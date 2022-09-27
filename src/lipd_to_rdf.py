@@ -1,12 +1,15 @@
 import json
 import re
-import uuid
 import os
 import os.path
 import zipfile
 import tempfile
 import pandas as pd
-from globals import SCHEMA, BLACKLIST, NS, ONTONS
+
+from globals.namespaces import NS, ONTONS
+from globals.blacklist import BLACKLIST
+from globals.schema import SCHEMA
+
 from utils import ucfirst, lcfirst, camelCase, unCamelCase, fromCamelCase, escape, uniqid, sanitizeId
 
 class LipdToRDF(object):
@@ -572,12 +575,19 @@ class LipdToRDF(object):
     
     def addVariableValues(self, obj, objhash) :
         csvname = obj["@parent"]["@id"] + ".csv"
-        colnum = int(obj["number"]) - 1
+        if not isinstance(obj["number"], list):
+            obj["number"] = [obj["number"]]
+        indices = [col-1 for col in obj["number"]]
         if csvname in self.lipd_csvs:
             df = self.lipd_csvs[csvname]
-            col = df[colnum]
-            values = col.tolist()
-            dtype = "float" if col.dtypes == "float64" else "string"
+            if len(indices) == 1:
+                df_values = df[indices[0]]
+                values = df_values.tolist()
+                #dtype = "float" if df_values.dtypes == "float64" else "string"
+            else:
+                df_values = df[indices]
+                values = df_values.values.tolist()
+                #dtype = "float" if df_values[0].dtypes == "float64" else "string"
             # TODO: Dumping to json string for now. 
             # rdf:Seq doesn't seem to be importing well in GraphDB
             obj["hasValues"] = json.dumps(values)

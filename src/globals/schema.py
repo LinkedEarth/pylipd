@@ -1,6 +1,3 @@
-ONTONS = "http://linked.earth/ontology#"
-NS = "http://linked.earth/lipd#"
-
 SCHEMA = {
     'Dataset': {
         '@id': ['{dataSetName}'],
@@ -154,7 +151,8 @@ SCHEMA = {
             'multiple': True,
             'schema': 'DataTable'
         },
-        'paleoModel': {
+        'model': {
+            'alternatives': ['paleoModel'],            
             'name': 'paleoModeledBy',
             'multiple': True,
             'schema': 'Model',
@@ -172,7 +170,8 @@ SCHEMA = {
             'multiple': True,
             'schema': 'DataTable'
         },
-        'chronModel': {
+        'model': {
+            'alternatives': ['chronModel'],            
             'name': 'chronModeledBy',
             'multiple': True,
             'schema': 'Model',
@@ -257,7 +256,8 @@ SCHEMA = {
         ],
         'number': { 
             'name': 'hasColumnNumber', 
-            'type': 'integer' 
+            'type': 'integer',
+            'multiple': True
         },
         'TSid': { 
             'name': 'hasVariableID', 
@@ -465,22 +465,4 @@ SCHEMA = {
             '{@index}'
         }
     }
-}
-
-
-BLACKLIST = {
-    'metadataMD5' : 1,
-    'paleoData_paleoDataMD5' : 1,
-    'paleoData_paleoMeasurementTableMD5' : 1,
-    'paleoDataMD5' : 1,
-    'paleoMeasurementTableMD5' : 1,
-    'tagMD5' : 1,
-    'chronData_chronDataMD5' : 1,
-    'chronData_chronMeasurementTableMD5' : 1,
-    'chronDataMD5' : 1,
-    'chronMeasurementTableMD5' : 1,
-    'earliestSampleDate' : 1,
-    'latestSampleDate' : 1,
-    'inCompilation' : 1,
-    'inCompilationBeta' : 1    
 }
