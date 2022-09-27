@@ -12,6 +12,7 @@ if __name__=="__main__":
     
     lipd = LiPD()
 
+    '''
     lipd.load_local_from_dir("/Users/varun/git/LiPD/PyLiPD/data/lpd/Temp12k1_0_2/")
 
     lipdfiles = [
@@ -26,9 +27,9 @@ if __name__=="__main__":
     print("Fetched..")
     for ds in datasets:
         print(ds['id'])
+    '''
 
-
-    #print("========== REMOTE API =========")
-    #lipd.load_remote("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse")
-    #ds = lipd.get_dataset("http://linked.earth/lipd/Temp12k1_0_2#117_723A.Godad.2011", data_only=True)
-    #print(ds)
+    print("========== REMOTE API =========")
+    lipd.load_remote("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse")
+    ds = lipd.get_dataset("http://linked.earth/lipd/PalMod1_0_1#ODP846", data_only=True)
+    print(ds)

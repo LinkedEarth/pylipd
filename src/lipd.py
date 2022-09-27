@@ -70,7 +70,7 @@ class LiPD(object):
 
     def query(self, query):
         if self.remote:
-            matches = re.match(r"SELECT (.+) WHERE\s+{(.+)}", query)
+            matches = re.match(r"\s*SELECT\s+(.+)\s+WHERE\s+{(.+)}\s*", query, re.DOTALL)
             if matches:
                 vars = matches.group(1)
                 where = matches.group(2)
