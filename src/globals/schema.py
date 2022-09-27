@@ -147,6 +147,7 @@ SCHEMA = {
             'name': 'name' 
         },
         'measurementTable': {
+            'alternatives': ['paleoMeasurementTable'],
             'name': 'foundInMeasurementTable',
             'multiple': True,
             'schema': 'DataTable'
@@ -166,6 +167,7 @@ SCHEMA = {
             '{@index}'
         ],
         'measurementTable': {
+            'alternatives': ['chronMeasurementTable'],
             'name': 'foundInMeasurementTable',
             'multiple': True,
             'schema': 'DataTable'

@@ -6,6 +6,9 @@ import zipfile
 import tempfile
 import pandas as pd
 
+from io import BytesIO
+from urllib.request import urlopen
+
 from globals.namespaces import NS, ONTONS
 from globals.blacklist import BLACKLIST
 from globals.schema import SCHEMA
@@ -33,8 +36,13 @@ class LipdToRDF(object):
                 self.convertLipdJsonToRDF(jsonpath, rdfpath)
 
     def unzip_lipd_file(self, lipdfile, unzipdir):
-        with zipfile.ZipFile(lipdfile, 'r') as zip_ref:
-            zip_ref.extractall(unzipdir)
+        if lipdfile.startswith("http"):
+            resp = urlopen(lipdfile)
+            with zipfile.ZipFile(BytesIO(resp.read())) as zip_ref:
+                zip_ref.extractall(unzipdir)
+        else:
+            with zipfile.ZipFile(lipdfile, 'r') as zip_ref:
+                zip_ref.extractall(unzipdir)
 
     def addExtraDatasetProperties(self, obj, objhash) :
         _REQUEST = {} # This is not really used here is it ?
@@ -81,11 +89,12 @@ class LipdToRDF(object):
         authname = auth
         if (type(auth) is dict) :
             authname = auth["name"]
-        m = re.search(r"(.+)\s*,\s*(.+)", authname)
-        if m is not None:
-            return {"name" : str(str(m.groups()[1]) + " ") + str(m.groups()[0])}
-        else : 
-            return {"name" : authname}
+        if authname:
+            m = re.search(r"(.+)\s*,\s*(.+)", authname)
+            if m is not None:
+                return {"name" : str(str(m.groups()[1]) + " ") + str(m.groups()[0])}
+            else : 
+                return {"name" : authname}
 
         
     def parsePersons(self, auths, parent = None) :
@@ -119,7 +128,7 @@ class LipdToRDF(object):
                 "Geo:AsWKT" : wkt
             }
         
-        if "properties" in geo :
+        if "properties" in geo and isinstance(geo["properties"], dict) :
             for key,value in geo["properties"].items() :
                 ngeo[key] = value
         return ngeo
@@ -331,6 +340,8 @@ class LipdToRDF(object):
 
     def getVariableId(self, obj, parentid) :
         iobj = dict((k.lower(), v) for k, v in obj.items())
+        if "tsid" not in iobj:
+            iobj["tsid"] = uniqid()
         id =  parentid + "." + iobj["tsid"]
         id += "." + str(iobj["variablename"])
         return id
@@ -575,24 +586,31 @@ class LipdToRDF(object):
     
     def addVariableValues(self, obj, objhash) :
         csvname = obj["@parent"]["@id"] + ".csv"
+        if "number" not in obj:
+            obj["number"] = obj["@index"]
         if not isinstance(obj["number"], list):
             obj["number"] = [obj["number"]]
         indices = [col-1 for col in obj["number"]]
         if csvname in self.lipd_csvs:
             df = self.lipd_csvs[csvname]
+            values = []
             if len(indices) == 1:
-                df_values = df[indices[0]]
-                values = df_values.tolist()
-                #dtype = "float" if df_values.dtypes == "float64" else "string"
+                if indices[0] < len(df.columns):
+                    df_values = df[indices[0]]
+                    values = df_values.tolist()
+                    #dtype = "float" if df_values.dtypes == "float64" else "string"
             else:
                 df_values = df[indices]
                 values = df_values.values.tolist()
                 #dtype = "float" if df_values[0].dtypes == "float64" else "string"
+
             # TODO: Dumping to json string for now. 
-            # rdf:Seq doesn't seem to be importing well in GraphDB
             obj["hasValues"] = json.dumps(values)
+
+            # rdf:Seq doesn't seem to be importing well in GraphDB            
             #bnodeid = unrollValuesListToRDF(values, dtype)
             #obj["hasValues"] = bnodeid
+
             return [obj, objhash, []]
         return [obj, objhash, []]
     

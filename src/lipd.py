@@ -16,6 +16,7 @@ def convert_to_rdf(lipdfile, rdffile):
         converter.convert(lipdfile, rdffile)
     except Exception as e:
         print(f"ERROR: Could not convert LiPD file {lipdfile} to RDF")            
+        print(e)
         raise(e)
 
 def multi_convert_to_rdf(filemap):
@@ -41,9 +42,7 @@ class LiPD(object):
         self.load_local(lipdfiles)
 
 
-    #####################################
-    # TODO: Allow loading http locations
-    #####################################
+    # Allows loading http locations
     def load_local(self, lipdfiles):
         filemap = {}
         for lipdfile in lipdfiles:
@@ -66,6 +65,33 @@ class LiPD(object):
     def load_remote(self, endpoint):
         self.remote = True
         self.endpoint = endpoint
+
+
+    def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file):
+        filemap = {}
+        for path in os.listdir(lipd_dir):
+            fullpath = os.path.join(lipd_dir, path)
+            tmp_rdf_file = tempfile.NamedTemporaryFile().name
+            filemap[fullpath] = tmp_rdf_file
+        
+        print(f"Starting conversion of {len(filemap.keys())} LiPD files")
+
+        multi_convert_to_rdf(filemap)
+        
+        print("Conversion to RDF done..")
+
+        print("Writing to main RDF file..")
+        with open(rdf_file, "a") as fout:
+            for lipdfile in filemap.keys():
+                tmp_rdf_file = filemap[lipdfile]
+                if os.path.exists(tmp_rdf_file):
+                    fin = open(tmp_rdf_file, "r")
+                    data = fin.read();
+                    fin.close()
+                    fout.write(data)
+                    os.remove(tmp_rdf_file)
+            fout.close()
+        print("Written..")
 
 
     def query(self, query):
