@@ -9,7 +9,7 @@ import pandas as pd
 from io import BytesIO
 from urllib.request import urlopen
 
-from globals.namespaces import NS, ONTONS
+from globals.urls import NSURL, DATAURL, ONTONS
 from globals.blacklist import BLACKLIST
 from globals.schema import SCHEMA
 
@@ -17,10 +17,16 @@ from utils import ucfirst, lcfirst, camelCase, unCamelCase, fromCamelCase, escap
 
 class LipdToRDF(object):
     
-    def __init__(self):
+    def __init__(self, collection_id=None):
         self.triples = []
         self.lipd_csvs = {}
+        self.collection_id = collection_id
+        self.namespace = NSURL + "#"
+        if collection_id:
+            self.namespace = NSURL + "/" + collection_id + "#"        
 
+    # -------
+    # TODO: Add the URL to convertLipdJsonToRDF
     def convert(self, lipdpath, rdfpath):
         self.triples = []
         with tempfile.TemporaryDirectory(prefix="lipd_to_rdf_") as tmpdir:
@@ -902,7 +908,7 @@ class LipdToRDF(object):
     
     # Create individual
     def createIndividual(self, objid) :
-        return NS + sanitizeId(objid)
+        return self.namespace + sanitizeId(objid)
     
     # Create class
     def createClass(self, category) :
@@ -1081,9 +1087,12 @@ class LipdToRDF(object):
         
         with open(jsonpath) as f:
             obj = json.load(f)
-            obj["hasUrl"] = url
         
             self.mapLipdJson(obj, None, None, "Dataset", "Dataset", objhash)
+            if url:
+                objhash[obj["@id"]]["hasUrl"] = url
+            elif self.collection_id:
+                objhash[obj["@id"]]["hasUrl"] = DATAURL + "/" + self.collection_id + "/" + obj["@id"] + ".lpd"            
 
             for key, item in objhash.items():
                 self.createIndividualFull(item)

@@ -315,9 +315,6 @@ SCHEMA = {
             'schema': 'Uncertainty', 
             'multiple': True 
         },
-        'useInGlobalTemperatureAnalysis': { 
-            'name': 'useInPAGES2kGlobalTemperatureAnalysis' 
-        },
         'hasValues': {
             'type': 'string'
         },
