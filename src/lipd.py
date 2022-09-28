@@ -58,12 +58,12 @@ class LiPD(object):
         for lipdfile in lipdfiles:
             rdffile = tempfile.NamedTemporaryFile().name
             filemap[lipdfile] = rdffile
-        print(f"Starting conversion of {len(filemap.keys())} LiPD files")
+        print(f"Loading {len(filemap.keys())} LiPD files from Collection: {collection_id}")
         multi_convert_to_rdf(filemap, collection_id)
         print("Conversion to RDF done..")
 
         self.remote = False
-        print("Loading RDF into graph")
+        print("Loading RDFs into graph")
         for lipdfile in lipdfiles:
             rdffile = filemap[lipdfile]
             if os.path.exists(rdffile):
@@ -160,9 +160,9 @@ class LiPD(object):
         return ds
 
 
-    def get_datasets(self):
+    def get_datasets(self, data_only=True):
         qres = self.query("SELECT ?s WHERE { ?s a le:Dataset }")
-        return [self.get_dataset(row.s) for row in qres]
+        return [self.get_dataset(row.s, data_only) for row in qres]
 
 
     def get_table_variables(self, tableid):

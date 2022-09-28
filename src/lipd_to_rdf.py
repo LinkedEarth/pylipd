@@ -137,6 +137,10 @@ class LipdToRDF(object):
         if "properties" in geo and isinstance(geo["properties"], dict) :
             for key,value in geo["properties"].items() :
                 ngeo[key] = value
+        elif isinstance(geo, dict) :
+            for key,value in geo.items() :
+                if key != "geometry":
+                    ngeo[key] = value
         return ngeo
 
 
