@@ -948,11 +948,12 @@ class LipdToRDF(object):
 
         (propid, dtype) = prop
         if objid and value:
-            if re.search("^.*[^a-zA-Z]?nan[^a-zA-Z]?.*$", str(value).lower()):
-                return
-            if re.search("^.*[^a-zA-Z]?na[^a-zA-Z]?.*$", str(value).lower()):
-                return
-            
+            if dtype == "float" or dtype == "integer":
+                if re.search("^.*[^a-zA-Z]?nan[^a-zA-Z]?.*$", str(value).lower()):
+                    return
+                if re.search("^.*[^a-zA-Z]?na[^a-zA-Z]?.*$", str(value).lower()):
+                    return
+
             if type(value) is str:
                 value = escape(value)
 
@@ -978,16 +979,19 @@ class LipdToRDF(object):
             if dtype == "Individual":
                 value = self.createIndividual(value)
                 value = "<" + value + ">"
+            
             elif dtype == "List":
                 value = value
+            
             else:
                 value = '"' + str(value) + '"' + "^^<http://www.w3.org/2001/XMLSchema#" + dtype + ">"
-            
+
             self.triples.append([
                 "<"+objid+">",
                 "<"+propid+">",
                 value
             ])
+
     # Set subobject propvals
     def setSubobjects(self, objid, subobjid, subpropvals, schema) :
         if (not subpropvals) :
@@ -1052,10 +1056,10 @@ class LipdToRDF(object):
             subobject =  details["subobject"] if ("subobject" in details) else False
             if (not prop) :
                 continue
-            
+                
             # Create Property
             propDI = self.createProperty(prop, dtype, cat, icon, multiple)
-            
+
             # Set property value
             if (dtype == "Individual" or type(value) is dict) :
                 self.setProperty(objid, propDI, value)
