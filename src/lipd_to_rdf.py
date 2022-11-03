@@ -35,6 +35,8 @@ class LipdToRDF(object):
         self.graph = ConjunctiveGraph()
         
         lpdname = os.path.basename(lipdpath).replace(".lpd", "")
+        lpdname = re.sub("\?.+$", "", lpdname)
+
         self.graphurl = NSURL + "/" + lpdname
         if self.collection_id:
             self.graphurl = NSURL + "/" + self.collection_id + "/" + lpdname

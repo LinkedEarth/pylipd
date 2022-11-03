@@ -3,7 +3,7 @@ import re
 import json
 import tempfile
 import multiprocessing as mp
-from rdflib import Graph, Namespace
+from rdflib import ConjunctiveGraph, Namespace
 
 from utils import ucfirst, lcfirst
 from lipd_to_rdf import LipdToRDF
@@ -15,7 +15,7 @@ from globals.urls import NSURL, ONTONS
 # Pass the "Collection id" to the LiPD to RDF conversion
 # - Use it for Default namespace & for hasURL
 # - Mark URL prefix in globals
-# Recreate the RDF files & Send .nt files to the endpoint
+# Recreate the RDF files & Send .nq files to the endpoint
 # Reload the graphs to the endpoint
 # Move the LiPD files to the server 
 ###########################################
@@ -39,7 +39,7 @@ def multi_convert_to_rdf(filemap, collection_id=None):
 
 class LiPD(object):
     def __init__(self):
-        self.graph = Graph(bind_namespaces="rdflib")
+        self.graph = ConjunctiveGraph()
         self.graph.bind("le", Namespace(ONTONS))
         #self.graph.bind("", Namespace(NS))
 
@@ -58,7 +58,9 @@ class LiPD(object):
         for lipdfile in lipdfiles:
             rdffile = tempfile.NamedTemporaryFile().name
             filemap[lipdfile] = rdffile
-        print(f"Loading {len(filemap.keys())} LiPD files from Collection: {collection_id}")
+        
+        print(f"Loading {len(filemap.keys())} LiPD files" + (" from Collection: {collection_id}" if collection_id else ""))
+        
         multi_convert_to_rdf(filemap, collection_id)
         print("Conversion to RDF done..")
 
@@ -66,8 +68,9 @@ class LiPD(object):
         print("Loading RDFs into graph")
         for lipdfile in lipdfiles:
             rdffile = filemap[lipdfile]
+            print(rdffile)
             if os.path.exists(rdffile):
-                self.graph.parse(rdffile)
+                self.graph.parse(rdffile, format="nquads")
                 os.remove(rdffile)
         print("Loaded..")
 
