@@ -25,13 +25,14 @@ def fromCamelCase(str) :
     #return ucfirst(str.replace(r"([^A-Z])([A-Z])"", "$1_$2", str))
 
 def escape( str ):
-    str = str.replace("&", "&amp;")
-    str = str.replace("<", "&lt;")
-    str = str.replace(">", "&gt;")
-    str = str.replace("\"", "\\\"")
-    str = str.replace("\n", " ")
-    str = str.replace("\r", " ")
-    str = re.sub(r"\\$", "", str)
+    # str = str.replace("&", "&amp;")
+    # str = str.replace("<", "&lt;")
+    # str = str.replace(">", "&gt;")
+    # str = str.replace("\"", "\\\"")
+    # str = str.replace("'", "\\'")
+    # str = str.replace("\n", " ")
+    # str = str.replace("\r", " ")
+    # str = re.sub(r"\\$", "", str)
     return str
 
 def sanitizeId(id):

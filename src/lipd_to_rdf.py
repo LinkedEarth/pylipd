@@ -6,6 +6,9 @@ import zipfile
 import tempfile
 import pandas as pd
 
+from rdflib.graph import ConjunctiveGraph, Literal, RDF, URIRef, BNode, Collection
+from rdflib.namespace import XSD
+
 from io import BytesIO
 from urllib.request import urlopen
 
@@ -18,17 +21,24 @@ from utils import ucfirst, lcfirst, camelCase, unCamelCase, fromCamelCase, escap
 class LipdToRDF(object):
     
     def __init__(self, collection_id=None):
-        self.triples = []
+        self.graph = ConjunctiveGraph()
         self.lipd_csvs = {}
         self.collection_id = collection_id
+        self.graphurl = NSURL
         self.namespace = NSURL + "#"
-        if collection_id:
+        if self.collection_id:
             self.namespace = NSURL + "/" + collection_id + "#"        
 
     # -------
     # TODO: Add the URL to convertLipdJsonToRDF
     def convert(self, lipdpath, rdfpath):
-        self.triples = []
+        self.graph = ConjunctiveGraph()
+        
+        lpdname = os.path.basename(lipdpath).replace(".lpd", "")
+        self.graphurl = NSURL + "/" + lpdname
+        if self.collection_id:
+            self.graphurl = NSURL + "/" + self.collection_id + "/" + lpdname
+
         with tempfile.TemporaryDirectory(prefix="lipd_to_rdf_") as tmpdir:
             self.unzip_lipd_file(lipdpath, tmpdir)
             jsons = self.find_files_with_extension(tmpdir, 'jsonld')
@@ -384,14 +394,16 @@ class LipdToRDF(object):
         # Deal with proxies
         proxyobs = None
         sampleid = None
-        if ("proxy" in obj) :
+        if ("proxy" in obj and obj["proxy"]) :
             proxyobs = obj["proxy"]
             del obj["proxy"]
-        elif ("OnProxyObservationProperty" in obj) :
+        elif ("OnProxyObservationProperty" in obj and obj["OnProxyObservationProperty"]) :
             proxyobs = obj["OnProxyObservationProperty"]
             del obj["OnProxyObservationProperty"]
-        elif ("ProxyObservationType" in obj) :
+        elif ("ProxyObservationType" in obj and obj["ProxyObservationType"]) :
             proxyobs = obj["ProxyObservationType"]
+        elif ("proxyObservationType" in obj and obj["proxyObservationType"]) :
+            proxyobs = obj["proxyObservationType"]
         
         vartype = obj["@category"]
         if (vartype and vartype == "MeasuredVariable") :
@@ -437,7 +449,7 @@ class LipdToRDF(object):
             observationid = self.getObservation(proxyobs)
             #obj["proxy"])
             # Create sensor
-            sensorid = (str(observationid) if observationid is not None else "") + "DefaultSensor"
+            sensorid = ((str(observationid) + ".") if observationid is not None else "") + "DefaultSensor"
             sensor = {
                 "@id" : sensorid, 
                 "@category" : "Sensor"
@@ -578,21 +590,13 @@ class LipdToRDF(object):
     
     # Unroll the list to a rdf first/rest structure
     def unrollValuesListToRDF(self, lst: list, dtype):
-        bnodeid = "_:values" + uniqid()
-        rdfns = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xsdns = "http://www.w3.org/2001/XMLSchema#"
-        self.triples.append([
-            bnodeid,
-            f"<{rdfns}type>",
-            f"<{rdfns}Seq>"
-        ])
+        listitems = []
         for idx, item in enumerate(lst):
-            self.triples.append([
-                bnodeid,
-                f"<{rdfns}_{idx+1}>",
-                f"\"{item}\"^^<{xsdns}{dtype}>"
-            ])
-        return bnodeid
+            listitems.append(Literal(item, datatype=(XSD[dtype] if dtype in XSD else None)))
+
+        listid = BNode()
+        list = Collection(self.graph, listid, listitems)
+        return listid
     
     def addVariableValues(self, obj, objhash) :
         csvname = obj["@parent"]["@id"] + ".csv"
@@ -618,7 +622,7 @@ class LipdToRDF(object):
             obj["hasValues"] = json.dumps(values)
 
             # rdf:Seq doesn't seem to be importing well in GraphDB            
-            #bnodeid = unrollValuesListToRDF(values, dtype)
+            #bnodeid = self.unrollValuesListToRDF(values, dtype)
             #obj["hasValues"] = bnodeid
 
             return [obj, objhash, []]
@@ -924,20 +928,21 @@ class LipdToRDF(object):
     
     # Set individual classes
     def setIndividualClasses(self, objid, category, extracats) :
-        rdftype = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
         if objid and category:
-            self.triples.append([
-                "<"+objid+">",
-                "<"+rdftype+">",
-                "<"+category+">"
-            ])
+            self.graph.add((
+                URIRef(objid),
+                RDF.type,
+                URIRef(category),
+                URIRef(self.graphurl)
+            ))
         for ecat in extracats:
             if objid and ecat:
-                self.triples.append([
-                    "<"+objid+">",
-                    "<"+rdftype+">",
-                    "<"+self.createClass(ecat)+">"
-                ])
+                self.graph.add((
+                    URIRef(objid),
+                    RDF.type,
+                    URIRef(self.createClass(ecat)),
+                    URIRef(self.graphurl)
+                ))
     
     # Set property value
     def setProperty( self, objid, prop, value ):
@@ -948,6 +953,8 @@ class LipdToRDF(object):
 
         (propid, dtype) = prop
         if objid and value:
+            objitem = None
+
             if dtype == "float" or dtype == "integer":
                 if re.search("^.*[^a-zA-Z]?nan[^a-zA-Z]?.*$", str(value).lower()):
                     return
@@ -978,19 +985,20 @@ class LipdToRDF(object):
 
             if dtype == "Individual":
                 value = self.createIndividual(value)
-                value = "<" + value + ">"
+                objitem = URIRef(value)
             
             elif dtype == "List":
-                value = value
+                objitem = value
             
             else:
-                value = '"' + str(value) + '"' + "^^<http://www.w3.org/2001/XMLSchema#" + dtype + ">"
+                objitem = Literal(value, datatype=(XSD[dtype] if dtype in XSD else None))
 
-            self.triples.append([
-                "<"+objid+">",
-                "<"+propid+">",
-                value
-            ])
+            self.graph.add((
+                URIRef(objid),
+                URIRef(propid),
+                objitem,
+                URIRef(self.graphurl)
+            ))
 
     # Set subobject propvals
     def setSubobjects(self, objid, subobjid, subpropvals, schema) :
@@ -1090,7 +1098,7 @@ class LipdToRDF(object):
             print(directory +' not found ', fnf)
 
     def convertLipdJsonToRDF(self, jsonpath, rdfpath, url=None):
-        self.triples.clear()    
+        self.graph = ConjunctiveGraph()
         objhash = {}
         
         with open(jsonpath) as f:
@@ -1100,12 +1108,11 @@ class LipdToRDF(object):
             if url:
                 objhash[obj["@id"]]["hasUrl"] = url
             elif self.collection_id:
-                objhash[obj["@id"]]["hasUrl"] = DATAURL + "/" + self.collection_id + "/" + obj["@id"] + ".lpd"            
+                objhash[obj["@id"]]["hasUrl"] = DATAURL + "/" + self.collection_id + "/" + obj["@id"] + ".lpd"
+            else:
+                objhash[obj["@id"]]["hasUrl"] = DATAURL + "/" + obj["@id"] + ".lpd"
 
             for key, item in objhash.items():
                 self.createIndividualFull(item)
 
-            with open(rdfpath, "w") as f:
-                for triple in self.triples:
-                    f.write(" ".join(triple) + " .\n")
-                f.close()
+            self.graph.serialize(rdfpath, format="nquads", encoding="utf-8")
