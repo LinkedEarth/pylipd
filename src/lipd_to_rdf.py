@@ -621,7 +621,7 @@ class LipdToRDF(object):
                 #dtype = "float" if df_values[0].dtypes == "float64" else "string"
 
             # TODO: Dumping to json string for now. 
-            #obj["hasValues"] = json.dumps(values)
+            obj["hasValues"] = json.dumps(values)
 
             # rdf:Seq doesn't seem to be importing well in GraphDB            
             #bnodeid = self.unrollValuesListToRDF(values, dtype)
