@@ -76,6 +76,15 @@ SCHEMA = {
             'name': 'datasetVersion' 
         }
     },
+    'Compilation': {
+        '@id': ['{compilationName}', '.', '{@id}'],
+        'compilationName': {
+            'name': 'name'
+        },
+        'compilationVersion': {
+            'name': 'version'
+        }
+    },
     'ChangeLog': {
         '@id': ['{@parent.@id}', '.ChangeLog.', '{@index}'],
         '@category': 'ChangeLog'
@@ -123,6 +132,10 @@ SCHEMA = {
         'link': { 
             'name': 'hasLink', 
             'multiple': True 
+        },
+        'doi': {
+            'name': 'hasDOI',
+            'type': 'string'
         },
         'author': {
             'name': 'author',
@@ -232,13 +245,16 @@ SCHEMA = {
             'name': 'includesVariable',
             'multiple': True,
             'schema': 'Variable'
+        },
+        'missingValue': { 
+            'name': 'hasMissingValue' 
         }
     },
     'Variable': {
         '@id': [
             '{foundInTable|@parent.@id}',
             '.',
-            '{TSid|tsid}',
+            '{TSid|tsid|tSid}',
             '.',
             '{variableName|name}'
         ],
@@ -263,7 +279,7 @@ SCHEMA = {
         },
         'TSid': { 
             'name': 'hasVariableID', 
-            'alternates': ['tsid'] 
+            'alternates': ['tsid', 'tSid'] 
         },
         'variableName': { 
             'name': 'name' 
@@ -280,10 +296,26 @@ SCHEMA = {
         'missingValue': { 
             'name': 'hasMissingValue' 
         },
-        'hasMaxValue': { 'type': 'float' },
-        'hasMinValue': { 'type': 'float' },
-        'hasMeanValue': { 'type': 'float' },
-        'hasMedianValue': { 'type': 'float' },
+        'hasMaxValue': { 
+            'name': 'hasMaxValue', 
+            'alternates': ['hasMax'], 
+            'type': 'float' 
+        },
+        'hasMinValue': { 
+            'name': 'hasMinValue', 
+            'alternates': ['hasMin'], 
+            'type': 'float' 
+        },
+        'hasMeanValue': { 
+            'name': 'hasMeanValue', 
+            'alternates': ['hasMean'], 
+            'type': 'float' 
+        },
+        'hasMedianValue': { 
+            'name': 'hasMedianValue', 
+            'alternates': ['hasMedian'], 
+            'type': 'float' 
+        },
         'instrument': {
             'name': 'measuredBy',
             'type': 'Individual',
@@ -326,6 +358,11 @@ SCHEMA = {
         },
         'takenAtDepth': {
             'type': 'Individual'
+        },
+        'inCompilationBeta': {
+            'name': 'partOfCompilation',
+            'schema': 'Compilation',
+            'category': 'Compilation'
         }
     },
     'ProxySystemModel': {
@@ -348,10 +385,13 @@ SCHEMA = {
     },
     'Resolution': {
         '@id': ['{@parent.@id}', '.Resolution'],
-        'hasMaxValue': { 'type': 'float' },
-        'hasMinValue': { 'type': 'float' },
-        'hasMeanValue': { 'type': 'float' },
-        'hasMedianValue': { 'type': 'float' },        
+        'hasMaxValue': { 'name': 'hasMaxValue', 'alternates': ['hasMax'], 'type': 'float' },
+        'hasMinValue': { 'name': 'hasMinValue', 'alternates': ['hasMin'], 'type': 'float' },
+        'hasMeanValue': { 'name': 'hasMeanValue', 'alternates': ['hasMean'], 'type': 'float' },
+        'hasMedianValue': { 'name': 'hasMedianValue', 'alternates': ['hasMedian'], 'type': 'float' },
+        'units': { 
+            'name': 'hasUnits' 
+        }    
         #'@fromJson': ['valuesToString'],
         #'@toJson': ['valuesToArray']
     },
@@ -389,6 +429,11 @@ SCHEMA = {
         'variableDetail': { 
             'name': 'detail', 
             'alternates': ['variabledetail'] 
+        },
+        'integrationTime': {
+            'name': 'hasIntegrationTime',
+            'type': 'Individual',
+            'schema': 'IntegrationTime'
         },
         'rank': { 'name': 'hasRank' },
         'basis': { 'name': 'relevantQuote' },

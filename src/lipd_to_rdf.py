@@ -12,7 +12,7 @@ from rdflib.namespace import XSD
 from io import BytesIO
 from urllib.request import urlopen
 
-from globals.urls import NSURL, DATAURL, ONTONS
+from globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
 from globals.blacklist import BLACKLIST
 from globals.schema import SCHEMA
 
@@ -131,19 +131,19 @@ class LipdToRDF(object):
         coords = geo["geometry"]["coordinates"]
         if (coords and len(coords) > 0) :
             ngeo["coordinates"] = str(str(coords[1]) + ",") + str(coords[0])
-            ngeo["Wgs84:Lat"] = coords[1]
-            ngeo["Wgs84:Long"] = coords[0]
+            ngeo["wgs84:lat"] = coords[1]
+            ngeo["wgs84:long"] = coords[0]
             # FIXME: For now assuming points
             wkt = str(str("POINT(" + str(coords[1])) + " ") + str(coords[0])
             if (len(coords) > 2) :
-                ngeo["Wgs84:Alt"] = coords[2]
+                ngeo["wgs84:alt"] = coords[2]
                 wkt += " " + str(coords[2])
             
             wkt += ")"
-            ngeo["Geo:HasGeometry"] = {
+            ngeo["geo:hasGeometry"] = {
                 "@id" : str(parent["@id"]) + ".Geometry",
                 "@category" : "Geo:Geometry",
-                "Geo:AsWKT" : wkt
+                "geo:asWKT" : wkt
             }
         
         if "properties" in geo and isinstance(geo["properties"], dict) :
@@ -621,7 +621,7 @@ class LipdToRDF(object):
                 #dtype = "float" if df_values[0].dtypes == "float64" else "string"
 
             # TODO: Dumping to json string for now. 
-            obj["hasValues"] = json.dumps(values)
+            #obj["hasValues"] = json.dumps(values)
 
             # rdf:Seq doesn't seem to be importing well in GraphDB            
             #bnodeid = self.unrollValuesListToRDF(values, dtype)
@@ -882,7 +882,7 @@ class LipdToRDF(object):
         return "string"
     
     def getPropertyDetails(self, key, schema, value) :
-        pname = fromCamelCase(key)
+        pname = key
         details = {
             "name": pname
         }
@@ -897,7 +897,7 @@ class LipdToRDF(object):
         if (("schema" in details)) :
             details["type"] = "Individual"
         
-        pname = ucfirst(details["name"])
+        pname = lcfirst(details["name"])
         
         # Get more details from the property definition (if it exists)
         """
@@ -926,7 +926,14 @@ class LipdToRDF(object):
     
     # Create property
     def createProperty(self, prop, dtype, cat, icon, multiple) :
-        return [ ONTONS + lcfirst(sanitizeId(prop)), dtype ]
+        nsprop = prop.split(":", 2)
+        ns = ONTONS
+        if len(nsprop) > 1 :
+            prefix = nsprop[0]
+            if prefix in NAMESPACES:
+                ns = NAMESPACES[prefix]
+            prop = nsprop[1]
+        return [ ns + lcfirst(sanitizeId(prop)), dtype ]
     
     # Set individual classes
     def setIndividualClasses(self, objid, category, extracats) :
