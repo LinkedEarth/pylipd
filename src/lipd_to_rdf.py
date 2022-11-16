@@ -30,7 +30,7 @@ class LipdToRDF(object):
             self.namespace = NSURL + "/" + collection_id + "#"        
 
     # -------
-    # TODO: Add the URL to convertLipdJsonToRDF
+    # TODO: Add the URL to convert_lipd_json_to_rdf
     def convert(self, lipdpath, rdfpath):
         self.graph = ConjunctiveGraph()
         
@@ -51,7 +51,7 @@ class LipdToRDF(object):
                 for csvpath, _ in csvs:
                     csvname = os.path.basename(csvpath)        
                     self.lipd_csvs[csvname] = pd.read_csv(csvpath, header=None)
-                self.convertLipdJsonToRDF(jsonpath, rdfpath)
+                self.convert_lipd_json_to_rdf(jsonpath, rdfpath)
 
     def unzip_lipd_file(self, lipdfile, unzipdir):
         if lipdfile.startswith("http"):
@@ -62,7 +62,7 @@ class LipdToRDF(object):
             with zipfile.ZipFile(lipdfile, 'r') as zip_ref:
                 zip_ref.extractall(unzipdir)
 
-    def addExtraDatasetProperties(self, obj, objhash) :
+    def add_extra_dataset_properties(self, obj, objhash) :
         _REQUEST = {} # This is not really used here is it ?
         for key,value in _REQUEST.items() :
             m = re.search(r"^extra_(.+)", key)
@@ -72,15 +72,15 @@ class LipdToRDF(object):
                     obj[prop] = value
         return [obj, objhash, []]
 
-    def parsePersonsString(self, authstring, parent = None) :
+    def parse_persons_string(self, authstring, parent = None) :
         authors = []
         if (type(authstring) is list) :
-            return self.parsePersons(authstring, None)
+            return self.parse_persons(authstring, None)
         
         if (re.search(r"\s*\s*", authstring)) :
             auths = re.split(r"\s*\s*", authstring)
             for auth in auths:            
-                authors.append(self.parsePerson(auth))
+                authors.append(self.parse_person(auth))
             
         else : 
             if (re.search(r".*,.*,.*", authstring)) :
@@ -103,7 +103,7 @@ class LipdToRDF(object):
         return authors
 
 
-    def parsePerson(self, auth, parent = None) :
+    def parse_person(self, auth, parent = None) :
         authname = auth
         if (type(auth) is dict) :
             authname = auth["name"]
@@ -115,16 +115,16 @@ class LipdToRDF(object):
                 return {"name" : authname}
 
         
-    def parsePersons(self, auths, parent = None) :
+    def parse_persons(self, auths, parent = None) :
         authors = []
         if (not type(auths) is list) :
             return None
         
         for auth in auths: 
-            authors.append(self.parsePerson(auth, parent))
+            authors.append(self.parse_person(auth, parent))
         return authors
 
-    def parseLocation(self, geo, parent = None) :
+    def parse_location(self, geo, parent = None) :
         ngeo = {}
         ngeo["locationType"] = geo["type"] if "type" in geo else None
         ngeo["coordinatesFor"] = parent["@id"]
@@ -133,18 +133,8 @@ class LipdToRDF(object):
             ngeo["coordinates"] = str(str(coords[1]) + ",") + str(coords[0])
             ngeo["wgs84:lat"] = coords[1]
             ngeo["wgs84:long"] = coords[0]
-            # FIXME: For now assuming points
-            wkt = str(str("POINT(" + str(coords[1])) + " ") + str(coords[0])
             if (len(coords) > 2) :
                 ngeo["wgs84:alt"] = coords[2]
-                wkt += " " + str(coords[2])
-            
-            wkt += ")"
-            ngeo["geo:hasGeometry"] = {
-                "@id" : str(parent["@id"]) + ".Geometry",
-                "@category" : "Geo:Geometry",
-                "geo:asWKT" : wkt
-            }
         
         if "properties" in geo and isinstance(geo["properties"], dict) :
             for key,value in geo["properties"].items() :
@@ -156,62 +146,17 @@ class LipdToRDF(object):
         return ngeo
 
 
-    def locationToJson(self, geo, parent = None) :
-        geojson = {
-            "geometry":
-                {
-                    "coordinates" : [],
-                    "properties" : []
-                }
-        }
-        if "coordinates" in geo :
-            latlong = geo["coordinates"].split(",")
-            geojson["geometry"]["coordinates"][0] = float(latlong[1])
-            geojson["geometry"]["coordinates"][1] = float(latlong[0])
-            geojson["geometry"]["type"] = "Point"
-        
-        if "wgs84:Long" in geo :
-            geojson["geometry"]["coordinates"][0] = float(geo["wgs84:Long"])
-        
-        if "wgs84:Lat" in geo :
-            geojson["geometry"]["coordinates"][1] = float(geo["wgs84:Lat"])
-        
-        if "wgs84:Alt" in geo :
-            geojson["geometry"]["coordinates"][2] = float(geo["wgs84:Alt"])
-        
-        for prop,value in geo.items() :
-            if prop[0] == "@" :
-                continue
-            
-            if prop == "locationType" :
-                geojson["type"] = geo["locationType"]
-            else : 
-                if prop == "coordinates" or prop == "coordinatesFor":
-                    # Ignore
-                    pass
-                else : 
-                    if re.search(r"^(geo|wgs84):", prop) :
-                        # Ignore
-                        pass
-                    else : 
-                        geojson["properties"][prop] = value
-        
-        return geojson
-
-    def getUncertainty(self, val, parent = None) :
+    def get_uncertainty(self, val, parent = None) :
         uncertainty = {}
         uncertainty["hasValue"] = val
         uncertainty["analytical"] = val
         uncertainty["reproducibility"] = val
         return uncertainty
 
-    def getGoogleSpreadsheetURL(self, key, parent = None) :
+    def get_google_spreadsheet_url(self, key, parent = None) :
         return "https://docs.google.com/spreadsheets/d/" + str(key) + ""
-
-    def getGoogleSpreadsheetKey(self, url:str, parent = None) :
-        return url.replace("https://docs.google.com/spreadsheets/d/", "")
     
-    def getParentProperty(self, obj, prop) :
+    def get_parent_property(self, obj, prop) :
         parent = obj["@parent"]
         while (parent) :
             if ((prop in parent)) :
@@ -220,7 +165,7 @@ class LipdToRDF(object):
             parent = parent["@parent"]
         return None
 
-    def getParentWithPropertyValue(self, obj, prop, val) :
+    def get_parent_with_property_value(self, obj, prop, val) :
         parent = obj["@parent"]
         while (parent) :
             if ((prop in parent) and parent[prop] == val) :
@@ -229,7 +174,7 @@ class LipdToRDF(object):
             parent = parent["@parent"]
         return None
     
-    def setIdentifierProperties(self, pub, objhash) :
+    def set_identifier_properties(self, pub, objhash) :
         props = {}
         if "identifier" in pub :
             for identifier in pub["identifier"] : 
@@ -256,14 +201,14 @@ class LipdToRDF(object):
         
         return [pub, objhash, []]
     
-    def valuesToString(self, obj, objhash) :
+    def values_to_string(self, obj, objhash) :
         if "values" in obj :
             if (type(obj["values"]) is list) :
                 obj["values"] = ", ".join(obj["values"])
         return [obj, objhash, []]
 
 
-    def setVariableCategory(self, obj, objhash) :
+    def set_variable_category(self, obj, objhash) :
         # Default category
         obj["@category"] = "MeasuredVariable"
         obj["@schema"] = "Variable"
@@ -276,10 +221,10 @@ class LipdToRDF(object):
                 obj["@category"] = "InferredVariable"
         return [obj, objhash, []]
     
-    def getLiPDArchiveType(self, archiveType) :
+    def get_lipd_archive_type(self, archiveType) :
         return unCamelCase(archiveType)
 
-    def getArchiveType(self, id, latitude) :
+    def get_archive_type(self, id, latitude) :
         if not id:
             return None
         id = id.lower()
@@ -296,7 +241,7 @@ class LipdToRDF(object):
                         return "Rock"
         return camelCase(id)
     
-    def guessSensorType(self, archive, observation, sensor) :
+    def guess_sensor_type(self, archive, observation, sensor) :
         if (('sensorGenus' in sensor) or ('sensorSpecies' in sensor)) :
             if (archive == "MarineSediment") :
                 return "Foraminifera"
@@ -353,14 +298,14 @@ class LipdToRDF(object):
             else : 
                 return "InorganicSensor"
     
-    def getObservation(self, observation) :
+    def get_observation(self, observation) :
         if observation is None:
             return None
         if (observation.lower() == "alkenone") :
             return "Uk37"
         return camelCase(observation)
 
-    def getVariableId(self, obj, parentid) :
+    def get_variable_id(self, obj, parentid) :
         iobj = dict((k.lower(), v) for k, v in obj.items())
         if "tsid" not in iobj:
             iobj["tsid"] = uniqid()
@@ -368,15 +313,15 @@ class LipdToRDF(object):
         id += "." + str(iobj["variablename"])
         return id
     
-    def setInterVariableLinks(self, obj, objhash) :
+    def set_inter_variable_links(self, obj, objhash) :
         depthcol = None
         vobjhash = {}
         for col in obj["columns"] : 
-            vobjhash[col["variableName"].lower()] = self.getVariableId(col, obj["@id"])
+            vobjhash[col["variableName"].lower()] = self.get_variable_id(col, obj["@id"])
         
         depthcol =  vobjhash["depth"] if ("depth" in vobjhash) else None
         for col in obj["columns"] : 
-            thiscol = self.getVariableId(col, obj["@id"])
+            thiscol = self.get_variable_id(col, obj["@id"])
             if (("inferredFrom" in col)) :
                 infcol = col["inferredFrom"].lower()
                 if ((infcol in vobjhash)) :
@@ -386,12 +331,7 @@ class LipdToRDF(object):
                 col["takenAtDepth"] = depthcol
         return [obj, objhash, []]
     
-    def removeDepthProperty(self, val, parent = None) :
-        if (("takenAtDepth" in val)) :
-            del val["takenAtDepth"]
-        return val
-    
-    def createProxySystem(self, obj, hash) :
+    def create_proxy_system(self, obj, hash) :
         varid = obj["@id"]
         # Deal with proxies
         proxyobs = None
@@ -410,20 +350,20 @@ class LipdToRDF(object):
         vartype = obj["@category"]
         if (vartype and vartype == "MeasuredVariable") :
             # Get the archive type
-            dsname = self.getParentProperty(obj, "dataSetName")
-            geo = self.getParentProperty(obj, "geo")
+            dsname = self.get_parent_property(obj, "dataSetName")
+            geo = self.get_parent_property(obj, "geo")
             latitude = 0
             if (("geometry" in geo) and len(geo["geometry"]["coordinates"]) > 1) :
                 latitude = geo["geometry"]["coordinates"][1]
             
-            archivetype = self.getParentProperty(obj, "archiveType")
+            archivetype = self.get_parent_property(obj, "archiveType")
             if (not archivetype) :
-                archivetype = self.getParentProperty(obj, "archive")
+                archivetype = self.get_parent_property(obj, "archive")
             
-            archivetype = self.getArchiveType(archivetype, latitude)
+            archivetype = self.get_archive_type(archivetype, latitude)
             # Create sample (archive)
             if (not ("physicalSample" in obj)) :
-                cname = self.getParentProperty(obj, "collectionName")
+                cname = self.get_parent_property(obj, "collectionName")
                 if (cname) :
                     obj["physicalSample"] = {"name" : cname}
                 
@@ -448,7 +388,7 @@ class LipdToRDF(object):
                     hash[sampleid] = sampleobj
                 del obj["physicalSample"]
             
-            observationid = self.getObservation(proxyobs)
+            observationid = self.get_observation(proxyobs)
             #obj["proxy"])
             # Create sensor
             sensorid = ((str(observationid) + ".") if observationid is not None else "") + "DefaultSensor"
@@ -478,7 +418,7 @@ class LipdToRDF(object):
             
             if (not (sensorid in hash)) :
                 sensor["@id"] = sensorid
-                sensor["@category"] = self.guessSensorType(archivetype, observationid, sensor)
+                sensor["@category"] = self.guess_sensor_type(archivetype, observationid, sensor)
                 hash[sensorid] = sensor
             
             #$hash[$sampleid]["ProxySensorType"] = $sensorid
@@ -526,7 +466,7 @@ class LipdToRDF(object):
         
         return [obj, hash, []]
     
-    def wrapIntegrationTime(self, obj, objhash) :
+    def wrap_integration_time(self, obj, objhash) :
         objid = obj["@id"]
         # Deal with integrationTime
         pvals = {}
@@ -555,7 +495,7 @@ class LipdToRDF(object):
         
         return [obj, objhash, []]
 
-    def wrapUncertainty(self, obj, objhash) :
+    def wrap_uncertainty(self, obj, objhash) :
         objid = obj["@id"]
         # Deal with uncertainty
         pvals = {}
@@ -586,12 +526,12 @@ class LipdToRDF(object):
         
         return [obj, objhash, []]
     
-    def addFoundInTable(self, obj, objhash) :
+    def add_found_in_table(self, obj, objhash) :
         obj["foundInTable"] = obj["@parent"]["@id"]
         return [obj, objhash, []]
     
     # Unroll the list to a rdf first/rest structure
-    def unrollValuesListToRDF(self, lst: list, dtype):
+    def unroll_values_list_to_rdf(self, lst: list, dtype):
         listitems = []
         for idx, item in enumerate(lst):
             listitems.append(Literal(item, datatype=(XSD[dtype] if dtype in XSD else None)))
@@ -600,7 +540,7 @@ class LipdToRDF(object):
         list = Collection(self.graph, listid, listitems)
         return listid
     
-    def addVariableValues(self, obj, objhash) :
+    def add_variable_values(self, obj, objhash) :
         csvname = obj["@parent"]["@id"] + ".csv"
         if "number" not in obj:
             obj["number"] = obj["@index"]
@@ -624,20 +564,14 @@ class LipdToRDF(object):
             obj["hasValues"] = json.dumps(values)
 
             # rdf:Seq doesn't seem to be importing well in GraphDB            
-            #bnodeid = self.unrollValuesListToRDF(values, dtype)
+            #bnodeid = self.unroll_values_list_to_rdf(values, dtype)
             #obj["hasValues"] = bnodeid
 
             return [obj, objhash, []]
         return [obj, objhash, []]
     
-    ### Object json reverse conversion
-    def removeFoundInTable(self, var, parent = None) :
-        if (("foundInTable" in var)) :
-            del var["foundInTable"]
-        return var
-    
     ### Testing Lipd Json to Ontology
-    def expandSchema(self) :
+    def expand_schema(self) :
         xschema = {}
         for key,props in SCHEMA.items() :
             # Add core schema too
@@ -651,7 +585,7 @@ class LipdToRDF(object):
                         xschema[key][altkey] = pdetails
         SCHEMA = xschema
     
-    def modifyStructureIfNeeded(self, obj, objhash, schema) :
+    def modify_structure_if_needed(self, obj, objhash, schema) :
         if (("@fromJson" in schema)) :
             for func in schema["@fromJson"]: 
                 fn = getattr(self, func)
@@ -662,11 +596,11 @@ class LipdToRDF(object):
                         if (type(newobj) is dict) and ("@category" in newobj) :
                             newschid = newobj["@category"]
                             newschema =  SCHEMA[newschid] if (newschid in SCHEMA) else {}
-                            (objhash[newid], objhash) = self.modifyStructureIfNeeded(newobj, objhash, newschema)
+                            (objhash[newid], objhash) = self.modify_structure_if_needed(newobj, objhash, newschema)
         
         return [obj, objhash]
     
-    def getCompoundKeyId(self, compound_key, obj) :
+    def get_compound_key_id(self, compound_key, obj) :
         tobj = obj
         for key in compound_key : 
             if ((type(tobj) is dict) and (key in tobj)) :
@@ -679,52 +613,52 @@ class LipdToRDF(object):
         
         return None
     
-    def getBindingKeyId(self, key, obj) :
+    def get_binding_key_id(self, key, obj) :
         key_options = key.split("|")
         for optkey in key_options : 
             compound_key = optkey.split(".")
-            keyid = self.getCompoundKeyId(compound_key, obj)
+            keyid = self.get_compound_key_id(compound_key, obj)
             if (keyid) :
                 return keyid
         return uniqid()
     
-    def getFunctionKeyId(self, fn, arg, curobjid) :
+    def get_function_key_id(self, fn, arg, curobjid) :
         if (fn == "trunc") :
             return curobjid[0:0 + len(curobjid) - int(arg)]
         elif (fn == "uniqid") :
             return str(curobjid) + uniqid(arg)
         return curobjid
     
-    def createIdFromPattern(self, pattern, obj) :
+    def create_id_from_pattern(self, pattern, obj) :
         objid = ""
         for key in pattern : 
             m = re.search(r"{(.+)}", key)
             if m and len(m.groups()) > 0 :
-                objid += str(self.getBindingKeyId(m.groups()[0], obj))
+                objid += str(self.get_binding_key_id(m.groups()[0], obj))
             else : 
                 m = re.search(r"_(.+)\((.*)\)", key)
                 if m and len(m.groups()) > 1:
                     fn = m.groups()[0]
                     arg = m.groups()[1]
-                    objid = str(self.getFunctionKeyId(fn, arg, objid))
+                    objid = str(self.get_function_key_id(fn, arg, objid))
                 else : 
                     objid += str(key)
         return objid
     
-    def fixTitle(self, titleid) :
+    def fix_title(self, titleid) :
         return titleid.replace(r"@\\x{FFFD}@u", '_')
     
-    def getObjectId(self, obj, category, schema) :
+    def get_object_id(self, obj, category, schema) :
         if type(obj) is dict:
             objid =  "Unknown." + uniqid(category)
         else:
             objid = ucfirst(obj).replace(" ", "_")
         if (("@id" in schema)) :
-            objid = self.createIdFromPattern(schema["@id"], obj)
+            objid = self.create_id_from_pattern(schema["@id"], obj)
         
-        return self.fixTitle(objid)
+        return self.fix_title(objid)
     
-    def mapLipdJson(self, obj, parent, index, category, schemaname, hash) :
+    def map_lipd_to_json(self, obj, parent, index, category, schemaname, hash) :
         schema =  SCHEMA[schemaname] if (schemaname in SCHEMA) else {}
         SCHEMA[schemaname] = schema
         
@@ -735,14 +669,14 @@ class LipdToRDF(object):
         obj["@index"] = index
         obj["@schema"] = schemaname
         
-        objid = self.getObjectId(obj, category, schema)
+        objid = self.get_object_id(obj, category, schema)
         if (("@id" in obj)) :
             objid = obj["@id"]
         if ((objid in hash)) :
             return objid
         obj["@id"] = objid
         
-        (obj, hash) = self.modifyStructureIfNeeded(obj, hash, schema)
+        (obj, hash) = self.modify_structure_if_needed(obj, hash, schema)
         
         if ("@category" in obj) :
             category = obj["@category"]
@@ -787,11 +721,11 @@ class LipdToRDF(object):
                                 if (type(value) is dict):
                                     if propkey not in item:
                                         item[propkey] = []
-                                    item[propkey].append(self.mapLipdJson(subvalue, obj, index, cat, sch, hash))
+                                    item[propkey].append(self.map_lipd_to_json(subvalue, obj, index, cat, sch, hash))
                                     index+=1
                         else : 
                             if (type(value) is dict):
-                                item[propkey] = self.mapLipdJson(value, obj, None, cat, sch, hash)
+                                item[propkey] = self.map_lipd_to_json(value, obj, None, cat, sch, hash)
                             else : 
                                 item[propkey] = value
                             
@@ -816,14 +750,14 @@ class LipdToRDF(object):
                     for subvalue in value: 
                         if propkey not in item:
                             item[propkey] = []                    
-                        item[propkey].append(self.mapLipdJson(subvalue, obj, index, cat, sch, hash))
+                        item[propkey].append(self.map_lipd_to_json(subvalue, obj, index, cat, sch, hash))
                         index+=1
                     
                 else : 
                     if (type(value) is dict):
                         if propkey not in item:
                             item[propkey] = []                      
-                        item[propkey].append(self.mapLipdJson(value, obj, None, cat, sch, hash))
+                        item[propkey].append(self.map_lipd_to_json(value, obj, None, cat, sch, hash))
                     else : 
                         if (dtype == "Individual") :
                             item[propkey] = value
@@ -839,7 +773,7 @@ class LipdToRDF(object):
         hash[objid] = item
         return objid
     
-    def guessDataValueType(self, val) :
+    def guess_data_value_type(self, val) :
         value = str(val)
         if (re.search(r"^-?\d+$", value)) :
             return "float" #"integer"
@@ -876,12 +810,12 @@ class LipdToRDF(object):
                 return "Individual"
             
             else : 
-                valtype = self.guessDataValueType(value)
+                valtype = self.guess_data_value_type(value)
                 return valtype
 
         return "string"
     
-    def getPropertyDetails(self, key, schema, value) :
+    def get_property_details(self, key, schema, value) :
         pname = key
         details = {
             "name": pname
@@ -917,15 +851,15 @@ class LipdToRDF(object):
         return details
     
     # Create individual
-    def createIndividual(self, objid) :
+    def create_individual(self, objid) :
         return self.namespace + sanitizeId(objid)
     
     # Create class
-    def createClass(self, category) :
+    def create_class(self, category) :
         return ONTONS + sanitizeId(category)
     
     # Create property
-    def createProperty(self, prop, dtype, cat, icon, multiple) :
+    def create_property(self, prop, dtype, cat, icon, multiple) :
         nsprop = prop.split(":", 2)
         ns = ONTONS
         if len(nsprop) > 1 :
@@ -936,7 +870,7 @@ class LipdToRDF(object):
         return [ ns + lcfirst(sanitizeId(prop)), dtype ]
     
     # Set individual classes
-    def setIndividualClasses(self, objid, category, extracats) :
+    def set_individual_classes(self, objid, category, extracats) :
         if objid and category:
             self.graph.add((
                 URIRef(objid),
@@ -949,15 +883,15 @@ class LipdToRDF(object):
                 self.graph.add((
                     URIRef(objid),
                     RDF.type,
-                    URIRef(self.createClass(ecat)),
+                    URIRef(self.create_class(ecat)),
                     URIRef(self.graphurl)
                 ))
     
     # Set property value
-    def setProperty( self, objid, prop, value ):
+    def set_property( self, objid, prop, value ):
         if (type(value) is list) :
             for subvalue in value : 
-                self.setProperty(objid, prop, subvalue)
+                self.set_property(objid, prop, subvalue)
             return
 
         (propid, dtype) = prop
@@ -993,7 +927,7 @@ class LipdToRDF(object):
                     value = 0
 
             if dtype == "Individual":
-                value = self.createIndividual(value)
+                value = self.create_individual(value)
                 objitem = URIRef(value)
             
             elif dtype == "List":
@@ -1008,35 +942,8 @@ class LipdToRDF(object):
                 objitem,
                 URIRef(self.graphurl)
             ))
-
-    # Set subobject propvals
-    def setSubobjects(self, objid, subobjid, subpropvals, schema) :
-        if (not subpropvals) :
-            return
-        
-        subobjectid = str(objid) + "_" + str(subobjid)
-        for pval in subpropvals : 
-            for key,value in pval.items() :
-                if (key[0] == "@") :
-                    continue
-                
-                details = self.getPropertyDetails(key, schema, value)
-                prop = details["name"]
-                type = details["type"]
-                icon =  details["icon"] if ("icon" in details) else None
-                cat =  details["category"] if ("category" in details) else None
-                sch =  details["schema"] if ("schema" in details) else None
-                fromJson =  details["fromJson"] if ("fromJson" in details) else None
-                multiple =  details["multiple"] if ("multiple" in details) else False
-                # Create & set Property
-                propDI = self.createProperty(prop, type, cat, icon, multiple)
-                self.setProperty(subobjectid, propDI, value)
-                #print "|$key=$value"
-
-        #print "\n"
-        return
     
-    def createIndividualFull(self, obj) :
+    def create_individual_full(self, obj) :
         category = obj["@category"]
         extracats =  obj["@extracats"] if ("@extracats" in obj) else {}
         schemaname =  obj["@schema"] if ("@schema" in obj) else category
@@ -1048,18 +955,18 @@ class LipdToRDF(object):
         subobjects = {}
         # Create category
         if (category) :
-            category = self.createClass(category)
+            category = self.create_class(category)
         
-        objid = self.createIndividual(objid)
+        objid = self.create_individual(objid)
         
         # Set Individual classes
-        self.setIndividualClasses(objid, category, extracats)
+        self.set_individual_classes(objid, category, extracats)
         
         for key,value in obj.items() :
             if (key[0] == "@") :
                 continue
             
-            details = self.getPropertyDetails(key, schema, value)
+            details = self.get_property_details(key, schema, value)
             prop = details["name"]
             dtype = details["type"]
             icon =  details["icon"] if ("icon" in details) else None
@@ -1075,11 +982,11 @@ class LipdToRDF(object):
                 continue
                 
             # Create Property
-            propDI = self.createProperty(prop, dtype, cat, icon, multiple)
+            propDI = self.create_property(prop, dtype, cat, icon, multiple)
 
             # Set property value
             if (dtype == "Individual" or type(value) is dict) :
-                self.setProperty(objid, propDI, value)
+                self.set_property(objid, propDI, value)
             else : 
                 if (dtype == "File") :
                     # Enable this ?
@@ -1087,11 +994,11 @@ class LipdToRDF(object):
                     fileid = uploadFile(value)
                     if (fileid) :
                         protectIndividual(fileid)
-                        data = setProperty(data, propDI, fileid)
+                        data = set_property(data, propDI, fileid)
                     """
 
                 else : 
-                    self.setProperty(objid, propDI, value)
+                    self.set_property(objid, propDI, value)
 
     def find_files_with_extension(self, directory, extension):
         myregexobj = re.compile('\.'+extension+'$')
@@ -1106,14 +1013,17 @@ class LipdToRDF(object):
         except FileNotFoundError as fnf:
             print(directory +' not found ', fnf)
 
-    def convertLipdJsonToRDF(self, jsonpath, rdfpath, url=None):
+    def convert_lipd_json_to_rdf(self, jsonpath, rdfpath, url=None):
         self.graph = ConjunctiveGraph()
         objhash = {}
         
         with open(jsonpath) as f:
             obj = json.load(f)
+            fw = open("test.json", "w")
+            fw.write(json.dumps(obj, indent=3))
+            fw.close()
         
-            self.mapLipdJson(obj, None, None, "Dataset", "Dataset", objhash)
+            self.map_lipd_to_json(obj, None, None, "Dataset", "Dataset", objhash)
             if url:
                 objhash[obj["@id"]]["hasUrl"] = url
             elif self.collection_id:
@@ -1122,6 +1032,6 @@ class LipdToRDF(object):
                 objhash[obj["@id"]]["hasUrl"] = DATAURL + "/" + obj["@id"] + ".lpd"
 
             for key, item in objhash.items():
-                self.createIndividualFull(item)
+                self.create_individual_full(item)
 
             self.graph.serialize(rdfpath, format="nquads", encoding="utf-8")

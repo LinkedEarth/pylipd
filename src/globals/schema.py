@@ -1,8 +1,8 @@
 SCHEMA = {
     'Dataset': {
         '@id': ['{dataSetName}'],
-        '@fromJson': ['addExtraDatasetProperties'],
-        '@toJson': ['getVariableArchiveTypes'],
+        '@fromJson': ['add_extra_dataset_properties'],
+        '@toJson': ['get_variable_archive_types'],
         'dataSetName': { 
             'name': 'name', 
             'alternates': ['paleoArchiveName'] 
@@ -15,7 +15,7 @@ SCHEMA = {
             'name': 'author',
             'schema': 'Person',
             'alternates': ['whoEnteredinDB', 'MetadataEnteredByWhom'],
-            'fromJson': 'parsePerson'
+            'fromJson': 'parse_person'
         },
         'archiveType': {
             'name': 'proxyArchiveType',
@@ -33,13 +33,13 @@ SCHEMA = {
             'name': 'contributor',
             'schema': 'Person',
             'multiple': True,
-            'fromJson': 'parsePersons'
+            'fromJson': 'parse_persons'
         },
         'investigators': {
             'name': 'contributor',
             'schema': 'Person',
             'hack': True,
-            'fromJson': 'parsePersonsString'
+            'fromJson': 'parse_persons_string'
         },
         'funding': { 
             'name': 'fundedBy', 
@@ -54,8 +54,8 @@ SCHEMA = {
         'geo': {
             'name': 'collectedFrom',
             'schema': 'Location',
-            'fromJson': 'parseLocation',
-            'toJson': 'locationToJson'
+            'fromJson': 'parse_location',
+            'toJson': 'location_to_json'
         },
         'paleoData': {
             'name': 'includesPaleoData',
@@ -69,8 +69,8 @@ SCHEMA = {
         },
         'googleSpreadSheetKey': {
             'name': 'hasSpreadsheetLink',
-            'fromJson': 'getGoogleSpreadsheetURL',
-            'toJson': 'getGoogleSpreadsheetKey'
+            'fromJson': 'get_google_spreadsheet_url',
+            'toJson': 'get_google_spreadsheet_key'
         },
         'dataSetVersion': { 
             'name': 'datasetVersion' 
@@ -87,7 +87,11 @@ SCHEMA = {
     },
     'ChangeLog': {
         '@id': ['{@parent.@id}', '.ChangeLog.', '{@index}'],
-        '@category': 'ChangeLog'
+        '@category': 'ChangeLog',
+        'changes': {
+            'name': 'hasChanges',
+            'type': 'Individual'
+        }
     },
     'Funding': {
         '@id': [
@@ -115,8 +119,8 @@ SCHEMA = {
             '{identifier.0.id|@parent.dataSetName}',
             '{index}'
         ],
-        '@fromJson': ['setIdentifierProperties'],
-        '@toJson': ['createPublicationIdentifier'],
+        '@fromJson': ['set_identifier_properties'],
+        '@toJson': ['create_publication_identifier'],
         'title': { 
             'name': 'title' 
         },
@@ -141,12 +145,12 @@ SCHEMA = {
             'name': 'author',
             'schema': 'Person',
             'multiple': True,
-            'fromJson': 'parsePersons'
+            'fromJson': 'parse_persons'
         },
         'authors': {
             'name': 'author',
             'schema': 'Person',
-            'fromJson': 'parsePersonsString',
+            'fromJson': 'parse_persons_string',
             'hack': True
         }
     },
@@ -236,7 +240,7 @@ SCHEMA = {
     },
     'DataTable': {
         '@id': ['{filename}', '_trunc(4)'],
-        '@fromJson': ['setInterVariableLinks'],
+        '@fromJson': ['set_inter_variable_links'],
         'filename': { 
             'name': 'hasFileName', 
             'type': 'File' 
@@ -259,18 +263,19 @@ SCHEMA = {
             '{variableName|name}'
         ],
         '@fromJson': [
-            'setVariableCategory',
-            'wrapUncertainty',
-            'createProxySystem',
-            'addFoundInTable',
-            'addVariableValues'
+            'set_variable_category',
+            'wrap_uncertainty',
+            'create_proxy_system',
+            'add_found_in_table',
+            'add_variable_values'
         ],
         '@toJson': [
-            'setVariableType',
-            'unwrapUncertainty',
-            'extractFromProxySystem',
-            'removeFoundInTable',
-            'removeDepthProperty'
+            'set_variable_type',
+            'unwrap_uncertainty',
+            'extract_from_proxy_system',
+            'remove_found_in_table',
+            'remove_depth_property',
+            'unarray_column_number'
         ],
         'number': { 
             'name': 'hasColumnNumber', 
@@ -392,8 +397,8 @@ SCHEMA = {
         'units': { 
             'name': 'hasUnits' 
         }    
-        #'@fromJson': ['valuesToString'],
-        #'@toJson': ['valuesToArray']
+        #'@fromJson': ['values_to_string'],
+        #'@toJson': ['values_to_array']
     },
     'Location': {
         '@id': ['{@parent.dataSetName}', '.Location'],
@@ -413,7 +418,7 @@ SCHEMA = {
             '.Interpretation',
             '{@index}'
         ],
-        '@toJson': ['changeSeasonalityType'],
+        '@toJson': ['change_seasonality_type'],
         'interpDirection': {
             'name': 'interpretationDirection',
             'alternates': [
@@ -445,8 +450,8 @@ SCHEMA = {
             '.IsotopeInterpretation',
             '{@index}'
         },
-        '@fromJson': ['wrapIntegrationTime'],
-        '@toJson': ['unwrapIntegrationTime'],
+        '@fromJson': ['wrap_integration_time'],
+        '@toJson': ['unwrap_integration_time'],
         'integrationTime': {
             'name': 'hasIntegrationTime',
             'type': 'Individual',
@@ -459,8 +464,8 @@ SCHEMA = {
         }
     },
     'IntegrationTime': {
-        '@fromJson': ['wrapUncertainty'],
-        '@toJson': ['unwrapUncertainty'],
+        '@fromJson': ['wrap_uncertainty'],
+        '@toJson': ['unwrap_uncertainty'],
         'basis': { 
             'name': 'relevantQuote' 
         },
@@ -495,8 +500,8 @@ SCHEMA = {
     },
     'CalibrationModel': {
         '@id': ['{@parent.@id}', '.Calibration'],
-        '@fromJson': ['wrapUncertainty'],
-        '@toJson': ['unwrapUncertainty'],
+        '@fromJson': ['wrap_uncertainty'],
+        '@toJson': ['unwrap_uncertainty'],
         'reference': { 
             'name': 'relevantQuote' 
         }
