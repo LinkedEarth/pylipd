@@ -1019,10 +1019,7 @@ class LipdToRDF(object):
         
         with open(jsonpath) as f:
             obj = json.load(f)
-            fw = open("test.json", "w")
-            fw.write(json.dumps(obj, indent=3))
-            fw.close()
-        
+            
             self.map_lipd_to_json(obj, None, None, "Dataset", "Dataset", objhash)
             if url:
                 objhash[obj["@id"]]["hasUrl"] = url
