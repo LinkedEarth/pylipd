@@ -196,7 +196,7 @@ class LiPD(object):
             timeseries.extend(tss)
         return timeseries
 
-    def get_dataset(self, dsid, data_only=True):
+    def get_dataset(self, dsid, data_only=False):
         ds = self.get_all_properties(dsid)
         ds["id"] = str(dsid)
         ds["includesPaleoData"] = self.get_paleo_data(dsid)
@@ -207,7 +207,7 @@ class LiPD(object):
         return ds
 
 
-    def get_datasets(self, dsids=None, data_only=True):
+    def get_datasets(self, dsids=None, data_only=False):
         extraclause = ""
         if dsids != None:
             dsidstr = (' '.join('<' + NSURL + "#" + dsid + '>' for dsid in dsids))
