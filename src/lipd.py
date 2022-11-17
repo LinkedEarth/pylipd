@@ -53,16 +53,16 @@ class LiPD(object):
         self.graph.bind("le", Namespace(ONTONS))        
         #self.graph.bind("", Namespace(NS))
 
-    def load_local_from_dir(self, dir_path, collection_id=None):
+    def load_from_dir(self, dir_path, collection_id=None):
         lipdfiles = []
         for path in os.listdir(dir_path):
             fullpath = os.path.join(dir_path, path)
             lipdfiles.append(fullpath)
-        self.load_local(lipdfiles, collection_id)
+        self.load(lipdfiles, collection_id)
 
 
     # Allows loading http locations
-    def load_local(self, lipdfiles, collection_id=None):
+    def load(self, lipdfiles, collection_id=None):
         filemap = {}
         for lipdfile in lipdfiles:
             rdffile = tempfile.NamedTemporaryFile().name
@@ -83,7 +83,7 @@ class LiPD(object):
         print("Loaded..")
 
 
-    def load_remote(self, endpoint):
+    def set_endpoint(self, endpoint):
         self.remote = True
         self.endpoint = endpoint
 
@@ -158,7 +158,7 @@ class LiPD(object):
             "properties": self._get_prop_values_from_query_result_p_o(object_rows[objid])
         } for objid in object_rows]
 
-    def cache_remote_datasets_to_local(self, dsids):
+    def load_remote_datasets(self, dsids):
         if dsids == None or len(dsids) == 0:
             raise Exception("No dataset ids to cache")
         dsidstr = (' '.join('<' + NSURL + "/" + dsid + '>' for dsid in dsids))

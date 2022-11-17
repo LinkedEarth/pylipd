@@ -29,11 +29,12 @@ if __name__=="__main__":
 
     # Load from local
     lipdfiles = [local_lipd_dir + "/" + dsid + ".lpd" for dsid in dsids]
-    lipd.load_local(lipdfiles)
-    #lipd.load_local_from_dir(local_lipd_dir)
+    lipd.load(lipdfiles)
+    #lipd.load_from_dir(local_lipd_dir)
     
     # Fetch LiPD data from remote RDF Graph
-    # lipd.load_remote(remote_lipd_endpoint)
+    #lipd.set_endpoint(remote_lipd_endpoint)
+    #lipd.load_remote_datasets(dsids=dsids)
 
     # Convert to TSO object (as before)
     ts_list = lipd.convert_to_timeseries(dsids)
