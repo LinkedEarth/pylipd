@@ -16,7 +16,7 @@ from globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
 from globals.blacklist import BLACKLIST
 from globals.schema import SCHEMA
 
-from utils import ucfirst, lcfirst, camelCase, unCamelCase, fromCamelCase, escape, uniqid, sanitizeId
+from utils import ucfirst, lcfirst, camelCase, unCamelCase, escape, uniqid, sanitizeId
 
 class LipdToRDF(object):
     
@@ -660,7 +660,6 @@ class LipdToRDF(object):
     
     def map_lipd_to_json(self, obj, parent, index, category, schemaname, hash) :
         schema =  SCHEMA[schemaname] if (schemaname in SCHEMA) else {}
-        SCHEMA[schemaname] = schema
         
         if not type(obj) is dict:
             return obj

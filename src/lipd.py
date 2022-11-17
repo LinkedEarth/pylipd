@@ -2,6 +2,7 @@ import os
 import re
 import json
 import copy
+import os.path
 import tempfile
 import multiprocessing as mp
 
@@ -11,7 +12,7 @@ from rdf_to_lipd import RDFToLiPD
 from utils import ucfirst, lcfirst
 from lipd_to_rdf import LipdToRDF
 from globals.urls import NSURL, ONTONS
-from series.regexes import re_pandas_x_und, re_fund_valid, re_pub_valid, re_sheet_w_number, re_sheet, re_filter_expr
+from series.regexes import re_pandas_x_und, re_sheet
 
 
 EMPTY = ['', ' ', None, 'na', 'n/a', '?', "'", "''"]
@@ -47,6 +48,7 @@ def multi_convert_to_rdf(filemap, collection_id=None):
 class LiPD(object):
     def __init__(self):
         self.initialize_graph()
+        self.remote = False
 
     def initialize_graph(self):
         self.graph = ConjunctiveGraph()
@@ -54,17 +56,29 @@ class LiPD(object):
         #self.graph.bind("", Namespace(NS))
 
     def load_from_dir(self, dir_path, collection_id=None):
+        if not os.path.isdir(dir_path):
+            print(f"Directory {dir_path} does not exist")
+            return
+
         lipdfiles = []
         for path in os.listdir(dir_path):
-            fullpath = os.path.join(dir_path, path)
-            lipdfiles.append(fullpath)
+            if os.path.isfile(path) and path.endswith(".lpd"):
+                fullpath = os.path.join(dir_path, path)
+                lipdfiles.append(fullpath)
         self.load(lipdfiles, collection_id)
 
 
     # Allows loading http locations
     def load(self, lipdfiles, collection_id=None):
+        if type(lipdfiles) is not list:
+            lipdfiles = [lipdfiles]
+            
         filemap = {}
         for lipdfile in lipdfiles:
+            if not os.path.isfile(lipdfile):
+                print(f"File {lipdfile} does not exist")
+                continue
+
             rdffile = tempfile.NamedTemporaryFile().name
             filemap[lipdfile] = rdffile
         
@@ -142,7 +156,6 @@ class LiPD(object):
         qres = self.query(f"SELECT ?p ?o WHERE {{ <{id}> ?p ?o }}")
         return self._get_prop_values_from_query_result_p_o(qres)
 
-
     def get_dataset_property_object_properties(self, dsid, propid):
         qres = self.query(f"SELECT ?s ?p ?o WHERE {{ <{dsid}> le:{propid} ?s . ?s ?p ?o }}")
         
@@ -172,11 +185,11 @@ class LiPD(object):
         print("Done..")
         self.remote = False
 
-    def convert_to_timeseries(self, dsids):
+    def get_timeseries(self, dsids):
         if self.remote:
             # Cache datasets locally - to speed up queries
             self.cache_remote_datasets_to_local(dsids)
-            ts = self.get_timeseries(dsids)
+            ts = self._get_timeseries(dsids)
 
             # Go back to remote
             self.initialize_graph()
@@ -184,17 +197,22 @@ class LiPD(object):
 
             return ts
         else:
-            ts = self.get_timeseries(dsids)
+            ts = self._get_timeseries(dsids)
             return ts
 
-    def get_timeseries(self, dsids):
-        timeseries = []
+    def _get_timeseries(self, dsids):
+        timeseries = {}
         for dsid in dsids:
             converter = RDFToLiPD()            
             d = converter.convert(dsid, self.graph)
-            tss = self.extract(d)
-            timeseries.extend(tss)
+            if len(d.items()):
+                tss = self.extract(d)
+                timeseries[dsid] = tss
         return timeseries
+
+    def get_lipd(self, dsid):
+        converter = RDFToLiPD()            
+        return converter.convert(dsid, self.graph)
 
     def get_dataset(self, dsid, data_only=False):
         ds = self.get_all_properties(dsid)
@@ -221,6 +239,16 @@ class LiPD(object):
             """
         qres = self.query(query)
         return [self.get_dataset(row.s, data_only) for row in qres]
+
+    def get_all_dataset_ids(self):
+        query = f"""
+            SELECT ?dsname WHERE {{ 
+                ?ds a le:Dataset .
+                ?ds le:name ?dsname
+            }}
+            """
+        qres = self.query(query)
+        return [row.dsname for row in qres]
 
     def get_table_variables(self, tableid):
         qres = self.query(f"SELECT ?v ?p ?o WHERE {{ <{tableid}> le:includesVariable ?v . ?v ?p ?o }}")

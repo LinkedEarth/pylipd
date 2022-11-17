@@ -7,7 +7,7 @@ from globals.urls import NSURL
 from globals.blacklist import REVERSE_BLACKLIST
 from globals.schema import SCHEMA
 
-from utils import ucfirst, lcfirst, camelCase, unCamelCase, fromCamelCase, escape, uniqid, sanitizeId
+from utils import ucfirst, lcfirst, camelCase, unCamelCase
 
 class RDFToLiPD(object):
     def __init__(self, collection_id=None):
@@ -298,7 +298,7 @@ class RDFToLiPD(object):
             del var["foundInTable"]
         return var
 
-    def _get_variable_archive_types(self, item, atypes = {}) :
+    def _get_variable_archive_types(self, item, atypes) :
         if type(item) is dict:
             nitem = {}
             for key,value in item.items() :
@@ -318,7 +318,7 @@ class RDFToLiPD(object):
         return [nitem, atypes]
 
     def get_variable_archive_types(self, var, parent = None) :
-        [var, atypes] = self._get_variable_archive_types(var)
+        [var, atypes] = self._get_variable_archive_types(var, {})
         for atype,ok in atypes.items() :
             var["archiveType"] = atype
         return var
