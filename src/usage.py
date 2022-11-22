@@ -33,14 +33,20 @@ if __name__=="__main__":
     #lipd.load_from_dir(local_lipd_dir)
     
     # Fetch LiPD data from remote RDF Graph
-    #lipd.set_endpoint(remote_lipd_endpoint)
-    #lipd.load_remote_datasets(dsids=dsids)
+    # lipd.set_endpoint(remote_lipd_endpoint)
+    # lipd.search_datasets(params1=x1, param2=x2)
+    # lipd.load_remote_datasets(dsids=dsids)
+
+    res = lipd.query("SELECT ?s WHERE {?s a le:Dataset }")
+    for row in res:
+        print(row)
 
     # Convert to TSO object (as before)
+    print(lipd.get_all_dataset_ids())
     ts_list = lipd.get_timeseries(dsids)
     for dsid, tsos in ts_list.items():
         for tso in tsos:
-            print(dsid+': '+tso['paleoData_variableName'])
+            print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
 
     '''
     datasets = lipd.get_datasets(dsids=dsids)
