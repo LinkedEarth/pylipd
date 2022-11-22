@@ -188,12 +188,12 @@ class LiPD(object):
     def get_timeseries(self, dsids):
         if self.remote:
             # Cache datasets locally - to speed up queries
-            self.cache_remote_datasets_to_local(dsids)
+            self.load_remote_datasets(dsids)
             ts = self._get_timeseries(dsids)
 
             # Go back to remote
             self.initialize_graph()
-            self.load_remote(self.endpoint)
+            self.set_endpoint(self.endpoint)
 
             return ts
         else:

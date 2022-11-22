@@ -6,8 +6,6 @@ from lipd import LiPD
 ####################
 
 if __name__=="__main__":
-    lipd = LiPD()
-
     local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd"
     remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2"
 
@@ -28,27 +26,30 @@ if __name__=="__main__":
     dsids = ["MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012", "Asi-TDAXJP.PAGES2k.2013"]
 
     # Load from local
+    lipd = LiPD()
     lipdfiles = [local_lipd_dir + "/" + dsid + ".lpd" for dsid in dsids]
     lipd.load(lipdfiles)
     #lipd.load_from_dir(local_lipd_dir)
+    res = lipd.query("SELECT ?s WHERE {?s a le:Dataset }")
+    for row in res:
+        print(row)    
     
     # Fetch LiPD data from remote RDF Graph
-    # lipd.set_endpoint(remote_lipd_endpoint)
-    # lipd.search_datasets(params1=x1, param2=x2)
-    # lipd.load_remote_datasets(dsids=dsids)
-
+    lipd = LiPD()
+    lipd.set_endpoint(remote_lipd_endpoint)
+    #lipd.load_remote_datasets(dsids=dsids)
     res = lipd.query("SELECT ?s WHERE {?s a le:Dataset }")
     for row in res:
         print(row)
 
     # Convert to TSO object (as before)
-    print(lipd.get_all_dataset_ids())
     ts_list = lipd.get_timeseries(dsids)
     for dsid, tsos in ts_list.items():
         for tso in tsos:
             print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
 
     '''
+    print(lipd.get_all_dataset_ids())    
     datasets = lipd.get_datasets(dsids=dsids)
     print("Fetched..")
     for ds in datasets:
