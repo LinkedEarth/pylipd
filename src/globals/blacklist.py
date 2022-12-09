@@ -10,3 +10,7 @@ BLACKLIST = {
     'chronDataMD5' : 1,
     'chronMeasurementTableMD5' : 1
 }
+
+REVERSE_BLACKLIST = {
+    'takenAtDepth' : 1
+}
