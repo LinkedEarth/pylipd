@@ -7,12 +7,13 @@ import tempfile
 import multiprocessing as mp
 
 from rdflib import ConjunctiveGraph, Namespace
-from rdf_to_lipd import RDFToLiPD
 
-from utils import ucfirst, lcfirst
-from lipd_to_rdf import LipdToRDF
-from globals.urls import NSURL, ONTONS
-from series.regexes import re_pandas_x_und, re_sheet
+from pylipd.rdf_to_lipd import RDFToLiPD
+from pylipd.lipd_to_rdf import LipdToRDF
+
+from .utils import ucfirst, lcfirst
+from .globals.urls import NSURL, ONTONS
+from .series.regexes import re_pandas_x_und, re_sheet
 
 
 EMPTY = ['', ' ', None, 'na', 'n/a', '?', "'", "''"]

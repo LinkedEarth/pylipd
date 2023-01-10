@@ -1,4 +1,4 @@
-from lipd import LiPD
+from pylipd.lipd import LiPD
 
 ####################
 # TODO:

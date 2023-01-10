@@ -3,11 +3,11 @@ import json
 
 from rdflib.graph import ConjunctiveGraph, URIRef
 
-from globals.urls import NSURL
-from globals.blacklist import REVERSE_BLACKLIST
-from globals.schema import SCHEMA
+from .globals.urls import NSURL
+from .globals.blacklist import REVERSE_BLACKLIST
+from .globals.schema import SCHEMA
 
-from utils import ucfirst, lcfirst, camelCase, unCamelCase
+from .utils import ucfirst, lcfirst, camelCase, unCamelCase
 
 class RDFToLiPD(object):
     def __init__(self, collection_id=None):

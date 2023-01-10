@@ -12,11 +12,11 @@ from rdflib.namespace import XSD
 from io import BytesIO
 from urllib.request import urlopen
 
-from globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
-from globals.blacklist import BLACKLIST
-from globals.schema import SCHEMA
+from .globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
+from .globals.blacklist import BLACKLIST
+from .globals.schema import SCHEMA
 
-from utils import ucfirst, lcfirst, camelCase, unCamelCase, escape, uniqid, sanitizeId
+from .utils import ucfirst, lcfirst, camelCase, unCamelCase, escape, uniqid, sanitizeId
 
 class LipdToRDF(object):
     
