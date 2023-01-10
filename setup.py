@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="pylipd",
-    version="0.9.0",
+    version="0.9.1",
     description="Python utilities for handling LiPD data",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -29,7 +29,8 @@ setup(
         "Intended Audience :: Science/Research",
         "Operating System :: Unix",
     ],
-    packages=["src/pylipd"],
+    packages=["pylipd"],
+    package_dir = {'pylipd': 'src/pylipd'},
     include_package_data=True,
     install_requires=["rdflib", "pandas"]
 )
