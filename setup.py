@@ -29,7 +29,7 @@ setup(
         "Intended Audience :: Science/Research",
         "Operating System :: Unix",
     ],
-    packages=["pylipd"],
+    packages=["src/pylipd"],
     include_package_data=True,
-    install_requires=["rdflib", "chardet", "idna", "requests", "urllib3"],
+    install_requires=["rdflib", "pandas"]
 )
