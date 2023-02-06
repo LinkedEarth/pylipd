@@ -2,3 +2,5 @@ __pycache__
 *.egg-info
 build
 dist
+src/.ipynb_checkpoints/ExampleUsage-checkpoint.ipynb
+src/.ipynb_checkpoints/usage-checkpoint.py
