@@ -164,13 +164,13 @@ SCHEMA = {
             'name': 'name' 
         },
         'measurementTable': {
-            'alternatives': ['paleoMeasurementTable'],
+            'alternates': ['paleoMeasurementTable'],
             'name': 'foundInMeasurementTable',
             'multiple': True,
             'schema': 'DataTable'
         },
         'model': {
-            'alternatives': ['paleoModel'],            
+            'alternates': ['paleoModel'],            
             'name': 'paleoModeledBy',
             'multiple': True,
             'schema': 'Model',
@@ -184,13 +184,13 @@ SCHEMA = {
             '{@index}'
         ],
         'measurementTable': {
-            'alternatives': ['chronMeasurementTable'],
+            'alternates': ['chronMeasurementTable'],
             'name': 'foundInMeasurementTable',
             'multiple': True,
             'schema': 'DataTable'
         },
         'model': {
-            'alternatives': ['chronModel'],            
+            'alternates': ['chronModel'],            
             'name': 'chronModeledBy',
             'multiple': True,
             'schema': 'Model',
@@ -267,7 +267,8 @@ SCHEMA = {
             'wrap_uncertainty',
             'create_proxy_system',
             'add_found_in_table',
-            'add_variable_values'
+            'add_variable_values',
+            'stringify_column_numbers_array'
         ],
         '@toJson': [
             'set_variable_type',
@@ -275,12 +276,12 @@ SCHEMA = {
             'extract_from_proxy_system',
             'remove_found_in_table',
             'remove_depth_property',
+            'extract_variable_values',
             'unarray_column_number'
         ],
         'number': { 
             'name': 'hasColumnNumber', 
-            'type': 'integer',
-            'multiple': True
+            'type': 'integer'
         },
         'TSid': { 
             'name': 'hasVariableID', 

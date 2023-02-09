@@ -1,3 +1,4 @@
+import copy
 import re
 import json
 
@@ -7,7 +8,7 @@ from .globals.urls import NSURL
 from .globals.blacklist import REVERSE_BLACKLIST
 from .globals.schema import SCHEMA
 
-from .utils import ucfirst, lcfirst, camelCase, unCamelCase
+from .utils import expand_schema, ucfirst, lcfirst, unCamelCase, unzip_string
 
 class RDFToLiPD(object):
     def __init__(self, collection_id=None):
@@ -21,12 +22,13 @@ class RDFToLiPD(object):
 
     def convert(self, id, graph):
         self.graph = graph
+        self.schema = copy.deepcopy(SCHEMA)
         self.rschema = self.get_schema_reverse_map()
 
         self.allfacts = {}
         self.get_indexed_facts(self.namespace + id)
         
-        lipd = self.convert_to_lipd(self.namespace + id, "Dataset", "Dataset")
+        lipd = self.convert_to_lipd(self.namespace + id, "Dataset", "Dataset", pagesdone=[])
         lipd = self.post_processing(lipd)
         return lipd
 
@@ -57,7 +59,7 @@ class RDFToLiPD(object):
 
     def get_schema_reverse_map(self) :
         newschema = {}
-        for schid,sch in SCHEMA.items() :
+        for schid,sch in self.schema.items() :
             newsch = {}
             for prop,details in sch.items() :
                 if (prop[0] == "@") :
@@ -182,7 +184,7 @@ class RDFToLiPD(object):
                     
                     for pfact in pfacts : 
                         if pfact["@type"] == "uri" :
-                            val = self.convert_to_lipd(pfact["@id"], cat, sch)
+                            val = self.convert_to_lipd(pfact["@id"], cat, sch, pagesdone)
                         else:
                             val = pfact["@value"]
                         
@@ -227,7 +229,7 @@ class RDFToLiPD(object):
                 obj[key] = self.post_processing(value, obj)
 
         schemaname = obj["@schema"]
-        tschema = SCHEMA[schemaname] if schemaname in SCHEMA else None
+        tschema = self.schema[schemaname] if schemaname in self.schema else None
         if tschema and "@toJson" in tschema:
             for func in tschema["@toJson"]:
                 fn = getattr(self, func)
@@ -342,9 +344,11 @@ class RDFToLiPD(object):
             del var["hasProxySystem"]
         if (("measuredOn" in var)) :
             archive = var["measuredOn"]
-            archiveType = archive["@category"]
-            var["archiveType"] = self.get_lipd_archive_type(archiveType)
-            #print "$archiveType\n"
+            if type(archive) is dict and "@category" in archive:
+                archiveType = archive["@category"]
+                var["archiveType"] = self.get_lipd_archive_type(archiveType)
+            elif type(archive) is str:
+                var["archiveType"] = self.get_lipd_archive_type(archive)
             del var["measuredOn"]
         return var
 
@@ -433,6 +437,18 @@ class RDFToLiPD(object):
             return resolution["values"].split(",")
 
     def unarray_column_number(self, var, parent = None) :
+        if not var:
+            return var
         if ("number" in var) and (type(var["number"]) is list) and (len(var["number"]) == 1) :
             var["number"] = var["number"][0]
+        if ("number" in var) and (type(var["number"]) is str) :
+            var["number"] = json.loads(var["number"])
+        return var
+
+    def extract_variable_values(self, var, parent = None) :
+        if "hasValues" in var:
+            values = json.loads(var["hasValues"])
+            if type(values) is dict and "base64_zlib" in values:
+                values = unzip_string(values["base64_zlib"])
+                var["hasValues"] = values
         return var

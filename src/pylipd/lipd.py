@@ -1,14 +1,14 @@
 import os
+import pickle
 import re
 import json
 import os.path
 import tempfile
-import multiprocessing as mp
 
 from rdflib import ConjunctiveGraph, Namespace
+from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rdf
 
 from pylipd.rdf_to_lipd import RDFToLiPD
-from pylipd.lipd_to_rdf import LipdToRDF
 from pylipd.legacy_utils import LiPD_Legacy
 
 from .utils import ucfirst, lcfirst
@@ -24,23 +24,6 @@ from .globals.urls import NSURL, ONTONS
 # Reload the graphs to the endpoint
 # Move the LiPD files to the server 
 ###########################################
-def convert_to_rdf(lipdfile, rdffile, collection_id=None):
-    converter = LipdToRDF(collection_id)    
-    """Worker that converts one lipdfile to an rdffile"""
-    try:
-        converter.convert(lipdfile, rdffile)
-    except Exception as e:
-        print(f"ERROR: Could not convert LiPD file {lipdfile} to RDF")            
-        raise e
-        raise(e)
-
-def multi_convert_to_rdf(filemap, collection_id=None):
-    """Create a pool to convert all lipdfiles to rdffiles"""
-    pool = mp.Pool(mp.cpu_count())
-    args = [(lipdfile, rdffile, collection_id) for lipdfile, rdffile in filemap.items()]
-    pool.starmap(convert_to_rdf, args, chunksize=1)
-    pool.close()
-
 
 class LiPD(object):
     def __init__(self):
@@ -72,26 +55,27 @@ class LiPD(object):
             
         filemap = {}
         for lipdfile in lipdfiles:
-            print(lipdfile)
             if not os.path.isfile(lipdfile) and not lipdfile.startswith("http"):
                 print(f"File {lipdfile} does not exist")
                 continue
 
-            rdffile = tempfile.NamedTemporaryFile().name
-            filemap[lipdfile] = rdffile
+            picklefile = tempfile.NamedTemporaryFile().name
+            filemap[lipdfile] = picklefile
         
         print(f"Loading {len(filemap.keys())} LiPD files" + (" from Collection: {collection_id}" if collection_id else ""))
         
-        multi_convert_to_rdf(filemap, collection_id)
+        multi_convert_to_pickle(filemap, collection_id)
         print("Conversion to RDF done..")
 
         self.remote = False
-        print("Loading RDFs into graph")
+        print("Loading RDF into graph")
         for lipdfile in lipdfiles:
-            rdffile = filemap[lipdfile]
-            if os.path.exists(rdffile):
-                self.graph.parse(rdffile, format="nquads")
-                os.remove(rdffile)
+            picklefile = filemap[lipdfile]
+            if os.path.exists(picklefile):
+                with open(picklefile, 'rb') as f:
+                    subgraph = pickle.load(f)
+                    self.graph.addN(subgraph.quads())
+                os.remove(picklefile)
         print("Loaded..")
 
 
@@ -201,7 +185,7 @@ class LiPD(object):
     def _get_timeseries(self, dsids):
         timeseries = {}
         for dsid in dsids:
-            converter = RDFToLiPD()            
+            converter = RDFToLiPD()
             d = converter.convert(dsid, self.graph)
             print("Extracting timeseries from dataset: " + dsid + " ...")
             if len(d.items()):

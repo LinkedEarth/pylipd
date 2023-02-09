@@ -1,4 +1,6 @@
+import copy
 import json
+import pickle
 import re
 import os
 import os.path
@@ -16,7 +18,7 @@ from .globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
 from .globals.blacklist import BLACKLIST
 from .globals.schema import SCHEMA
 
-from .utils import ucfirst, lcfirst, camelCase, unCamelCase, escape, uniqid, sanitizeId
+from .utils import expand_schema, ucfirst, lcfirst, camelCase, unCamelCase, escape, uniqid, sanitizeId, zip_string
 
 class LipdToRDF(object):
     
@@ -26,12 +28,14 @@ class LipdToRDF(object):
         self.collection_id = collection_id
         self.graphurl = NSURL
         self.namespace = NSURL + "#"
+        self.schema = expand_schema(copy.deepcopy(SCHEMA))
+
         if self.collection_id:
             self.namespace = NSURL + "/" + collection_id + "#"        
 
     # -------
-    # TODO: Add the URL to convert_lipd_json_to_rdf
-    def convert(self, lipdpath, rdfpath):
+    # TODO: Add the URL to load_lipd_json_to_graph
+    def convert(self, lipdpath, topath, type="rdf"):
         self.graph = ConjunctiveGraph()
         
         lpdname = os.path.basename(lipdpath).replace(".lpd", "")
@@ -51,7 +55,13 @@ class LipdToRDF(object):
                 for csvpath, _ in csvs:
                     csvname = os.path.basename(csvpath)        
                     self.lipd_csvs[csvname] = pd.read_csv(csvpath, header=None)
-                self.convert_lipd_json_to_rdf(jsonpath, rdfpath)
+                self.load_lipd_json_to_graph(jsonpath)                    
+                
+                if type == "rdf":
+                    self.graph.serialize(topath, format="nquads", encoding="utf-8")
+                elif type == "pickle":
+                    with open(topath, 'wb') as f:
+                        pickle.dump(self.graph, f)
 
     def unzip_lipd_file(self, lipdfile, unzipdir):
         if lipdfile.startswith("http"):
@@ -539,11 +549,14 @@ class LipdToRDF(object):
         listid = BNode()
         list = Collection(self.graph, listid, listitems)
         return listid
-    
+
+
     def add_variable_values(self, obj, objhash) :
         csvname = obj["@parent"]["@id"] + ".csv"
         if "number" not in obj:
             obj["number"] = obj["@index"]
+        if type(obj["number"]) is str:
+            obj["number"] = int(obj["number"])
         if not isinstance(obj["number"], list):
             obj["number"] = [obj["number"]]
         indices = [col-1 for col in obj["number"]]
@@ -561,7 +574,11 @@ class LipdToRDF(object):
                 #dtype = "float" if df_values[0].dtypes == "float64" else "string"
 
             # TODO: Dumping to json string for now. 
-            obj["hasValues"] = json.dumps(values)
+            # - Compressing string if it is too long (otherwise loading to RDF hangs)
+            valstring = json.dumps(values)
+            #if len(valstring) > 1000000:
+            #    valstring =json.dumps({"base64_zlib": zip_string(valstring)})
+            obj["hasValues"] = valstring
 
             # rdf:Seq doesn't seem to be importing well in GraphDB            
             #bnodeid = self.unroll_values_list_to_rdf(values, dtype)
@@ -570,20 +587,11 @@ class LipdToRDF(object):
             return [obj, objhash, []]
         return [obj, objhash, []]
     
-    ### Testing Lipd Json to Ontology
-    def expand_schema(self) :
-        xschema = {}
-        for key,props in SCHEMA.items() :
-            # Add core schema too
-            xschema[key] = props
-            for lipdkey,pdetails in props.items() :
-                if not type(pdetails) is dict:
-                    continue
-                
-                if (("alternates" in pdetails)) :
-                    for altkey in pdetails["alternates"]: 
-                        xschema[key][altkey] = pdetails
-        SCHEMA = xschema
+    def stringify_column_numbers_array(self, obj, objhash):
+        if "number" in obj and isinstance(obj["number"], list) and len(obj["number"]) > 1:
+            obj["hasColumnNumber"] = json.dumps(obj["number"])
+            del obj["number"]
+        return [obj, objhash, []]
     
     def modify_structure_if_needed(self, obj, objhash, schema) :
         if (("@fromJson" in schema)) :
@@ -595,7 +603,7 @@ class LipdToRDF(object):
                         newobj = objhash[newid]
                         if (type(newobj) is dict) and ("@category" in newobj) :
                             newschid = newobj["@category"]
-                            newschema =  SCHEMA[newschid] if (newschid in SCHEMA) else {}
+                            newschema =  self.schema[newschid] if (newschid in self.schema) else {}
                             (objhash[newid], objhash) = self.modify_structure_if_needed(newobj, objhash, newschema)
         
         return [obj, objhash]
@@ -659,7 +667,7 @@ class LipdToRDF(object):
         return self.fix_title(objid)
     
     def map_lipd_to_json(self, obj, parent, index, category, schemaname, hash) :
-        schema =  SCHEMA[schemaname] if (schemaname in SCHEMA) else {}
+        schema =  self.schema[schemaname] if (schemaname in self.schema) else {}
         
         if not type(obj) is dict:
             return obj
@@ -946,7 +954,7 @@ class LipdToRDF(object):
         category = obj["@category"]
         extracats =  obj["@extracats"] if ("@extracats" in obj) else {}
         schemaname =  obj["@schema"] if ("@schema" in obj) else category
-        schema =  SCHEMA[schemaname] if (schemaname in SCHEMA) else {}
+        schema =  self.schema[schemaname] if (schemaname in self.schema) else {}
         objid = obj["@id"]
         if (not objid) :
             return
@@ -1012,7 +1020,7 @@ class LipdToRDF(object):
         except FileNotFoundError as fnf:
             print(directory +' not found ', fnf)
 
-    def convert_lipd_json_to_rdf(self, jsonpath, rdfpath, url=None):
+    def load_lipd_json_to_graph(self, jsonpath, url=None):
         self.graph = ConjunctiveGraph()
         objhash = {}
         
@@ -1029,5 +1037,3 @@ class LipdToRDF(object):
 
             for key, item in objhash.items():
                 self.create_individual_full(item)
-
-            self.graph.serialize(rdfpath, format="nquads", encoding="utf-8")

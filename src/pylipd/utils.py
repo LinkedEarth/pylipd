@@ -1,7 +1,10 @@
+import copy
 import re
 import time
 import math
 import random
+
+import zlib, json, base64
 
 def ucfirst(s):
     return s[0].upper() + s[1:]
@@ -50,3 +53,29 @@ def uniqid(prefix='', more_entropy=False):
 
     the_uniqid = (prefix if prefix else '') + the_uniqid
     return the_uniqid
+
+def zip_string(string):
+    return base64.b64encode(
+        zlib.compress(string.encode('utf-8'))
+    ).decode('ascii')
+
+def unzip_string(string):
+    try:
+        return  zlib.decompress(base64.b64decode(string))
+    except:
+        raise RuntimeError("Could not decode/unzip the contents")
+
+def expand_schema(schema) :
+    xschema = {}
+    for key,props in schema.items() :
+        # Add core schema too
+        xschema[key] = copy.copy(props)
+        for lipdkey,pdetails in props.items() :
+            if not type(pdetails) is dict:
+                continue
+            
+            if (("alternates" in pdetails)) :
+                for altkey in pdetails["alternates"]: 
+                    xschema[key][altkey] = pdetails
+    xschema["__expanded"] = True
+    return xschema
