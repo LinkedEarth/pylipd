@@ -1,6 +1,8 @@
 import copy
+import re
 
 from .series.regexes import re_pandas_x_und, re_sheet
+EMPTY = ['', ' ', None, 'na', 'n/a', '?', "'", "''"]
 
 class LiPD_Legacy(object):
     ##############################################

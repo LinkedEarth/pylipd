@@ -14,8 +14,6 @@ from pylipd.legacy_utils import LiPD_Legacy
 from .utils import ucfirst, lcfirst
 from .globals.urls import NSURL, ONTONS
 
-EMPTY = ['', ' ', None, 'na', 'n/a', '?', "'", "''"]
-
 ###########################################
 # TODO:
 # -----------------------------------------
