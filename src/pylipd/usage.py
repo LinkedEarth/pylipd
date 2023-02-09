@@ -23,16 +23,25 @@ if __name__=="__main__":
     '''
 
     # Load Datasets (from Local and Remote)
-    dsids = ["MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012", "Asi-TDAXJP.PAGES2k.2013"]
+    dsids = ["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012", "Asi-TDAXJP.PAGES2k.2013"]
 
     # Load from local
     lipd = LiPD()
     lipdfiles = [local_lipd_dir + "/" + dsid + ".lpd" for dsid in dsids]
-    lipd.load(lipdfiles)
+    #print(lipdfiles)
+    
+    lipd.load(["https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1//Nunalleq.Ledger.2018.lpd"])
+    
     #lipd.load_from_dir(local_lipd_dir)
     res = lipd.query("SELECT ?s WHERE {?s a le:Dataset }")
     for row in res:
         print(row)    
+    
+    ts_list = lipd.get_timeseries(lipd.get_all_dataset_ids())
+    for dsid, tsos in ts_list.items():
+        for tso in tsos:
+            if 'paleoData_variableName' in tso:
+                print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
     
     # Fetch LiPD data from remote RDF Graph
     lipd = LiPD()

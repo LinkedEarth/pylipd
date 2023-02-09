@@ -267,7 +267,7 @@ class RDFToLiPD(object):
         if "lat" in geo :
             geojson["geometry"]["coordinates"][1] = float(geo["lat"])
         
-        if "alt" in geo :
+        if "alt" in geo and geo["alt"] != "NA":
             geojson["geometry"]["coordinates"][2] = float(geo["alt"])
         
         for prop,value in geo.items() :
