@@ -47,24 +47,25 @@ extensions = [
     'sphinx_search.extension'
 ]
 
-mathjax_config = {
-    'tex2jax': {
-        'inlineMath': [ ["\\(","\\)"] ],
-        'displayMath': [["\\[","\\]"] ],
-    },
-}
+#mathjax_config = {
+#    'tex2jax': {
+#        'inlineMath': [ ["\\(","\\)"] ],
+#        'displayMath': [["\\[","\\]"] ],
+#    },
+#}
+#
+#mathjax3_config = {
+#  "tex": {
+#    "inlineMath": [['\\(', '\\)']],
+#    "displayMath": [["\\[", "\\]"]],
+#  }
+#}
+#
+#plot_include_source = True
+#plot_formats = [("png", 90)]
+#plot_html_show_formats = True
+#plot_html_show_source_link = True
 
-mathjax3_config = {
-  "tex": {
-    "inlineMath": [['\\(', '\\)']],
-    "displayMath": [["\\[", "\\]"]],
-  }
-}
-
-plot_include_source = True
-plot_formats = [("png", 90)]
-plot_html_show_formats = True
-plot_html_show_source_link = True
 autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
