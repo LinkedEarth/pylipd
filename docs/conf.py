@@ -15,6 +15,7 @@
 
 import sys
 import os
+import pylipd
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -90,9 +91,9 @@ author = 'Varun Ratnakar, Deborah Khider'
 #
 # The short X.Y version.
 
-#version = pylipd.__version__
+version = pylipd.__version__
 # The full version, including alpha/beta/rc tags.
-#release = pylipd.__version__
+release = pylipd.__version__
 
 
 
