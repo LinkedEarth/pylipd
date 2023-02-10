@@ -1,0 +1,17 @@
+name: rtd_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy
+  - cartopy=0.21
+  - pip:
+    - sphinx
+    - pylint
+    - pytest
+    - numpydoc>=1.1.0
+    - nbsphinx
+    - IPython
+    - readthedocs-sphinx-search>=0.1.0
+    - pylipd
