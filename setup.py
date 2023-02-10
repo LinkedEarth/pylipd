@@ -5,7 +5,7 @@ import io
 from setuptools import setup, find_packages
 
 
-version = '0.9.4'
+version = '0.9.5'
 
 # Read the readme file contents into variable
 def read(fname):
@@ -26,7 +26,7 @@ setup(
     url='https://github.com/linkedearth/pylipd',
     download_url='https://github.com/linkedearth/pylipd/tarball/'+version,
     keywords=['Paleoclimate, Data Analysis, LiPD'],
-    package_dir = {'':'src'},
+    package_dir = {'':'.'},
     classifiers=[],
     install_requires=[
         "rdflib",

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pylipd.lipd &mdash; PyLiPD 0.9.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_sphinx_search.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/js/rtd_sphinx_search.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PyLiPD
+          </a>
+              <div class="version">
+                0.9.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Working with PyLiPD</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing PyLiPD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/modules.html">pylipd</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyLiPD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pylipd.lipd</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pylipd.lipd</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The LiPD class describes a `LiPD (Linked Paleo Data) &lt;https://cp.copernicus.org/articles/12/1093/2016/cp-12-1093-2016.html&gt;` object. It contains an `RDF &lt;https://www.w3.org/RDF/&gt;` Graph which is serialization of the LiPD data into an RDF graph containing terms from the `LiPD Ontology &lt;http://linked.earth/Ontology/release/core/1.2.0/index-en.html&gt;`</span>
+<span class="sd">How to browse and query LiPD objects is described in a short example below, while `this notebook &lt;https://nbviewer.jupyter.org/github/LinkedEarth/pylipd/blob/master/example_notebooks/pylipd_tutorial.ipynb&gt;` demonstrates how to use PyLiPD to view and query LiPD datasets.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">ConjunctiveGraph</span><span class="p">,</span> <span class="n">Namespace</span>
+<span class="kn">from</span> <span class="nn">pylipd.multi_processing</span> <span class="kn">import</span> <span class="n">multi_convert_to_pickle</span><span class="p">,</span> <span class="n">multi_convert_to_rdf</span>
+
+<span class="kn">from</span> <span class="nn">pylipd.rdf_to_lipd</span> <span class="kn">import</span> <span class="n">RDFToLiPD</span>
+<span class="kn">from</span> <span class="nn">pylipd.legacy_utils</span> <span class="kn">import</span> <span class="n">LiPD_Legacy</span>
+
+<span class="kn">from</span> <span class="nn">.globals.urls</span> <span class="kn">import</span> <span class="n">NSURL</span><span class="p">,</span> <span class="n">ONTONS</span>
+
+
+<div class="viewcode-block" id="LiPD"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD">[docs]</a><span class="k">class</span> <span class="nc">LiPD</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;The LiPD class describes a `LiPD (Linked Paleo Data) &lt;https://cp.copernicus.org/articles/12/1093/2016/cp-12-1093-2016.html&gt;` object. It contains an `RDF &lt;https://www.w3.org/RDF/&gt;` Graph which is serialization of the LiPD data into an RDF graph containing terms from the `LiPD Ontology &lt;http://linked.earth/Ontology/release/core/1.2.0/index-en.html&gt;`</span>
+<span class="sd">    How to browse and query LiPD objects is described in a short example below.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    In this example, we read an online LiPD file and convert it into a time series object dictionary.</span>
+
+<span class="sd">    .. ipython:: python</span>
+<span class="sd">        :okwarning:</span>
+<span class="sd">        :okexcept:</span>
+
+<span class="sd">        from pylipd.lipd import LiPD</span>
+
+<span class="sd">        lipd = LiPD()        </span>
+<span class="sd">        lipd.load([&quot;https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1//Nunalleq.Ledger.2018.lpd&quot;])</span>
+<span class="sd">        </span>
+<span class="sd">        ts_list = lipd.get_timeseries(lipd.get_all_dataset_ids())</span>
+
+<span class="sd">        for dsid, tsos in ts_list.items():</span>
+<span class="sd">            for tso in tsos:</span>
+<span class="sd">                if &#39;paleoData_variableName&#39; in tso:</span>
+<span class="sd">                    print(dsid+&#39;: &#39;+tso[&#39;paleoData_variableName&#39;]+&#39;: &#39;+tso[&#39;archiveType&#39;])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="LiPD.initialize_graph"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.initialize_graph">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">ConjunctiveGraph</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;le&quot;</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">ONTONS</span><span class="p">))</span>        </div>
+        <span class="c1">#self.graph.bind(&quot;&quot;, Namespace(NS))</span>
+
+<div class="viewcode-block" id="LiPD.load_from_dir"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.load_from_dir">[docs]</a>    <span class="k">def</span> <span class="nf">load_from_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_path</span><span class="p">,</span> <span class="n">collection_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Load LiPD files from a directory</span>
+<span class="sd">        Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the &quot;__main__&quot; process</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        dir_path : str</span>
+<span class="sd">            path to the directory containing lipd files</span>
+
+<span class="sd">        collection_id : str</span>
+<span class="sd">            (Optional) set a collection id for all lipd files in the directory</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        In this example, we load LiPD files from a directory.</span>
+
+<span class="sd">        .. ipython:: python</span>
+<span class="sd">            :okwarning:</span>
+<span class="sd">            :okexcept:</span>
+
+<span class="sd">            from pylipd.lipd import LiPD</span>
+
+<span class="sd">            if __name__==&quot;__main__&quot;:</span>
+<span class="sd">                lipd = LiPD()        </span>
+<span class="sd">                lipd.load_from_dir(&quot;/Users/varun/git/LiPD/PyLiPD/data/lpd.new/Pages2k2_1_2&quot;)</span>
+
+<span class="sd">                print(lipd.get_all_dataset_ids())</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">dir_path</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Directory </span><span class="si">{</span><span class="n">dir_path</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">lipdfiles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_path</span><span class="p">):</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.lpd&quot;</span><span class="p">):</span>
+                <span class="n">lipdfiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">lipdfiles</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Allows loading http locations</span>
+<div class="viewcode-block" id="LiPD.load"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lipdfiles</span><span class="p">,</span> <span class="n">collection_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Load LiPD files. </span>
+<span class="sd">        Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the &quot;__main__&quot; process</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        lipdfiles : array</span>
+<span class="sd">            array of paths to lipd files (the paths could also be urls)</span>
+
+<span class="sd">        collection_id : str</span>
+<span class="sd">            (Optional) set a collection id for all lipd files in the directory</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        In this example, we load LiPD files for an array of paths.</span>
+
+<span class="sd">        .. ipython:: python</span>
+<span class="sd">            :okwarning:</span>
+<span class="sd">            :okexcept:</span>
+
+<span class="sd">            from pylipd.lipd import LiPD</span>
+
+<span class="sd">            if __name__==&quot;__main__&quot;:</span>
+<span class="sd">                lipd = LiPD() </span>
+<span class="sd">                lipd.load([</span>
+<span class="sd">                    &quot;/Users/varun/git/LiPD/PyLiPD/data/lpd/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd&quot;,</span>
+<span class="sd">                    &quot;/Users/varun/git/LiPD/PyLiPD/data/lpd/MD98_2181.Stott.2007.lpd&quot;,</span>
+<span class="sd">                    &quot;/Users/varun/git/LiPD/PyLiPD/data/lpd/Ant-WAIS-Divide.Severinghaus.2012.lpd&quot;,</span>
+<span class="sd">                    &quot;https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1/Nunalleq.Ledger.2018.lpd&quot;                    </span>
+<span class="sd">                ])            </span>
+
+<span class="sd">                print(lipd.get_all_dataset_ids())</span>
+<span class="sd">        &#39;&#39;&#39;</span>        
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">lipdfiles</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">lipdfiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">lipdfiles</span><span class="p">]</span>
+            
+        <span class="n">filemap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">lipdfile</span> <span class="ow">in</span> <span class="n">lipdfiles</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">lipdfile</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lipdfile</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">lipdfile</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">picklefile</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">filemap</span><span class="p">[</span><span class="n">lipdfile</span><span class="p">]</span> <span class="o">=</span> <span class="n">picklefile</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filemap</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2"> LiPD files&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot; from Collection: </span><span class="si">{collection_id}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">collection_id</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        
+        <span class="n">multi_convert_to_pickle</span><span class="p">(</span><span class="n">filemap</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Conversion to RDF done..&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading RDF into graph&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">lipdfile</span> <span class="ow">in</span> <span class="n">lipdfiles</span><span class="p">:</span>
+            <span class="n">picklefile</span> <span class="o">=</span> <span class="n">filemap</span><span class="p">[</span><span class="n">lipdfile</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">picklefile</span><span class="p">):</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">picklefile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">subgraph</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">addN</span><span class="p">(</span><span class="n">subgraph</span><span class="o">.</span><span class="n">quads</span><span class="p">())</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">picklefile</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loaded..&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LiPD.set_endpoint"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.set_endpoint">[docs]</a>    <span class="k">def</span> <span class="nf">set_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Sets a SparQL endpoint for a remote Knowledge Base (example: GraphDB)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        endpoint : str</span>
+<span class="sd">            URL for the SparQL endpoint </span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        .. ipython:: python</span>
+<span class="sd">            :okwarning:</span>
+<span class="sd">            :okexcept:</span>
+
+<span class="sd">            from pylipd.lipd import LiPD</span>
+
+<span class="sd">            if __name__==&quot;__main__&quot;:</span>
+<span class="sd">                # Fetch LiPD data from remote RDF Graph</span>
+<span class="sd">                lipd_remote = LiPD()</span>
+<span class="sd">                lipd_remote.set_endpoint(&quot;https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2&quot;)</span>
+<span class="sd">                lipd_remote.load_remote_datasets([&quot;Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001&quot;, &quot;MD98_2181.Stott.2007&quot;, &quot;Ant-WAIS-Divide.Severinghaus.2012&quot;])</span>
+<span class="sd">                print(lipd_remote.get_all_dataset_ids())</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span></div>
+
+
+<div class="viewcode-block" id="LiPD.convert_lipd_dir_to_rdf"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.convert_lipd_dir_to_rdf">[docs]</a>    <span class="k">def</span> <span class="nf">convert_lipd_dir_to_rdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lipd_dir</span><span class="p">,</span> <span class="n">rdf_file</span><span class="p">,</span> <span class="n">collection_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Convert a directory containing LiPD files into a single RDF file (to be used for uploading to Knowledge Bases like GraphDB)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        lipd_dir : str</span>
+<span class="sd">            Path to the directory containing lipd files</span>
+
+<span class="sd">        rdf_file : str</span>
+<span class="sd">            Path to the output rdf file</span>
+
+<span class="sd">        collection_id : str</span>
+<span class="sd">            (Optional) set a collection id for all lipd files in the directory</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. ipython:: python</span>
+<span class="sd">            :okwarning:</span>
+<span class="sd">            :okexcept:</span>
+
+<span class="sd">            from pylipd.lipd import LiPD</span>
+
+<span class="sd">            if __name__==&quot;__main__&quot;:</span>
+<span class="sd">                # Fetch LiPD data from remote RDF Graph</span>
+<span class="sd">                lipd = LiPD()</span>
+
+<span class="sd">                lipd.convert_lipd_dir_to_rdf(&quot;/Users/varun/git/LiPD/PyLiPD/data/lpd&quot;, &quot;all-lipd.nq&quot;)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">filemap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">lipd_dir</span><span class="p">):</span>
+            <span class="n">fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lipd_dir</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="n">tmp_rdf_file</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">filemap</span><span class="p">[</span><span class="n">fullpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_rdf_file</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting conversion of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filemap</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2"> LiPD files&quot;</span><span class="p">)</span>
+
+        <span class="n">multi_convert_to_rdf</span><span class="p">(</span><span class="n">filemap</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Conversion to RDF done..&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing to main RDF file..&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rdf_file</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">lipdfile</span> <span class="ow">in</span> <span class="n">filemap</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">tmp_rdf_file</span> <span class="o">=</span> <span class="n">filemap</span><span class="p">[</span><span class="n">lipdfile</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp_rdf_file</span><span class="p">):</span>
+                    <span class="n">fin</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp_rdf_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">read</span><span class="p">();</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                    <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmp_rdf_file</span><span class="p">)</span>
+            <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Written..&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LiPD.query"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="s2">&quot;sparql&quot;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Once LiPD files or loaded into the graph (or remote endpoint set), one can make SparQL queries to the graph</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        query : str</span>
+<span class="sd">            SparQL query</span>
+
+<span class="sd">        result : str</span>
+<span class="sd">            (Optional) Result return type</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        result : dict</span>
+<span class="sd">            Dictionary of sparql variable and binding values</span>
+<span class="sd">    </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. ipython:: python</span>
+<span class="sd">            :okwarning:</span>
+<span class="sd">            :okexcept:</span>
+
+<span class="sd">            from pylipd.lipd import LiPD</span>
+
+<span class="sd">            if __name__==&quot;__main__&quot;:</span>
+<span class="sd">                # Fetch LiPD data from remote RDF Graph</span>
+<span class="sd">                lipd = LiPD()</span>
+<span class="sd">                lipd.load([</span>
+<span class="sd">                    &quot;/Users/varun/git/LiPD/PyLiPD/data/lpd/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd&quot;,</span>
+<span class="sd">                    &quot;/Users/varun/git/LiPD/PyLiPD/data/lpd/MD98_2181.Stott.2007.lpd&quot;</span>
+<span class="sd">                ])</span>
+<span class="sd">                query = &quot;&quot;&quot;PREFIX le: &lt;http://linked.earth/ontology#&gt;</span>
+<span class="sd">                        select (count(distinct ?ds) as ?count) where { </span>
+<span class="sd">                            ?ds a le:Dataset .</span>
+<span class="sd">                            ?ds le:hasUrl ?url</span>
+<span class="sd">                        }&quot;&quot;&quot;</span>
+<span class="sd">                result = lipd.query(query)</span>
+<span class="sd">                print(result)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">:</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s*SELECT\s+(.+)\s+WHERE\s+{(.+)}\s*&quot;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="nb">vars</span> <span class="o">=</span> <span class="n">matches</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">where</span> <span class="o">=</span> <span class="n">matches</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT </span><span class="si">{</span><span class="nb">vars</span><span class="si">}</span><span class="s2"> WHERE </span><span class="se">{{</span><span class="s2"> SERVICE &lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&gt; </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">where</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LiPD.load_remote_datasets"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.load_remote_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">load_remote_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsids</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Loads remote datasets into cache if a remote endpoint is set</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        dsids : array</span>
+<span class="sd">            array of dataset id strings</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. ipython:: python</span>
+<span class="sd">            :okwarning:</span>
+<span class="sd">            :okexcept:</span>
+
+<span class="sd">            from pylipd.lipd import LiPD</span>
+
+<span class="sd">            if __name__==&quot;__main__&quot;:</span>
+<span class="sd">                # Fetch LiPD data from remote RDF Graph</span>
+<span class="sd">                lipd_remote = LiPD()</span>
+<span class="sd">                lipd_remote.set_endpoint(&quot;https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2&quot;)</span>
+<span class="sd">                lipd_remote.load_remote_datasets([&quot;Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001&quot;, &quot;MD98_2181.Stott.2007&quot;, &quot;Ant-WAIS-Divide.Severinghaus.2012&quot;])</span>
+<span class="sd">                print(lipd_remote.get_all_dataset_ids())</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No remote endpoint&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dsids</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">dsids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No dataset ids to cache&quot;</span><span class="p">)</span>
+        <span class="n">dsidstr</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="n">NSURL</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">dsid</span> <span class="o">+</span> <span class="s1">&#39;&gt;&#39;</span> <span class="k">for</span> <span class="n">dsid</span> <span class="ow">in</span> <span class="n">dsids</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Caching datasets from remote endpoint..&quot;</span><span class="p">)</span>
+        <span class="n">qres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SELECT ?s ?p ?o ?g WHERE </span><span class="se">{{</span><span class="s2"> GRAPH ?g </span><span class="se">{{</span><span class="s2"> ?s ?p ?o </span><span class="se">}}</span><span class="s2"> VALUES ?g </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">dsidstr</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Reinitialize graph</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">qres</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">row</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">o</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">g</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done..&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="LiPD.get_timeseries"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.get_timeseries">[docs]</a>    <span class="k">def</span> <span class="nf">get_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsids</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Get Legacy LiPD like Time Series Object (tso)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        dsids : array</span>
+<span class="sd">            array of dataset id strings</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. ipython:: python</span>
+<span class="sd">            :okwarning:</span>
+<span class="sd">            :okexcept:</span>
+
+<span class="sd">            from pylipd.lipd import LiPD</span>
+
+<span class="sd">            if __name__==&quot;__main__&quot;:</span>
+<span class="sd">                # Fetch LiPD data from remote RDF Graph</span>
+<span class="sd">                lipd_remote = LiPD()</span>
+<span class="sd">                lipd_remote.set_endpoint(&quot;https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2&quot;)</span>
+<span class="sd">                ts_list = lipd_remote.get_timeseries([&quot;Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001&quot;, &quot;MD98_2181.Stott.2007&quot;, &quot;Ant-WAIS-Divide.Severinghaus.2012&quot;])</span>
+<span class="sd">                for dsid, tsos in ts_list.items():</span>
+<span class="sd">                    for tso in tsos:</span>
+<span class="sd">                        if &#39;paleoData_variableName&#39; in tso:</span>
+<span class="sd">                            print(dsid+&#39;: &#39;+tso[&#39;paleoData_variableName&#39;]+&#39;: &#39;+tso[&#39;archiveType&#39;])</span>
+<span class="sd">        &#39;&#39;&#39;</span>        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote</span><span class="p">:</span>
+            <span class="c1"># Cache datasets locally - to speed up queries</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_remote_datasets</span><span class="p">(</span><span class="n">dsids</span><span class="p">)</span>
+            <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_timeseries</span><span class="p">(</span><span class="n">dsids</span><span class="p">)</span>
+
+            <span class="c1"># Go back to remote</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">ts</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_timeseries</span><span class="p">(</span><span class="n">dsids</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ts</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsids</span><span class="p">):</span>
+        <span class="n">timeseries</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">dsid</span> <span class="ow">in</span> <span class="n">dsids</span><span class="p">:</span>
+            <span class="n">converter</span> <span class="o">=</span> <span class="n">RDFToLiPD</span><span class="p">()</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">dsid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Extracting timeseries from dataset: &quot;</span> <span class="o">+</span> <span class="n">dsid</span> <span class="o">+</span> <span class="s2">&quot; ...&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="n">tss</span> <span class="o">=</span> <span class="n">LiPD_Legacy</span><span class="p">()</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+                <span class="n">timeseries</span><span class="p">[</span><span class="n">dsid</span><span class="p">]</span> <span class="o">=</span> <span class="n">tss</span>
+        <span class="k">return</span> <span class="n">timeseries</span>
+
+<div class="viewcode-block" id="LiPD.get_lipd"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.get_lipd">[docs]</a>    <span class="k">def</span> <span class="nf">get_lipd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsid</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Get LiPD json for a dataset</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        dsid : str</span>
+<span class="sd">            dataset id</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. ipython:: python</span>
+<span class="sd">            :okwarning:</span>
+<span class="sd">            :okexcept:</span>
+
+<span class="sd">            from pylipd.lipd import LiPD</span>
+
+<span class="sd">            if __name__==&quot;__main__&quot;:</span>
+<span class="sd">                # Fetch LiPD data from remote RDF Graph</span>
+<span class="sd">                lipd_remote = LiPD()</span>
+<span class="sd">                lipd_remote.set_endpoint(&quot;https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2&quot;)</span>
+<span class="sd">                dsid = &quot;Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001&quot;</span>
+<span class="sd">                lipd_remote.load_remote_datasets([dsid])</span>
+<span class="sd">                lipd_json = lipd_remote.get_lipd(dsid)</span>
+<span class="sd">                print(lipd_json)</span>
+<span class="sd">        &#39;&#39;&#39;</span>           
+        <span class="n">converter</span> <span class="o">=</span> <span class="n">RDFToLiPD</span><span class="p">()</span>            
+        <span class="k">return</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">dsid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LiPD.get_all_dataset_ids"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.get_all_dataset_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_dataset_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SELECT ?dsname WHERE </span><span class="se">{{</span><span class="s2"> </span>
+<span class="s2">                ?ds a le:Dataset .</span>
+<span class="s2">                ?ds le:name ?dsname</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            &quot;&quot;&quot;</span>
+        <span class="n">qres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">dsname</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">qres</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="LiPD.search_datasets"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.search_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">search_datasets</span><span class="p">(</span><span class="n">variableName</span><span class="o">=</span><span class="p">[</span> <span class="p">],</span> <span class="n">archiveType</span><span class="o">=</span><span class="p">[</span> <span class="p">],</span> <span class="n">proxyObsType</span><span class="o">=</span><span class="p">[</span> <span class="p">],</span> <span class="n">infVarType</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span> <span class="n">sensorGenus</span><span class="o">=</span><span class="p">[</span> <span class="p">],</span>
+                    <span class="n">sensorSpecies</span><span class="o">=</span><span class="p">[</span> <span class="p">],</span> <span class="n">interpName</span> <span class="o">=</span><span class="p">[</span> <span class="p">],</span> <span class="n">interpDetail</span> <span class="o">=</span><span class="p">[</span> <span class="p">],</span> <span class="n">ageUnits</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span>
+                    <span class="n">ageBound</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span> <span class="n">ageBoundType</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span> <span class="n">recordLength</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span> <span class="n">resolution</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span>
+                    <span class="n">lat</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span> <span class="n">lon</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span> <span class="n">alt</span> <span class="o">=</span> <span class="p">[</span> <span class="p">],</span> <span class="n">print_response</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">download_lipd</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="n">download_folder</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="LiPD.find_ensemble_table_for_variable"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.lipd.LiPD.find_ensemble_table_for_variable">[docs]</a>    <span class="k">def</span> <span class="nf">find_ensemble_table_for_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ensemble_table</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

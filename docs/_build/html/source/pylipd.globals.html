@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pylipd.globals package &mdash; PyLiPD 0.9.5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_sphinx_search.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/js/rtd_sphinx_search.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pylipd.series package" href="pylipd.series.html" />
+    <link rel="prev" title="pylipd package" href="pylipd.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyLiPD
+          </a>
+              <div class="version">
+                0.9.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Working with PyLiPD</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing PyLiPD</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pylipd</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pylipd.html">pylipd package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pylipd.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pylipd.globals package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.series.html">pylipd.series package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#module-pylipd.legacy_utils">pylipd.legacy_utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#module-pylipd.lipd">pylipd.lipd module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#module-pylipd.lipd_to_rdf">pylipd.lipd_to_rdf module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#module-pylipd.multi_processing">pylipd.multi_processing module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#module-pylipd.rdf_to_lipd">pylipd.rdf_to_lipd module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#module-pylipd.usage">pylipd.usage module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#module-pylipd.utils">pylipd.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#module-pylipd">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyLiPD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pylipd</a></li>
+          <li class="breadcrumb-item"><a href="pylipd.html">pylipd package</a></li>
+      <li class="breadcrumb-item active">pylipd.globals package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/pylipd.globals.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="pylipd-globals-package">
+<h1>pylipd.globals package<a class="headerlink" href="#pylipd-globals-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-pylipd.globals.blacklist">
+<span id="pylipd-globals-blacklist-module"></span><h2>pylipd.globals.blacklist module<a class="headerlink" href="#module-pylipd.globals.blacklist" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-pylipd.globals.schema">
+<span id="pylipd-globals-schema-module"></span><h2>pylipd.globals.schema module<a class="headerlink" href="#module-pylipd.globals.schema" title="Permalink to this heading"></a></h2>
+<p>The SCHEMA dictionary defines the conversion from and to RDF and LiPD
+&#64;fromJson refers to functions in LipdToRDF
+&#64;toJson refers to functions in RDFToLiPD</p>
+</section>
+<section id="module-pylipd.globals.urls">
+<span id="pylipd-globals-urls-module"></span><h2>pylipd.globals.urls module<a class="headerlink" href="#module-pylipd.globals.urls" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-pylipd.globals">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pylipd.globals" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pylipd.html" class="btn btn-neutral float-left" title="pylipd package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pylipd.series.html" class="btn btn-neutral float-right" title="pylipd.series package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

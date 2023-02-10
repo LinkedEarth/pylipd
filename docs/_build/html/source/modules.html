@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pylipd &mdash; PyLiPD 0.9.5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd_sphinx_search.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/js/rtd_sphinx_search.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pylipd package" href="pylipd.html" />
+    <link rel="prev" title="Installing PyLiPD" href="../installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyLiPD
+          </a>
+              <div class="version">
+                0.9.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Working with PyLiPD</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing PyLiPD</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pylipd</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html">pylipd package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyLiPD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pylipd</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="pylipd">
+<h1>pylipd<a class="headerlink" href="#pylipd" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pylipd.html">pylipd package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.globals.html">pylipd.globals package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.globals.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.globals.html#module-pylipd.globals.blacklist">pylipd.globals.blacklist module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.globals.html#module-pylipd.globals.schema">pylipd.globals.schema module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.globals.html#module-pylipd.globals.urls">pylipd.globals.urls module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.globals.html#module-pylipd.globals">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.series.html">pylipd.series package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.series.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.series.html#module-pylipd.series.regexes">pylipd.series.regexes module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.series.html#module-pylipd.series">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#module-pylipd.legacy_utils">pylipd.legacy_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.legacy_utils.LiPD_Legacy"><code class="docutils literal notranslate"><span class="pre">LiPD_Legacy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.legacy_utils.LiPD_Legacy.extract"><code class="docutils literal notranslate"><span class="pre">LiPD_Legacy.extract()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#module-pylipd.lipd">pylipd.lipd module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD"><code class="docutils literal notranslate"><span class="pre">LiPD</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.convert_lipd_dir_to_rdf"><code class="docutils literal notranslate"><span class="pre">LiPD.convert_lipd_dir_to_rdf()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.find_ensemble_table_for_variable"><code class="docutils literal notranslate"><span class="pre">LiPD.find_ensemble_table_for_variable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.get_all_dataset_ids"><code class="docutils literal notranslate"><span class="pre">LiPD.get_all_dataset_ids()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.get_lipd"><code class="docutils literal notranslate"><span class="pre">LiPD.get_lipd()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.get_timeseries"><code class="docutils literal notranslate"><span class="pre">LiPD.get_timeseries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.initialize_graph"><code class="docutils literal notranslate"><span class="pre">LiPD.initialize_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.load"><code class="docutils literal notranslate"><span class="pre">LiPD.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.load_from_dir"><code class="docutils literal notranslate"><span class="pre">LiPD.load_from_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.load_remote_datasets"><code class="docutils literal notranslate"><span class="pre">LiPD.load_remote_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.query"><code class="docutils literal notranslate"><span class="pre">LiPD.query()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.search_datasets"><code class="docutils literal notranslate"><span class="pre">LiPD.search_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd.LiPD.set_endpoint"><code class="docutils literal notranslate"><span class="pre">LiPD.set_endpoint()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#module-pylipd.lipd_to_rdf">pylipd.lipd_to_rdf module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.lipd_to_rdf.LipdToRDF"><code class="docutils literal notranslate"><span class="pre">LipdToRDF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.lipd_to_rdf.LipdToRDF.convert"><code class="docutils literal notranslate"><span class="pre">LipdToRDF.convert()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#module-pylipd.multi_processing">pylipd.multi_processing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.multi_processing.convert_to_pickle"><code class="docutils literal notranslate"><span class="pre">convert_to_pickle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.multi_processing.convert_to_rdf"><code class="docutils literal notranslate"><span class="pre">convert_to_rdf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.multi_processing.multi_convert_to_pickle"><code class="docutils literal notranslate"><span class="pre">multi_convert_to_pickle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.multi_processing.multi_convert_to_rdf"><code class="docutils literal notranslate"><span class="pre">multi_convert_to_rdf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#module-pylipd.rdf_to_lipd">pylipd.rdf_to_lipd module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.rdf_to_lipd.RDFToLiPD"><code class="docutils literal notranslate"><span class="pre">RDFToLiPD</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylipd.html#pylipd.rdf_to_lipd.RDFToLiPD.convert"><code class="docutils literal notranslate"><span class="pre">RDFToLiPD.convert()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#module-pylipd.usage">pylipd.usage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#module-pylipd.utils">pylipd.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.camelCase"><code class="docutils literal notranslate"><span class="pre">camelCase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.escape"><code class="docutils literal notranslate"><span class="pre">escape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.expand_schema"><code class="docutils literal notranslate"><span class="pre">expand_schema()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.fromCamelCase"><code class="docutils literal notranslate"><span class="pre">fromCamelCase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.lcfirst"><code class="docutils literal notranslate"><span class="pre">lcfirst()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.sanitizeId"><code class="docutils literal notranslate"><span class="pre">sanitizeId()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.ucfirst"><code class="docutils literal notranslate"><span class="pre">ucfirst()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.unCamelCase"><code class="docutils literal notranslate"><span class="pre">unCamelCase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.uniqid"><code class="docutils literal notranslate"><span class="pre">uniqid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.unzip_string"><code class="docutils literal notranslate"><span class="pre">unzip_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylipd.html#pylipd.utils.zip_string"><code class="docutils literal notranslate"><span class="pre">zip_string()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylipd.html#module-pylipd">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../installation.html" class="btn btn-neutral float-left" title="Installing PyLiPD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pylipd.html" class="btn btn-neutral float-right" title="pylipd package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

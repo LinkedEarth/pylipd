@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pylipd.utils &mdash; PyLiPD 0.9.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_sphinx_search.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/js/rtd_sphinx_search.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PyLiPD
+          </a>
+              <div class="version">
+                0.9.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Working with PyLiPD</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing PyLiPD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/modules.html">pylipd</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyLiPD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pylipd.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pylipd.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">zlib</span><span class="o">,</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">base64</span>
+
+<div class="viewcode-block" id="ucfirst"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.ucfirst">[docs]</a><span class="k">def</span> <span class="nf">ucfirst</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span></div>
+
+<div class="viewcode-block" id="lcfirst"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.lcfirst">[docs]</a><span class="k">def</span> <span class="nf">lcfirst</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span></div>
+
+<div class="viewcode-block" id="camelCase"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.camelCase">[docs]</a><span class="k">def</span> <span class="nf">camelCase</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">term</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">subid</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span> 
+        <span class="n">term</span> <span class="o">+=</span> <span class="n">ucfirst</span><span class="p">(</span><span class="n">subid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">term</span></div>
+
+<div class="viewcode-block" id="unCamelCase"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.unCamelCase">[docs]</a><span class="k">def</span> <span class="nf">unCamelCase</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?&lt;=[a-z])(?=[A-Z]) | (?&lt;=[A-Z])(?=[A-Z][a-z])&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="fromCamelCase"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.fromCamelCase">[docs]</a><span class="k">def</span> <span class="nf">fromCamelCase</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">ucfirst</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span></div>
+    <span class="c1">#return ucfirst(str.replace(r&quot;([^A-Z])([A-Z])&quot;&quot;, &quot;$1_$2&quot;, str))</span>
+
+<div class="viewcode-block" id="escape"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.escape">[docs]</a><span class="k">def</span> <span class="nf">escape</span><span class="p">(</span> <span class="nb">str</span> <span class="p">):</span>
+    <span class="c1"># str = str.replace(&quot;&amp;&quot;, &quot;&amp;amp;&quot;)</span>
+    <span class="c1"># str = str.replace(&quot;&lt;&quot;, &quot;&amp;lt;&quot;)</span>
+    <span class="c1"># str = str.replace(&quot;&gt;&quot;, &quot;&amp;gt;&quot;)</span>
+    <span class="c1"># str = str.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;)</span>
+    <span class="c1"># str = str.replace(&quot;&#39;&quot;, &quot;\\&#39;&quot;)</span>
+    <span class="c1"># str = str.replace(&quot;\n&quot;, &quot; &quot;)</span>
+    <span class="c1"># str = str.replace(&quot;\r&quot;, &quot; &quot;)</span>
+    <span class="c1"># str = re.sub(r&quot;\\$&quot;, &quot;&quot;, str)</span>
+    <span class="k">return</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="sanitizeId"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.sanitizeId">[docs]</a><span class="k">def</span> <span class="nf">sanitizeId</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-zA-Z0-9\-_\.]&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="uniqid"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.uniqid">[docs]</a><span class="k">def</span> <span class="nf">uniqid</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">more_entropy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">sec</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">usec</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="mi">1000000</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">sec</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">more_entropy</span><span class="p">:</span>
+        <span class="n">lcg</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="n">the_uniqid</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%08x%05x%.8F</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">usec</span><span class="p">,</span> <span class="n">lcg</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">the_uniqid</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%8x%05x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">usec</span><span class="p">)</span>
+
+    <span class="n">the_uniqid</span> <span class="o">=</span> <span class="p">(</span><span class="n">prefix</span> <span class="k">if</span> <span class="n">prefix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">the_uniqid</span>
+    <span class="k">return</span> <span class="n">the_uniqid</span></div>
+
+<div class="viewcode-block" id="zip_string"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.zip_string">[docs]</a><span class="k">def</span> <span class="nf">zip_string</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span>
+        <span class="n">zlib</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="unzip_string"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.unzip_string">[docs]</a><span class="k">def</span> <span class="nf">unzip_string</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="n">zlib</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not decode/unzip the contents&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="expand_schema"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.utils.expand_schema">[docs]</a><span class="k">def</span> <span class="nf">expand_schema</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">xschema</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">props</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">:</span>
+        <span class="c1"># Add core schema too</span>
+        <span class="n">xschema</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">props</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">lipdkey</span><span class="p">,</span><span class="n">pdetails</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">pdetails</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            <span class="k">if</span> <span class="p">((</span><span class="s2">&quot;alternates&quot;</span> <span class="ow">in</span> <span class="n">pdetails</span><span class="p">))</span> <span class="p">:</span>
+                <span class="k">for</span> <span class="n">altkey</span> <span class="ow">in</span> <span class="n">pdetails</span><span class="p">[</span><span class="s2">&quot;alternates&quot;</span><span class="p">]:</span> 
+                    <span class="n">xschema</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">altkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdetails</span>
+    <span class="n">xschema</span><span class="p">[</span><span class="s2">&quot;__expanded&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">xschema</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

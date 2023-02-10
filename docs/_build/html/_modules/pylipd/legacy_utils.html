@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pylipd.legacy_utils &mdash; PyLiPD 0.9.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd_sphinx_search.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/js/rtd_sphinx_search.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PyLiPD
+          </a>
+              <div class="version">
+                0.9.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Working with PyLiPD</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing PyLiPD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/modules.html">pylipd</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyLiPD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pylipd.legacy_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pylipd.legacy_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">.series.regexes</span> <span class="kn">import</span> <span class="n">re_pandas_x_und</span><span class="p">,</span> <span class="n">re_sheet</span>
+<span class="n">EMPTY</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">,</span> <span class="s1">&#39;n/a&#39;</span><span class="p">,</span> <span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&#39;&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LiPD_Legacy"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.legacy_utils.LiPD_Legacy">[docs]</a><span class="k">class</span> <span class="nc">LiPD_Legacy</span><span class="p">:</span>
+    <span class="c1">##############################################</span>
+    <span class="c1"># TODO: Create LiPDSeries and MultipleLiPDSeries objects</span>
+    <span class="c1"># LiPDSeries is:</span>
+    <span class="c1"># - Age and/or Year and/or Depth (values) &amp; a Variable (values) + Dataset id + Table id + Variable id </span>
+    <span class="c1"># - Look at : https://github.com/LinkedEarth/Pyleoclim_util/blob/master/pyleoclim/core/lipdseries.py</span>
+    <span class="c1"># - use xAxisTs function (to return depth as well)</span>
+    <span class="c1">#</span>
+    <span class="c1"># MultipleLiPDSeries is:</span>
+    <span class="c1"># - A list of LiPDSeries (could be from one or more datasets)</span>
+    <span class="c1">##############################################</span>
+
+<div class="viewcode-block" id="LiPD_Legacy.extract"><a class="viewcode-back" href="../../source/pylipd.html#pylipd.legacy_utils.LiPD_Legacy.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">whichtables</span><span class="o">=</span><span class="s2">&quot;meas&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;paleo&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        LiPD Version 1.3</span>
+<span class="sd">        Main function to initiate LiPD to TSOs conversion.</span>
+
+<span class="sd">        Each object has a</span>
+<span class="sd">        &quot;paleoNumber&quot; or &quot;chronNumber&quot;</span>
+<span class="sd">        &quot;tableNumber&quot;</span>
+<span class="sd">        &quot;modelNumber&quot;</span>
+<span class="sd">        &quot;time_id&quot;</span>
+<span class="sd">        &quot;mode&quot; - chronData or paleoData</span>
+<span class="sd">        &quot;tableType&quot; - &quot;meas&quot; &quot;ens&quot; &quot;summ&quot;</span>
+
+<span class="sd">        :param dict d: Metadata for one LiPD file</span>
+<span class="sd">        :param str whichtables: all, meas, summ, or ens</span>
+<span class="sd">        :param str mode: paleo or chron mode</span>
+<span class="sd">        :return list _ts: Time series</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_root</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_ts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># _switch = {&quot;paleoData&quot;: &quot;chronData&quot;, &quot;chronData&quot;: &quot;paleoData&quot;}</span>
+        <span class="n">_pc</span> <span class="o">=</span> <span class="s2">&quot;paleoData&quot;</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;chron&quot;</span><span class="p">:</span>
+            <span class="n">_pc</span> <span class="o">=</span> <span class="s2">&quot;chronData&quot;</span>
+        <span class="n">_root</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_pc</span>
+        <span class="n">_root</span><span class="p">[</span><span class="s2">&quot;time_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Build the root level data.</span>
+            <span class="c1"># This will serve as the template for which column data will be added onto later.</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;funding&quot;</span><span class="p">:</span>
+                    <span class="n">_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_fund</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_root</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;geo&quot;</span><span class="p">:</span>
+                    <span class="n">_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_geo</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_root</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;pub&#39;</span><span class="p">:</span>
+                    <span class="n">_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_pub</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_root</span><span class="p">)</span>
+                <span class="c1"># elif k in [&quot;chronData&quot;, &quot;paleoData&quot;]:</span>
+                <span class="c1">#     # Store chronData and paleoData as-is. Need it to collapse without data loss.</span>
+                <span class="c1">#     _root[k] = copy.deepcopy(v)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;chronData&quot;</span><span class="p">,</span> <span class="s2">&quot;paleoData&quot;</span><span class="p">]:</span>
+                        <span class="n">_root</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="c1"># Create tso dictionaries for each individual column (build on root data)</span>
+            <span class="n">_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_pc</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">_root</span><span class="p">,</span> <span class="n">_pc</span><span class="p">,</span> <span class="n">whichtables</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_ts</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_extract_fund</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">_root</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates flat funding dictionary.</span>
+<span class="sd">        :param list l: Funding entries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">_root</span><span class="p">[</span><span class="s1">&#39;funding&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">_root</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">_root</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract geo data from input</span>
+<span class="sd">        :param dict d: Geo</span>
+<span class="sd">        :return dict _root: Root data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># May not need these if the key names are corrected in the future.</span>
+        <span class="c1"># COORDINATE ORDER: [LON, LAT, ELEV]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;geo_meanLon&#39;</span><span class="p">,</span> <span class="s1">&#39;geo_meanLat&#39;</span><span class="p">,</span> <span class="s1">&#39;geo_meanElev&#39;</span><span class="p">]</span>
+        <span class="c1"># Iterate through geo dictionary</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Case 1: Coordinates special naming</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;coordinates&#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># Check that our value is not in EMPTY.</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">EMPTY</span><span class="p">:</span>
+                                <span class="c1"># If elevation is a string or 0, don&#39;t record it</span>
+                                <span class="k">if</span> <span class="n">idx</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                                    <span class="c1"># If long or lat is empty, set it as 0 instead</span>
+                                    <span class="n">_root</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="c1"># Set the value as a float into its entry.</span>
+                                <span class="n">_root</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                        <span class="c1"># Value is a normal number, or string representation of a number</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># Set the value as a float into its entry.</span>
+                            <span class="n">_root</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">e</span>
+            <span class="c1"># Case 2: Any value that is a string can be added as-is</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;meanElev&#39;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># Some data sets have meanElev listed under properties for some reason.</span>
+                        <span class="n">_root</span><span class="p">[</span><span class="s1">&#39;geo_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="c1"># If the value is a string, then we don&#39;t want it</span>
+                        <span class="k">raise</span> <span class="n">e</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_root</span><span class="p">[</span><span class="s1">&#39;geo_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="c1"># Case 3: Nested dictionary. Recursion</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_geo</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_root</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_root</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_pub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">_root</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract publication data from one or more publication entries.</span>
+<span class="sd">        :param list l: Publication</span>
+<span class="sd">        :return dict _root: Root data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># For each publication entry</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pub</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+            <span class="c1"># Get author data first, since that&#39;s the most ambiguously structured data.</span>
+            <span class="n">_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_authors</span><span class="p">(</span><span class="n">pub</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_root</span><span class="p">)</span>
+            <span class="c1"># Go through data of this publication</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pub</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># Case 1: DOI ID. Don&#39;t need the rest of &#39;identifier&#39; dict</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;identifier&#39;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">_root</span><span class="p">[</span><span class="s1">&#39;pub&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_DOI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;hello&quot;</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">e</span>
+                <span class="c1"># Case 2: All other string entries</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">&#39;authors&#39;</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">&#39;author&#39;</span><span class="p">:</span>
+                        <span class="n">_root</span><span class="p">[</span><span class="s1">&#39;pub&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">_root</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_authors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pub</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_root</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a concatenated string of author names. Separate names with semi-colons.</span>
+<span class="sd">        :param any pub: Publication author structure is ambiguous</span>
+<span class="sd">        :param int idx: Index number of Pub</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># DOI Author data. We&#39;d prefer to have this first.</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="n">pub</span><span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Manually entered author data. This is second best.</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="n">pub</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Couldn&#39;t find any author data. Skip it altogether.</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># If there is author data, find out what type it is</span>
+        <span class="k">if</span> <span class="n">names</span><span class="p">:</span>
+            <span class="c1"># Build author names onto empty string</span>
+            <span class="n">auth</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="c1"># Is it a list of dicts or a list of strings? Could be either</span>
+            <span class="c1"># Authors: Stored as a list of dictionaries or list of strings</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="n">auth</span> <span class="o">+=</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="n">auth</span> <span class="o">+=</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">auth</span> <span class="o">=</span> <span class="n">names</span>
+            <span class="c1"># Enter finished author string into target</span>
+            <span class="n">_root</span><span class="p">[</span><span class="s1">&#39;pub&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_author&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_root</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_pc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">whichtables</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract all data from a PaleoData dictionary.</span>
+<span class="sd">        :param dict d: PaleoData dictionary</span>
+<span class="sd">        :param dict root: Time series root data</span>
+<span class="sd">        :param str pc: paleoData or chronData</span>
+<span class="sd">        :param str whichtables: all, meas, summ, or ens</span>
+<span class="sd">        :return list _ts: Time series</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_ts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># For each table in pc</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="n">pc</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">whichtables</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="n">whichtables</span> <span class="o">==</span> <span class="s2">&quot;meas&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">_table_data1</span> <span class="ow">in</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;measurementTable&quot;</span><span class="p">]:</span>
+                        <span class="n">_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_table</span><span class="p">(</span><span class="n">_table_data1</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">root</span><span class="p">),</span> <span class="n">pc</span><span class="p">,</span> <span class="n">_ts</span><span class="p">,</span> <span class="s2">&quot;meas&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">whichtables</span> <span class="o">!=</span> <span class="s2">&quot;meas&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;model&quot;</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">_table_data1</span> <span class="ow">in</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]:</span>
+                            <span class="c1"># get the method info for this model. This will be paired to all summ and ens table data</span>
+                            <span class="n">_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_method</span><span class="p">(</span><span class="n">_table_data1</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">])</span>
+                            <span class="k">if</span> <span class="n">whichtables</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="n">whichtables</span> <span class="o">==</span> <span class="s2">&quot;summ&quot;</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="s2">&quot;summaryTable&quot;</span> <span class="ow">in</span> <span class="n">_table_data1</span><span class="p">:</span>
+                                    <span class="k">for</span> <span class="n">_table_data2</span> <span class="ow">in</span> <span class="n">_table_data1</span><span class="p">[</span><span class="s2">&quot;summaryTable&quot;</span><span class="p">]:</span>
+                                        <span class="c1"># take a copy of this tso root</span>
+                                        <span class="n">_tso</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+                                        <span class="c1"># add in the method details</span>
+                                        <span class="n">_tso</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_method</span><span class="p">)</span>
+                                        <span class="c1"># add in the table details</span>
+                                        <span class="n">_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_table</span><span class="p">(</span><span class="n">_table_data2</span><span class="p">,</span> <span class="n">_tso</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">_ts</span><span class="p">,</span> <span class="s2">&quot;summ&quot;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">whichtables</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="n">whichtables</span> <span class="o">==</span> <span class="s2">&quot;ens&quot;</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="s2">&quot;ensembleTable&quot;</span> <span class="ow">in</span> <span class="n">_table_data1</span><span class="p">:</span>
+                                    <span class="k">for</span> <span class="n">_table_data2</span> <span class="ow">in</span> <span class="n">_table_data1</span><span class="p">[</span><span class="s2">&quot;ensembleTable&quot;</span><span class="p">]:</span>
+                                        <span class="n">_tso</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+                                        <span class="n">_tso</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_method</span><span class="p">)</span>
+                                        <span class="n">_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_table</span><span class="p">(</span><span class="n">_table_data2</span><span class="p">,</span> <span class="n">_tso</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">_ts</span><span class="p">,</span> <span class="s2">&quot;ens&quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">return</span> <span class="n">_ts</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a timeseries-formatted version of model method data</span>
+
+<span class="sd">        :param dict method: Method data</span>
+<span class="sd">        :return dict _method: Method data, formatted</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_method</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">_method</span><span class="p">[</span><span class="s2">&quot;method_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">_method</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_special</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">table_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract year, age, and depth column from table data</span>
+<span class="sd">        :param dict table_data: Data at the table level</span>
+<span class="sd">        :param dict current: Current data</span>
+<span class="sd">        :return dict current:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Add age, year, and depth columns to ts_root where possible</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">table_data</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s2">&quot;variableName&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                
+                <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;variableName&quot;</span><span class="p">]</span>
+
+                <span class="c1"># special case for year bp, or any variation of it. Translate key to &quot;age&quot;&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;bp&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;age&quot;</span>
+
+                <span class="c1"># all other normal cases. clean key and set key.</span>
+                <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;depth&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s2">&quot;yr&quot;</span><span class="p">,</span> <span class="s2">&quot;distance_from_top&quot;</span><span class="p">,</span> <span class="s2">&quot;distance&quot;</span><span class="p">)):</span>
+                    <span class="c1"># Some keys have units hanging on them (i.e. &#39;year_ad&#39;, &#39;depth_cm&#39;). We don&#39;t want units on the keys</span>
+                    <span class="k">if</span> <span class="n">re_pandas_x_und</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+                        <span class="n">s</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="s2">&quot;distance&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+                        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;depth&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">s</span> <span class="o">=</span> <span class="n">k</span>
+
+                <span class="c1"># create the entry in ts_root.</span>
+                <span class="k">if</span> <span class="n">s</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">current</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="c1"># Values key was not found.</span>
+                        <span class="k">raise</span> <span class="n">e</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">current</span><span class="p">[</span><span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;Units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="c1"># Values key was not found.</span>
+                        <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">return</span> <span class="n">current</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_table_root</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">pc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract data from the root level of a paleoData table.</span>
+<span class="sd">        :param dict d: paleoData table</span>
+<span class="sd">        :param dict current: Current root data</span>
+<span class="sd">        :param str pc: paleoData or chronData</span>
+<span class="sd">        :return dict current: Current root data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">current</span><span class="p">[</span><span class="n">pc</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">return</span> <span class="n">current</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_table_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_data</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">tt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add in modelNumber and summaryNumber fields if this is a summary table</span>
+
+<span class="sd">        :param dict table_data: Table data</span>
+<span class="sd">        :param dict current: LiPD root data</span>
+<span class="sd">        :param str tt: Table type &quot;summ&quot;, &quot;ens&quot;, &quot;meas&quot;</span>
+<span class="sd">        :return dict current: Current root data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tt</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;summ&quot;</span><span class="p">,</span> <span class="s2">&quot;ens&quot;</span><span class="p">]:</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">re_sheet</span><span class="p">,</span> <span class="n">table_data</span><span class="p">[</span><span class="s2">&quot;tableName&quot;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">_pc_num</span><span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Number&quot;</span>
+                    <span class="n">current</span><span class="p">[</span><span class="n">_pc_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="n">current</span><span class="p">[</span><span class="s2">&quot;modelNumber&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+                    <span class="n">current</span><span class="p">[</span><span class="s2">&quot;tableNumber&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;extract_table_summary: Unable to parse paleo/model/table numbers&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;extract_table_summary: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">current</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_data</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">tt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use the given table data to create a time series entry for each column in the table.</span>
+
+<span class="sd">        :param dict table_data: Table data</span>
+<span class="sd">        :param dict current: LiPD root data</span>
+<span class="sd">        :param str pc: paleoData or chronData</span>
+<span class="sd">        :param list ts: Time series (so far)</span>
+<span class="sd">        :param bool summary: Summary Table or not</span>
+<span class="sd">        :return list ts: Time series (so far)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current</span><span class="p">[</span><span class="s2">&quot;tableType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tt</span>
+        <span class="c1"># Get root items for this table</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_table_root</span><span class="p">(</span><span class="n">table_data</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">pc</span><span class="p">)</span>
+        <span class="c1"># Add in modelNumber and tableNumber if this is &quot;ens&quot; or &quot;summ&quot; table</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_table_model</span><span class="p">(</span><span class="n">table_data</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">tt</span><span class="p">)</span>
+        <span class="c1"># Add age, depth, and year columns to root if available</span>
+        <span class="n">_table_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_special</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">table_data</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Start creating entries using dictionary copies.</span>
+            <span class="k">for</span> <span class="n">_col_data</span> <span class="ow">in</span> <span class="n">table_data</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]:</span>
+                <span class="c1"># Add column data onto root items. Copy so we don&#39;t ruin original data</span>
+                <span class="n">_col_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_columns</span><span class="p">(</span><span class="n">_col_data</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">_table_tmp</span><span class="p">),</span> <span class="n">pc</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_col_tmp</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;extract_table: Unable to create ts entry, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">return</span> <span class="n">ts</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">tmp_tso</span><span class="p">,</span> <span class="n">pc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract data from one paleoData column</span>
+<span class="sd">        :param dict d: Column dictionary</span>
+<span class="sd">        :param dict tmp_tso: TSO dictionary with only root items</span>
+<span class="sd">        :return dict: Finished TSO</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">flat_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_nested</span><span class="p">(</span><span class="n">pc</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="k">for</span> <span class="n">n</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="n">flat_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">tmp_tso</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Assume if it&#39;s not a special nested case, then it&#39;s a string value</span>
+                <span class="n">tmp_tso</span><span class="p">[</span><span class="n">pc</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">tmp_tso</span>
+
+
+    <span class="k">def</span> <span class="nf">_extract_nested</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crumbs</span><span class="p">,</span> <span class="n">dat</span><span class="p">,</span> <span class="n">flat_dat</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dat</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">flat_dat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_nested</span><span class="p">(</span><span class="n">crumbs</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">flat_dat</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">flat_dat</span><span class="p">[</span><span class="n">crumbs</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ts: _extract_nested: &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">flat_dat</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
