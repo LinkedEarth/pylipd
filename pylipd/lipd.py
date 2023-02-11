@@ -76,7 +76,7 @@ class LiPD:
 
             if __name__=="__main__":
                 lipd = LiPD()        
-                lipd.load_from_dir("/Users/varun/git/LiPD/PyLiPD/data/lpd.new/Pages2k2_1_2")
+                lipd.load_from_dir("../examples/data")
 
                 print(lipd.get_all_dataset_ids())
         '''
@@ -119,9 +119,9 @@ class LiPD:
             if __name__=="__main__":
                 lipd = LiPD() 
                 lipd.load([
-                    "/Users/varun/git/LiPD/PyLiPD/data/lpd/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "/Users/varun/git/LiPD/PyLiPD/data/lpd/MD98_2181.Stott.2007.lpd",
-                    "/Users/varun/git/LiPD/PyLiPD/data/lpd/Ant-WAIS-Divide.Severinghaus.2012.lpd",
+                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                    "../examples/data/MD98_2181.Stott.2007.lpd",
+                    "../examples/data/Ant-WAIS-Divide.Severinghaus.2012.lpd",
                     "https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1/Nunalleq.Ledger.2018.lpd"                    
                 ])            
 
@@ -214,7 +214,7 @@ class LiPD:
                 # Fetch LiPD data from remote RDF Graph
                 lipd = LiPD()
 
-                lipd.convert_lipd_dir_to_rdf("/Users/varun/git/LiPD/PyLiPD/data/lpd", "all-lipd.nq")
+                lipd.convert_lipd_dir_to_rdf("../examples/data", "all-lipd.nq")
         '''
 
         filemap = {}
@@ -273,8 +273,8 @@ class LiPD:
             if __name__=="__main__":
                 lipd = LiPD()
                 lipd.load([
-                    "/Users/varun/git/LiPD/PyLiPD/data/lpd/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "/Users/varun/git/LiPD/PyLiPD/data/lpd/MD98_2181.Stott.2007.lpd"
+                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                    "../examples/data/MD98_2181.Stott.2007.lpd"
                 ])
                 query = """PREFIX le: <http://linked.earth/ontology#>
                         select (count(distinct ?ds) as ?count) where { 
