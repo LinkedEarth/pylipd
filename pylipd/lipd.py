@@ -425,7 +425,7 @@ class LiPD:
             }}
             """
         qres = self.query(query)
-        return [row.dsname for row in qres]
+        return [str(row.dsname) for row in qres]
 
     def search_datasets(variableName=[ ], archiveType=[ ], proxyObsType=[ ], infVarType = [ ], sensorGenus=[ ],
                     sensorSpecies=[ ], interpName =[ ], interpDetail =[ ], ageUnits = [ ],
