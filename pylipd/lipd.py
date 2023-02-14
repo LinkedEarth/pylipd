@@ -14,6 +14,7 @@ from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rd
 
 from pylipd.rdf_to_lipd import RDFToLiPD
 from pylipd.legacy_utils import LiPD_Legacy
+from pylipd.utils import sanitizeId
 
 from .globals.urls import NSURL, ONTONS
 
@@ -425,7 +426,7 @@ class LiPD:
             }}
             """
         qres = self.query(query)
-        return [str(row.dsname) for row in qres]
+        return [sanitizeId(row.dsname) for row in qres]
 
     def search_datasets(variableName=[ ], archiveType=[ ], proxyObsType=[ ], infVarType = [ ], sensorGenus=[ ],
                     sensorSpecies=[ ], interpName =[ ], interpDetail =[ ], ageUnits = [ ],

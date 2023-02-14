@@ -34,7 +34,7 @@ if __name__=="__main__":
     #lipd.load_from_dir(local_lipd_dir)
     print(lipd.get_all_dataset_ids())
 
-    lipd.load(["https://github.com/LinkedEarth/Pyleoclim_util/blob/master/example_data/Arc-LakeNataujärvi.Ojala.2005.lpd?raw=true"])
+    lipd.load(["/Users/varun/Downloads/Arc-LakeNataujärvi.Ojala.2005.lpd"])
     print(lipd.get_all_dataset_ids())
     
     ts_list = lipd.get_timeseries(lipd.get_all_dataset_ids())
@@ -43,7 +43,7 @@ if __name__=="__main__":
             if 'paleoData_variableName' in tso:
                 print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
 
-
+    exit()
     # Fetch LiPD data from remote RDF Graph
     lipd_remote = LiPD()
     lipd_remote.set_endpoint(remote_lipd_endpoint)
