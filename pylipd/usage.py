@@ -32,6 +32,10 @@ if __name__=="__main__":
     
     lipd.load(lipdfiles)
     #lipd.load_from_dir(local_lipd_dir)
+    print(lipd.get_all_dataset_ids())
+
+    lipd.load(["https://github.com/LinkedEarth/Pyleoclim_util/blob/master/example_data/Arc-LakeNataujärvi.Ojala.2005.lpd?raw=true"])
+    print(lipd.get_all_dataset_ids())
     
     ts_list = lipd.get_timeseries(lipd.get_all_dataset_ids())
     for dsid, tsos in ts_list.items():
