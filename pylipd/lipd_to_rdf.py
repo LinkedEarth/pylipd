@@ -18,6 +18,7 @@ from rdflib.namespace import XSD
 
 from io import BytesIO
 from urllib.request import urlopen
+from urllib.parse import urlparse, urlunparse, quote
 
 from .globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
 from .globals.blacklist import BLACKLIST
@@ -93,10 +94,18 @@ class LipdToRDF:
 
     def _unzip_lipd_file(self, lipdfile, unzipdir):
         if lipdfile.startswith("http"):
-            resp = urlopen(lipdfile)
+            # If this is a URL
+            # Handle special characters in url (if any)
+            res = urlparse(lipdfile)
+            lipdurl = urlunparse(res._replace(path=quote(res.path)))
+
+            # Open url and unzip
+            resp = urlopen(lipdurl)
             with zipfile.ZipFile(BytesIO(resp.read())) as zip_ref:
                 zip_ref.extractall(unzipdir)
         else:
+            # If this is a local file
+            # Unzip file
             with zipfile.ZipFile(lipdfile, 'r') as zip_ref:
                 zip_ref.extractall(unzipdir)
 
@@ -429,6 +438,9 @@ class LipdToRDF:
                     hash[sampleid] = sampleobj
                 del obj["physicalSample"]
             
+            if type(proxyobs) is list:
+                proxyobs = proxyobs[0]
+
             observationid = self._get_observation(proxyobs)
             #obj["proxy"])
             # Create sensor
@@ -590,7 +602,8 @@ class LipdToRDF:
             obj["number"] = int(obj["number"])
         if not isinstance(obj["number"], list):
             obj["number"] = [obj["number"]]
-        indices = [col-1 for col in obj["number"]]
+        
+        indices = [int(col)-1 for col in obj["number"]]
         if csvname in self.lipd_csvs:
             df = self.lipd_csvs[csvname]
             values = []
