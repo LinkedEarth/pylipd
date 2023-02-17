@@ -34,4 +34,4 @@ jobs:
     - name: Test with pytest
       run: |
         conda activate pylipd
-        pytest pyleoclim/tests -svv
+        pytest pylipd/tests -svv
