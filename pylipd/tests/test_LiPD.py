@@ -38,6 +38,14 @@ class TestLiPDLoad():
             lipd = LiPD()
             lipd.load(url)
     
+    def test_load_t2(self):
+        if __name__=="__main__":
+            # Fetch LiPD data from remote RDF Graph
+            lipd_remote = LiPD()
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+            lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
+            #print(lipd_remote.get_all_dataset_names())
+    
 
 class TestLiPDids():
     
