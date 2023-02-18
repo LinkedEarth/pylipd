@@ -60,7 +60,7 @@ class TestLiPDTimeseries():
         if  __name__=="__main__":
             lipd = LiPD()
             lipd.load(url)
-            ts_list=lipd.get_timeseries(lipd.get_dataset_ids())
+            ts_list=lipd.get_timeseries(lipd.get_dataset_names())
         
 class TestLiPDquery():
 
