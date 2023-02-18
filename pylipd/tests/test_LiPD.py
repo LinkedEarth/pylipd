@@ -80,7 +80,7 @@ class TestLiPDquery():
         if  __name__=="__main__":
             lipd = LiPD()
             lipd.load(url)
-            result = lipd.query(query)
+            result, result_df = lipd.query(query)
              
         
         

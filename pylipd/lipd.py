@@ -8,13 +8,14 @@ import pickle
 import re
 import os.path
 import tempfile
+import pandas as pd
 
 from rdflib import ConjunctiveGraph, Namespace
 from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rdf
 
 from pylipd.rdf_to_lipd import RDFToLiPD
 from pylipd.legacy_utils import LiPD_Legacy
-from pylipd.utils import sanitizeId
+from pylipd.utils import sanitizeId, sparql_results_to_df
 
 from .globals.urls import NSURL, ONTONS
 
@@ -261,6 +262,9 @@ class LiPD:
 
         result : dict
             Dictionary of sparql variable and binding values
+        
+        result_df : pandas.Dataframe
+            Return the dictionary above as a pandas.Dataframe
     
         Examples
         --------
@@ -282,8 +286,8 @@ class LiPD:
                             ?ds a le:Dataset .
                             ?ds le:hasUrl ?url
                         }"""
-                result = lipd.query(query)
-                print(result)
+                result, result_df = lipd.query(query)
+                result_df
         '''
 
         if self.remote:
@@ -291,8 +295,12 @@ class LiPD:
             if matches:
                 vars = matches.group(1)
                 where = matches.group(2)
-                query = f"SELECT {vars} WHERE {{ SERVICE <{self.endpoint}> {{ {where} }} }}"
-        return self.graph.query(query, result=result)
+                query = f"SELECT {vars} WHERE {{ SERVICE <{self.endpoint}> {{ {where} }} }}"   
+        
+        result = self.graph.query(query)
+        result_df = sparql_results_to_df(result)
+        
+        return result, result_df 
 
     def load_remote_datasets(self, dsids):
         '''Loads remote datasets into cache if a remote endpoint is set
