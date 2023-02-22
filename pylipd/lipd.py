@@ -337,12 +337,15 @@ class LiPD:
         '''
         if not self.remote or not self.endpoint:
             raise Exception("No remote endpoint")
-
+        
+        if type(dsnames) is not list:
+            dsnames = [dsnames]
+            
         if dsnames == None or len(dsnames) == 0:
             raise Exception("No dataset names to cache")
         dsnamestr = (' '.join('<' + NSURL + "/" + dsname + '>' for dsname in dsnames))
         print("Caching datasets from remote endpoint..")
-        qres = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}")
+        qres, qres_df = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}")
 
         # Reinitialize graph
         self.initialize_graph()
@@ -441,7 +444,7 @@ class LiPD:
                 ?ds le:name ?dsname
             }}
             """
-        qres = self.query(query)
+        qres, qres_df = self.query(query)
         return [sanitizeId(row.dsname) for row in qres]
 
     def search_datasets(variableName=[ ], archiveType=[ ], proxyObsType=[ ], infVarType = [ ], sensorGenus=[ ],
@@ -454,3 +457,8 @@ class LiPD:
 
     def find_ensemble_table_for_variable(self, ensemble_table):
         pass
+    
+    def export_biblio(self):
+        pass
+
+
