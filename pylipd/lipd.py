@@ -441,7 +441,7 @@ class LiPD:
                 ?ds le:name ?dsname
             }}
             """
-        qres = self.query(query)
+        qres, qres_df = self.query(query)
         return [sanitizeId(row.dsname) for row in qres]
 
     def search_datasets(variableName=[ ], archiveType=[ ], proxyObsType=[ ], infVarType = [ ], sensorGenus=[ ],
