@@ -342,7 +342,7 @@ class LiPD:
             raise Exception("No dataset names to cache")
         dsnamestr = (' '.join('<' + NSURL + "/" + dsname + '>' for dsname in dsnames))
         print("Caching datasets from remote endpoint..")
-        qres = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}")
+        qres, qres_df = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}")
 
         # Reinitialize graph
         self.initialize_graph()
