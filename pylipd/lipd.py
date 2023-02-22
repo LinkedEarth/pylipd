@@ -457,8 +457,6 @@ class LiPD:
 
     def find_ensemble_table_for_variable(self, ensemble_table):
         pass
-    
+
     def export_biblio(self):
         pass
-
-
