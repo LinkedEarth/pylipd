@@ -90,5 +90,4 @@ class TestLiPDquery():
             lipd.load(url)
             result, result_df = lipd.query(query)
              
-        
-        
+      

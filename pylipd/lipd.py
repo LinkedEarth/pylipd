@@ -337,7 +337,10 @@ class LiPD:
         '''
         if not self.remote or not self.endpoint:
             raise Exception("No remote endpoint")
-
+        
+        if type(dsnames) is not list:
+            dsnames = [dsnames]
+            
         if dsnames == None or len(dsnames) == 0:
             raise Exception("No dataset names to cache")
         dsnamestr = (' '.join('<' + NSURL + "/" + dsname + '>' for dsname in dsnames))
@@ -453,4 +456,7 @@ class LiPD:
 
 
     def find_ensemble_table_for_variable(self, ensemble_table):
+        pass
+
+    def export_biblio(self):
         pass
