@@ -331,17 +331,19 @@ SCHEMA = {
         'instrument': {
             'name': 'measuredBy',
             'type': 'Individual',
-            'category': 'Instrument'
+            'category': 'Instrument',
         },
         'calibration': {
             'name': 'calibratedVia',
             'schema': 'CalibrationModel',
+            'type': 'Individual',
             'multiple': True
         },
         'interpretation': {
             'name': 'interpretedAs',
             'schema': 'Interpretation',
             'category': 'Interpretation',
+            'type': 'Individual',
             'multiple': True
         },
         'hasResolution': {
@@ -349,14 +351,17 @@ SCHEMA = {
             'name': 'hasResolution',
             'category': 'Resolution',
             'schema': 'Resolution',
+            'type': 'Individual',
             'alternates': ['hasResolution']
         },
         'inferredFrom': { 
             'schema': 'Variable', 
-            'category': 'MeasuredVariable' 
+            'category': 'MeasuredVariable',
+            'type': 'Individual'
         },
         'hasUncertainty': { 
             'schema': 'Uncertainty', 
+            'type': 'Individual',
             'multiple': True 
         },
         'hasValues': {
@@ -511,7 +516,12 @@ SCHEMA = {
         '@toJson': ['_unwrap_uncertainty'],
         'reference': { 
             'name': 'relevantQuote' 
-        }
+        },
+        'hasUncertainty': { 
+            'schema': 'Uncertainty', 
+            'type': 'Individual',
+            'multiple': True 
+        },
     },
     'Person': { '@id': ['{name}'] },
     'Uncertainty': {
