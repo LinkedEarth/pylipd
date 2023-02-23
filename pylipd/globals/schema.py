@@ -361,8 +361,7 @@ SCHEMA = {
         },
         'hasUncertainty': { 
             'schema': 'Uncertainty', 
-            'type': 'Individual',
-            'multiple': True 
+            'type': 'Individual'
         },
         'hasValues': {
             'type': 'string'
@@ -519,8 +518,7 @@ SCHEMA = {
         },
         'hasUncertainty': { 
             'schema': 'Uncertainty', 
-            'type': 'Individual',
-            'multiple': True 
+            'type': 'Individual'
         },
     },
     'Person': { '@id': ['{name}'] },
