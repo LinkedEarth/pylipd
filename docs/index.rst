@@ -22,14 +22,13 @@ Getting Started
 ===============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Working with PyLiPD
 
    installation.rst
    api.rst
    tutorials.rst
-   source/modules
-      
+   
    
 Indices and tables
 ==================
