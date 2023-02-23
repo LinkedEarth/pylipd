@@ -5,9 +5,9 @@ PyLiPD User API
 
 The following describes the main class that makes up PyLiPD
 
-LiPD (pylipd.LiPD)
+LiPD (pylipd.lipd.LiPD)
 """"""""""""""""""
 
-.. autoclass:: pylipd.LiPD
+.. autoclass:: pylipd.lipd.LiPD
    :members:
 
