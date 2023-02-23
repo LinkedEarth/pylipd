@@ -124,8 +124,8 @@ class LipdToRDF:
         if (type(authstring) is list) :
             return self._parse_persons(authstring, None)
         
-        if (re.search(r"\s*\s*", authstring)) :
-            auths = re.split(r"\s*\s*", authstring)
+        if (re.search(r"\s*;\s*", authstring)) :
+            auths = re.split(r"\s*;\s*", authstring)
             for auth in auths:            
                 authors.append(self._parse_person(auth))
             
@@ -155,11 +155,14 @@ class LipdToRDF:
         if (type(auth) is dict) :
             authname = auth["name"]
         if authname:
-            m = re.search(r"(.+)\s*,\s*(.+)", authname)
-            if m is not None:
-                return {"name" : str(str(m.groups()[1]) + " ") + str(m.groups()[0])}
-            else : 
-                return {"name" : authname}
+            if re.search(";", authname) is not None:
+                return self._parse_persons_string(authname)
+            else:
+                m = re.search(r"(.+)\s*,\s*(.+)", authname)
+                if m is not None:
+                    return {"name" : str(str(m.groups()[1]) + " ") + str(m.groups()[0])}
+                else : 
+                    return {"name" : authname}
 
         
     def _parse_persons(self, auths, parent = None) :
@@ -168,7 +171,11 @@ class LipdToRDF:
             return None
         
         for auth in auths: 
-            authors.append(self._parse_person(auth, parent))
+            authobj = self._parse_person(auth, parent)
+            if type(authobj) is list:
+                authors.extend(authobj)
+            else:
+                authors.append(authobj)
         return authors
 
     def _parse_location(self, geo, parent = None) :
@@ -768,8 +775,8 @@ class LipdToRDF:
                     if (pname) :
                         if (type(value) is list) :
                             index = 1
-                            for subvalue in value: 
-                                if (type(value) is dict):
+                            for subvalue in value:                              
+                                if (type(subvalue) is dict):
                                     if propkey not in item:
                                         item[propkey] = []
                                     item[propkey].append(self._map_lipd_to_json(subvalue, obj, index, cat, sch, hash))
