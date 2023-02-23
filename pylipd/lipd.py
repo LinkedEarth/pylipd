@@ -47,11 +47,11 @@ class LiPD:
     '''
     def __init__(self, graph=None):
         if graph is None:
-            self.initialize_graph()
+            self._initialize_graph()
         else:
             self.graph = graph
 
-    def initialize_graph(self):
+    def _initialize_graph(self):
         self.graph = ConjunctiveGraph()
         self.graph.bind("le", Namespace(ONTONS))        
         #self.graph.bind("", Namespace(NS))
@@ -162,7 +162,7 @@ class LiPD:
 
     def clear(self):
         '''Clears the graph'''
-        self.initialize_graph()
+        self._initialize_graph()
 
 
     def set_endpoint(self, endpoint):
@@ -357,7 +357,7 @@ class LiPD:
         qres, qres_df = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}", remote=True)
 
         # Reinitialize graph
-        # self.initialize_graph()
+        # self._initialize_graph()
         for row in qres:
             self.graph.add((row.s, row.p, row.o, row.g))
         print("Done..")
@@ -435,7 +435,39 @@ class LiPD:
         return converter.convert(dsname, self.graph)
 
     def pop(self, dsname, collection_id=None):
-        '''Removes a dataset from the graph and returns a LiPD object'''        
+        '''Removes a dataset from the graph and returns a LiPD object
+
+        Parameters
+        ----------
+
+        dsname : str
+            Path to the directory containing lipd files
+
+        collection_id : str
+            (Optional) collection id for the dataset
+
+        Examples
+        --------
+
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            if __name__=="__main__":
+                # Fetch LiPD data from remote RDF Graph
+                lipd = LiPD()
+                lipd.load([
+                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                    "../examples/data/MD98_2181.Stott.2007.lpd"
+                ])
+                all_datasets = lipd.get_all_dataset_names()
+                print("Loaded datasets: " + str(all_datasets))
+                popped = lipd.pop(all_datasets[0])
+                print("Loaded datasets after pop: " + str(lipd.get_all_dataset_names()))
+                print("Popped dataset: " + str(popped.get_all_dataset_names())        
+        '''        
         graphurl = NSURL + "/" + dsname
         if collection_id:
             graphurl = NSURL + "/" + collection_id + "/" + dsname
@@ -444,18 +476,86 @@ class LiPD:
         return LiPD(subgraph)
 
     def remove(self, dsname, collection_id=None):
-        '''Removes a dataset from the graph'''
+        '''Removes a dataset from the graph
+
+        Parameters
+        ----------
+
+        dsname : str
+            Path to the directory containing lipd files
+
+        collection_id : str
+            (Optional) collection id for the dataset
+
+        Examples
+        --------
+
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            if __name__=="__main__":
+                # Fetch LiPD data from remote RDF Graph
+                lipd = LiPD()
+                lipd.load([
+                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                    "../examples/data/MD98_2181.Stott.2007.lpd"
+                ])
+                all_datasets = lipd.get_all_dataset_names()
+                print("Loaded datasets: " + str(all_datasets))
+                lipd.remove(all_datasets[0])
+                print("Loaded datasets after remove: " + str(lipd.get_all_dataset_names()))
+        '''
         graphurl = NSURL + "/" + dsname
         if collection_id:
             graphurl = NSURL + "/" + collection_id + "/" + dsname
         self.graph.remove((None, None, None, graphurl))       
 
     def get_rdf(self):
-        '''Returns RDF serialization of the current Graph'''
+        '''Returns RDF serialization of the current Graph
+        Examples
+        --------
+
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            if __name__=="__main__":
+                # Fetch LiPD data from remote RDF Graph
+                lipd = LiPD()
+                lipd.load([
+                    "../examples/data/MD98_2181.Stott.2007.lpd"
+                ])
+                print(lipd.get_rdf())
+        '''
+        
         return self.graph.serialize(format='nquads')
 
 
     def get_all_dataset_names(self):
+        '''Get all Dataset Names
+        Examples
+        --------
+
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            if __name__=="__main__":
+                # Fetch LiPD data from remote RDF Graph
+                lipd = LiPD()
+                lipd.load([
+                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                    "../examples/data/MD98_2181.Stott.2007.lpd"
+                ])
+                print(lipd.get_all_dataset_names())
+        '''        
         query = f"""
             SELECT ?dsname WHERE {{ 
                 ?ds a le:Dataset .
