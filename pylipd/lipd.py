@@ -6,6 +6,7 @@ How to browse and query LiPD objects is described in a short example below, whil
 import os
 import pickle
 import re
+import copy
 import os.path
 import tempfile
 import pandas as pd
@@ -39,13 +40,16 @@ class LiPD:
         
         ts_list = lipd.get_timeseries(lipd.get_all_dataset_names())
 
-        for dsid, tsos in ts_list.items():
+        for dsname, tsos in ts_list.items():
             for tso in tsos:
                 if 'paleoData_variableName' in tso:
-                    print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
+                    print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
     '''
-    def __init__(self):
-        self.initialize_graph()
+    def __init__(self, graph=None):
+        if graph is None:
+            self.initialize_graph()
+        else:
+            self.graph = graph
 
     def initialize_graph(self):
         self.graph = ConjunctiveGraph()
@@ -358,13 +362,13 @@ class LiPD:
             self.graph.add((row.s, row.p, row.o, row.g))
         print("Done..")
 
-    def get_timeseries(self, dsids):
+    def get_timeseries(self, dsnames):
         '''Get Legacy LiPD like Time Series Object (tso)
 
         Parameters
         ----------
 
-        dsids : array
+        dsnames : array
             array of dataset id or name strings
 
         Examples
@@ -381,32 +385,32 @@ class LiPD:
                 lipd_remote = LiPD()
                 lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
                 ts_list = lipd_remote.get_timeseries(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
-                for dsid, tsos in ts_list.items():
+                for dsname, tsos in ts_list.items():
                     for tso in tsos:
                         if 'paleoData_variableName' in tso:
-                            print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
+                            print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
         '''
-        ts = self._get_timeseries(dsids)
+        ts = self._get_timeseries(dsnames)
         return ts
 
-    def _get_timeseries(self, dsids):
+    def _get_timeseries(self, dsnames):
         timeseries = {}
-        for dsid in dsids:
+        for dsname in dsnames:
             converter = RDFToLiPD()
-            d = converter.convert(dsid, self.graph)
-            print("Extracting timeseries from dataset: " + dsid + " ...")
+            d = converter.convert(dsname, self.graph)
+            print("Extracting timeseries from dataset: " + dsname + " ...")
             if len(d.items()):
                 tss = LiPD_Legacy().extract(d)
-                timeseries[dsid] = tss
+                timeseries[dsname] = tss
         return timeseries
 
-    def get_lipd(self, dsid):
+    def get_lipd(self, dsname):
         '''Get LiPD json for a dataset
 
         Parameters
         ----------
 
-        dsid : str
+        dsname : str
             dataset id
 
         Examples
@@ -422,13 +426,34 @@ class LiPD:
                 # Fetch LiPD data from remote RDF Graph
                 lipd_remote = LiPD()
                 lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-                dsid = "Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"
-                lipd_remote.load_remote_datasets([dsid])
-                lipd_json = lipd_remote.get_lipd(dsid)
+                dsname = "Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"
+                lipd_remote.load_remote_datasets([dsname])
+                lipd_json = lipd_remote.get_lipd(dsname)
                 print(lipd_json)
         '''           
         converter = RDFToLiPD()            
-        return converter.convert(dsid, self.graph)
+        return converter.convert(dsname, self.graph)
+
+    def pop(self, dsname, collection_id=None):
+        '''Removes a dataset from the graph and returns a LiPD object'''        
+        graphurl = NSURL + "/" + dsname
+        if collection_id:
+            graphurl = NSURL + "/" + collection_id + "/" + dsname
+        subgraph = copy.deepcopy(self.graph.get_context(graphurl))
+        self.graph.remove((None, None, None, graphurl))
+        return LiPD(subgraph)
+
+    def remove(self, dsname, collection_id=None):
+        '''Removes a dataset from the graph'''
+        graphurl = NSURL + "/" + dsname
+        if collection_id:
+            graphurl = NSURL + "/" + collection_id + "/" + dsname
+        self.graph.remove((None, None, None, graphurl))       
+
+    def get_rdf(self):
+        '''Returns RDF serialization of the current Graph'''
+        return self.graph.serialize(format='nquads')
+
 
     def get_all_dataset_names(self):
         query = f"""
