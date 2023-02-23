@@ -466,7 +466,7 @@ class LiPD:
                 print("Loaded datasets: " + str(all_datasets))
                 popped = lipd.pop(all_datasets[0])
                 print("Loaded datasets after pop: " + str(lipd.get_all_dataset_names()))
-                print("Popped dataset: " + str(popped.get_all_dataset_names())        
+                print("Popped dataset: " + str(popped.get_all_dataset_names()))       
         '''        
         graphurl = NSURL + "/" + dsname
         if collection_id:
@@ -530,7 +530,9 @@ class LiPD:
                 lipd.load([
                     "../examples/data/MD98_2181.Stott.2007.lpd"
                 ])
-                print(lipd.get_rdf())
+                nquads = lipd.get_rdf()
+                print(nquads[:1000])
+                print("...")
         '''
         
         return self.graph.serialize(format='nquads')
