@@ -8,13 +8,14 @@ import pickle
 import re
 import os.path
 import tempfile
+import pandas as pd
 
 from rdflib import ConjunctiveGraph, Namespace
 from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rdf
 
 from pylipd.rdf_to_lipd import RDFToLiPD
 from pylipd.legacy_utils import LiPD_Legacy
-from pylipd.utils import sanitizeId
+from pylipd.utils import sanitizeId, sparql_results_to_df
 
 from .globals.urls import NSURL, ONTONS
 
@@ -36,7 +37,7 @@ class LiPD:
         lipd = LiPD()        
         lipd.load(["https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1//Nunalleq.Ledger.2018.lpd"])
         
-        ts_list = lipd.get_timeseries(lipd.get_all_dataset_ids())
+        ts_list = lipd.get_timeseries(lipd.get_all_dataset_names())
 
         for dsid, tsos in ts_list.items():
             for tso in tsos:
@@ -79,7 +80,7 @@ class LiPD:
                 lipd = LiPD()        
                 lipd.load_from_dir("../examples/data")
 
-                print(lipd.get_all_dataset_ids())
+                print(lipd.get_all_dataset_names())
         '''
         if not os.path.isdir(dir_path):
             print(f"Directory {dir_path} does not exist")
@@ -126,7 +127,7 @@ class LiPD:
                     "https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1/Nunalleq.Ledger.2018.lpd"                    
                 ])            
 
-                print(lipd.get_all_dataset_ids())
+                print(lipd.get_all_dataset_names())
         '''        
         if type(lipdfiles) is not list:
             lipdfiles = [lipdfiles]
@@ -180,7 +181,7 @@ class LiPD:
                 lipd_remote = LiPD()
                 lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
                 lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
-                print(lipd_remote.get_all_dataset_ids())
+                print(lipd_remote.get_all_dataset_names())
 
         '''
         self.remote = True
@@ -261,6 +262,9 @@ class LiPD:
 
         result : dict
             Dictionary of sparql variable and binding values
+        
+        result_df : pandas.Dataframe
+            Return the dictionary above as a pandas.Dataframe
     
         Examples
         --------
@@ -282,8 +286,8 @@ class LiPD:
                             ?ds a le:Dataset .
                             ?ds le:hasUrl ?url
                         }"""
-                result = lipd.query(query)
-                print(result)
+                result, result_df = lipd.query(query)
+                result_df
         '''
 
         if self.remote:
@@ -291,17 +295,29 @@ class LiPD:
             if matches:
                 vars = matches.group(1)
                 where = matches.group(2)
-                query = f"SELECT {vars} WHERE {{ SERVICE <{self.endpoint}> {{ {where} }} }}"
-        return self.graph.query(query, result=result)
+                query = f"SELECT {vars} WHERE {{ SERVICE <{self.endpoint}> {{ {where} }} }}"   
+        
+        result = self.graph.query(query)
+        result_df = sparql_results_to_df(result)
+        
+        return result, result_df 
 
-    def load_remote_datasets(self, dsids):
+    # def whatArchive(self):
+        
+    #     archive_query = """PREFIX le: <http://linked.earth/ontology#>
+    #             select ?archiveType (count(distinct ?archiveType) as ?count) where { 
+    #                 ?ds a le:Dataset .
+    #                 ?ds le:hasUrl ?url
+    #             }"""
+
+    def load_remote_datasets(self, dsnames):
         '''Loads remote datasets into cache if a remote endpoint is set
 
         Parameters
         ----------
 
-        dsids : array
-            array of dataset id strings
+        dsnames : array
+            array of dataset names
 
         Examples
         --------
@@ -317,16 +333,19 @@ class LiPD:
                 lipd_remote = LiPD()
                 lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
                 lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
-                print(lipd_remote.get_all_dataset_ids())
+                print(lipd_remote.get_all_dataset_names())
         '''
         if not self.remote or not self.endpoint:
             raise Exception("No remote endpoint")
-
-        if dsids == None or len(dsids) == 0:
-            raise Exception("No dataset ids to cache")
-        dsidstr = (' '.join('<' + NSURL + "/" + dsid + '>' for dsid in dsids))
+        
+        if type(dsnames) is not list:
+            dsnames = [dsnames]
+            
+        if dsnames == None or len(dsnames) == 0:
+            raise Exception("No dataset names to cache")
+        dsnamestr = (' '.join('<' + NSURL + "/" + dsname + '>' for dsname in dsnames))
         print("Caching datasets from remote endpoint..")
-        qres = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsidstr} }} }}")
+        qres, qres_df = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}")
 
         # Reinitialize graph
         self.initialize_graph()
@@ -342,7 +361,7 @@ class LiPD:
         ----------
 
         dsids : array
-            array of dataset id strings
+            array of dataset id or name strings
 
         Examples
         --------
@@ -418,14 +437,14 @@ class LiPD:
         converter = RDFToLiPD()            
         return converter.convert(dsid, self.graph)
 
-    def get_all_dataset_ids(self):
+    def get_all_dataset_names(self):
         query = f"""
             SELECT ?dsname WHERE {{ 
                 ?ds a le:Dataset .
                 ?ds le:name ?dsname
             }}
             """
-        qres = self.query(query)
+        qres, qres_df = self.query(query)
         return [sanitizeId(row.dsname) for row in qres]
 
     def search_datasets(variableName=[ ], archiveType=[ ], proxyObsType=[ ], infVarType = [ ], sensorGenus=[ ],
@@ -437,4 +456,7 @@ class LiPD:
 
 
     def find_ensemble_table_for_variable(self, ensemble_table):
+        pass
+
+    def export_biblio(self):
         pass
