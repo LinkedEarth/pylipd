@@ -24,6 +24,7 @@ if __name__=="__main__":
 
     # Load Datasets (from Local and Remote)
     dsids = ["MD98_2181.Stott.2007"]
+    remote_dsids = ["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"]
 
     # Load from local
     lipd = LiPD()
@@ -32,31 +33,33 @@ if __name__=="__main__":
     
     lipd.load(lipdfiles)
     #lipd.load_from_dir(local_lipd_dir)
-    print(lipd.get_all_dataset_ids())
+    print(lipd.get_all_dataset_names())
 
-    lipd.load(["/Users/varun/Downloads/Arc-LakeNataujärvi.Ojala.2005.lpd"])
-    print(lipd.get_all_dataset_ids())
+    #lipd.load(["/Users/varun/Downloads/Arc-LakeNataujärvi.Ojala.2005.lpd"])
+    #print(lipd.get_all_dataset_names())
     
-    ts_list = lipd.get_timeseries(lipd.get_all_dataset_ids())
+    for dsid in lipd.get_all_dataset_names():
+        json = lipd.get_lipd(dsid)
+        print(json['pub'])
+
+    ts_list = lipd.get_timeseries(lipd.get_all_dataset_names())
     for dsid, tsos in ts_list.items():
         for tso in tsos:
             if 'paleoData_variableName' in tso:
                 print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
 
-    exit()
     # Fetch LiPD data from remote RDF Graph
-    lipd_remote = LiPD()
-    lipd_remote.set_endpoint(remote_lipd_endpoint)
+    lipd.set_endpoint(remote_lipd_endpoint)
+    lipd.load_remote_datasets(remote_dsids)
 
     # Convert to TSO object (as before)
-    ts_list_remote = lipd_remote.get_timeseries(dsids)
-
+    ts_list_remote = lipd.get_timeseries(lipd.get_all_dataset_names())
     for dsid, tsos in ts_list_remote.items():
         for tso in tsos:
             print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
 
     '''
-    print(lipd.get_all_dataset_ids())    
+    print(lipd.get_all_dataset_names())    
     datasets = lipd.get_datasets(dsids=dsids)
     print("Fetched..")
     for ds in datasets:

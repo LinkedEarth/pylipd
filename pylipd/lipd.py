@@ -46,7 +46,6 @@ class LiPD:
     '''
     def __init__(self):
         self.initialize_graph()
-        self.remote = False
 
     def initialize_graph(self):
         self.graph = ConjunctiveGraph()
@@ -146,7 +145,6 @@ class LiPD:
         multi_convert_to_pickle(filemap, collection_id)
         print("Conversion to RDF done..")
 
-        self.remote = False
         print("Loading RDF into graph")
         for lipdfile in lipdfiles:
             picklefile = filemap[lipdfile]
@@ -156,6 +154,11 @@ class LiPD:
                     self.graph.addN(subgraph.quads())
                 os.remove(picklefile)
         print("Loaded..")
+
+
+    def clear(self):
+        '''Clears the graph'''
+        self.initialize_graph()
 
 
     def set_endpoint(self, endpoint):
@@ -184,7 +187,6 @@ class LiPD:
                 print(lipd_remote.get_all_dataset_names())
 
         '''
-        self.remote = True
         self.endpoint = endpoint
 
 
@@ -245,7 +247,7 @@ class LiPD:
         print("Written..")
 
 
-    def query(self, query, result="sparql"):
+    def query(self, query, remote=False, result="sparql"):
         '''Once LiPD files or loaded into the graph (or remote endpoint set), one can make SparQL queries to the graph
 
         Parameters
@@ -253,6 +255,9 @@ class LiPD:
 
         query : str
             SparQL query
+
+        remote: bool
+            (Optional) If set to True, the query will be made to the remote endpoint (if set)
 
         result : str
             (Optional) Result return type
@@ -290,7 +295,7 @@ class LiPD:
                 result_df
         '''
 
-        if self.remote:
+        if remote and self.endpoint:
             matches = re.match(r"\s*SELECT\s+(.+)\s+WHERE\s+{(.+)}\s*", query, re.DOTALL)
             if matches:
                 vars = matches.group(1)
@@ -335,7 +340,7 @@ class LiPD:
                 lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
                 print(lipd_remote.get_all_dataset_names())
         '''
-        if not self.remote or not self.endpoint:
+        if not self.endpoint:
             raise Exception("No remote endpoint")
         
         if type(dsnames) is not list:
@@ -345,14 +350,13 @@ class LiPD:
             raise Exception("No dataset names to cache")
         dsnamestr = (' '.join('<' + NSURL + "/" + dsname + '>' for dsname in dsnames))
         print("Caching datasets from remote endpoint..")
-        qres, qres_df = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}")
+        qres, qres_df = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}", remote=True)
 
         # Reinitialize graph
-        self.initialize_graph()
+        # self.initialize_graph()
         for row in qres:
             self.graph.add((row.s, row.p, row.o, row.g))
         print("Done..")
-        self.remote = False
 
     def get_timeseries(self, dsids):
         '''Get Legacy LiPD like Time Series Object (tso)
@@ -381,20 +385,9 @@ class LiPD:
                     for tso in tsos:
                         if 'paleoData_variableName' in tso:
                             print(dsid+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
-        '''        
-        if self.remote:
-            # Cache datasets locally - to speed up queries
-            self.load_remote_datasets(dsids)
-            ts = self._get_timeseries(dsids)
-
-            # Go back to remote
-            self.initialize_graph()
-            self.set_endpoint(self.endpoint)
-
-            return ts
-        else:
-            ts = self._get_timeseries(dsids)
-            return ts
+        '''
+        ts = self._get_timeseries(dsids)
+        return ts
 
     def _get_timeseries(self, dsids):
         timeseries = {}
