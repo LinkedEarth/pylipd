@@ -300,11 +300,14 @@ class LiPD:
         '''
 
         if remote and self.endpoint:
-            matches = re.match(r"\s*SELECT\s+(.+)\s+WHERE\s+{(.+)}\s*", query, re.DOTALL)
+            print("Making remote query to endpoint: " + self.endpoint)
+            matches = re.match(r"(.*)\s*SELECT\s+(.+)\s+WHERE\s+{(.+)}\s*(.*)", query, re.DOTALL | re.IGNORECASE)
             if matches:
-                vars = matches.group(1)
-                where = matches.group(2)
-                query = f"SELECT {vars} WHERE {{ SERVICE <{self.endpoint}> {{ {where} }} }}"   
+                prefix = matches.group(1)
+                vars = matches.group(2)
+                where = matches.group(3)
+                suffix = matches.group(4)
+                query = f"{prefix} SELECT {vars} WHERE {{ SERVICE <{self.endpoint}> {{ {where} }} }} {suffix}"   
         
         result = self.graph.query(query)
         result_df = sparql_results_to_df(result)
