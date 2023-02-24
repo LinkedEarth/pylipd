@@ -531,7 +531,7 @@ class LiPD:
                     "../examples/data/MD98_2181.Stott.2007.lpd"
                 ])
                 nquads = lipd.get_rdf()
-                print(nquads[:1000])
+                print(nquads[:10000])
                 print("...")
         '''
         

@@ -119,64 +119,58 @@ class LipdToRDF:
                     obj[prop] = value
         return [obj, objhash, []]
 
-    def _parse_persons_string(self, authstring, parent = None) :
-        authors = []
-        if (type(authstring) is list) :
-            return self._parse_persons(authstring, None)
-        
-        if (re.search(r"\s*;\s*", authstring)) :
-            auths = re.split(r"\s*;\s*", authstring)
-            for auth in auths:            
-                authors.append(self._parse_person(auth))
-            
-        else : 
-            if (re.search(r".*,.*,.*", authstring)) :
-                auths = re.split(r"\s*,\s*", authstring)
-                i = 0
-                while ( i < len(auths) ) :
-                    name = auths[i]
-                    if not re.search(r"\s", name) :
-                        i+=1
-                        name = str(str(auths[i]) + " ") + str(name)
-                    authors.append({"name" : name})
-                    i+=1
-                
-            else : 
-                m = re.search(r"(.+),(.+)", authstring)
-                if m is not None:
-                    authors.append({"name" : str(str(m.groups()[1]) + " ") + str(m.groups()[0])})
-                else : 
-                    authors.append({"name" : authstring})
+    def _parse_persons_string(self, author_string, parent = None) :
+        # Check for semi-colon delimiter and split accordingly
+        if ";" in author_string:
+            author_split = re.split("\s*;\s*", author_string)
+            # Further split the authors with commas if necessary
+            author_list = []
+            for author in author_split:
+                author = author
+                if "," in author:
+                    last_first = re.split("\s*,\s*", author)
+                    author_list.append(f"{last_first[1]} {last_first[0]}")
+                else:
+                    author_list.append(author)
+            authors = author_list
+        else:
+            # Split the author string with commas
+            author_list = []
+            author_split = re.split("\s*,\s*", author_string)
+            if len(author_split) % 2 == 0:
+                # Even number : last name first name
+                for i in range(0, len(author_split), 2):
+                    author_list.append(f"{author_split[i+1]} {author_split[i]}")
+            else:
+                # Odd number : first name last name
+                for author in author_split:
+                    author_list.append(author)
+            authors = author_list
         return authors
 
 
-    def _parse_person(self, auth, parent = None) :
-        authname = auth
-        if (type(auth) is dict) :
-            authname = auth["name"]
-        if authname:
-            if re.search(";", authname) is not None:
-                return self._parse_persons_string(authname)
-            else:
-                m = re.search(r"(.+)\s*,\s*(.+)", authname)
-                if m is not None:
-                    return {"name" : str(str(m.groups()[1]) + " ") + str(m.groups()[0])}
-                else : 
-                    return {"name" : authname}
-
-        
     def _parse_persons(self, auths, parent = None) :
         authors = []
         if (not type(auths) is list) :
-            return None
+            auths = [auths]
         
-        for auth in auths: 
-            authobj = self._parse_person(auth, parent)
-            if type(authobj) is list:
-                authors.extend(authobj)
+        for authstr in auths: 
+            authname = None
+            if type(authstr) is dict:
+                if "name" in authstr:
+                    authname = authstr["name"]
             else:
-                authors.append(authobj)
-        return authors
+                authname = authstr
+            
+            if authname:
+                auth = self._parse_persons_string(authname, parent)
+                if type(auth) is list:
+                    authors.extend(auth)
+                else:
+                    authors.append(auth)
+        
+        return [{"name": auth} for auth in authors]
+
 
     def _parse_location(self, geo, parent = None) :
         ngeo = {}
@@ -1068,8 +1062,6 @@ class LipdToRDF:
                     yield from self._find_files_with_extension(entry.path, extension)
         except OSError as ose:
             print('Cannot access ' + directory +'. Probably a permissions error ', ose)
-        except FileNotFoundError as fnf:
-            print(directory +' not found ', fnf)
 
     def _load_lipd_json_to_graph(self, jsonpath, url=None):
         self.graph = ConjunctiveGraph()

@@ -1,4 +1,5 @@
 from pylipd.lipd import LiPD
+from pylipd.multi_processing import convert_to_rdf
 
 ####################
 # TODO:
@@ -9,20 +10,27 @@ if __name__=="__main__":
     local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd"
     remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2"
 
+    lipd = LiPD()
+
     '''
     # Convert LiPD files to RDF    
     lipd.convert_lipd_dir_to_rdf(
         local_lipd_dir,
         local_lipd_dir+".nq")
     
+    exit()
+    '''
+    
+    '''
     # Convert one LiPD file to RDF
     convert_to_rdf(
-        "/Users/varun/git/LiPD/PyLiPD/data/lpd/MD98_2181.Stott.2007.lpd",
+        "/Users/varun/git/LiPD/PyLiPD/data/lpd/CO03COPM.lpd",
         "/Users/varun/git/LiPD/PyLiPD/data/MD98_2181.Stott.2007.nq"
     )
+    exit()
     '''
-
-    lipd = LiPD()
+    
+    '''    
     data = ['https://lipdverse.org/data/TjhHrDv0LQ4aazHolZkR/1_0_0//Ocn-WEqPacific.Stott.2007.lpd']
     lipd.load(data)
 
@@ -32,9 +40,42 @@ if __name__=="__main__":
             if 'paleoData_variableName' in tso:
                 print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])    
 
+    '''
+
     # Load Datasets (from Local and Remote)
     dsnames = ["MD98_2181.Stott.2007"]
     remote_dsnames = ["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"]
+
+    L = LiPD()
+    L.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+    L.load_remote_datasets(["MD98_2181.Stott.2007","NAm-SmithersSkiArea.Schweingruber.1996", 
+                            "NAm-CeaderBreaks.Briffa.1996", "ODP1671017E", 
+                            "SPC14.Kahle.2021", "RC12-10.Poore.2003", 
+                            "MD02-2553.Poore.2009", "AD9117.Guinta.2001",
+                            "SchellingsBog.Barron.2004", "Hidden.Tang.1999"])
+
+    query = """PREFIX le: <http://linked.earth/ontology#>
+    select ?author ?doi ?year ?pubyear ?title ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution where { 
+        ?ds a le:Dataset .
+        ?ds le:publishedIn ?pub .
+            OPTIONAL{?pub le:hasDOI ?doi .}
+            OPTIONAL{?pub le:author ?author .}
+            OPTIONAL{?pub le:publicationYear ?year .}
+            OPTIONAL{?pub le:pubYear ?pubyear .}
+            OPTIONAL{?pub le:title ?title .}
+            OPTIONAL{?pub le:journal ?journal .}
+            OPTIONAL{?pub le:volume ?volume .}
+            OPTIONAL{?pub le:issue ?issue .}
+            OPTIONAL{?pub le:pages ?pages .}
+            OPTIONAL{?pub le:type ?type .}
+            OPTIONAL{?pub le:publisher ?publisher .}
+            OPTIONAL{?pub le:report ?report .}
+            OPTIONAL{?pub le:citeKey ?citeKey .}
+            OPTIONAL{?pub le:edition ?edition .}
+            OPTIONAL{?pub le:institution ?institution .}
+    }"""
+    result, df = L.query(query)
+    print(df)
 
     # Load from local
     lipd = LiPD()

@@ -21,7 +21,7 @@ SCHEMA = {
             'name': 'author',
             'schema': 'Person',
             'alternates': ['whoEnteredinDB', 'MetadataEnteredByWhom'],
-            'fromJson': '_parse_person'
+            'fromJson': '_parse_persons'
         },
         'archiveType': {
             'name': 'proxyArchiveType',
@@ -37,15 +37,10 @@ SCHEMA = {
         },
         'investigator': {
             'name': 'contributor',
+            'alternates': ['investigators'],
             'schema': 'Person',
             'multiple': True,
             'fromJson': '_parse_persons'
-        },
-        'investigators': {
-            'name': 'contributor',
-            'schema': 'Person',
-            'hack': True,
-            'fromJson': '_parse_persons_string'
         },
         'funding': { 
             'name': 'fundedBy', 
@@ -152,7 +147,7 @@ SCHEMA = {
             'alternates': ['authors'],
             'schema': 'Person',
             'multiple': True,
-            'fromJson': '_parse_persons_string'
+            'fromJson': '_parse_persons'
         }
     },
     'PaleoData': {
