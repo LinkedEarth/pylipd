@@ -149,15 +149,10 @@ SCHEMA = {
         },
         'author': {
             'name': 'author',
+            'alternates': ['authors'],
             'schema': 'Person',
             'multiple': True,
-            'fromJson': '_parse_persons'
-        },
-        'authors': {
-            'name': 'author',
-            'schema': 'Person',
-            'fromJson': '_parse_persons_string',
-            'hack': True
+            'fromJson': '_parse_persons_string'
         }
     },
     'PaleoData': {
