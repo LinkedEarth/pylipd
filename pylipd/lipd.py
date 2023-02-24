@@ -3,6 +3,7 @@ The LiPD class describes a `LiPD (Linked Paleo Data) <https://cp.copernicus.org/
 How to browse and query LiPD objects is described in a short example below, while `this notebook <https://nbviewer.jupyter.org/github/LinkedEarth/pylipd/blob/master/example_notebooks/pylipd_tutorial.ipynb>`_ demonstrates how to use PyLiPD to view and query LiPD datasets.
 """
 
+import math
 import os
 import pickle
 import re
@@ -17,6 +18,9 @@ from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rd
 from pylipd.rdf_to_lipd import RDFToLiPD
 from pylipd.legacy_utils import LiPD_Legacy
 from pylipd.utils import sanitizeId, sparql_results_to_df
+
+import bibtexparser
+from bibtexparser.bibdatabase import BibDatabase
 
 from .globals.urls import NSURL, ONTONS
 
@@ -364,6 +368,91 @@ class LiPD:
         for row in qres:
             self.graph.add((row.s, row.p, row.o, row.g))
         print("Done..")
+
+
+    def update_remote_datasets(self, dsnames):
+        '''Updates local LiPD Graph for datasets to remote endpoint'''
+        if not self.endpoint:
+            raise Exception("No remote endpoint")
+        # TODO: Implement this
+
+
+    def get_bibtex(self):
+        '''Get BibTeX for loaded datasets
+
+        Examples
+        --------
+
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            if __name__=="__main__":
+                # Fetch LiPD data from remote RDF Graph
+                lipd = LiPD()
+                lipd.load([
+                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                    "../examples/data/MD98_2181.Stott.2007.lpd"
+                ])
+                print(lipd_remote.get_bibtex())
+        '''
+
+        query = """SELECT ?dsname ?title (GROUP_CONCAT(?authorName;separator=" and ") as ?authors) 
+                    ?doi ?year ?pubyear ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution 
+                    WHERE { 
+                        ?ds a le:Dataset .
+                        ?ds le:name ?dsname .
+                        ?ds le:publishedIn ?pub .
+                        OPTIONAL{?pub le:hasDOI ?doi .}
+                        OPTIONAL{
+                            ?pub le:author ?author .
+                            ?author le:name ?authorName .
+                        }
+                        OPTIONAL{?pub le:publicationYear ?year .}
+                        OPTIONAL{?pub le:pubYear ?pubyear .}
+                        OPTIONAL{?pub le:title ?title .}
+                        OPTIONAL{?pub le:journal ?journal .}
+                        OPTIONAL{?pub le:volume ?volume .}
+                        OPTIONAL{?pub le:issue ?issue .}
+                        OPTIONAL{?pub le:pages ?pages .}
+                        OPTIONAL{?pub le:type ?type .}
+                        OPTIONAL{?pub le:publisher ?publisher .}
+                        OPTIONAL{?pub le:report ?report .}
+                        OPTIONAL{?pub le:citeKey ?citeKey .}
+                        OPTIONAL{?pub le:edition ?edition .}
+                        OPTIONAL{?pub le:institution ?institution .}
+                    }
+                    GROUP BY ?pub ?dsname ?title ?doi ?year ?pubyear ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution
+        """
+        result, result_df = self.query(query)
+
+        db = BibDatabase()
+        index = 0
+        for row in result:
+            index += 1
+            entry = {}
+            etype = str(row['type'] or "misc").lower()
+            if re.match(r".*article.*", etype):
+                etype = "article"
+            elif re.match(r".*chapter.*", etype):
+                etype = "inbook"
+            else:
+                etype = "misc"
+            entry['ENTRYTYPE'] = etype
+            entry['ID'] = str(row['dsname'] + str(index))
+            for col in result_df.columns:
+                if col not in ['type', 'dsname']:
+                    entry[col] = str(row[col])
+                    if entry[col] == "nan" or entry[col] == "None":
+                        entry[col] = ""
+                    if re.match(r"^\d+\.0$", entry[col]):
+                        entry[col] = entry[col][:-2]
+            db.entries.append(entry)
+        return bibtexparser.dumps(db)
+
+        
 
     def get_timeseries(self, dsnames):
         '''Get Legacy LiPD like Time Series Object (tso)
