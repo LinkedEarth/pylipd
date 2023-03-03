@@ -8,6 +8,7 @@ dependencies:
   - pytest
   - pandas
   - pip:
+    - bibtexparser
     - rdflib
-    - git+https://github.com/LinkedEarth/pylipd.git@main
+    - '-e .'
 
