@@ -27,23 +27,23 @@ class TestLiPDLoad():
     
     def test_load_t0(self):
         url = 'https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd'
-        if  __name__=="__main__":
-            lipd = LiPD()
-            lipd.load(url)
+       
+        lipd = LiPD()
+        lipd.load(url)
     
     def test_load_t1(self):
         url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
                'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
-        if  __name__=="__main__":
-            lipd = LiPD()
-            lipd.load(url)
-    
+        
+        lipd = LiPD()
+        lipd.load(url)
+
     def test_load_t2(self):
-        if __name__=="__main__":
+        
             # Fetch LiPD data from remote RDF Graph
-            lipd_remote = LiPD()
-            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-            lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
+        lipd_remote = LiPD()
+        lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+        lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
             #print(lipd_remote.get_all_dataset_names())
     
 
@@ -55,20 +55,33 @@ class TestLiPDnames():
         
         true_ids = ['Ocn-Philippines.Stott.2007','LedovyiObryvExposureNorthernSection.Anderson.2002']
         
-        if  __name__=="__main__":
-            lipd = LiPD()
-            lipd.load(url)
-            ids = lipd.get_all_dataset_ids()
-            assert ids == true_ids
+        
+        lipd = LiPD()
+        lipd.load(url)
+        ids = lipd.get_all_dataset_names()
+        assert ids == true_ids
+
+class TestLiPDids():
+    def test_get_all_dataset_ids_t0(self):
+        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
+               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
+        
+        true_ids = ['RRh3T4NCsf4MgrxhXbJq','LCd0404b13039620e9ec2b82dbdcf87861']
+        
+        
+        lipd = LiPD()
+        lipd.load(url)
+        ids = lipd.get_all_dataset_ids()
+        assert ids == true_ids
 
 class TestLiPDTimeseries():
     
     def test_get_timeseries_t0(self):
         url = 'https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd'
-        if  __name__=="__main__":
-            lipd = LiPD()
-            lipd.load(url)
-            ts_list=lipd.get_timeseries(lipd.get_dataset_names())
+        
+        lipd = LiPD()
+        lipd.load(url)
+        ts_list=lipd.get_timeseries(lipd.get_all_dataset_names())
         
 class TestLiPDquery():
 
@@ -85,10 +98,10 @@ class TestLiPDquery():
                }"""
        
         
-        if  __name__=="__main__":
-            lipd = LiPD()
-            lipd.load(url)
-            result, result_df = lipd.query(query)
+        
+        lipd = LiPD()
+        lipd.load(url)
+        result, result_df = lipd.query(query)
              
 class TestLiPDbibtex():
 
@@ -99,8 +112,7 @@ class TestLiPDbibtex():
                'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
         
         
-        if  __name__=="__main__":
-            lipd = LiPD()
-            lipd.load(url)
-            bibs = lipd.get_bibtex(save=False)
+        lipd = LiPD()
+        lipd.load(url)
+        bibs = lipd.get_bibtex(save=False)
       

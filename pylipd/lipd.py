@@ -754,6 +754,14 @@ class LiPD:
 
     def get_all_dataset_names(self):
         '''Get all Dataset Names
+        
+        Returns
+        -------
+        
+        dsnames : list
+        
+        A list of datasetnames
+        
         Examples
         --------
 
@@ -781,6 +789,43 @@ class LiPD:
         qres, qres_df = self.query(query)
         return [sanitizeId(row.dsname) for row in qres]
 
+    def get_all_dataset_ids(self):
+        '''Get all Dataset ids
+        
+        Returns
+        -------
+        
+        dsids : list
+        
+        A list of datasetnames
+        
+        Examples
+        --------
+
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            if __name__=="__main__":
+                # Fetch LiPD data from remote RDF Graph
+                lipd = LiPD()
+                lipd.load([
+                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                    "../examples/data/MD98_2181.Stott.2007.lpd"
+                ])
+                print(lipd.get_all_dataset_names())
+        '''        
+        query = """
+            SELECT ?dsid WHERE {{ 
+                ?ds a le:Dataset .
+                OPTIONAL{?ds le:datasetId ?dsid}
+            }}
+            """
+        qres, qres_df = self.query(query)
+        return [sanitizeId(row.dsid) for row in qres]
+    
     def search_datasets(variableName=[ ], archiveType=[ ], proxyObsType=[ ], infVarType = [ ], sensorGenus=[ ],
                     sensorSpecies=[ ], interpName =[ ], interpDetail =[ ], ageUnits = [ ],
                     ageBound = [ ], ageBoundType = [ ], recordLength = [ ], resolution = [ ],
