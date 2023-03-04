@@ -28,7 +28,9 @@ setup(
     classifiers=[],
     install_requires=[
         "rdflib",
-        "pandas"
+        "pandas",
+        "doi2bib",
+        "pybtex"
     ],
     python_requires=">=3.9.0"
 )

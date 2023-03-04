@@ -10,5 +10,7 @@ dependencies:
   - pip:
     - bibtexparser
     - rdflib
+    - pybtex
+    - doi2bib
     - '-e .'
 

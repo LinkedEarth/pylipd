@@ -11,6 +11,9 @@ import copy
 import os.path
 import tempfile
 import pandas as pd
+import random
+import string
+import io
 
 from rdflib import ConjunctiveGraph, Namespace
 from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rdf
@@ -19,10 +22,14 @@ from pylipd.rdf_to_lipd import RDFToLiPD
 from pylipd.legacy_utils import LiPD_Legacy
 from pylipd.utils import sanitizeId, sparql_results_to_df
 
-import bibtexparser
-from bibtexparser.bibdatabase import BibDatabase
+#import bibtexparser
+#from bibtexparser.bibdatabase import BibDatabase
+from doi2bib import crossref
+from pybtex.database import BibliographyData, Entry
 
 from .globals.urls import NSURL, ONTONS
+
+from copy import deepcopy
 
 
 class LiPD:
@@ -59,6 +66,19 @@ class LiPD:
         self.graph = ConjunctiveGraph()
         self.graph.bind("le", Namespace(ONTONS))        
         #self.graph.bind("", Namespace(NS))
+
+    def copy(self):
+        '''
+        Makes a copy of the object
+
+        Returns
+        -------
+        pylipd.LiPD
+            a copy of the original object
+
+        '''
+        
+        return deepcopy(self)
 
     def load_from_dir(self, dir_path, collection_id=None):
         '''Load LiPD files from a directory
@@ -377,9 +397,28 @@ class LiPD:
         # TODO: Implement this
 
 
-    def get_bibtex(self):
+    def get_bibtex(self, remote = True, save = True, path = 'mybiblio.bib', verbose = False):
         '''Get BibTeX for loaded datasets
+        
+        Parameters
+        ----------
+        remote : bool 
+            (Optional) If set to True, will return the bibliography by checking against the DOI
+        
+        save : bool
+            (Optional) Whether to save the bibliography to a file
+            
+        path : str
+            (Optional) Path where to save the file
+        
+        verbose : bool
+            (Optional) Whether to print out on the console. Note that this option will turn on automatically if saving to a file fails. 
 
+        Returns
+        -------
+        bibs : list
+            List of BiBTex entry
+        
         Examples
         --------
 
@@ -396,63 +435,146 @@ class LiPD:
                     "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
                     "../examples/data/MD98_2181.Stott.2007.lpd"
                 ])
-                print(lipd_remote.get_bibtex())
+                print(lipd.get_bibtex())
         '''
 
-        query = """SELECT ?dsname ?title (GROUP_CONCAT(?authorName;separator=" and ") as ?authors) 
-                    ?doi ?year ?pubyear ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution 
-                    WHERE { 
-                        ?ds a le:Dataset .
-                        ?ds le:name ?dsname .
-                        ?ds le:publishedIn ?pub .
-                        OPTIONAL{?pub le:hasDOI ?doi .}
-                        OPTIONAL{
-                            ?pub le:author ?author .
-                            ?author le:name ?authorName .
-                        }
-                        OPTIONAL{?pub le:publicationYear ?year .}
-                        OPTIONAL{?pub le:pubYear ?pubyear .}
-                        OPTIONAL{?pub le:title ?title .}
-                        OPTIONAL{?pub le:journal ?journal .}
-                        OPTIONAL{?pub le:volume ?volume .}
-                        OPTIONAL{?pub le:issue ?issue .}
-                        OPTIONAL{?pub le:pages ?pages .}
-                        OPTIONAL{?pub le:type ?type .}
-                        OPTIONAL{?pub le:publisher ?publisher .}
-                        OPTIONAL{?pub le:report ?report .}
-                        OPTIONAL{?pub le:citeKey ?citeKey .}
-                        OPTIONAL{?pub le:edition ?edition .}
-                        OPTIONAL{?pub le:institution ?institution .}
-                    }
-                    GROUP BY ?pub ?dsname ?title ?doi ?year ?pubyear ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution
-        """
-        result, result_df = self.query(query)
-
-        db = BibDatabase()
-        index = 0
-        for row in result:
-            index += 1
-            entry = {}
-            etype = str(row['type'] or "misc").lower()
-            if re.match(r".*article.*", etype):
-                etype = "article"
-            elif re.match(r".*chapter.*", etype):
-                etype = "inbook"
+        def establish_type(pub_type):
+            
+            if pub_type:
+                pub_type = re.sub('-', '', pub_type).lower()
             else:
-                etype = "misc"
-            entry['ENTRYTYPE'] = etype
-            entry['ID'] = str(row['dsname'] + str(index))
-            for col in result_df.columns:
-                if col not in ['type', 'dsname']:
-                    entry[col] = str(row[col])
-                    if entry[col] == "nan" or entry[col] == "None":
-                        entry[col] = ""
-                    if re.match(r"^\d+\.0$", entry[col]):
-                        entry[col] = entry[col][:-2]
-            db.entries.append(entry)
-        return bibtexparser.dumps(db)
+                pub_type = 'misc'
+            
+            if re.match(r".*article.*", pub_type) or re.match(r".*shortcommunication.*", pub_type):
+                pub_type = 'article'
+            elif re.match(r".*chapter.*", pub_type) or re.match(r".*book.*", pub_type):
+                pub_type = 'chapter'
+            elif re.match(r".*report.*", pub_type):
+                pub_type = 'report'
+            else:
+                pub_type = 'misc'
+            
+            return pub_type
 
+        def make_bib(row):
+            pub_type = establish_type(row['type'])
+            
+            # Create a unique citation ID if not given
+            row = row.fillna("")
+            if row['citeKey'] is None:
+                characters = string.ascii_letters + string.digits
+                citation_key = ''.join(random.choice(characters) for i in range(8))
+            else:
+                citation_key = row['citeKey']
+            
+            entries = [] #start creating the list
+            
+            if row['authors']:
+                entries.append(('author', str(row['authors'])))
+            if row['doi']:
+                entries.append(('doi',str(row['doi'])))
+            if row['year']:
+                entries.append(('year',str(row['year'])))
+            if row['pubyear']:
+                entries.append(('year',str(row['pubyear'])))
+            if row['title']:
+                if pub_type == 'article' or pub_type == 'misc':
+                    entries.append(('title',str(row['title'])))
+                elif pub_type == 'chapter' or pub_type == 'report':
+                    entries.append(('chapter', str(row['title'])))
+            if row['journal']:
+                if pub_type == 'article':
+                    entries.append(('journal', str(row['journal'])))
+                if pub_type == 'book':
+                    entries.append(('title', str(row['journal'])))
+            if row['volume']:
+                entries.append(('volume', str(row['volume'])))
+            if row['issue']:
+                entries.append(('issue', str(row['issue'])))
+            if row['pages']:
+                entries.append(('pages', str(row['pages'])))
+            if row['publisher']:
+                entries.append(('publisher', str(row['publisher'])))
+            if row['report']:
+                entries.append(('title', str(row['report'])))
+            if row['edition']:
+                entries.append(('edition', str(row['edition'])))
+            if row['institution']:
+                entries.append(('institution',str(row['institution'])))
+            if row['url']:
+                entries.append(('url',str(row['url'])))
+            if row['url2']:
+                entries.append(('url',str(row['url2'])))
+            
+            if pub_type == 'article':
+                bib = BibliographyData({citation_key:Entry('article',entries)})
+            elif pub_type == 'chapter' or pub_type == 'report':
+                bib = BibliographyData({citation_key:Entry('inbook',entries)})
+            elif pub_type == 'misc':
+                bib = BibliographyData({citation_key:Entry('misc',entries)})
+            
+            return bib  
         
+        query = """SELECT ?dsname ?title (GROUP_CONCAT(?authorName;separator=" and ") as ?authors) 
+                     ?doi ?pubyear ?year ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution ?url ?url2
+                     WHERE { 
+                         ?ds a le:Dataset .
+                         ?ds le:name ?dsname .
+                         ?ds le:publishedIn ?pub .
+                         OPTIONAL{?pub le:hasDOI ?doi .}
+                         OPTIONAL{
+                             ?pub le:author ?author .
+                             ?author le:name ?authorName .
+                         }
+                         OPTIONAL{?pub le:publicationYear ?year .}
+                         OPTIONAL{?pub le:pubYear ?pubyear .}
+                         OPTIONAL{?pub le:title ?title .}
+                         OPTIONAL{?pub le:journal ?journal .}
+                         OPTIONAL{?pub le:volume ?volume .}
+                         OPTIONAL{?pub le:issue ?issue .}
+                         OPTIONAL{?pub le:pages ?pages .}
+                         OPTIONAL{?pub le:type ?type .}
+                         OPTIONAL{?pub le:publisher ?publisher .}
+                         OPTIONAL{?pub le:report ?report .}
+                         OPTIONAL{?pub le:citeKey ?citeKey .}
+                         OPTIONAL{?pub le:edition ?edition .}
+                         OPTIONAL{?pub le:institution ?institution .}
+                         OPTIONAL{?pub le:hasLink ?url .}
+                         OPTIONAL{?pub le:url ?url2 .}
+                     }
+                     GROUP BY ?pub ?dsname ?title ?doi ?year ?pubyear ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution ?url ?url2
+         """
+        result, df = self.query(query)
+        
+        bibs = []
+
+        for idx,row in df.iterrows():
+            if remote == True:
+                try: 
+                    f = (crossref.get_bib(row['doi']))
+                    if f[0]==True:
+                        bibs.append(f[1])
+                    else:
+                        print("Cannot find a matching record for the provided DOI, creating the entry manually")
+                        bibs.append(make_bib(row).to_string('bibtex'))
+                except:
+                    print("Cannot parse the provided DOI, creating the entry manually")
+                    bibs.append(make_bib(row).to_string('bibtex'))
+            
+        if save == True:   
+            try:
+                with io.open(path, 'w', encoding="utf-8") as bibfile:
+                    for bib in bibs:
+                        bibfile.write("{}\n".format(bib))
+
+            except TypeError:
+                print("Can't save in output file\n")
+                verbose = True
+        
+        if verbose == True:
+            print(bibs)
+        
+        return bibs, df       
 
     def get_timeseries(self, dsnames):
         '''Get Legacy LiPD like Time Series Object (tso)
@@ -670,5 +792,3 @@ class LiPD:
     def find_ensemble_table_for_variable(self, ensemble_table):
         pass
 
-    def export_biblio(self):
-        pass

@@ -90,4 +90,17 @@ class TestLiPDquery():
             lipd.load(url)
             result, result_df = lipd.query(query)
              
+class TestLiPDbibtex():
+
+    def test_bibtex_t0(self):
+        
+        
+        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
+               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
+        
+        
+        if  __name__=="__main__":
+            lipd = LiPD()
+            lipd.load(url)
+            bibs = lipd.get_bibtex(save=False)
       
