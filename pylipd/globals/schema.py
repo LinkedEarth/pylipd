@@ -9,6 +9,9 @@ SCHEMA = {
         '@id': ['{dataSetName}'],
         '@fromJson': ['_add_extra_dataset_properties'],
         '@toJson': ['_get_variable_archive_types'],
+        'datasetId': {
+            'name': 'datasetId'
+        },
         'dataSetName': { 
             'name': 'name', 
             'alternates': ['paleoArchiveName'] 

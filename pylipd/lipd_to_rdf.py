@@ -382,6 +382,12 @@ class LipdToRDF:
                 col["takenAtDepth"] = depthcol
         return [obj, objhash, []]
     
+    # proxy (could be specific)
+    # proxyGeneral (more general than proxy)
+    # proxyDetail (more specific than proxy)
+    # proxyLumps ?
+    # archiveType -> keep at dataset level ?
+    # ^^ Essentially, can skip this function
     def _create_proxy_system(self, obj, hash) :
         varid = obj["@id"]
         # Deal with proxies

@@ -47,35 +47,16 @@ if __name__=="__main__":
     remote_dsnames = ["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"]
 
     L = LiPD()
-    L.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-    L.load_remote_datasets(["MD98_2181.Stott.2007","NAm-SmithersSkiArea.Schweingruber.1996", 
+    #L.load(local_lipd_dir+"/"+"ODP1671017E.lpd")
+    #L.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")    
+    L.load([local_lipd_dir + "/" + dsname + ".lpd" for dsname in ["MD98_2181.Stott.2007","NAm-SmithersSkiArea.Schweingruber.1996", 
                             "NAm-CeaderBreaks.Briffa.1996", "ODP1671017E", 
                             "SPC14.Kahle.2021", "RC12-10.Poore.2003", 
                             "MD02-2553.Poore.2009", "AD9117.Guinta.2001",
-                            "SchellingsBog.Barron.2004", "Hidden.Tang.1999"])
-
-    query = """PREFIX le: <http://linked.earth/ontology#>
-    select ?author ?doi ?year ?pubyear ?title ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution where { 
-        ?ds a le:Dataset .
-        ?ds le:publishedIn ?pub .
-            OPTIONAL{?pub le:hasDOI ?doi .}
-            OPTIONAL{?pub le:author ?author .}
-            OPTIONAL{?pub le:publicationYear ?year .}
-            OPTIONAL{?pub le:pubYear ?pubyear .}
-            OPTIONAL{?pub le:title ?title .}
-            OPTIONAL{?pub le:journal ?journal .}
-            OPTIONAL{?pub le:volume ?volume .}
-            OPTIONAL{?pub le:issue ?issue .}
-            OPTIONAL{?pub le:pages ?pages .}
-            OPTIONAL{?pub le:type ?type .}
-            OPTIONAL{?pub le:publisher ?publisher .}
-            OPTIONAL{?pub le:report ?report .}
-            OPTIONAL{?pub le:citeKey ?citeKey .}
-            OPTIONAL{?pub le:edition ?edition .}
-            OPTIONAL{?pub le:institution ?institution .}
-    }"""
-    result, df = L.query(query)
-    print(df)
+                            "SchellingsBog.Barron.2004", "Hidden.Tang.1999"]])
+    #bibtex = L.get_bibtex()
+    #print(bibtex)
+    #exit()
 
     # Load from local
     lipd = LiPD()
@@ -85,6 +66,7 @@ if __name__=="__main__":
     lipd.load(lipdfiles)
     #lipd.load_from_dir(local_lipd_dir)
     print(lipd.get_all_dataset_names())
+    print(lipd.get_all_dataset_ids())
 
     #lipd.load(["/Users/varun/Downloads/Arc-LakeNataujärvi.Ojala.2005.lpd"])
     #print(lipd.get_all_dataset_names())
@@ -99,6 +81,8 @@ if __name__=="__main__":
             if 'paleoData_variableName' in tso:
                 print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
 
+    exit()
+    
     # Fetch LiPD data from remote RDF Graph
     lipd.set_endpoint(remote_lipd_endpoint)
     lipd.load_remote_datasets(remote_dsnames)

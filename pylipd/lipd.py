@@ -815,7 +815,7 @@ class LiPD:
                     "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
                     "../examples/data/MD98_2181.Stott.2007.lpd"
                 ])
-                print(lipd.get_all_dataset_names())
+                print(lipd.get_all_dataset_ids())
         '''        
         query = """
             SELECT ?dsid WHERE {{ 
