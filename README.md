@@ -1,5 +1,5 @@
 # PyLiPD
-Python LiPD utilities
+Python utilities to interact with the Linked Paleo Data (LiPD) format
 
 ## Installation
     pip install pylipd
