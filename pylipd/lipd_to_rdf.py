@@ -387,6 +387,20 @@ class LipdToRDF:
     # proxyDetail (more specific than proxy)
     # proxyLumps ?
     # archiveType -> keep at dataset level ?
+
+    # proxyArchiveType
+
+    # don't create proxy system model ?
+
+    # if there is an proxyObservationType or inferredVariableType -> Existing Variable . Variable Name
+    # - keep the proxyObservationType and inferredVariableType properties ?
+
+    # Schema alignment with LiPD:
+    # - https://docs.google.com/spreadsheets/d/11WjpY8PtdwoX98n5MK8VhwgqSSB0ubS42spj06nVq9o/edit#gid=1904012337
+    # Types
+    # - [classkey]_[key]
+    # - [classkey[number]]_[key] : for arrays
+
     # ^^ Essentially, can skip this function
     def _create_proxy_system(self, obj, hash) :
         varid = obj["@id"]
@@ -395,15 +409,29 @@ class LipdToRDF:
         sampleid = None
         if ("proxy" in obj and obj["proxy"]) :
             proxyobs = obj["proxy"]
-            del obj["proxy"]
+            #del obj["proxy"]
         elif ("OnProxyObservationProperty" in obj and obj["OnProxyObservationProperty"]) :
             proxyobs = obj["OnProxyObservationProperty"]
             del obj["OnProxyObservationProperty"]
         elif ("ProxyObservationType" in obj and obj["ProxyObservationType"]) :
             proxyobs = obj["ProxyObservationType"]
+            if "name" in obj and obj["name"] :
+                obj["name"] = obj["name"] + "." + proxyobs
+            else:
+                obj["name"] = proxyobs
         elif ("proxyObservationType" in obj and obj["proxyObservationType"]) :
             proxyobs = obj["proxyObservationType"]
-        
+            if "name" in obj and obj["name"] :
+                obj["name"] = obj["name"] + "." + proxyobs
+            else:
+                obj["name"] = proxyobs
+        elif ("inferredVariableType" in obj and obj["inferredVariableType"]) :
+            infvar = obj["inferredVariableType"]
+            if "name" in obj and obj["name"] :
+                obj["name"] = obj["name"] + "." + infvar
+            else:
+                obj["name"] = infvar
+
         vartype = obj["@category"]
         if (vartype and vartype == "MeasuredVariable") :
             # Get the archive type
@@ -443,7 +471,7 @@ class LipdToRDF:
                         sampleobj[pkey] = pval
 
                     hash[sampleid] = sampleobj
-                del obj["physicalSample"]
+                #del obj["physicalSample"]
             
             if type(proxyobs) is list:
                 proxyobs = proxyobs[0]
@@ -459,21 +487,21 @@ class LipdToRDF:
             if (("archiveGenus" in obj)) :
                 sensor["sensorGenus"] = obj["archiveGenus"]
                 sensorid = ucfirst(sensor["sensorGenus"].lower())
-                del obj["archiveGenus"]
+                #del obj["archiveGenus"]
                 if (("archiveSpecies" in obj)) :
                     sensor["sensorSpecies"] = obj["archiveSpecies"]
                     sensorid += " " + sensor["sensorSpecies"].lower()
-                    del obj["archiveSpecies"]
+                    #del obj["archiveSpecies"]
                 
             
             if (("sensorGenus" in obj)) :
                 sensor["sensorGenus"] = obj["sensorGenus"]
                 sensorid = ucfirst(sensor["sensorGenus"].lower())
-                del obj["sensorGenus"]
+                #del obj["sensorGenus"]
                 if (("sensorSpecies" in obj)) :
                     sensor["sensorSpecies"] = obj["sensorSpecies"]
                     sensorid += " " + sensor["sensorSpecies"].lower()
-                    del obj["sensorSpecies"]
+                    #del obj["sensorSpecies"]
                 
             
             if (not (sensorid in hash)) :
@@ -520,8 +548,8 @@ class LipdToRDF:
             obj["measuredOn"] = sampleid
             obj["ProxyObservationType"] = observationid
             obj["hasProxySystem"] = proxyid
-            if "proxy" in obj:
-                del obj["proxy"]
+            #if "proxy" in obj:
+            #    del obj["proxy"]
             return [obj, hash, [sampleid, proxyid, sensorid]]
         
         return [obj, hash, []]

@@ -80,7 +80,7 @@ class LiPD:
         
         return deepcopy(self)
 
-    def load_from_dir(self, dir_path, collection_id=None):
+    def load_from_dir(self, dir_path, parallel=False, collection_id=None):
         '''Load LiPD files from a directory
         Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the "__main__" process
 
@@ -89,6 +89,9 @@ class LiPD:
 
         dir_path : str
             path to the directory containing lipd files
+
+        parallel: bool
+            (Optional) set to True to process lipd files in parallel. You *must* run this function under the "__main__" process for this to work
 
         collection_id : str
             (Optional) set a collection id for all lipd files in the directory
@@ -103,11 +106,10 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                lipd = LiPD()        
-                lipd.load_from_dir("../examples/data")
+            lipd = LiPD()        
+            lipd.load_from_dir("../examples/data")
 
-                print(lipd.get_all_dataset_names())
+            print(lipd.get_all_dataset_names())
         '''
         if not os.path.isdir(dir_path):
             print(f"Directory {dir_path} does not exist")
@@ -118,11 +120,11 @@ class LiPD:
             file_path = os.path.join(dir_path, path)
             if os.path.isfile(file_path) and path.endswith(".lpd"):
                 lipdfiles.append(file_path)
-        self.load(lipdfiles, collection_id)
+        self.load(lipdfiles, parallel, collection_id)
 
 
     # Allows loading http locations
-    def load(self, lipdfiles, collection_id=None):
+    def load(self, lipdfiles, parallel=False, collection_id=None):
         '''Load LiPD files. 
         Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the "__main__" process
 
@@ -131,6 +133,9 @@ class LiPD:
 
         lipdfiles : array
             array of paths to lipd files (the paths could also be urls)
+
+        parallel: bool
+            (Optional) set to True to process lipd files in parallel. You *must* run this function under the "__main__" process for this to work
 
         collection_id : str
             (Optional) set a collection id for all lipd files in the directory
@@ -145,16 +150,15 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                lipd = LiPD() 
-                lipd.load([
-                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "../examples/data/MD98_2181.Stott.2007.lpd",
-                    "../examples/data/Ant-WAIS-Divide.Severinghaus.2012.lpd",
-                    "https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1/Nunalleq.Ledger.2018.lpd"                    
-                ])            
+            lipd = LiPD() 
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd",
+                "../examples/data/Ant-WAIS-Divide.Severinghaus.2012.lpd",
+                "https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1/Nunalleq.Ledger.2018.lpd"                    
+            ])            
 
-                print(lipd.get_all_dataset_names())
+            print(lipd.get_all_dataset_names())
         '''        
         if type(lipdfiles) is not list:
             lipdfiles = [lipdfiles]
@@ -170,7 +174,7 @@ class LiPD:
         
         print(f"Loading {len(filemap.keys())} LiPD files" + (" from Collection: {collection_id}" if collection_id else ""))
         
-        multi_convert_to_pickle(filemap, collection_id)
+        multi_convert_to_pickle(filemap, parallel, collection_id)
         print("Conversion to RDF done..")
 
         print("Loading RDF into graph")
@@ -207,18 +211,17 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd_remote = LiPD()
-                lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-                lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
-                print(lipd_remote.get_all_dataset_names())
+            # Fetch LiPD data from remote RDF Graph
+            lipd_remote = LiPD()
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+            lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
+            print(lipd_remote.get_all_dataset_names())
 
         '''
         self.endpoint = endpoint
 
 
-    def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file, collection_id=None):
+    def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file, parallel=False, collection_id=None):
         '''Convert a directory containing LiPD files into a single RDF file (to be used for uploading to Knowledge Bases like GraphDB)
 
         Parameters
@@ -242,11 +245,10 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd = LiPD()
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
 
-                lipd.convert_lipd_dir_to_rdf("../examples/data", "all-lipd.nq")
+            lipd.convert_lipd_dir_to_rdf("../examples/data", "all-lipd.nq")
         '''
 
         filemap = {}
@@ -257,7 +259,7 @@ class LiPD:
         
         print(f"Starting conversion of {len(filemap.keys())} LiPD files")
 
-        multi_convert_to_rdf(filemap, collection_id)
+        multi_convert_to_rdf(filemap, parallel, collection_id)
         
         print("Conversion to RDF done..")
 
@@ -308,19 +310,18 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                lipd = LiPD()
-                lipd.load([
-                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "../examples/data/MD98_2181.Stott.2007.lpd"
-                ])
-                query = """PREFIX le: <http://linked.earth/ontology#>
-                        select (count(distinct ?ds) as ?count) where { 
-                            ?ds a le:Dataset .
-                            ?ds le:hasUrl ?url
-                        }"""
-                result, result_df = lipd.query(query)
-                result_df
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+            query = """PREFIX le: <http://linked.earth/ontology#>
+                    select (count(distinct ?ds) as ?count) where { 
+                        ?ds a le:Dataset .
+                        ?ds le:hasUrl ?url
+                    }"""
+            result, result_df = lipd.query(query)
+            result_df
         '''
 
         if remote and self.endpoint:
@@ -364,12 +365,11 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd_remote = LiPD()
-                lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-                lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
-                print(lipd_remote.get_all_dataset_names())
+            # Fetch LiPD data from remote RDF Graph
+            lipd_remote = LiPD()
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+            lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
+            print(lipd_remote.get_all_dataset_names())
         '''
         if not self.endpoint:
             raise Exception("No remote endpoint")
@@ -428,14 +428,13 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd = LiPD()
-                lipd.load([
-                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "../examples/data/MD98_2181.Stott.2007.lpd"
-                ])
-                print(lipd.get_bibtex())
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+            print(lipd.get_bibtex())
         '''
 
         def establish_type(pub_type):
@@ -594,15 +593,14 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd_remote = LiPD()
-                lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-                ts_list = lipd_remote.get_timeseries(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
-                for dsname, tsos in ts_list.items():
-                    for tso in tsos:
-                        if 'paleoData_variableName' in tso:
-                            print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
+            # Fetch LiPD data from remote RDF Graph
+            lipd_remote = LiPD()
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+            ts_list = lipd_remote.get_timeseries(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
+            for dsname, tsos in ts_list.items():
+                for tso in tsos:
+                    if 'paleoData_variableName' in tso:
+                        print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
         '''
         ts = self._get_timeseries(dsnames)
         return ts
@@ -636,14 +634,13 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd_remote = LiPD()
-                lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-                dsname = "Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"
-                lipd_remote.load_remote_datasets([dsname])
-                lipd_json = lipd_remote.get_lipd(dsname)
-                print(lipd_json)
+            # Fetch LiPD data from remote RDF Graph
+            lipd_remote = LiPD()
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+            dsname = "Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"
+            lipd_remote.load_remote_datasets([dsname])
+            lipd_json = lipd_remote.get_lipd(dsname)
+            print(lipd_json)
         '''           
         converter = RDFToLiPD()            
         return converter.convert(dsname, self.graph)
@@ -669,18 +666,17 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd = LiPD()
-                lipd.load([
-                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "../examples/data/MD98_2181.Stott.2007.lpd"
-                ])
-                all_datasets = lipd.get_all_dataset_names()
-                print("Loaded datasets: " + str(all_datasets))
-                popped = lipd.pop(all_datasets[0])
-                print("Loaded datasets after pop: " + str(lipd.get_all_dataset_names()))
-                print("Popped dataset: " + str(popped.get_all_dataset_names()))       
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+            all_datasets = lipd.get_all_dataset_names()
+            print("Loaded datasets: " + str(all_datasets))
+            popped = lipd.pop(all_datasets[0])
+            print("Loaded datasets after pop: " + str(lipd.get_all_dataset_names()))
+            print("Popped dataset: " + str(popped.get_all_dataset_names()))       
         '''        
         graphurl = NSURL + "/" + dsname
         if collection_id:
@@ -710,17 +706,16 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd = LiPD()
-                lipd.load([
-                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "../examples/data/MD98_2181.Stott.2007.lpd"
-                ])
-                all_datasets = lipd.get_all_dataset_names()
-                print("Loaded datasets: " + str(all_datasets))
-                lipd.remove(all_datasets[0])
-                print("Loaded datasets after remove: " + str(lipd.get_all_dataset_names()))
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+            all_datasets = lipd.get_all_dataset_names()
+            print("Loaded datasets: " + str(all_datasets))
+            lipd.remove(all_datasets[0])
+            print("Loaded datasets after remove: " + str(lipd.get_all_dataset_names()))
         '''
         graphurl = NSURL + "/" + dsname
         if collection_id:
@@ -738,15 +733,14 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd = LiPD()
-                lipd.load([
-                    "../examples/data/MD98_2181.Stott.2007.lpd"
-                ])
-                nquads = lipd.get_rdf()
-                print(nquads[:10000])
-                print("...")
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+            nquads = lipd.get_rdf()
+            print(nquads[:10000])
+            print("...")
         '''
         
         return self.graph.serialize(format='nquads')
@@ -771,14 +765,13 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd = LiPD()
-                lipd.load([
-                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "../examples/data/MD98_2181.Stott.2007.lpd"
-                ])
-                print(lipd.get_all_dataset_names())
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+            print(lipd.get_all_dataset_names())
         '''        
         query = f"""
             SELECT ?dsname WHERE {{ 
@@ -808,14 +801,13 @@ class LiPD:
 
             from pylipd.lipd import LiPD
 
-            if __name__=="__main__":
-                # Fetch LiPD data from remote RDF Graph
-                lipd = LiPD()
-                lipd.load([
-                    "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                    "../examples/data/MD98_2181.Stott.2007.lpd"
-                ])
-                print(lipd.get_all_dataset_ids())
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+            print(lipd.get_all_dataset_ids())
         '''        
         query = """
             SELECT ?dsid WHERE {{ 
@@ -826,10 +818,10 @@ class LiPD:
         qres, qres_df = self.query(query)
         return [sanitizeId(row.dsid) for row in qres]
     
-    def search_datasets(variableName=[ ], archiveType=[ ], proxyObsType=[ ], infVarType = [ ], sensorGenus=[ ],
-                    sensorSpecies=[ ], interpName =[ ], interpDetail =[ ], ageUnits = [ ],
-                    ageBound = [ ], ageBoundType = [ ], recordLength = [ ], resolution = [ ],
-                    lat = [ ], lon = [ ], alt = [ ], print_response = True, download_lipd = True,
+    def search_datasets(variableName=[ ], archiveType=[ ], proxy=[ ], resolution = [ ],
+                    ageUnits = [ ], ageBound = [ ], ageBoundType = [ ], 
+                    lat = [ ], lon = [ ], alt = [ ], 
+                    print_response = True, download_lipd = True,
                     download_folder = 'default'):
         pass
 

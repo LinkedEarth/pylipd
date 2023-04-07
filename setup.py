@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 
-version = '1.0.3'
+version = '1.0.4'
 
 # Read the readme file contents into variable
 def read(fname):
