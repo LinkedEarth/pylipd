@@ -10,6 +10,14 @@ from pylipd.multi_processing import convert_to_rdf
 local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd.latest"
 remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2"
 
+url = 'https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd'
+        
+lipd = LiPD()
+lipd.load(url)
+ts_list=lipd.get_timeseries(lipd.get_all_dataset_names())
+
+exit()
+
 '''
 lipd = LiPD()
 # Convert LiPD files to RDF    
