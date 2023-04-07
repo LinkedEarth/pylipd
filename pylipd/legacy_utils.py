@@ -259,6 +259,9 @@ class LiPD_Legacy:
                 k = v["variableName"]
 
                 # special case for year bp, or any variation of it. Translate key to "age""
+                if type(k) is list:
+                    k = k[0]
+                    
                 if "bp" in k.lower():
                     s = "age"
 
