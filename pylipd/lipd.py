@@ -15,7 +15,7 @@ import random
 import string
 import io
 
-from rdflib import ConjunctiveGraph, Namespace
+from rdflib import ConjunctiveGraph, Namespace, URIRef
 from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rdf
 
 from pylipd.rdf_to_lipd import RDFToLiPD
@@ -80,6 +80,26 @@ class LiPD:
         
         return deepcopy(self)
 
+    def merge(self, lipd):
+        '''
+        Merges the current LiPD object with another LiPD object
+
+        Parameters
+        ----------
+        lipd : pylipd.LiPD
+            LiPD object to merge with
+
+        Returns
+        -------
+        pylipd.LiPD
+            merged LiPD object
+
+        '''
+
+        merged = self.copy()
+        merged.graph.addN(lipd.graph.quads())
+        return merged
+    
     def load_from_dir(self, dir_path, parallel=False, collection_id=None):
         '''Load LiPD files from a directory
         Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the "__main__" process
@@ -608,15 +628,15 @@ class LiPD:
     def _get_timeseries(self, dsnames):
         timeseries = {}
         for dsname in dsnames:
-            converter = RDFToLiPD()
-            d = converter.convert(dsname, self.graph)
+            converter = RDFToLiPD(self.graph)
+            d = converter.convert_to_json(dsname)
             print("Extracting timeseries from dataset: " + dsname + " ...")
             if len(d.items()):
                 tss = LiPD_Legacy().extract(d)
                 timeseries[dsname] = tss
         return timeseries
 
-    def get_lipd(self, dsname):
+    def get_lipd(self, dsname, lipdfile):
         '''Get LiPD json for a dataset
 
         Parameters
@@ -642,17 +662,48 @@ class LiPD:
             lipd_json = lipd_remote.get_lipd(dsname)
             print(lipd_json)
         '''           
-        converter = RDFToLiPD()            
-        return converter.convert(dsname, self.graph)
+        converter = RDFToLiPD(self.graph)
+        return converter.convert_to_json(dsname, lipdfile)
 
-    def pop(self, dsname, collection_id=None):
+    def create_lipd(self, dsname, lipdfile):
+        '''Create LiPD file for a dataset
+
+        Parameters
+        ----------
+
+        dsname : str
+            dataset id
+
+        lipdfile: str
+            path to LiPD file
+
+        Examples
+        --------
+
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            # Fetch LiPD data from remote RDF Graph
+            lipd_remote = LiPD()
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+            dsname = "Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"
+            lipd_remote.load_remote_datasets([dsname])
+            lipd_remote.create_lipd(dsname, "test.lpd")
+        '''           
+        converter = RDFToLiPD(self.graph)
+        return converter.convert(dsname, lipdfile)
+    
+    def pop(self, dsname=None, collection_id=None):
         '''Removes a dataset from the graph and returns a LiPD object
 
         Parameters
         ----------
 
         dsname : str
-            Path to the directory containing lipd files
+            (Optional) Name of the dataset (Set to None to pop all datasets in a collection)
 
         collection_id : str
             (Optional) collection id for the dataset
@@ -677,13 +728,32 @@ class LiPD:
             popped = lipd.pop(all_datasets[0])
             print("Loaded datasets after pop: " + str(lipd.get_all_dataset_names()))
             print("Popped dataset: " + str(popped.get_all_dataset_names()))       
-        '''        
-        graphurl = NSURL + "/" + dsname
-        if collection_id:
-            graphurl = NSURL + "/" + collection_id + "/" + dsname
-        subgraph = copy.deepcopy(self.graph.get_context(graphurl))
-        self.graph.remove((None, None, None, graphurl))
-        return LiPD(subgraph)
+        '''
+
+        popped = LiPD()
+
+        if dsname:
+            graphurl = NSURL + "/" + dsname
+            if collection_id:
+                graphurl = NSURL + "/" + collection_id + "/" + dsname
+        elif collection_id:
+            graphurl = NSURL + "/" + collection_id
+
+        # Match subgraphs
+        for ctx in self.graph.contexts():
+            id = ctx.identifier
+            if id.startswith(graphurl):
+                subgraph = copy.deepcopy(self.graph.get_context(id))
+                for triple in subgraph.triples((None, None, None)):
+                    popped.graph.add((
+                        triple[0],
+                        triple[1],
+                        triple[2],
+                        URIRef(id)))
+
+                self.graph.remove((None, None, None, id))
+        
+        return popped
 
     def remove(self, dsname, collection_id=None):
         '''Removes a dataset from the graph

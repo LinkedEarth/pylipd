@@ -241,8 +241,7 @@ SCHEMA = {
         '@id': ['{filename}', '_trunc(4)'],
         '@fromJson': ['_set_inter_variable_links'],
         'filename': { 
-            'name': 'hasFileName', 
-            'type': 'File' 
+            'name': 'hasFileName'
         },
         'columns': {
             'name': 'includesVariable',

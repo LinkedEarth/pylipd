@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 
-version = '1.0.6'
+version = '1.1.0'
 
 # Read the readme file contents into variable
 def read(fname):
@@ -30,7 +30,8 @@ setup(
         "rdflib",
         "pandas",
         "doi2bib",
-        "pybtex"
+        "pybtex",
+        "bagit"
     ],
     python_requires=">=3.9.0"
 )

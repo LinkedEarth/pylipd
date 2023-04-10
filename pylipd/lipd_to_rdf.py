@@ -190,7 +190,9 @@ class LipdToRDF:
         elif isinstance(geo, dict) :
             for key,value in geo.items() :
                 if key != "geometry":
-                    ngeo[key] = value
+                    # Do not add lat long if they are already added
+                    if f"wgs84:{key}" not in ngeo:
+                        ngeo[key] = value
         return ngeo
 
 
@@ -427,10 +429,12 @@ class LipdToRDF:
                 obj["name"] = proxyobs
         elif ("inferredVariableType" in obj and obj["inferredVariableType"]) :
             infvar = obj["inferredVariableType"]
-            if "name" in obj and obj["name"] :
-                obj["name"] = obj["name"] + "." + infvar
+            if "variableName" in obj and obj["variableName"] :
+                varname = str(obj["variableName"])
+                if varname.lower() != infvar.lower() :
+                    obj["variableName"] = varname + "." + infvar
             else:
-                obj["name"] = infvar
+                obj["variableName"] = infvar
 
         vartype = obj["@category"]
         if (vartype and vartype == "MeasuredVariable") :
@@ -945,7 +949,7 @@ class LipdToRDF:
         return ONTONS + sanitizeId(category)
     
     # Create property
-    def _create_property(self, prop, dtype, cat, icon, multiple) :
+    def _create_property(self, prop, dtype, cat, multiple) :
         nsprop = prop.split(":", 2)
         ns = ONTONS
         if len(nsprop) > 1 :
@@ -953,7 +957,7 @@ class LipdToRDF:
             if prefix in NAMESPACES:
                 ns = NAMESPACES[prefix]
             prop = nsprop[1]
-        return [ ns + lcfirst(sanitizeId(prop)), dtype ]
+        return [ ns + lcfirst(sanitizeId(prop)), dtype, cat, multiple ]
     
     # Set individual classes
     def _set_individual_classes(self, objid, category, extracats) :
@@ -974,13 +978,13 @@ class LipdToRDF:
                 ))
     
     # Set property value
-    def _set_property( self, objid, prop, value ):
+    def _set_property_value( self, objid, prop, value ):
         if (type(value) is list) :
             for subvalue in value : 
-                self._set_property(objid, prop, subvalue)
+                self._set_property_value(objid, prop, subvalue)
             return
 
-        (propid, dtype) = prop
+        (propid, dtype, cat, multiple) = prop
         if objid and value:
             objitem = None
 
@@ -1022,6 +1026,14 @@ class LipdToRDF:
             else:
                 objitem = Literal(value, datatype=(XSD[dtype] if dtype in XSD else None))
 
+            # FIXME: Do not add if property doesn't allow multiple values and a value already exists
+            '''
+            if not multiple:
+                existing = list(self.graph.triples((URIRef(objid), URIRef(propid), None)))
+                if len(existing) > 0:
+                    return
+            '''
+            
             self.graph.add((
                 URIRef(objid),
                 URIRef(propid),
@@ -1055,7 +1067,6 @@ class LipdToRDF:
             details = self._get_property_details(key, schema, value)
             prop = details["name"]
             dtype = details["type"]
-            icon =  details["icon"] if ("icon" in details) else None
             cat =  details["category"] if ("category" in details) else None
             sch =  details["schema"] if ("schema" in details) else None
             if (sch and not cat) :
@@ -1068,11 +1079,11 @@ class LipdToRDF:
                 continue
                 
             # Create Property
-            propDI = self._create_property(prop, dtype, cat, icon, multiple)
+            propDI = self._create_property(prop, dtype, cat, multiple)
 
             # Set property value
             if (dtype == "Individual" or type(value) is dict) :
-                self._set_property(objid, propDI, value)
+                self._set_property_value(objid, propDI, value)
             else : 
                 if (dtype == "File") :
                     # Enable this ?
@@ -1084,7 +1095,7 @@ class LipdToRDF:
                     """
 
                 else : 
-                    self._set_property(objid, propDI, value)
+                    self._set_property_value(objid, propDI, value)
 
     def _find_files_with_extension(self, directory, extension):
         myregexobj = re.compile('\.'+extension+'$')

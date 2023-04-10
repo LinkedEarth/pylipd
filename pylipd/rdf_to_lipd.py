@@ -4,8 +4,13 @@ It uses the SCHEMA dictionary (from globals/schema.py) to do the conversion
 """
 
 import copy
+import os
 import re
+import csv
+import bagit
 import json
+import tempfile
+import zipfile
 
 from rdflib.graph import ConjunctiveGraph, URIRef
 
@@ -25,8 +30,8 @@ class RDFToLiPD:
     collection_id : str
         (Optional) set a collection id for the lipd file    
     """    
-    def __init__(self, collection_id=None):
-        self.graph = ConjunctiveGraph()
+    def __init__(self, graph, collection_id=None):
+        self.graph = graph
         self.lipd_csvs = {}
         self.collection_id = collection_id
         self.graphurl = NSURL
@@ -34,8 +39,8 @@ class RDFToLiPD:
         if self.collection_id:
             self.namespace = NSURL + "/" + collection_id + "#"
 
-    def convert(self, id, graph):
-        '''Convert RDF graph to LiPD json
+    def convert(self, dsname, lipdfile):
+        '''Convert RDF graph to a LiPD file
 
         Parameters
         ----------
@@ -44,17 +49,92 @@ class RDFToLiPD:
             the RDF graph object
 
         '''
-        self.graph = graph
+        lipd = self.convert_to_json(dsname)
+
+        with tempfile.TemporaryDirectory(prefix="rdf_to_lipd_") as tmpdir:
+            # Create a temporary data directory
+            datadir = f"{tmpdir}/{dsname}"
+            os.makedirs(datadir)
+
+            # Create the csv files and metadata jsonld
+            self._create_csvs(lipd, datadir)
+            with(open(f"{datadir}/metadata.jsonld", "w")) as f:
+                json.dump(lipd, f, indent=4, default=str)
+            
+            # Convert data directory to a bag
+            bagit.make_bag(datadir, checksums=['md5'])
+
+            # Zip the bag
+            self._zip_directory(datadir, lipdfile)
+
+        return lipd
+
+    def convert_to_json(self, dsname):
+        '''Convert RDF graph to a LiPD file
+
+        Parameters
+        ----------
+
+        graph : rdflib.ConjunctiveGraph
+            the RDF graph object
+
+        '''
         self.schema = copy.deepcopy(SCHEMA)
         self.rschema = self._get_schema_reverse_map()
 
         self.allfacts = {}
-        self._get_indexed_facts(self.namespace + id)
+        self._get_indexed_facts(self.namespace + dsname)
         
-        lipd = self._convert_to_lipd(self.namespace + id, "Dataset", "Dataset", pagesdone=[])
+        lipd = self._convert_to_lipd(self.namespace + dsname, "Dataset", "Dataset", pagesdone=[])
         lipd = self._post_processing(lipd)
         return lipd
 
+    def _create_csvs(self, lipd, datadir):
+        csvs = {}
+        if "paleoData" in lipd:
+            for pd in lipd["paleoData"]:
+                if "measurementTable" in pd:
+                    for table in pd["measurementTable"]:
+                        csvdata = []
+                        sorted(table["columns"], key=lambda x: x["number"]) 
+                        for col in table["columns"]:
+                            csvdata.append(col["values"])
+                            del col["values"]
+                        csvs[table["filename"]] = csvdata
+
+        for csvname, csvdata in csvs.items():
+            # writing to csv file 
+            with open(f"{datadir}/{csvname}", 'w') as csvfile: 
+                csvwriter = csv.writer(csvfile) 
+                csvwriter.writerows(csvdata)
+
+
+    def _zip_directory(self, datadir, lipdfile):
+        # Zip the bag
+        with zipfile.ZipFile(lipdfile, 'w') as zipf:
+            for root, dirs, files in os.walk(datadir):
+                for file in files:
+                    zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), os.path.join(datadir, '..')))
+
+    '''
+    def _zip_lipd_dir(self, lipddir, lipdfile):
+        if lipdfile.startswith("http"):
+            # If this is a URL
+            # Handle special characters in url (if any)
+            res = urlparse(lipdfile)
+            lipdurl = urlunparse(res._replace(path=quote(res.path)))
+
+            # Open url and unzip
+            resp = urlopen(lipdurl)
+            with zipfile.ZipFile(BytesIO(resp.read())) as zip_ref:
+                zip_ref.extractall(unzipdir)
+        else:
+            # If this is a local file
+            # Unzip file
+            with zipfile.ZipFile(lipdfile, 'r') as zip_ref:
+                zip_ref.extractall(unzipdir)
+    '''
+    
     def _get_property_details(self, pname, schema) :
         details = { "name": pname }
         # Create property
@@ -258,8 +338,10 @@ class RDFToLiPD:
                 fn = getattr(self, func)
                 obj = fn(obj, parent)
 
+        # FIXME: Only remove hasValues.. LiPD CSVs should be created outside this function beforehand
         if "hasValues" in obj:
-            obj["values"] = json.loads(obj["hasValues"])
+            valuestr = obj["hasValues"]
+            obj["values"] = json.loads(valuestr)
             del obj["hasValues"]
         
         del obj["@id"]
@@ -308,6 +390,8 @@ class RDFToLiPD:
                 else : 
                     if re.search(r"^(geo|wgs84):", prop) :
                         # Ignore
+                        pass
+                    elif prop in ["long", "lat", "alt"] :
                         pass
                     else : 
                         geojson["properties"][prop] = value
@@ -470,7 +554,8 @@ class RDFToLiPD:
 
     def _extract_variable_values(self, var, parent = None) :
         if "hasValues" in var:
-            values = json.loads(var["hasValues"])
+            valuestr = var["hasValues"]
+            values = json.loads(valuestr)
             if type(values) is dict and "base64_zlib" in values:
                 values = unzip_string(values["base64_zlib"])
                 var["hasValues"] = values

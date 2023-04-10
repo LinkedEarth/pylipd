@@ -1,4 +1,5 @@
 from pylipd.lipd import LiPD
+import json
 from pylipd.multi_processing import convert_to_rdf
 
 ####################
@@ -9,14 +10,6 @@ from pylipd.multi_processing import convert_to_rdf
 
 local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd.latest"
 remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2"
-
-url = 'https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd'
-        
-lipd = LiPD()
-lipd.load(url)
-ts_list=lipd.get_timeseries(lipd.get_all_dataset_names())
-
-exit()
 
 '''
 lipd = LiPD()
@@ -73,8 +66,8 @@ lipd = LiPD()
 lipdfiles = [local_lipd_dir + "/" + dsname + ".lpd" for dsname in dsnames]
 #print(lipdfiles)
 
-lipd.load(lipdfiles)
-#lipd.load_from_dir(local_lipd_dir)
+#lipd.load(lipdfiles)
+lipd.load_from_dir("examples/data")
 print(lipd.get_all_dataset_names())
 print(lipd.get_all_dataset_ids())
 
@@ -85,25 +78,55 @@ ts_list = lipd.get_timeseries(lipd.get_all_dataset_names())
 for dsname, tsos in ts_list.items():
     for tso in tsos:
         if 'paleoData_variableName' in tso:
-            print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
+            print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
 
 
 # Fetch LiPD data from remote RDF Graph
 lipd.set_endpoint(remote_lipd_endpoint)
-lipd.load_remote_datasets(remote_dsnames)
+#lipd.load_remote_datasets(remote_dsnames)
 
 # Convert to TSO object (as before)
 ts_list_remote = lipd.get_timeseries(lipd.get_all_dataset_names())
 for dsname, tsos in ts_list_remote.items():
     for tso in tsos:
-        print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
+        print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
 
 print(lipd.get_all_dataset_names())
 poplipd = lipd.pop(remote_dsnames[0])
+
+print("Creating separate lipd file for popped")
+dsname = poplipd.get_all_dataset_names()[0]
+lipdfile = f"{dsname}.lpd"
+poplipd.create_lipd(dsname, lipdfile)
+
+print("Loading .. created lipd file: "+lipdfile)
+lpd2 = LiPD()
+lpd2.load([lipdfile])
+ts_list_remote = lpd2.get_timeseries(lpd2.get_all_dataset_names())
+for dsname, tsos in ts_list_remote.items():
+    for tso in tsos:
+        print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
+
+exit()
+
 print("After popping..")
 print(lipd.get_all_dataset_names())
+ts_list_remote = lipd.get_timeseries(lipd.get_all_dataset_names())
+for dsname, tsos in ts_list_remote.items():
+    for tso in tsos:
+        print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
+
 print("Popped..")
 print(poplipd.get_all_dataset_names())
+
+print("Merging back..")
+mergelipd = lipd.merge(poplipd)
+print(mergelipd.get_all_dataset_names())
+
+ts_list_remote = mergelipd.get_timeseries(mergelipd.get_all_dataset_names())
+for dsname, tsos in ts_list_remote.items():
+    for tso in tsos:
+        print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
 
 '''
 print(lipd.get_all_dataset_names())    
