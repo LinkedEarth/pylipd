@@ -360,7 +360,7 @@ class LipdToRDF:
         if "tsid" not in iobj:
             iobj["tsid"] = uniqid()
         id =  parentid + "." + iobj["tsid"]
-        id += "." + str(iobj["variablename"])
+        id += "." + str(iobj.get("variablename", ""))
         return id
     
     def _set_inter_variable_links(self, obj, objhash) :
@@ -379,9 +379,11 @@ class LipdToRDF:
                 infcol = col["inferredFrom"].lower()
                 if ((infcol in vobjhash)) :
                     col["inferredFrom"] = vobjhash[infcol]
-                
-            if (depthcol and thiscol != depthcol) :
-                col["takenAtDepth"] = depthcol
+
+            # FIXME: Adding takenAtDepth is messing stuff up   
+            #if (depthcol and thiscol != depthcol) :
+            #    col["takenAtDepth"] = depthcol
+
         return [obj, objhash, []]
     
     # proxy (could be specific)
@@ -417,16 +419,20 @@ class LipdToRDF:
             del obj["OnProxyObservationProperty"]
         elif ("ProxyObservationType" in obj and obj["ProxyObservationType"]) :
             proxyobs = obj["ProxyObservationType"]
-            if "name" in obj and obj["name"] :
-                obj["name"] = obj["name"] + "." + proxyobs
+            if "variableName" in obj and obj["variableName"] :
+                varname = str(obj["variableName"])
+                if varname.lower() != proxyobs.lower() :
+                    obj["variableName"] = obj["variableName"] + "." + proxyobs
             else:
-                obj["name"] = proxyobs
+                obj["variableName"] = proxyobs
         elif ("proxyObservationType" in obj and obj["proxyObservationType"]) :
             proxyobs = obj["proxyObservationType"]
-            if "name" in obj and obj["name"] :
-                obj["name"] = obj["name"] + "." + proxyobs
+            if "variableName" in obj and obj["variableName"] :
+                varname = str(obj["variableName"])
+                if varname.lower() != proxyobs.lower() :
+                    obj["variableName"] = obj["variableName"] + "." + proxyobs
             else:
-                obj["name"] = proxyobs
+                obj["variableName"] = proxyobs
         elif ("inferredVariableType" in obj and obj["inferredVariableType"]) :
             infvar = obj["inferredVariableType"]
             if "variableName" in obj and obj["variableName"] :
@@ -1027,12 +1033,10 @@ class LipdToRDF:
                 objitem = Literal(value, datatype=(XSD[dtype] if dtype in XSD else None))
 
             # FIXME: Do not add if property doesn't allow multiple values and a value already exists
-            '''
             if not multiple:
                 existing = list(self.graph.triples((URIRef(objid), URIRef(propid), None)))
                 if len(existing) > 0:
                     return
-            '''
             
             self.graph.add((
                 URIRef(objid),

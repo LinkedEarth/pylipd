@@ -12,5 +12,6 @@ BLACKLIST = {
 }
 
 REVERSE_BLACKLIST = {
-    'takenAtDepth' : 1
+    #'takenAtDepth' : 1
+    #'foundInTable' : 1,
 }

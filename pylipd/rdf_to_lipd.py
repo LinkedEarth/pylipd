@@ -85,22 +85,74 @@ class RDFToLiPD:
         self.allfacts = {}
         self._get_indexed_facts(self.namespace + dsname)
         
-        lipd = self._convert_to_lipd(self.namespace + dsname, "Dataset", "Dataset", pagesdone=[])
+        lipd = self._convert_to_lipd(self.namespace + dsname, "Dataset", "Dataset", pagesdone={})
         lipd = self._post_processing(lipd)
         return lipd
 
+    def _get_table_data(self, table):
+        csvdata = []
+        numrows = 0
+        
+        table["columns"] = sorted(table["columns"], key=lambda x: x["number"] if ("number" in x and type(x["number"]) is int) else 99999)
+
+        for col in table["columns"]:
+            if "values" in col:
+                numrows = len(col["values"])
+                break
+        
+        for rowidx in range(numrows):
+            row = []
+            for col in table["columns"]:
+                if "values" in col:
+                    colindices = []
+                    if "number" in col:
+                        colnum = col["number"]
+                        colindices.append(colnum)
+                    else:
+                        colindices.append(1)
+                    
+                    for colindex in colindices:
+                        if type(colindex) is list:
+                            sorted(colindex)
+                            firstidx = colindex[0]
+                            for subindex in colindex:
+                                idx = subindex - 1
+                                if idx >= len(row):
+                                    row.extend([""] * (idx - len(row) + 1))
+                                row[idx] = col["values"][rowidx][subindex-firstidx]
+
+                        else:
+                            idx = colindex - 1
+                            if idx >= len(row):
+                                row.extend([""] * (idx - len(row) + 1))
+                            row[idx] = col["values"][rowidx]
+
+            csvdata.append(row)
+
+        # Delete the values field (since we've extracted the csv data)
+        for col in table["columns"]:
+            if "values" in col:
+                del col["values"]
+
+        return csvdata
+    
     def _create_csvs(self, lipd, datadir):
         csvs = {}
-        if "paleoData" in lipd:
-            for pd in lipd["paleoData"]:
-                if "measurementTable" in pd:
-                    for table in pd["measurementTable"]:
-                        csvdata = []
-                        sorted(table["columns"], key=lambda x: x["number"]) 
-                        for col in table["columns"]:
-                            csvdata.append(col["values"])
-                            del col["values"]
-                        csvs[table["filename"]] = csvdata
+        datakeys = ["paleoData", "chronData"]
+        for datakey in datakeys:
+            if datakey in lipd:
+                for data in lipd[datakey]:
+                    if "measurementTable" in data:
+                        for table in data["measurementTable"]:
+                            csvs[table["filename"]] = self._get_table_data(table)
+                    if "model" in data:
+                        for model in data["model"]:
+                            if "ensembleTable" in model:
+                                for table in model["ensembleTable"]:
+                                    csvs[table["filename"]] = self._get_table_data(table)
+                            if "summaryTable" in model:
+                                for table in model["summaryTable"]:
+                                    csvs[table["filename"]] = self._get_table_data(table)
 
         for csvname, csvdata in csvs.items():
             # writing to csv file 
@@ -226,13 +278,12 @@ class RDFToLiPD:
                         self._get_indexed_facts(pfact["@id"])
 
 
-    def _convert_to_lipd(self, id, category, schemaname, pagesdone=[]) :
+    def _convert_to_lipd(self, id, category, schemaname, pagesdone={}) :
         if id in self.allfacts:
             facts = self.allfacts[id]
 
             if id in pagesdone:
-                return {}
-            pagesdone.append(id)
+                return pagesdone[id]
             
             schema =  self.rschema[schemaname] if (schemaname in self.rschema) else None
             if (schemaname and not category) :
@@ -250,6 +301,8 @@ class RDFToLiPD:
                 "@category":category,
                 "@schema":schemaname
             }
+
+            pagesdone[id] = obj
 
             for pname, pfacts in facts.items() :
                 if pname in REVERSE_BLACKLIST:
@@ -294,9 +347,7 @@ class RDFToLiPD:
                         if (toJson) :
                             fn = getattr(self, toJson)
                             val = fn(val)
-                        
-                        # TODO: Handle hasValues :: Convert to File ?
-                        
+                                                
                         # If there is already a value present
                         # - Then this need to be marked as "multiple"
                         if (not multiple) and (name in obj) and (not type(obj[name]) is list):
@@ -308,10 +359,6 @@ class RDFToLiPD:
                         else : 
                             obj[name] = val
 
-            # TODO: Fix the empty case ?
-            #if (empty(Settlement.array_keys([obj]))) :
-            #    return preg_replace("/_/", " ", id)
-            
             return obj
         else : 
             return re.sub("/_/", " ", id)
@@ -324,6 +371,15 @@ class RDFToLiPD:
         if not("@schema" in obj):
             return obj
 
+        # FIXME: Hack to avoid recursion
+        schemaname = obj["@schema"]
+        tschema = self.schema[schemaname] if schemaname in self.schema else None
+
+        if tschema and "@toJson_pre" in tschema:
+            for func in tschema["@toJson_pre"]:
+                fn = getattr(self, func)
+                obj = fn(obj, parent)        
+
         for key,value in obj.items():
             if type(value) is list:
                 for i in range(len(value)):
@@ -331,8 +387,6 @@ class RDFToLiPD:
             else:
                 obj[key] = self._post_processing(value, obj)
 
-        schemaname = obj["@schema"]
-        tschema = self.schema[schemaname] if schemaname in self.schema else None
         if tschema and "@toJson" in tschema:
             for func in tschema["@toJson"]:
                 fn = getattr(self, func)
@@ -403,7 +457,7 @@ class RDFToLiPD:
         return url.replace("https://docs.google.com/spreadsheets/d/", "")
 
     def _remove_found_in_table(self, var, parent = None) :
-        if (("foundInTable" in var)) :
+        if "foundInTable" in var :
             del var["foundInTable"]
         return var
 
@@ -509,7 +563,7 @@ class RDFToLiPD:
         return var
 
     def _remove_depth_property(self, val, parent = None) :
-        if (("takenAtDepth" in val)) :
+        if "takenAtDepth" in val :
             del val["takenAtDepth"]
         return val
 

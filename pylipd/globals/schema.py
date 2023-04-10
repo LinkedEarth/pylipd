@@ -268,12 +268,14 @@ SCHEMA = {
             '_add_variable_values',
             '_stringify_column_numbers_array'
         ],
+        '@toJson_pre': [
+            '_remove_found_in_table',
+            #'_remove_depth_property'
+        ],
         '@toJson': [
             '_set_variable_type',
             '_unwrap_uncertainty',
             '_extract_from_proxy_system',
-            '_remove_found_in_table',
-            '_remove_depth_property',
             '_extract_variable_values',
             '_unarray_column_number'
         ],
@@ -345,6 +347,9 @@ SCHEMA = {
             'schema': 'Resolution',
             'type': 'Individual',
             'alternates': ['hasResolution']
+        },
+        'physicalSample': {
+            'type': 'Individual',
         },
         'inferredFrom': { 
             'schema': 'Variable', 
