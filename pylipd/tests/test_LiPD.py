@@ -76,12 +76,14 @@ class TestLiPDids():
 
 class TestLiPDTimeseries():
     
-    def test_get_timeseries_t0(self):
+    @pytest.mark.parametrize('dataframe',['True', 'False'])
+    def test_get_timeseries_t0(self, dataframe):
         url = 'https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd'
         
         lipd = LiPD()
         lipd.load(url)
-        ts_list=lipd.get_timeseries(lipd.get_all_dataset_names())
+        ts_list=lipd.get_timeseries(lipd.get_all_dataset_names(), to_dataframe = dataframe)
+    
         
 class TestLiPDquery():
 
@@ -116,3 +118,37 @@ class TestLiPDbibtex():
         lipd.load(url)
         bibs = lipd.get_bibtex(save=False)
       
+class TestLiPDremove():
+    
+    def test_remove_t0(self):
+        
+        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
+               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd',
+               'https://lipdverse.org/data/ch2kTA18TAS01/1_0_2//TA18TAS01.lpd']
+        
+        D=LiPD()
+        D.load(url)
+        names = D.get_all_dataset_names()
+        names_compare = names[1:]
+        D_test = D.copy()
+        D_test.remove(names[0])
+        assert D_test.get_all_dataset_names() == names_compare
+
+class TestLiPDpop():
+    
+    def test_remove_t0(self):
+        
+        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
+               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd',
+               'https://lipdverse.org/data/ch2kTA18TAS01/1_0_2//TA18TAS01.lpd']
+        
+        D=LiPD()
+        D.load(url)
+        names = D.get_all_dataset_names()
+        D_test = D.copy()
+        D_popped = D_test.pop(names[0])
+        assert D_test.get_all_dataset_names() == names[1:]
+        assert D_popped.get_all_dataset_names()[0] == names[0]
+    
+        
+        
