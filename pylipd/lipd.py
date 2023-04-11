@@ -678,11 +678,11 @@ class LiPD:
             from pylipd.lipd import LiPD
 
             # Fetch LiPD data from remote RDF Graph
-            lipd_remote = LiPD()
-            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-            dsname = "Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"
-            lipd_remote.load_remote_datasets([dsname])
-            lipd_json = lipd_remote.get_lipd(dsname)
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+            ])
+            lipd_json = lipd.get_lipd(lipd.get_all_dataset_names()[0])
             print(lipd_json)
         '''           
         converter = RDFToLiPD(self.graph)
@@ -715,7 +715,7 @@ class LiPD:
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
             ])
             dsname = lipd.get_all_dataset_names()[0]
-            lipd_remote.create_lipd(dsname, "test.lpd")
+            lipd.create_lipd(dsname, "test.lpd")
         '''           
         converter = RDFToLiPD(self.graph)
         return converter.convert(dsname, lipdfile)
