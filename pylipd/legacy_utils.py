@@ -140,7 +140,7 @@ class LiPD_Legacy:
                 # Case 1: DOI ID. Don't need the rest of 'identifier' dict
                 if k == 'identifier':
                     try:
-                        _root['pub' + str(idx + 1) + '_DOI'] = "hello"
+                        _root['pub' + str(idx + 1) + '_DOI'] = v
                     except KeyError as e:
                         raise e
                 # Case 2: All other string entries

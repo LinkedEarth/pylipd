@@ -687,10 +687,11 @@ class LiPD:
             from pylipd.lipd import LiPD
 
             # Fetch LiPD data from remote RDF Graph
-            lipd_remote = LiPD()
-            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-            dsname = "Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"
-            lipd_remote.load_remote_datasets([dsname])
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+            ])
+            dsname = lipd.get_all_dataset_names()[0]
             lipd_remote.create_lipd(dsname, "test.lpd")
         '''           
         converter = RDFToLiPD(self.graph)
@@ -787,10 +788,20 @@ class LiPD:
             lipd.remove(all_datasets[0])
             print("Loaded datasets after remove: " + str(lipd.get_all_dataset_names()))
         '''
-        graphurl = NSURL + "/" + dsname
-        if collection_id:
-            graphurl = NSURL + "/" + collection_id + "/" + dsname
-        self.graph.remove((None, None, None, graphurl))       
+        
+        if dsname:
+            graphurl = NSURL + "/" + dsname
+            if collection_id:
+                graphurl = NSURL + "/" + collection_id + "/" + dsname
+        elif collection_id:
+            graphurl = NSURL + "/" + collection_id
+
+        # Match subgraphs
+        for ctx in self.graph.contexts():
+            id = ctx.identifier
+            if id.startswith(graphurl):        
+                self.graph.remove((None, None, None, id))       
+
 
     def get_rdf(self):
         '''Returns RDF serialization of the current Graph
