@@ -24,20 +24,12 @@ class RDFToLiPD:
     """
     The RDFToLiPD class helps in converting an RDF Graph to a LiPD file.
     It uses the SCHEMA dictionary (from globals/schema.py) to do the conversion
-
-    Parameters
-    ----------
-    collection_id : str
-        (Optional) set a collection id for the lipd file    
     """    
-    def __init__(self, graph, collection_id=None):
+    def __init__(self, graph):
         self.graph = graph
         self.lipd_csvs = {}
-        self.collection_id = collection_id
         self.graphurl = NSURL
         self.namespace = NSURL + "#"
-        if self.collection_id:
-            self.namespace = NSURL + "/" + collection_id + "#"
 
     def convert(self, dsname, lipdfile):
         '''Convert RDF graph to a LiPD file

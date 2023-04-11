@@ -30,23 +30,14 @@ class LipdToRDF:
     """
     The LipdToRDF class helps in converting a LiPD file to an RDF Graph. 
     It uses the SCHEMA dictionary (from globals/schema.py) to do the conversion
-
-    Parameters
-    ----------
-    collection_id : str
-        (Optional) set a collection id for the lipd file
     """
 
-    def __init__(self, collection_id=None):
+    def __init__(self):
         self.graph = ConjunctiveGraph()
         self.lipd_csvs = {}
-        self.collection_id = collection_id
         self.graphurl = NSURL
         self.namespace = NSURL + "#"
-        self.schema = expand_schema(copy.deepcopy(SCHEMA))
-
-        if self.collection_id:
-            self.namespace = NSURL + "/" + collection_id + "#"        
+        self.schema = expand_schema(copy.deepcopy(SCHEMA))  
 
 
     def convert(self, lipdpath, topath, type="rdf"):
@@ -71,8 +62,6 @@ class LipdToRDF:
         lpdname = re.sub("\?.+$", "", lpdname)
 
         self.graphurl = NSURL + "/" + lpdname
-        if self.collection_id:
-            self.graphurl = NSURL + "/" + self.collection_id + "/" + lpdname
 
         with tempfile.TemporaryDirectory(prefix="lipd_to_rdf_") as tmpdir:
             self._unzip_lipd_file(lipdpath, tmpdir)
@@ -1122,8 +1111,6 @@ class LipdToRDF:
             self._map_lipd_to_json(obj, None, None, "Dataset", "Dataset", objhash)
             if url:
                 objhash[obj["@id"]]["hasUrl"] = url
-            elif self.collection_id:
-                objhash[obj["@id"]]["hasUrl"] = DATAURL + "/" + self.collection_id + "/" + obj["@id"] + ".lpd"
             else:
                 objhash[obj["@id"]]["hasUrl"] = DATAURL + "/" + obj["@id"] + ".lpd"
 

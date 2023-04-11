@@ -136,7 +136,7 @@ class TestLiPDremove():
 
 class TestLiPDpop():
     
-    def test_remove_t0(self):
+    def test_pop_t0(self):
         
         url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
                'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd',

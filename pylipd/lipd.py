@@ -100,7 +100,7 @@ class LiPD:
         merged.graph.addN(lipd.graph.quads())
         return merged
     
-    def load_from_dir(self, dir_path, parallel=False, collection_id=None):
+    def load_from_dir(self, dir_path, parallel=False):
         '''Load LiPD files from a directory
         Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the "__main__" process
 
@@ -112,9 +112,6 @@ class LiPD:
 
         parallel: bool
             (Optional) set to True to process lipd files in parallel. You *must* run this function under the "__main__" process for this to work
-
-        collection_id : str
-            (Optional) set a collection id for all lipd files in the directory
 
         Examples
         --------
@@ -140,25 +137,23 @@ class LiPD:
             file_path = os.path.join(dir_path, path)
             if os.path.isfile(file_path) and path.endswith(".lpd"):
                 lipdfiles.append(file_path)
-        self.load(lipdfiles, parallel, collection_id)
+        self.load(lipdfiles, parallel)
 
 
     # Allows loading http locations
-    def load(self, lipdfiles, parallel=False, collection_id=None):
+    def load(self, lipdfiles, parallel=False):
         '''Load LiPD files. 
         Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the "__main__" process
 
         Parameters
         ----------
 
-        lipdfiles : array
+        lipdfiles : list of str
             array of paths to lipd files (the paths could also be urls)
 
         parallel: bool
             (Optional) set to True to process lipd files in parallel. You *must* run this function under the "__main__" process for this to work
 
-        collection_id : str
-            (Optional) set a collection id for all lipd files in the directory
 
         Examples
         --------
@@ -192,9 +187,9 @@ class LiPD:
             picklefile = tempfile.NamedTemporaryFile().name
             filemap[lipdfile] = picklefile
         
-        print(f"Loading {len(filemap.keys())} LiPD files" + (" from Collection: {collection_id}" if collection_id else ""))
+        print(f"Loading {len(filemap.keys())} LiPD files")
         
-        multi_convert_to_pickle(filemap, parallel, collection_id)
+        multi_convert_to_pickle(filemap, parallel)
         print("Conversion to RDF done..")
 
         print("Loading RDF into graph")
@@ -241,7 +236,7 @@ class LiPD:
         self.endpoint = endpoint
 
 
-    def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file, parallel=False, collection_id=None):
+    def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file, parallel=False):
         '''Convert a directory containing LiPD files into a single RDF file (to be used for uploading to Knowledge Bases like GraphDB)
 
         Parameters
@@ -253,8 +248,6 @@ class LiPD:
         rdf_file : str
             Path to the output rdf file
 
-        collection_id : str
-            (Optional) set a collection id for all lipd files in the directory
 
         Examples
         --------
@@ -279,7 +272,7 @@ class LiPD:
         
         print(f"Starting conversion of {len(filemap.keys())} LiPD files")
 
-        multi_convert_to_rdf(filemap, parallel, collection_id)
+        multi_convert_to_rdf(filemap, parallel)
         
         print("Conversion to RDF done..")
 
@@ -678,7 +671,7 @@ class LiPD:
             from pylipd.lipd import LiPD
 
             # Fetch LiPD data from remote RDF Graph
-            lipd = LiPD()
+            lipd = LiPD()git
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
             ])
@@ -720,17 +713,15 @@ class LiPD:
         converter = RDFToLiPD(self.graph)
         return converter.convert(dsname, lipdfile)
     
-    def pop(self, dsnames=None, collection_id=None):
-        '''Removes a dataset from the graph and returns a LiPD object
+    def pop(self, dsnames):
+        '''Pops dataset(s) from the graph and returns the popped LiPD object
 
         Parameters
         ----------
 
-        dsname : str or list of str
-            (Optional) Name of the dataset (Set to None to pop all datasets in a collection)
+        dsnames : str or list of str
+            dataset name(s) to be popped.
 
-        collection_id : str
-            (Optional) collection id for the dataset
 
         Examples
         --------
@@ -755,48 +746,38 @@ class LiPD:
         '''
 
         popped = LiPD()
-        
+
         if type(dsnames) is not list:
             dsnames = [dsnames]
         
         graphurls=[]
-        
-        if dsnames:
-            for dsname in dsnames:
-                graphurls.append(NSURL + "/" + dsname)
-                if collection_id:
-                    graphurls.append(NSURL + "/" + collection_id + "/" + dsname)
-        elif collection_id:
-            graphurls.append(NSURL + "/" + collection_id)
+        for dsname in dsnames:
+            graphurls.append(NSURL + "/" + dsname)
 
         # Match subgraphs
-        for graphurl in graphurls:
-            for ctx in self.graph.contexts():
-                id = ctx.identifier
-                if id.startswith(graphurl):
-                    subgraph = copy.deepcopy(self.graph.get_context(id))
-                    for triple in subgraph.triples((None, None, None)):
-                        popped.graph.add((
-                            triple[0],
-                            triple[1],
-                            triple[2],
-                            URIRef(id)))
-    
-                    self.graph.remove((None, None, None, id))
+        for ctx in self.graph.contexts():
+            id = str(ctx.identifier)
+            if id in graphurls:
+                subgraph = copy.deepcopy(self.graph.get_context(id))
+                for triple in subgraph.triples((None, None, None)):
+                    popped.graph.add((
+                        triple[0],
+                        triple[1],
+                        triple[2],
+                        URIRef(id)))
+
+                self.graph.remove((None, None, None, id))
         
         return popped
 
-    def remove(self, dsname, collection_id=None):
-        '''Removes a dataset from the graph
+    def remove(self, dsnames):
+        '''Removes dataset(s) from the graph
 
         Parameters
         ----------
 
         dsnames : str or list of str
             dataset name(s) to be removed
-
-        collection_id : str
-            (Optional) collection id for the dataset
 
         Examples
         --------
@@ -819,17 +800,17 @@ class LiPD:
             print("Loaded datasets after remove: " + str(lipd.get_all_dataset_names()))
         '''
         
-        if dsname:
-            graphurl = NSURL + "/" + dsname
-            if collection_id:
-                graphurl = NSURL + "/" + collection_id + "/" + dsname
-        elif collection_id:
-            graphurl = NSURL + "/" + collection_id
+        if type(dsnames) is not list:
+            dsnames = [dsnames]
+        
+        graphurls=[]
+        for dsname in dsnames:
+            graphurls.append(NSURL + "/" + dsname)
 
         # Match subgraphs
         for ctx in self.graph.contexts():
-            id = ctx.identifier
-            if id.startswith(graphurl):        
+            id = str(ctx.identifier)
+            if id in graphurls:
                 self.graph.remove((None, None, None, id))       
 
 

@@ -95,7 +95,9 @@ for dsname, tsos in ts_list_remote.items():
 '''
 
 print("Popping ...")
-poplipd = lipd.pop(lipd.get_all_dataset_names()[0])
+poplipd = lipd.pop(lipd.get_all_dataset_names())
+print(lipd.get_all_dataset_names())
+print(poplipd.get_all_dataset_names())
 
 print("Creating separate lipd file for popped")
 dsname = poplipd.get_all_dataset_names()[0]
