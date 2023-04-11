@@ -786,7 +786,7 @@ class LiPD:
         
         return popped
 
-    def remove(self, dsnames, collection_id=None):
+    def remove(self, dsname, collection_id=None):
         '''Removes a dataset from the graph
 
         Parameters
