@@ -76,12 +76,14 @@ class TestLiPDids():
 
 class TestLiPDTimeseries():
     
-    def test_get_timeseries_t0(self):
+    @pytest.mark.parametrize('dataframe',['True', 'False'])
+    def test_get_timeseries_t0(self, dataframe):
         url = 'https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd'
         
         lipd = LiPD()
         lipd.load(url)
-        ts_list=lipd.get_timeseries(lipd.get_all_dataset_names())
+        ts_list=lipd.get_timeseries(lipd.get_all_dataset_names(), to_dataframe = dataframe)
+    
         
 class TestLiPDquery():
 

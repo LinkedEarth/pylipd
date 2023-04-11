@@ -595,14 +595,26 @@ class LiPD:
         
         return bibs, df       
 
-    def get_timeseries(self, dsnames):
+    def get_timeseries(self, dsnames, to_dataframe=False):
         '''Get Legacy LiPD like Time Series Object (tso)
 
         Parameters
         ----------
 
-        dsnames : array
+        dsnames : list
             array of dataset id or name strings
+        
+        to_dataframe : bool {True; False}
+            Whether to return a dataframe along the dictionary. Default is False
+        
+        Returns
+        -------
+        
+        ts : dict
+            A dictionary containing Time Series Object
+            
+        df : Pandas.DataFrame
+            If to_dataframe is set to True, returns a queriable Pandas DataFrame
 
         Examples
         --------
@@ -623,7 +635,18 @@ class LiPD:
                         print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
         '''
         ts = self._get_timeseries(dsnames)
-        return ts
+        if to_dataframe == False:
+            return ts
+        elif to_dataframe == True:
+            dict_list =[]
+
+            for item in ts.keys():
+                for dictionary in ts[item]:
+                    dict_list.append(dictionary)
+
+            df = pd.DataFrame.from_dict(dict_list, orient='columns')
+            
+            return ts, df
 
     def _get_timeseries(self, dsnames):
         timeseries = {}
@@ -762,7 +785,7 @@ class LiPD:
         ----------
 
         dsname : str
-            Path to the directory containing lipd files
+            dataset name to be removed
 
         collection_id : str
             (Optional) collection id for the dataset
