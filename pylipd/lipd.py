@@ -657,7 +657,7 @@ class LiPD:
             print(lipd_json)
         '''           
         converter = RDFToLiPD(self.graph)
-        return converter.convert_to_json(dsname, lipdfile)
+        return converter.convert_to_json(dsname)
 
     def create_lipd(self, dsname, lipdfile):
         '''Create LiPD file for a dataset
