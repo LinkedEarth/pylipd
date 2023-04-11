@@ -16,6 +16,7 @@ import string
 import io
 
 from rdflib import ConjunctiveGraph, Namespace, URIRef
+from pylipd.globals.queries import QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE
 from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rdf
 
 from pylipd.rdf_to_lipd import RDFToLiPD
@@ -527,36 +528,7 @@ class LiPD:
             
             return bib  
         
-        query = """SELECT ?dsname ?title (GROUP_CONCAT(?authorName;separator=" and ") as ?authors) 
-                     ?doi ?pubyear ?year ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution ?url ?url2
-                     WHERE { 
-                         ?ds a le:Dataset .
-                         ?ds le:name ?dsname .
-                         ?ds le:publishedIn ?pub .
-                         OPTIONAL{?pub le:hasDOI ?doi .}
-                         OPTIONAL{
-                             ?pub le:author ?author .
-                             ?author le:name ?authorName .
-                         }
-                         OPTIONAL{?pub le:publicationYear ?year .}
-                         OPTIONAL{?pub le:pubYear ?pubyear .}
-                         OPTIONAL{?pub le:title ?title .}
-                         OPTIONAL{?pub le:journal ?journal .}
-                         OPTIONAL{?pub le:volume ?volume .}
-                         OPTIONAL{?pub le:issue ?issue .}
-                         OPTIONAL{?pub le:pages ?pages .}
-                         OPTIONAL{?pub le:type ?type .}
-                         OPTIONAL{?pub le:publisher ?publisher .}
-                         OPTIONAL{?pub le:report ?report .}
-                         OPTIONAL{?pub le:citeKey ?citeKey .}
-                         OPTIONAL{?pub le:edition ?edition .}
-                         OPTIONAL{?pub le:institution ?institution .}
-                         OPTIONAL{?pub le:hasLink ?url .}
-                         OPTIONAL{?pub le:url ?url2 .}
-                     }
-                     GROUP BY ?pub ?dsname ?title ?doi ?year ?pubyear ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution ?url ?url2
-         """
-        result, df = self.query(query)
+        result, df = self.query(QUERY_BIBLIO)
         
         bibs = []
 
@@ -865,13 +837,7 @@ class LiPD:
             ])
             print(lipd.get_all_dataset_names())
         '''        
-        query = f"""
-            SELECT ?dsname WHERE {{ 
-                ?ds a le:Dataset .
-                ?ds le:name ?dsname
-            }}
-            """
-        qres, qres_df = self.query(query)
+        qres, qres_df = self.query(QUERY_DSNAME)
         return [sanitizeId(row.dsname) for row in qres]
 
     def get_all_dataset_ids(self):
@@ -900,16 +866,11 @@ class LiPD:
                 "../examples/data/MD98_2181.Stott.2007.lpd"
             ])
             print(lipd.get_all_dataset_ids())
-        '''        
-        query = """
-            SELECT ?dsid WHERE {{ 
-                ?ds a le:Dataset .
-                OPTIONAL{?ds le:datasetId ?dsid}
-            }}
-            """
-        qres, qres_df = self.query(query)
+        '''
+        qres, qres_df = self.query(QUERY_DSID)
         return [sanitizeId(row.dsid) for row in qres]
     
+
     def search_datasets(variableName=[ ], archiveType=[ ], proxy=[ ], resolution = [ ],
                     ageUnits = [ ], ageBound = [ ], ageBoundType = [ ], 
                     lat = [ ], lon = [ ], alt = [ ], 
@@ -918,6 +879,68 @@ class LiPD:
         pass
 
 
-    def find_ensemble_table_for_variable(self, ensemble_table):
-        pass
+    def get_ensemble_tables(self, archiveType, varName, timeVarName, depthVarName, ensembleVarName, ensembleDepthVarName):
+        '''Gets ensemble tables from the LiPD graph
+
+        Parameters
+        ----------
+
+        archiveType : str
+            archive type (Set to ".*" to match all archive types)
+        varName : str
+            variable name (Set to ".*" to match all variable names)
+        timeVarName : str
+            time variable name (Set to ".*" to match all time variable names)
+        depthVarName : str
+            depth variable name (Set to ".*" to match all depth variable names)
+        ensembleVarName : str
+            ensemble variable name (Set to ".*" to match all ensemble variable names)
+        ensembleDepthVarName : str
+            ensemble depth variable name (Set to ".*" to match all ensemble depth variable names)
+
+        Returns
+        -------
+
+        ensemble_tables : dataframe
+            A dataframe containing the ensemble tables
+
+
+        Examples
+        --------
+
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/ODP846.Lawrence.2006.lpd"
+            ])
+            all_datasets = lipd.get_all_dataset_names()
+            print("Loaded datasets: " + str(all_datasets))
+
+            ens_df = lipd.get_ensemble_tables(
+                archiveType=".*",
+                varName="c37",
+                timeVarName="age",
+                depthVarName="depth",
+                ensembleVarName="age",
+                ensembleDepthVarName="depth"
+            )
+            print("Ensemble tables:")
+            print(ens_df)
+        '''
+       
+        query = QUERY_ENSEMBLE_TABLE
+        query = query.replace("[archiveType]", archiveType)
+        query = query.replace("[varName]", varName)
+        query = query.replace("[timeVarName]", timeVarName)
+        query = query.replace("[depthVarName]", depthVarName)
+        query = query.replace("[ensembleVarName]", ensembleVarName)
+        query = query.replace("[ensembleDepthVarName]", ensembleDepthVarName)
+
+        qres, qres_df = self.query(query)
+        return qres_df
 

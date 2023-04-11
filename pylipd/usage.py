@@ -67,10 +67,19 @@ lipdfiles = [local_lipd_dir + "/" + dsname + ".lpd" for dsname in dsnames]
 #print(lipdfiles)
 
 #lipd.load(lipdfiles)
-#lipd.load_from_dir("examples/data")
-lipd.load(["/Users/varun/Downloads/ODP846.Lawrence.2006.lpd"])
+lipd.load_from_dir("examples/data")
 print(lipd.get_all_dataset_names())
-print(lipd.get_all_dataset_ids())
+#print(lipd.get_all_dataset_ids())
+ens_df = lipd.get_ensemble_tables(
+    archiveType=".*",
+    varName="c37",
+    timeVarName="age",
+    depthVarName="depth",
+    ensembleVarName="age",
+    ensembleDepthVarName="depth"
+)
+print(ens_df)
+exit()
 
 #lipd.load(["/Users/varun/Downloads/Arc-LakeNataujärvi.Ojala.2005.lpd"])
 #print(lipd.get_all_dataset_names())
@@ -83,7 +92,7 @@ for dsname, tsos in ts_list.items():
 
 
 # Fetch LiPD data from remote RDF Graph
-lipd.set_endpoint(remote_lipd_endpoint)
+#lipd.set_endpoint(remote_lipd_endpoint)
 #lipd.load_remote_datasets(remote_dsnames)
 
 # Convert to TSO object (as before)
@@ -112,6 +121,7 @@ for dsname, tsos in ts_list_remote.items():
     for tso in tsos:
         print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
 
+print(lpd2.get_ensemble_tables())
 exit()
 
 print("After popping..")
