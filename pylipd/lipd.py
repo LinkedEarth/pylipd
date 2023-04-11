@@ -719,13 +719,13 @@ class LiPD:
         converter = RDFToLiPD(self.graph)
         return converter.convert(dsname, lipdfile)
     
-    def pop(self, dsname=None, collection_id=None):
+    def pop(self, dsnames=None, collection_id=None):
         '''Removes a dataset from the graph and returns a LiPD object
 
         Parameters
         ----------
 
-        dsname : str
+        dsname : str or list of str
             (Optional) Name of the dataset (Set to None to pop all datasets in a collection)
 
         collection_id : str
@@ -754,38 +754,45 @@ class LiPD:
         '''
 
         popped = LiPD()
-
-        if dsname:
-            graphurl = NSURL + "/" + dsname
-            if collection_id:
-                graphurl = NSURL + "/" + collection_id + "/" + dsname
+        
+        if type(dsnames) is not list:
+            dsnames = [dsnames]
+        
+        graphurls=[]
+        
+        if dsnames:
+            for dsname in dsnames:
+                graphurls.append(NSURL + "/" + dsname)
+                if collection_id:
+                    graphurls.append(NSURL + "/" + collection_id + "/" + dsname)
         elif collection_id:
-            graphurl = NSURL + "/" + collection_id
+            graphurls.append(NSURL + "/" + collection_id)
 
         # Match subgraphs
-        for ctx in self.graph.contexts():
-            id = ctx.identifier
-            if id.startswith(graphurl):
-                subgraph = copy.deepcopy(self.graph.get_context(id))
-                for triple in subgraph.triples((None, None, None)):
-                    popped.graph.add((
-                        triple[0],
-                        triple[1],
-                        triple[2],
-                        URIRef(id)))
-
-                self.graph.remove((None, None, None, id))
+        for graphurl in graphurls:
+            for ctx in self.graph.contexts():
+                id = ctx.identifier
+                if id.startswith(graphurl):
+                    subgraph = copy.deepcopy(self.graph.get_context(id))
+                    for triple in subgraph.triples((None, None, None)):
+                        popped.graph.add((
+                            triple[0],
+                            triple[1],
+                            triple[2],
+                            URIRef(id)))
+    
+                    self.graph.remove((None, None, None, id))
         
         return popped
 
-    def remove(self, dsname, collection_id=None):
+    def remove(self, dsnames, collection_id=None):
         '''Removes a dataset from the graph
 
         Parameters
         ----------
 
-        dsname : str
-            dataset name to be removed
+        dsnames : str or list of str
+            dataset name(s) to be removed
 
         collection_id : str
             (Optional) collection id for the dataset
@@ -810,10 +817,14 @@ class LiPD:
             lipd.remove(all_datasets[0])
             print("Loaded datasets after remove: " + str(lipd.get_all_dataset_names()))
         '''
-        graphurl = NSURL + "/" + dsname
-        if collection_id:
-            graphurl = NSURL + "/" + collection_id + "/" + dsname
-        self.graph.remove((None, None, None, graphurl))       
+        
+        if type(dsnames) is not list:
+            dsnames = [dsnames]
+        for item in dsnames:
+            graphurl = NSURL + "/" + item
+            if collection_id:
+                graphurl = NSURL + "/" + collection_id + "/" + item
+            self.graph.remove((None, None, None, graphurl))       
 
     def get_rdf(self):
         '''Returns RDF serialization of the current Graph
