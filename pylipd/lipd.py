@@ -624,7 +624,7 @@ class LiPD:
                 timeseries[dsname] = tss
         return timeseries
 
-    def get_lipd(self, dsname, lipdfile):
+    def get_lipd(self, dsname):
         '''Get LiPD json for a dataset
 
         Parameters
@@ -632,6 +632,12 @@ class LiPD:
 
         dsname : str
             dataset id
+
+        Returns
+        -------
+
+        lipdjson : dict
+            LiPD json
 
         Examples
         --------
@@ -664,6 +670,12 @@ class LiPD:
 
         lipdfile: str
             path to LiPD file
+
+        Returns
+        -------
+
+        lipdjson : dict
+            LiPD json
 
         Examples
         --------
