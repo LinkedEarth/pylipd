@@ -67,7 +67,8 @@ lipdfiles = [local_lipd_dir + "/" + dsname + ".lpd" for dsname in dsnames]
 #print(lipdfiles)
 
 #lipd.load(lipdfiles)
-lipd.load_from_dir("examples/data")
+#lipd.load_from_dir("examples/data")
+lipd.load(["/Users/varun/Downloads/ODP846.Lawrence.2006.lpd"])
 print(lipd.get_all_dataset_names())
 print(lipd.get_all_dataset_ids())
 
@@ -86,13 +87,15 @@ lipd.set_endpoint(remote_lipd_endpoint)
 #lipd.load_remote_datasets(remote_dsnames)
 
 # Convert to TSO object (as before)
+'''
 ts_list_remote = lipd.get_timeseries(lipd.get_all_dataset_names())
 for dsname, tsos in ts_list_remote.items():
     for tso in tsos:
         print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
+'''
 
-print(lipd.get_all_dataset_names())
-poplipd = lipd.pop(remote_dsnames[0])
+print("Popping ...")
+poplipd = lipd.pop(lipd.get_all_dataset_names()[0])
 
 print("Creating separate lipd file for popped")
 dsname = poplipd.get_all_dataset_names()[0]
