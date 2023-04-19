@@ -56,7 +56,7 @@ QUERY_ENSEMBLE_TABLE = """
         ?ds le:includesChronData ?chron .
         ?chron le:chronModeledBy ?model .
         ?model le:foundInEnsembleTable ?ensembleTable .
-            PTIONAL{?ensembleTable le:notes ?notes}
+            OPTIONAL{?ensembleTable le:notes ?notes}
         
         ?ensembleTable le:includesVariable ?ensvar .
         ?ensvar le:name ?ensembleVariableName .
