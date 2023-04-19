@@ -14,58 +14,59 @@ QUERY_DSID = """
     }
 """
 
+QUERY_ENSEMBLE_TABLE_SHORT = """
+    PREFIX le: <http://linked.earth/ontology#>
+    PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+
+    SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits 
+    WHERE {
+        ?ds a le:Dataset .
+        ?ds le:name ?datasetName .
+            FILTER regex(?datasetName, "[dsname].*").
+    
+        ?ds le:includesChronData ?chron .
+        ?chron le:chronModeledBy ?model .
+        ?model le:foundInEnsembleTable ?ensembleTable .
+        
+        ?ensembleTable le:includesVariable ?ensvar .
+        ?ensvar le:name ?ensembleVariableName .
+            FILTER (regex(?ensembleVariableName, "year.*") || regex(?ensembleVariableName, "age.*")) .
+        ?ensvar le:hasValues ?ensembleVariableValues
+            OPTIONAL{?ensvar le:hasUnits ?ensembleVariableUnits .}
+        
+        ?ensembleTable le:includesVariable ?ensdepthvar .
+        ?ensdepthvar le:name ?ensembleDepthName .
+            FILTER regex(?ensembleDepthName, "[ensembleDepthVarName].*").
+        ?ensdepthvar le:hasValues ?ensembleDepthValues .
+            OPTIONAL{?ensdepthvar le:hasUnits ?ensembleDepthUnits .}
+    }
+"""
+
 QUERY_ENSEMBLE_TABLE = """
     PREFIX le: <http://linked.earth/ontology#>
     PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 
-    SELECT ?dsname ?lat ?lon ?archive ?table ?varname ?varunits ?val ?timevarname ?timeunits ?timeval 
-    ?depthvarname ?depthunits ?depthval 
-    ?enstable ?ensvarname ?ensval ?ensunits ?ensdepthvarname ?ensdepthval ?ensdepthunits 
+    SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits 
     WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?dsname .
-        
-        ?ds le:collectedFrom ?loc . 
-        ?loc wgs:lat ?lat .
-        ?loc wgs:long ?lon .
-        
-        ?ds le:proxyArchiveType ?archive .
-            FILTER regex(?archive, "[archiveType].*") .
-            
-        ?ds le:includesPaleoData ?data .
-        ?data le:foundInMeasurementTable ?table .
-        
-        ?table le:includesVariable ?var .
-        ?var le:name ?varname .
-            FILTER regex(?varname, "[varName].*") .
-        ?var le:hasValues ?val .
-            OPTIONAL{?var le:hasUnits ?varunits } .
-
-        ?table le:includesVariable ?timevar .
-        ?timevar le:name ?timevarname .
-            FILTER regex(?timevarname, "[timeVarName].*").
-        ?timevar le:hasValues ?timeval .
-            OPTIONAL{?timevar le:hasUnits ?timeunits }
-        
-        OPTIONAL{?table le:includesVariable ?depthvar .
-        ?depthvar le:name ?depthvarname .
-            FILTER regex(?depthvarname, "[depthVarName].*").
-        ?depthvar le:hasValues ?depthval .
-            OPTIONAL{?depthvar le:hasUnits ?depthunits .}}
-        
+        ?ds le:name ?datasetName .
+            FILTER regex(?datasetName, "[dsname].*").
+    
         ?ds le:includesChronData ?chron .
         ?chron le:chronModeledBy ?model .
-        ?model le:foundInEnsembleTable ?enstable .
+        ?model le:foundInEnsembleTable ?ensembleTable .
         
-        ?enstable le:includesVariable ?ensvar .
-        ?ensvar le:name ?ensvarname .
-            FILTER regex(?ensvarname, "[ensembleVarName].*").
+        ?ensembleTable le:includesVariable ?ensvar .
+        ?ensvar le:name ?ensembleVariableName .
+            FILTER regex(?ensembleVariableName, "[ensembleVarName].*").
+        ?ensvar le:hasValues ?ensembleVariableValues
+            OPTIONAL{?ensvar le:hasUnits ?ensembleVariableUnits .}
         
-        ?enstable le:includesVariable ?ensdepthvar .
-        ?ensdepthvar le:name ?ensdepthvarname .
-            FILTER regex(?ensdepthvarname, "[ensembleDepthVarName].*").
-        ?ensdepthvar le:hasValues ?ensdepthval .
-            OPTIONAL{?ensdepthvar le:hasUnits ?ensdepthunits .}
+        ?ensembleTable le:includesVariable ?ensdepthvar .
+        ?ensdepthvar le:name ?ensembleDepthName .
+            FILTER regex(?ensembleDepthName, "[ensembleDepthVarName].*").
+        ?ensdepthvar le:hasValues ?ensembleDepthValues .
+            OPTIONAL{?ensdepthvar le:hasUnits ?ensembleDepthUnits .}
     }
 """
 

@@ -16,7 +16,7 @@ import string
 import io
 
 from rdflib import ConjunctiveGraph, Namespace, URIRef
-from pylipd.globals.queries import QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE
+from pylipd.globals.queries import QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT
 from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rdf
 
 from pylipd.rdf_to_lipd import RDFToLiPD
@@ -891,24 +891,18 @@ class LiPD:
         pass
 
 
-    def get_ensemble_tables(self, archiveType, varName, timeVarName, depthVarName, ensembleVarName, ensembleDepthVarName):
+    def get_ensemble_tables(self, dsname = None, ensembleVarName = None, ensembleDepthVarName = 'depth'):
         '''Gets ensemble tables from the LiPD graph
 
         Parameters
         ----------
 
-        archiveType : str
-            archive type (Set to ".*" to match all archive types)
-        varName : str
-            variable name (Set to ".*" to match all variable names)
-        timeVarName : str
-            time variable name (Set to ".*" to match all time variable names)
-        depthVarName : str
-            depth variable name (Set to ".*" to match all depth variable names)
-        ensembleVarName : str
-            ensemble variable name (Set to ".*" to match all ensemble variable names)
+        dsname : str
+            The name of the dataset if you wish to analyse one at a time (Set to ".*" to match all datasets with a common root)
+        ensembleVarName : None or str
+            ensemble variable name. Default is None, which searches for names that contain "year" or "age" (Set to ".*" to match all ensemble variable names)
         ensembleDepthVarName : str
-            ensemble depth variable name (Set to ".*" to match all ensemble depth variable names)
+            ensemble depth variable name. Default is 'depth' (Set to ".*" to match all ensemble depth variable names)
 
         Returns
         -------
@@ -934,24 +928,27 @@ class LiPD:
             print("Loaded datasets: " + str(all_datasets))
 
             ens_df = lipd.get_ensemble_tables(
-                archiveType=".*",
-                varName="c37",
-                timeVarName="age",
-                depthVarName="depth",
                 ensembleVarName="age",
                 ensembleDepthVarName="depth"
             )
             print("Ensemble tables:")
             print(ens_df)
         '''
+        
+        if dsname is None:
+            dsname = ''
+        
+        if ensembleVarName is None:
+            query = QUERY_ENSEMBLE_TABLE_SHORT
+            query = query.replace("[dsname]", dsname)
+            query = query.replace("[ensembleDepthVarName]", ensembleDepthVarName)
+        
+        else:
        
-        query = QUERY_ENSEMBLE_TABLE
-        query = query.replace("[archiveType]", archiveType)
-        query = query.replace("[varName]", varName)
-        query = query.replace("[timeVarName]", timeVarName)
-        query = query.replace("[depthVarName]", depthVarName)
-        query = query.replace("[ensembleVarName]", ensembleVarName)
-        query = query.replace("[ensembleDepthVarName]", ensembleDepthVarName)
+            query = QUERY_ENSEMBLE_TABLE
+            query = query.replace("[dsname]", dsname)
+            query = query.replace("[ensembleVarName]", ensembleVarName)
+            query = query.replace("[ensembleDepthVarName]", ensembleDepthVarName)
 
         qres, qres_df = self.query(query)
         return qres_df

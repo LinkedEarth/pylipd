@@ -150,5 +150,39 @@ class TestLiPDpop():
         assert D_test.get_all_dataset_names() == names[1:]
         assert D_popped.get_all_dataset_names()[0] == names[0]
     
+class TestLiPDensemble():
+
+    def test_ens_t0(self):
+
+        path = './examples/data/ODP846.Lawrence.2006.lpd'
+        D=LiPD()
+        D.load(path)
         
+        ens_df = D.get_ensemble_tables()
+        assert len(ens_df.index) == 1
+    
+    @pytest.mark.parametrize('ensname',['year','age'])
+    def test_ens_t1(self,ensname):
+        path = './examples/data/ODP846.Lawrence.2006.lpd'
+        D=LiPD()
+        D.load(path)
+        
+        ens_df = D.get_ensemble_tables(ensembleVarName=ensname)
+        if ensname == 'year':
+            assert len(ens_df.index) == 0
+        else:
+            assert len(ens_df.index) == 1
+    
+    def test_ens_t2(self):
+
+        path = './examples/data/ODP846.Lawrence.2006.lpd'
+        D=LiPD()
+        D.load(path)
+        
+        names = D.get_all_dataset_names()
+        
+        ens_df = D.get_ensemble_tables(dsname=names[0])
+        assert len(ens_df.index) == 1
+        
+                
         
