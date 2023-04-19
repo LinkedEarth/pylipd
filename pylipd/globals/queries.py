@@ -18,7 +18,7 @@ QUERY_ENSEMBLE_TABLE_SHORT = """
     PREFIX le: <http://linked.earth/ontology#>
     PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 
-    SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits 
+    SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits ?notes 
     WHERE {
         ?ds a le:Dataset .
         ?ds le:name ?datasetName .
@@ -27,6 +27,7 @@ QUERY_ENSEMBLE_TABLE_SHORT = """
         ?ds le:includesChronData ?chron .
         ?chron le:chronModeledBy ?model .
         ?model le:foundInEnsembleTable ?ensembleTable .
+            OPTIONAL{?ensembleTable le:notes ?notes}
         
         ?ensembleTable le:includesVariable ?ensvar .
         ?ensvar le:name ?ensembleVariableName .
@@ -46,7 +47,7 @@ QUERY_ENSEMBLE_TABLE = """
     PREFIX le: <http://linked.earth/ontology#>
     PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 
-    SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits 
+    SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits ?notes
     WHERE {
         ?ds a le:Dataset .
         ?ds le:name ?datasetName .
@@ -55,6 +56,7 @@ QUERY_ENSEMBLE_TABLE = """
         ?ds le:includesChronData ?chron .
         ?chron le:chronModeledBy ?model .
         ?model le:foundInEnsembleTable ?ensembleTable .
+            PTIONAL{?ensembleTable le:notes ?notes}
         
         ?ensembleTable le:includesVariable ?ensvar .
         ?ensvar le:name ?ensembleVariableName .
