@@ -101,15 +101,9 @@ WHERE {
      "POLYGON((-77.089005 38.913574,-77.029953 38.913574,-77.029953 38.886321,-77.089005 38.886321,-77.089005 38.913574))"^^geo:wktLiteral))
 }
 """)
-print(result_df)
-exit()
 
 #print(lipd.get_all_dataset_ids())
 ens_df = lipd.get_ensemble_tables(
-    archiveType=".*",
-    varName="c37",
-    timeVarName="age",
-    depthVarName="depth",
     ensembleVarName="age",
     ensembleDepthVarName="depth"
 )
@@ -157,10 +151,6 @@ for dsname, tsos in ts_list_remote.items():
         print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
 
 ens_df2 = lpd2.get_ensemble_tables(
-    archiveType=".*",
-    varName="c37",
-    timeVarName="age",
-    depthVarName="depth",
     ensembleVarName="age",
     ensembleDepthVarName="depth"
 )

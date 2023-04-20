@@ -11,3 +11,14 @@ LiPD (pylipd.lipd.LiPD)
 .. autoclass:: pylipd.lipd.LiPD
    :members:
 
+LiPDSeries (pylipd.lipd_series.LiPDSeries)
+""""""""""""""""""
+
+.. autoclass:: pylipd.lipd_series.LiPDSeries
+   :members:
+
+RDFGraph (pylipd.rdf_graph.RDFGraph)
+""""""""""""""""""
+
+.. autoclass:: pylipd.rdf_graph.RDFGraph
+   :members:

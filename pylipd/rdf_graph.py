@@ -25,7 +25,7 @@ class RDFGraph:
 
         # Load RDF file into graph
         rdf = RDFGraph()
-        rdf.load(["examples/rdf/graph.rdf"])
+        rdf.load(["../examples/rdf/graph.ttl"])
         (result, result_df) = rdf.query("SELECT ?s ?p ?o WHERE {?s ?p ?o} LIMIT 10")
         result_df    
 
@@ -62,7 +62,7 @@ class RDFGraph:
 
             # Load RDF file into graph
             rdf = RDFGraph()
-            rdf.load(["examples/data/graph.rdf"])
+            rdf.load(["../examples/rdf/graph.ttl"])
             (result, result_df) = rdf.query("SELECT ?s ?p ?o WHERE {?s ?p ?o} LIMIT 10")
             result_df
         '''
@@ -170,7 +170,7 @@ class RDFGraph:
             from pylipd.rdf_graph import RDFGraph
 
             rdf = RDFGraph()
-            rdf.load(["examples/data/graph.rdf"])
+            rdf.load(["../examples/rdf/graph.ttl"])
             query = """PREFIX le: <http://linked.earth/ontology#>
                     select ?s ?p ?o where { 
                         ?s ?p ?o 
@@ -214,7 +214,7 @@ class RDFGraph:
 
             # Remove RDF graph data for given id(s)
             rdf = RDFGraph()
-            rdf.load(["examples/data/graph.rdf"], graphid="http://example.org/graph")
+            rdf.load(["../examples/rdf/graph.ttl"], graphid="http://example.org/graph")
             rdf.remove("http://example.org/graph")
         '''
         
@@ -254,7 +254,7 @@ class RDFGraph:
 
             # Fetch RDF graph data for given id(s)
             rdf = RDFGraph()
-            rdf.load(["examples/data/graph.rdf"], graphid="http://example.org/graph")
+            rdf.load(["../examples/rdf/graph.ttl"], graphid="http://example.org/graph")
             rdf.get("http://example.org/graph")  
         '''
 
@@ -302,7 +302,7 @@ class RDFGraph:
 
             # Pop RDF graph data for given id(s)
             rdf = RDFGraph()
-            rdf.load(["examples/data/graph.rdf"], graphid="http://example.org/graph")
+            rdf.load(["../examples/rdf/graph.ttl"], graphid="http://example.org/graph")
             popped = rdf.pop("http://example.org/graph")      
         '''
 
@@ -333,7 +333,7 @@ class RDFGraph:
 
             # Fetch RDF Graph Data
             rdf = RDFGraph()
-            rdf.load(["examples/data/graph.rdf"], graphid="http://example.org/graph")
+            rdf.load(["../examples/rdf/graph.ttl"], graphid="http://example.org/graph")
             print(rdf.get_all_graph_ids())
         '''        
         ids = [str(ctx.identifier) for ctx in self.graph.contexts()]
@@ -353,7 +353,7 @@ class RDFGraph:
 
             # Fetch RDF data
             rdf = RDFGraph()
-            rdf.load(["examples/data/graph.rdf"], graphid="http://example.org/graph")
+            rdf.load(["../examples/rdf/graph.ttl"], graphid="http://example.org/graph")
             nquads = rdf.serialize()
             print(nquads[:10000])
             print("...")

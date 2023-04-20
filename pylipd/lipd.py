@@ -593,7 +593,9 @@ class LiPD(RDFGraph):
         .. ipython:: python
             :okwarning:
             :okexcept:
+
             from pylipd.lipd import LiPD
+
             # Fetch LiPD data from remote RDF Graph
             lipd = LiPD()
             lipd.load([
@@ -625,7 +627,9 @@ class LiPD(RDFGraph):
         .. ipython:: python
             :okwarning:
             :okexcept:
+
             from pylipd.lipd import LiPD
+            
             # Fetch LiPD data from remote RDF Graph
             lipd = LiPD()
             lipd.load([

@@ -27,7 +27,7 @@ class LiPDSeries(RDFGraph):
 
         lipd = LiPD()
         lipd.load(["https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1//Nunalleq.Ledger.2018.lpd"])
-        lipd_series = lipd.to_series()
+        lipd_series = lipd.to_lipd_series()
     '''
     def __init__(self, graph=None):
         super().__init__(graph)
