@@ -31,13 +31,13 @@ QUERY_ENSEMBLE_TABLE_SHORT = """
         
         ?ensembleTable le:includesVariable ?ensvar .
         ?ensvar le:name ?ensembleVariableName .
-            FILTER (regex(?ensembleVariableName, "year.*") || regex(?ensembleVariableName, "age.*")) .
+            FILTER (regex(lcase(?ensembleVariableName), "year.*") || regex(?ensembleVariableName, "age.*")) .
         ?ensvar le:hasValues ?ensembleVariableValues
             OPTIONAL{?ensvar le:hasUnits ?ensembleVariableUnits .}
         
         ?ensembleTable le:includesVariable ?ensdepthvar .
         ?ensdepthvar le:name ?ensembleDepthName .
-            FILTER regex(?ensembleDepthName, "[ensembleDepthVarName].*").
+            FILTER regex(lcase(?ensembleDepthName), "[ensembleDepthVarName].*").
         ?ensdepthvar le:hasValues ?ensembleDepthValues .
             OPTIONAL{?ensdepthvar le:hasUnits ?ensembleDepthUnits .}
     }
@@ -60,13 +60,13 @@ QUERY_ENSEMBLE_TABLE = """
         
         ?ensembleTable le:includesVariable ?ensvar .
         ?ensvar le:name ?ensembleVariableName .
-            FILTER regex(?ensembleVariableName, "[ensembleVarName].*").
+            FILTER regex(lcase(?ensembleVariableName), "[ensembleVarName].*").
         ?ensvar le:hasValues ?ensembleVariableValues
             OPTIONAL{?ensvar le:hasUnits ?ensembleVariableUnits .}
         
         ?ensembleTable le:includesVariable ?ensdepthvar .
         ?ensdepthvar le:name ?ensembleDepthName .
-            FILTER regex(?ensembleDepthName, "[ensembleDepthVarName].*").
+            FILTER regex(lcase(?ensembleDepthName), "[ensembleDepthVarName].*").
         ?ensdepthvar le:hasValues ?ensembleDepthValues .
             OPTIONAL{?ensdepthvar le:hasUnits ?ensembleDepthUnits .}
     }
