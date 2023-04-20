@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 
-version = '1.2.4'
+version = '1.3.1'
 
 # Read the readme file contents into variable
 def read(fname):
@@ -31,6 +31,7 @@ setup(
         "pandas",
         "doi2bib",
         "pybtex",
+        "tqdm",
         "bagit"
     ],
     python_requires=">=3.9.0"

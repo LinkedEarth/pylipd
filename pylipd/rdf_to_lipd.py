@@ -453,6 +453,11 @@ class RDFToLiPD:
             del var["foundInTable"]
         return var
 
+    def _remove_found_in_dataset(self, var, parent = None) :
+        if "foundInDataset" in var :
+            del var["foundInDataset"]
+        return var
+    
     def __get_variable_archive_types(self, item, atypes) :
         if type(item) is dict:
             nitem = {}
