@@ -3,11 +3,8 @@ The LiPD class describes a `LiPD (Linked Paleo Data) <https://cp.copernicus.org/
 How to browse and query LiPD objects is described in a short example below, while `this notebook <https://nbviewer.jupyter.org/github/LinkedEarth/pylipd/blob/master/example_notebooks/pylipd_tutorial.ipynb>`_ demonstrates how to use PyLiPD to view and query LiPD datasets.
 """
 
-import math
 import os
-import pickle
 import re
-import copy
 import os.path
 import tempfile
 import pandas as pd
@@ -15,25 +12,25 @@ import random
 import string
 import io
 
-from rdflib import ConjunctiveGraph, Namespace, URIRef
-from pylipd.globals.queries import QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT
-from pylipd.multi_processing import multi_convert_to_pickle, multi_convert_to_rdf
+from rdflib import ConjunctiveGraph, URIRef
+from tqdm import tqdm
+from pylipd.globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH
+from pylipd.lipd_series import LiPDSeries
+from pylipd.multi_processing import multi_convert_to_rdf, multi_load_lipd
+from pylipd.rdf_graph import RDFGraph
 
 from pylipd.rdf_to_lipd import RDFToLiPD
 from pylipd.legacy_utils import LiPD_Legacy
-from pylipd.utils import sanitizeId, sparql_results_to_df
+from pylipd.utils import sanitizeId
 
 #import bibtexparser
 #from bibtexparser.bibdatabase import BibDatabase
 from doi2bib import crossref
 from pybtex.database import BibliographyData, Entry
 
-from .globals.urls import NSURL, ONTONS
+from .globals.urls import NSURL
 
-from copy import deepcopy
-
-
-class LiPD:
+class LiPD(RDFGraph):
     '''The LiPD class describes a `LiPD (Linked Paleo Data) <https://cp.copernicus.org/articles/12/1093/2016/cp-12-1093-2016.html>`_ object. It contains an `RDF <https://www.w3.org/RDF/>`_ Graph which is serialization of the LiPD data into an RDF graph containing terms from the `LiPD Ontology <http://linked.earth/Ontology/release/core/1.2.0/index-en.html>`
     How to browse and query LiPD objects is described in a short example below.
 
@@ -58,50 +55,10 @@ class LiPD:
                     print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
     '''
     def __init__(self, graph=None):
-        if graph is None:
-            self._initialize_graph()
-        else:
-            self.graph = graph
+        super().__init__(graph)
 
-    def _initialize_graph(self):
-        self.graph = ConjunctiveGraph()
-        self.graph.bind("le", Namespace(ONTONS))        
-        #self.graph.bind("", Namespace(NS))
-
-    def copy(self):
-        '''
-        Makes a copy of the object
-
-        Returns
-        -------
-        pylipd.LiPD
-            a copy of the original object
-
-        '''
-        
-        return deepcopy(self)
-
-    def merge(self, lipd):
-        '''
-        Merges the current LiPD object with another LiPD object
-
-        Parameters
-        ----------
-        lipd : pylipd.LiPD
-            LiPD object to merge with
-
-        Returns
-        -------
-        pylipd.LiPD
-            merged LiPD object
-
-        '''
-
-        merged = self.copy()
-        merged.graph.addN(lipd.graph.quads())
-        return merged
     
-    def load_from_dir(self, dir_path, parallel=False):
+    def load_from_dir(self, dir_path, parallel=False, cutoff=None):
         '''Load LiPD files from a directory
         Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the "__main__" process
 
@@ -138,6 +95,8 @@ class LiPD:
             file_path = os.path.join(dir_path, path)
             if os.path.isfile(file_path) and path.endswith(".lpd"):
                 lipdfiles.append(file_path)
+        if cutoff:
+            lipdfiles = lipdfiles[0:cutoff]
         self.load(lipdfiles, parallel)
 
 
@@ -179,62 +138,10 @@ class LiPD:
         if type(lipdfiles) is not list:
             lipdfiles = [lipdfiles]
             
-        filemap = {}
-        for lipdfile in lipdfiles:
-            if not os.path.isfile(lipdfile) and not lipdfile.startswith("http"):
-                print(f"File {lipdfile} does not exist")
-                continue
-
-            picklefile = tempfile.NamedTemporaryFile().name
-            filemap[lipdfile] = picklefile
-        
-        print(f"Loading {len(filemap.keys())} LiPD files")
-        
-        multi_convert_to_pickle(filemap, parallel)
-        print("Conversion to RDF done..")
-
-        print("Loading RDF into graph")
-        for lipdfile in lipdfiles:
-            picklefile = filemap[lipdfile]
-            if os.path.exists(picklefile):
-                with open(picklefile, 'rb') as f:
-                    subgraph = pickle.load(f)
-                    self.graph.addN(subgraph.quads())
-                os.remove(picklefile)
+        numfiles = len(lipdfiles)
+        print(f"Loading {numfiles} LiPD files")
+        self.graph = multi_load_lipd(self.graph, lipdfiles, parallel)
         print("Loaded..")
-
-
-    def clear(self):
-        '''Clears the graph'''
-        self._initialize_graph()
-
-
-    def set_endpoint(self, endpoint):
-        '''Sets a SparQL endpoint for a remote Knowledge Base (example: GraphDB)
-
-        Parameters
-        ----------
-
-        endpoint : str
-            URL for the SparQL endpoint 
-
-        Examples
-        --------
-        
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
-
-            from pylipd.lipd import LiPD
-
-            # Fetch LiPD data from remote RDF Graph
-            lipd_remote = LiPD()
-            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-            lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
-            print(lipd_remote.get_all_dataset_names())
-
-        '''
-        self.endpoint = endpoint
 
 
     def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file, parallel=False):
@@ -290,76 +197,6 @@ class LiPD:
             fout.close()
         print("Written..")
 
-
-    def query(self, query, remote=False, result="sparql"):
-        '''Once LiPD files or loaded into the graph (or remote endpoint set), one can make SparQL queries to the graph
-
-        Parameters
-        ----------
-
-        query : str
-            SparQL query
-
-        remote: bool
-            (Optional) If set to True, the query will be made to the remote endpoint (if set)
-
-        result : str
-            (Optional) Result return type
-
-        Returns
-        -------
-
-        result : dict
-            Dictionary of sparql variable and binding values
-        
-        result_df : pandas.Dataframe
-            Return the dictionary above as a pandas.Dataframe
-    
-        Examples
-        --------
-
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
-
-            from pylipd.lipd import LiPD
-
-            lipd = LiPD()
-            lipd.load([
-                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
-                "../examples/data/MD98_2181.Stott.2007.lpd"
-            ])
-            query = """PREFIX le: <http://linked.earth/ontology#>
-                    select (count(distinct ?ds) as ?count) where { 
-                        ?ds a le:Dataset .
-                        ?ds le:hasUrl ?url
-                    }"""
-            result, result_df = lipd.query(query)
-            result_df
-        '''
-
-        if remote and self.endpoint:
-            print("Making remote query to endpoint: " + self.endpoint)
-            matches = re.match(r"(.*)\s*SELECT\s+(.+)\s+WHERE\s+{(.+)}\s*(.*)", query, re.DOTALL | re.IGNORECASE)
-            if matches:
-                prefix = matches.group(1)
-                vars = matches.group(2)
-                where = matches.group(3)
-                suffix = matches.group(4)
-                query = f"{prefix} SELECT {vars} WHERE {{ SERVICE <{self.endpoint}> {{ {where} }} }} {suffix}"   
-        
-        result = self.graph.query(query)
-        result_df = sparql_results_to_df(result)
-        
-        return result, result_df 
-
-    # def whatArchive(self):
-        
-    #     archive_query = """PREFIX le: <http://linked.earth/ontology#>
-    #             select ?archiveType (count(distinct ?archiveType) as ?count) where { 
-    #                 ?ds a le:Dataset .
-    #                 ?ds le:hasUrl ?url
-    #             }"""
 
     def load_remote_datasets(self, dsnames):
         '''Loads remote datasets into cache if a remote endpoint is set
@@ -697,25 +534,66 @@ class LiPD:
         converter = RDFToLiPD(self.graph)
         return converter.convert(dsname, lipdfile)
     
-    def pop(self, dsnames):
-        '''Pops dataset(s) from the graph and returns the popped LiPD object
 
+    def get(self, dsnames):
+        '''Gets dataset(s) from the graph and returns the popped LiPD object
         Parameters
         ----------
-
         dsnames : str or list of str
-            dataset name(s) to be popped.
+            dataset name(s) to get.
+        
+        Returns
+        -------
 
+        pylipd.lipd.LiPD
+            LiPD object with the retrieved dataset(s)
 
         Examples
         --------
-
         .. ipython:: python
             :okwarning:
             :okexcept:
 
             from pylipd.lipd import LiPD
 
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+
+            all_datasets = lipd.get_all_dataset_names()
+            print("Loaded datasets: " + str(all_datasets))
+            ds = lipd.get(all_datasets[0])
+            print("Got dataset: " + str(ds.get_all_dataset_names()))       
+        '''
+        dsnames = [dsnames] if type(dsnames) is not list else dsnames
+        dsids = [(f"{NSURL}/{dsname}" if not dsname.startswith(NSURL) else dsname) for dsname in dsnames]
+
+        ds = super().get(dsids)
+        return LiPD(ds.graph)
+
+    def pop(self, dsnames):
+        '''Pops dataset(s) from the graph and returns the popped LiPD object
+        
+        Parameters
+        ----------
+        dsnames : str or list of str
+            dataset name(s) to be popped.
+        
+        Returns
+        -------
+
+        pylipd.lipd.LiPD
+            LiPD object with the popped dataset(s)
+
+        Examples
+        --------
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+            from pylipd.lipd import LiPD
             # Fetch LiPD data from remote RDF Graph
             lipd = LiPD()
             lipd.load([
@@ -729,49 +607,25 @@ class LiPD:
             print("Popped dataset: " + str(popped.get_all_dataset_names()))       
         '''
 
-        popped = LiPD()
-
-        if type(dsnames) is not list:
-            dsnames = [dsnames]
-        
-        graphurls=[]
-        for dsname in dsnames:
-            graphurls.append(NSURL + "/" + dsname)
-
-        # Match subgraphs
-        for ctx in self.graph.contexts():
-            id = str(ctx.identifier)
-            if id in graphurls:
-                subgraph = copy.deepcopy(self.graph.get_context(id))
-                for triple in subgraph.triples((None, None, None)):
-                    popped.graph.add((
-                        triple[0],
-                        triple[1],
-                        triple[2],
-                        URIRef(id)))
-
-                self.graph.remove((None, None, None, id))
-        
-        return popped
+        dsnames = [dsnames] if type(dsnames) is not list else dsnames
+        dsids = [(f"{NSURL}/{dsname}" if not dsname.startswith(NSURL) else dsname) for dsname in dsnames]
+        popped = super().pop(dsids)
+        return LiPD(popped.graph)
 
     def remove(self, dsnames):
         '''Removes dataset(s) from the graph
-
+        
         Parameters
         ----------
-
         dsnames : str or list of str
             dataset name(s) to be removed
-
+        
         Examples
         --------
-
         .. ipython:: python
             :okwarning:
             :okexcept:
-
             from pylipd.lipd import LiPD
-
             # Fetch LiPD data from remote RDF Graph
             lipd = LiPD()
             lipd.load([
@@ -784,42 +638,10 @@ class LiPD:
             print("Loaded datasets after remove: " + str(lipd.get_all_dataset_names()))
         '''
         
-        if type(dsnames) is not list:
-            dsnames = [dsnames]
-        
-        graphurls=[]
-        for dsname in dsnames:
-            graphurls.append(NSURL + "/" + dsname)
+        dsnames = [dsnames] if type(dsnames) is not list else dsnames
+        dsids = [(f"{NSURL}/{dsname}" if not dsname.startswith(NSURL) else dsname) for dsname in dsnames]
 
-        # Match subgraphs
-        for ctx in self.graph.contexts():
-            id = str(ctx.identifier)
-            if id in graphurls:
-                self.graph.remove((None, None, None, id))       
-
-
-    def get_rdf(self):
-        '''Returns RDF serialization of the current Graph
-        Examples
-        --------
-
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
-
-            from pylipd.lipd import LiPD
-
-            # Fetch LiPD data from remote RDF Graph
-            lipd = LiPD()
-            lipd.load([
-                "../examples/data/MD98_2181.Stott.2007.lpd"
-            ])
-            nquads = lipd.get_rdf()
-            print(nquads[:10000])
-            print("...")
-        '''
-        
-        return self.graph.serialize(format='nquads')
+        super().remove(dsids)
 
 
     def get_all_dataset_names(self):
@@ -881,14 +703,6 @@ class LiPD:
         '''
         qres, qres_df = self.query(QUERY_DSID)
         return [sanitizeId(row.dsid) for row in qres]
-    
-
-    def search_datasets(variableName=[ ], archiveType=[ ], proxy=[ ], resolution = [ ],
-                    ageUnits = [ ], ageBound = [ ], ageBoundType = [ ], 
-                    lat = [ ], lon = [ ], alt = [ ], 
-                    print_response = True, download_lipd = True,
-                    download_folder = 'default'):
-        pass
 
 
     def get_ensemble_tables(self, dsname = None, ensembleVarName = None, ensembleDepthVarName = 'depth'):
@@ -953,3 +767,97 @@ class LiPD:
         qres, qres_df = self.query(query)
         return qres_df
 
+
+    def get_all_variables(self):
+        '''
+        Returns a list of all variables in the graph
+        
+        Returns
+        -------
+
+        pandas.DataFrame
+            A dataframe of all variables in the graph with columns uri, varid, varname
+
+        '''
+        return self.query(QUERY_VARIABLE)[1]
+
+
+    def to_lipd_series(self, parallel=False):
+        '''
+        Converts the LiPD object to a LiPDSeries object
+
+        Parameters
+        ----------
+        parallel : bool
+            Whether to use parallel processing to load the data. Default is False
+
+        Returns
+        -------
+        pylipd.lipd.LiPDSeries
+            A LiPDSeries object
+
+        '''
+        S = LiPDSeries()    
+        S.load(self, parallel)
+        return S
+
+
+    # bbox = left,bottom,right,top
+    # bbox = min Longitude , min Latitude , max Longitude , max Latitude 
+    def filter_by_geo_bbox(self, lonMin, latMin, lonMax, latMax):
+        '''
+        Filters datasets to return a new LiPD object that only keeps datasets that fall within the bounding box
+
+        Parameters
+        ----------
+        lonMin : float
+            Minimum longitude
+
+        latMin : float
+            Minimum latitude
+        
+        lonMax : float
+            Maximum longitude
+
+        latMax : float
+            Maximum latitude
+
+        Returns
+        -------
+
+        pylipd.lipd.LiPD
+            A new LiPD object that only contains datasets that fall within the bounding box
+
+        '''
+        query = QUERY_FILTER_GEO
+        query = query.replace("[lonMin]", str(lonMin))
+        query = query.replace("[latMin]", str(latMin))
+        query = query.replace("[lonMax]", str(lonMax))               
+        query = query.replace("[latMax]", str(latMax))
+        qres, qres_df = self.query(query)
+        dsnames = [sanitizeId(row.dsname) for row in qres]
+        return self.get(dsnames)
+
+
+    def filter_by_archive_type(self, archiveType):
+        '''
+        Filters datasets to return a new LiPD object that only keeps datasets that have the specified archive type
+
+        Parameters
+        ----------
+
+        archiveType : str
+            The archive type to filter by
+
+        Returns
+        -------
+        
+        pylipd.lipd.LiPD
+            A new LiPD object that only contains datasets that have the specified archive type (regex)
+
+        '''
+        query = QUERY_FILTER_ARCHIVE_TYPE
+        query = query.replace("[archiveType]", archiveType)
+        qres, qres_df = self.query(query)
+        dsnames = [sanitizeId(row.dsname) for row in qres]
+        return self.get(dsnames)

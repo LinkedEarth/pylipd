@@ -36,12 +36,12 @@ class LipdToRDF:
         self.graph = ConjunctiveGraph()
         self.lipd_csvs = {}
         self.graphurl = NSURL
-        self.namespace = NSURL + "#"
+        self.namespace = NSURL + "/"
         self.schema = expand_schema(copy.deepcopy(SCHEMA))  
 
 
-    def convert(self, lipdpath, topath, type="rdf"):
-        '''Convert LiPD file to RDF (or Pickled Graph)
+    def convert(self, lipdpath):
+        '''Convert LiPD file to RDF Graph
 
         Parameters
         ----------
@@ -49,13 +49,7 @@ class LipdToRDF:
         lipdpath : str
             path to lipd file (the path could also be a url)
 
-        topath : str
-            path to the output file
-
-        type : str
-            the output file type : rdf or pickle (we store the pickled rdf graph for efficiency sometimes)
         '''
-
         self.graph = ConjunctiveGraph()
         
         lpdname = os.path.basename(lipdpath).replace(".lpd", "")
@@ -74,12 +68,28 @@ class LipdToRDF:
                     csvname = os.path.basename(csvpath)        
                     self.lipd_csvs[csvname] = pd.read_csv(csvpath, header=None)
                 self._load_lipd_json_to_graph(jsonpath)                    
-                
-                if type == "rdf":
-                    self.graph.serialize(topath, format="nquads", encoding="utf-8")
-                elif type == "pickle":
-                    with open(topath, 'wb') as f:
-                        pickle.dump(self.graph, f)
+
+
+    def serialize(self, topath, type="rdf"):
+        '''Write LiPD RDF Graph to RDF file (or Pickle file)
+
+        Parameters
+        ----------
+
+        topath : str
+            path to the output file
+
+        type : str
+            the output file type : rdf or pickle (we store the pickled rdf graph for efficiency sometimes)
+        '''
+
+        if self.graph:
+            if type == "rdf":
+                self.graph.serialize(topath, format="nquads", encoding="utf-8")
+            elif type == "pickle":
+                with open(topath, 'wb') as f:
+                    pickle.dump(self.graph, f)
+
 
     def _unzip_lipd_file(self, lipdfile, unzipdir):
         if lipdfile.startswith("http"):
@@ -617,6 +627,15 @@ class LipdToRDF:
         obj["foundInTable"] = obj["@parent"]["@id"]
         return [obj, objhash, []]
     
+    def _add_found_in_dataset(self, obj, objhash) :
+        parent = obj["@parent"]
+        top = parent
+        while (parent) :
+            top = parent
+            parent = parent["@parent"]
+        obj["foundInDataset"] = top["@id"]
+        return [obj, objhash, []]
+        
     # Unroll the list to a rdf first/rest structure
     def _unroll_values_list_to_rdf(self, lst: list, dtype):
         listitems = []

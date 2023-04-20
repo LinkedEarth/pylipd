@@ -12,6 +12,7 @@ dependencies:
     - rdflib
     - pybtex
     - bagit
+    - tqdm
     - doi2bib
     - '-e .'
 

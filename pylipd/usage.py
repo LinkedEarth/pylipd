@@ -1,5 +1,6 @@
 from pylipd.lipd import LiPD
 import json
+from pylipd.lipd_series import LiPDSeries
 from pylipd.multi_processing import convert_to_rdf
 
 ####################
@@ -49,26 +50,60 @@ remote_dsnames = ["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001"]
 
 '''
 L = LiPD()
+
 #L.load(local_lipd_dir+"/"+"ODP1671017E.lpd")
 #L.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")    
 L.load([local_lipd_dir + "/" + dsname + ".lpd" for dsname in ["MD98_2181.Stott.2007","NAm-SmithersSkiArea.Schweingruber.1996", 
                         "NAm-CeaderBreaks.Briffa.1996", "ODP1671017E", 
                         "SPC14.Kahle.2021", "RC12-10.Poore.2003", 
-                        "MD02-2553.Poore.2009", "AD9117.Guinta.2001",
+                        "MD02-2553.Poore.2009", "AD9117.Guinta.2001", "SP10BEIN",
                         "SchellingsBog.Barron.2004", "Hidden.Tang.1999"]])
 #bibtex = L.get_bibtex()
 #print(bibtex)
 #exit()
+
+S = LiPDSeries()
+S.load(L)
+
+print(S)
+
+exit()
 '''
 
 # Load from local
 lipd = LiPD()
-lipdfiles = [local_lipd_dir + "/" + dsname + ".lpd" for dsname in dsnames]
+data_path = local_lipd_dir + '/Ocn-Palmyra.Nurhati.2011.lpd'
+lipd.load(data_path)
+print(lipd.get_all_dataset_names())
+
+#lipdfiles = [local_lipd_dir + "/" + dsname + ".lpd" for dsname in dsnames]
 #print(lipdfiles)
 
 #lipd.load(lipdfiles)
 lipd.load_from_dir("examples/data")
 print(lipd.get_all_dataset_names())
+
+lat = -77.08
+lon = 38.91
+radius = 50
+
+(result, result_df) = lipd.query("""
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+
+SELECT ?what
+WHERE {
+  ?ds wgs84:lat ?lat .
+  ?ds wgs84:lon ?lon .
+  
+  FILTER(geof:sfWithin(?geometry,
+     "POLYGON((-77.089005 38.913574,-77.029953 38.913574,-77.029953 38.886321,-77.089005 38.886321,-77.089005 38.913574))"^^geo:wktLiteral))
+}
+""")
+print(result_df)
+exit()
+
 #print(lipd.get_all_dataset_ids())
 ens_df = lipd.get_ensemble_tables(
     archiveType=".*",
@@ -79,7 +114,7 @@ ens_df = lipd.get_ensemble_tables(
     ensembleDepthVarName="depth"
 )
 print(ens_df)
-exit()
+
 
 #lipd.load(["/Users/varun/Downloads/Arc-LakeNataujärvi.Ojala.2005.lpd"])
 #print(lipd.get_all_dataset_names())
@@ -121,8 +156,15 @@ for dsname, tsos in ts_list_remote.items():
     for tso in tsos:
         print(dsname+': '+str(tso['paleoData_variableName'])+': '+tso['archiveType'])
 
-print(lpd2.get_ensemble_tables())
-exit()
+ens_df2 = lpd2.get_ensemble_tables(
+    archiveType=".*",
+    varName="c37",
+    timeVarName="age",
+    depthVarName="depth",
+    ensembleVarName="age",
+    ensembleDepthVarName="depth"
+)
+print(ens_df2)
 
 print("After popping..")
 print(lipd.get_all_dataset_names())

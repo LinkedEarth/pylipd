@@ -265,11 +265,13 @@ SCHEMA = {
             '_wrap_uncertainty',
             '_create_proxy_system',
             '_add_found_in_table',
+            '_add_found_in_dataset',
             '_add_variable_values',
             '_stringify_column_numbers_array'
         ],
         '@toJson_pre': [
             '_remove_found_in_table',
+            '_remove_found_in_dataset',
             #'_remove_depth_property'
         ],
         '@toJson': [
@@ -364,6 +366,9 @@ SCHEMA = {
             'type': 'string'
         },
         'foundInTable': {
+            'type': 'Individual'
+        },
+        'foundInDataset': {
             'type': 'Individual'
         },
         'hasProxySystem': {
