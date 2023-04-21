@@ -14,7 +14,7 @@ import io
 
 from rdflib import ConjunctiveGraph, URIRef
 from tqdm import tqdm
-from pylipd.globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH
+from pylipd.globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE
 from pylipd.lipd_series import LiPDSeries
 from pylipd.multi_processing import multi_convert_to_rdf, multi_load_lipd
 from pylipd.rdf_graph import RDFGraph
@@ -707,6 +707,39 @@ class LiPD(RDFGraph):
         '''
         qres, qres_df = self.query(QUERY_DSID)
         return [sanitizeId(row.dsid) for row in qres]
+    
+    def get_all_archiveTypes(self):
+        '''
+        Returns a list of all the unique archiveTypes present in the LiPD object
+
+        Returns
+        -------
+        list
+            A list of archiveTypes
+            
+        Examples
+        --------
+        
+        .. ipython:: python
+            :okwarning:
+            :okexcept:
+
+            from pylipd.lipd import LiPD
+
+            # Fetch LiPD data from remote RDF Graph
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
+                "../examples/data/MD98_2181.Stott.2007.lpd"
+            ])
+            print(lipd.get_all_archiveTypes())
+
+        '''
+        
+        qres, qres_df = self.query(QUERY_UNIQUE_ARCHIVE_TYPE)
+        return [sanitizeId(row.archiveType) for row in qres]
+        
+        
 
 
     def get_ensemble_tables(self, dsname = None, ensembleVarName = None, ensembleDepthVarName = 'depth'):

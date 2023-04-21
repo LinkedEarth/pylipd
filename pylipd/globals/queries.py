@@ -14,6 +14,13 @@ QUERY_DSID = """
     }
 """
 
+QUERY_UNIQUE_ARCHIVE_TYPE = """
+    SELECT distinct ?archiveType WHERE {
+        ?ds a le:Dataset .
+        ?ds le:proxyArchiveType ?archiveType .
+    }
+"""
+
 QUERY_ENSEMBLE_TABLE_SHORT = """
     PREFIX le: <http://linked.earth/ontology#>
 
