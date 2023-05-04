@@ -198,7 +198,7 @@ SCHEMA = {
     },
     'Model': {
         '@id': ['{@parent.@id}', '.Model', '{@index}'],
-        'method': { 
+        'methods': { 
             'name': 'hasCode', 
             'schema': 'SoftwareCode' 
         },
@@ -221,20 +221,29 @@ SCHEMA = {
     'SoftwareCode': {
         '@id': {
             '{@parent.@id}',
-            '.',
+            '.Method',
             '{name|software}'
         },
-        'runCommand': { 
-            'name': 'hasExecutionCommand' 
+        'method': {
+            'type': 'string' 
         },
-        'runEnv': { 
-            'name': 'hasExecutionEnvironment' 
+        'version': {
+            'type': 'string' 
+        },
+        'algorithm': {
+            'type': 'string' 
         },
         'parameters': { 
             'type': 'string' 
         },
+        'runCommand': { 
+            'name': 'hasExecutionCommand' 
+        },            
+        'runEnv': { 
+            'name': 'hasExecutionEnvironment' 
+        },
         'software': { 
-            'name': 'name' 
+            'type': 'string' 
         }
     },
     'DataTable': {

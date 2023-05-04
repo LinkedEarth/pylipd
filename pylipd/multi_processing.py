@@ -4,7 +4,8 @@ from pylipd.lipd_to_rdf import LipdToRDF
 import multiprocessing as mp
 import copy
 
-def convert_to_rdf(lipdfile, rdffile):
+def convert_to_rdf(files):
+    (lipdfile, rdffile) = files
     converter = LipdToRDF()    
     """Worker that converts one lipdfile to an rdffile"""
     try:
@@ -18,9 +19,10 @@ def convert_to_rdf(lipdfile, rdffile):
 def multi_convert_to_rdf(filemap, parallel=True):
     if parallel:
         """Create a pool to convert all lipdfiles to rdffiles"""
-        pool = mp.Pool(mp.cpu_count())
         args = [(lipdfile, rdffile) for lipdfile, rdffile in filemap.items()]
-        pool.starmap(convert_to_rdf, args, chunksize=1)
+        pool = mp.Pool(mp.cpu_count())
+        for file in tqdm(pool.imap_unordered(convert_to_rdf, args, chunksize=1), total=len(args)):
+            pass
         pool.close()
     else:
         for lipdfile, rdffile in filemap.items():

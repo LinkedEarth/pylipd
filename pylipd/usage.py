@@ -81,6 +81,8 @@ print(lipd.get_all_dataset_names())
 
 #lipd.load(lipdfiles)
 lipd.load_from_dir("examples/data")
+
+lipd.load_from_dir("/Users/varun/Downloads/example_sisal_lipds")
 print(lipd.get_all_dataset_names())
 
 lat = -77.08
@@ -133,7 +135,7 @@ for dsname, tsos in ts_list_remote.items():
 '''
 
 print("Popping ...")
-poplipd = lipd.pop(lipd.get_all_dataset_names())
+poplipd = lipd.pop(lipd.get_all_dataset_names()[0])
 print(lipd.get_all_dataset_names())
 print(poplipd.get_all_dataset_names())
 

@@ -4,6 +4,14 @@ if __name__ == "__main__":
     local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd.latest"
 
     L = LiPD()
+
+    # Convert LiPD files to RDF    
+    L.convert_lipd_dir_to_rdf(
+        local_lipd_dir,
+        local_lipd_dir+".nq", 
+        parallel=True)
+    
+    '''
     L.load_from_dir(local_lipd_dir, parallel=True, cutoff=1000)
     
     print(f"Total number of datasets: {len(L.get_all_dataset_names())}")
@@ -26,5 +34,6 @@ if __name__ == "__main__":
     
     print("Printing all valid variables")
     print(S.get_all_variables()['varname'])
+    '''
 
     exit()

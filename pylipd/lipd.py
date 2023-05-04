@@ -178,14 +178,14 @@ class LiPD(RDFGraph):
             tmp_rdf_file = tempfile.NamedTemporaryFile().name
             filemap[fullpath] = tmp_rdf_file
         
-        print(f"Starting conversion of {len(filemap.keys())} LiPD files")
+        print(f"Converting {len(filemap.keys())} LiPD files to RDF..")
 
         multi_convert_to_rdf(filemap, parallel)
         
         print("Conversion to RDF done..")
 
         print("Writing to main RDF file..")
-        with open(rdf_file, "a") as fout:
+        with open(rdf_file, "w") as fout:
             for lipdfile in filemap.keys():
                 tmp_rdf_file = filemap[lipdfile]
                 if os.path.exists(tmp_rdf_file):
