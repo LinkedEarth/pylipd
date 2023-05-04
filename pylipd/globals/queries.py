@@ -14,9 +14,15 @@ QUERY_DSID = """
     }
 """
 
+QUERY_UNIQUE_ARCHIVE_TYPE = """
+    SELECT distinct ?archiveType WHERE {
+        ?ds a le:Dataset .
+        ?ds le:proxyArchiveType ?archiveType .
+    }
+"""
+
 QUERY_ENSEMBLE_TABLE_SHORT = """
     PREFIX le: <http://linked.earth/ontology#>
-    PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 
     SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits ?notes 
     WHERE {
@@ -45,9 +51,8 @@ QUERY_ENSEMBLE_TABLE_SHORT = """
 
 QUERY_ENSEMBLE_TABLE = """
     PREFIX le: <http://linked.earth/ontology#>
-    PREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 
-    SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits ?notes
+    SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits ?notes ?methodobj ?methods
     WHERE {
         ?ds a le:Dataset .
         ?ds le:name ?datasetName .
