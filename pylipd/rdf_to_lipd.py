@@ -29,7 +29,7 @@ class RDFToLiPD:
         self.graph = graph
         self.lipd_csvs = {}
         self.graphurl = NSURL
-        self.namespace = NSURL + "#"
+        self.namespace = NSURL + "/"
 
     def convert(self, dsname, lipdfile):
         '''Convert RDF graph to a LiPD file
