@@ -179,7 +179,7 @@ class LiPD_Legacy:
                         auth += name + ';'
                     elif isinstance(name, dict):
                         for k, v in name.items():
-                            auth += v + ';'
+                            auth += str(v) + ';'
             elif isinstance(names, str):
                 auth = names
             # Enter finished author string into target
