@@ -278,12 +278,14 @@ class LiPD_Legacy:
                 # create the entry in ts_root.
                 if s:
                     try:
-                        current[s] = v['values']
+                        if 'values' in v:
+                            current[s] = v['values']
                     except KeyError as e:
                         # Values key was not found.
                         raise e
                     try:
-                        current[s + 'Units'] = v['units']
+                        if 'units' in v:
+                            current[s + 'Units'] = v['units']
                     except KeyError as e:
                         # Values key was not found.
                         raise e
