@@ -25,164 +25,130 @@ from pylipd.lipd import LiPD
 
 class TestLiPDLoad():
     
-    def test_load_t0(self):
-        url = 'https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd'
-       
-        lipd = LiPD()
-        lipd.load(url)
+    def test_load_t0(self, odp846):
+        lipd = odp846
     
-    def test_load_t1(self):
-        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
-               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
-        
-        lipd = LiPD()
-        lipd.load(url)
+    def test_load_t1(self,multipleLipds):
+        lipd, names = multipleLipds
 
     def test_load_t2(self):
         
-            # Fetch LiPD data from remote RDF Graph
         lipd_remote = LiPD()
         lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
         lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
-            #print(lipd_remote.get_all_dataset_names())
     
+    def test_load_t3(self,euro2k):
+        lipd = euro2k
 
-class TestLiPDnames():
+class Testgetall():
     
-    def test_get_all_dataset_names_t0(self):
-        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
-               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
-        
-        true_ids = ['Ocn-Philippines.Stott.2007','LedovyiObryvExposureNorthernSection.Anderson.2002']
-        
-        
-        lipd = LiPD()
-        lipd.load(url)
+    def test_dataset_names_t0(self, multipleLipds):
+        lipd, true_ids = multipleLipds
         ids = lipd.get_all_dataset_names()
         assert ids == true_ids
 
-class TestLiPDids():
-    def test_get_all_dataset_ids_t0(self):
-        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
-               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
-        
-        true_ids = ['RRh3T4NCsf4MgrxhXbJq','LCd0404b13039620e9ec2b82dbdcf87861']
-        
-        
-        lipd = LiPD()
-        lipd.load(url)
+    def test_dataset_ids_t0(self, multipleLipds):
+        lipd, true_ids = multipleLipds
         ids = lipd.get_all_dataset_ids()
-        assert ids == true_ids
-
-class TestLiPDTimeseries():
+        
+    def test_archiveTypes_t0(self,euro2k):
+        lipd = euro2k
+        archive = lipd.get_all_archiveTypes()
     
-    @pytest.mark.parametrize('dataframe',['True', 'False'])
-    def test_get_timeseries_t0(self, dataframe):
-        url = 'https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd'
+    def test_variables_t0(self,odp846):
+        lipd = odp846
+        df = lipd.get_all_variables()
         
-        lipd = LiPD()
-        lipd.load(url)
-        ts_list=lipd.get_timeseries(lipd.get_all_dataset_names(), to_dataframe = dataframe)
-    
-        
-class TestLiPDquery():
 
-    def test_query_t0(self):
-        
-        
-        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
-               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
-        
-        query = """PREFIX le: <http://linked.earth/ontology#>
-               select (count(distinct ?ds) as ?count) where {
-                   ?ds a le:Dataset .
-                   ?ds le:hasUrl ?url
-               }"""
-       
-        
-        
-        lipd = LiPD()
-        lipd.load(url)
-        result, result_df = lipd.query(query)
-             
-class TestLiPDbibtex():
-
-    def test_bibtex_t0(self):
-        
-        
-        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
-               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd']
-        
-        
-        lipd = LiPD()
-        lipd.load(url)
-        bibs = lipd.get_bibtex(save=False)
-      
-class TestLiPDremove():
+class TestManipulation():
     
-    def test_remove_t0(self):
-        
-        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
-               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd',
-               'https://lipdverse.org/data/ch2kTA18TAS01/1_0_2//TA18TAS01.lpd']
-        
-        D=LiPD()
-        D.load(url)
+    def test_remove_to(self,euro2k):
+               
+        D=euro2k
         names = D.get_all_dataset_names()
         names_compare = names[1:]
         D_test = D.copy()
         D_test.remove(names[0])
         assert D_test.get_all_dataset_names() == names_compare
 
-class TestLiPDpop():
-    
-    def test_pop_t0(self):
+    def test_pop_t0(self,euro2k):
         
-        url = ['https://lipdverse.org/data/RRh3T4NCsf4MgrxhXbJq/1_0_0//Ocn-Philippines.Stott.2007.lpd',
-               'https://lipdverse.org/data/LCd0404b13039620e9ec2b82dbdcf87861/1_0_1//LedovyiObryvExposureNorthernSection.Anderson.2002.lpd',
-               'https://lipdverse.org/data/ch2kTA18TAS01/1_0_2//TA18TAS01.lpd']
-        
-        D=LiPD()
-        D.load(url)
+        D=euro2k
         names = D.get_all_dataset_names()
         D_test = D.copy()
         D_popped = D_test.pop(names[0])
         assert D_test.get_all_dataset_names() == names[1:]
         assert D_popped.get_all_dataset_names()[0] == names[0]
+
+class TestFilter():
     
-class TestLiPDensemble():
+    def test_geo_t0(self,euro2k):
+        D=euro2k
+        Lfiltered = D.filter_by_geo_bbox(0,25,50,50)
+        assert len(Lfiltered.get_all_dataset_names()) == 10
+    
+    def test_archive_to(self,euro2k):
+        D=euro2k
+        Lfiltered = D.filter_by_archive_type('marine')
+        assert len(Lfiltered.get_all_archiveTypes())==1
+        assert Lfiltered.get_all_archiveTypes()[0] == 'marine_sediment'
 
-    def test_ens_t0(self):
-
-        path = './examples/data/ODP846.Lawrence.2006.lpd'
-        D=LiPD()
-        D.load(path)
         
+class TestGet():
+    @pytest.mark.parametrize('dataframe',['True', 'False'])
+    def test_get_timeseries_t0(self, odp846, dataframe):
+        D = odp846
+        ts_list=D.get_timeseries(D.get_all_dataset_names(), to_dataframe = dataframe)
+    
+    def test_bibtex_t0(self, odp846):
+                
+        lipd = odp846
+        bibs, df = lipd.get_bibtex(save=False)
+        
+    def test_get_t0(self, multipleLipds):
+        D,names = multipleLipds
+        all_datasets = D.get_all_dataset_names()
+        ds = D.get(all_datasets[0])
+        
+    def test_lipd_t0(self,odp846):
+        lipd = odp846
+        lipd_json = lipd.get_lipd(lipd.get_all_dataset_names()[0])
+          
+    def test_ens_t0(self,odp846):
+
+        D=odp846
+               
         ens_df = D.get_ensemble_tables()
         assert len(ens_df.index) == 1
     
     @pytest.mark.parametrize('ensname',['year','age'])
-    def test_ens_t1(self,ensname):
-        path = './examples/data/ODP846.Lawrence.2006.lpd'
-        D=LiPD()
-        D.load(path)
-        
+    def test_ens_t1(self,odp846, ensname):
+        D=odp846
         ens_df = D.get_ensemble_tables(ensembleVarName=ensname)
         if ensname == 'year':
             assert len(ens_df.index) == 0
         else:
             assert len(ens_df.index) == 1
     
-    def test_ens_t2(self):
+    def test_ens_t2(self, odp846):
 
-        path = './examples/data/ODP846.Lawrence.2006.lpd'
-        D=LiPD()
-        D.load(path)
-        
+        D=odp846
         names = D.get_all_dataset_names()
-        
         ens_df = D.get_ensemble_tables(dsname=names[0])
         assert len(ens_df.index) == 1
         
                 
+class TestTransform():
+
+    def test_lipd_series(self, odp846):
+        D=odp846
+        S = D.to_lipd_series()
+
+class TestRdf():
+    
+    def test_convert_to_rdf_t0(self):
+        lipd = LiPD()
+        lipd.convert_lipd_dir_to_rdf("./examples/data", "all-lipd.nq")
+
         
+                
