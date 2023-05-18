@@ -3,20 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; PyLiPD 0.9.5 documentation</title>
+  <title>Index &mdash; PyLiPD 1.3.3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="_static/jupyter-sphinx.css" type="text/css" />
+      <link rel="stylesheet" href="_static/thebelab.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/rtd_sphinx_search.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/thebelab-helper.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/js/rtd_search_config.js"></script>
         <script src="_static/js/rtd_sphinx_search.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
@@ -35,7 +45,7 @@
             PyLiPD
           </a>
               <div class="version">
-                0.9.5
+                1.3.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -48,7 +58,8 @@
               <p class="caption" role="heading"><span class="caption-text">Working with PyLiPD</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installing PyLiPD</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source/modules.html">pylipd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">PyLiPD User API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -82,13 +93,13 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
  
@@ -96,21 +107,37 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.camelCase">camelCase() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.camelCase">camelCase() (in module pylipd.utils.utils)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.lipd_to_rdf.LipdToRDF.convert">convert() (pylipd.lipd_to_rdf.LipdToRDF method)</a>
+      <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.clear">clear() (pylipd.rdf_graph.RDFGraph method)</a>
 
       <ul>
-        <li><a href="source/pylipd.html#pylipd.rdf_to_lipd.RDFToLiPD.convert">(pylipd.rdf_to_lipd.RDFToLiPD method)</a>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.clear">(pylipd.utils.rdf_graph.RDFGraph method)</a>
 </li>
       </ul></li>
+      <li><a href="source/pylipd.html#pylipd.utils.lipd_to_rdf.LipdToRDF.convert">convert() (pylipd.utils.lipd_to_rdf.LipdToRDF method)</a>
+
+      <ul>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_to_lipd.RDFToLiPD.convert">(pylipd.utils.rdf_to_lipd.RDFToLiPD method)</a>
+</li>
+      </ul></li>
+      <li><a href="api.html#pylipd.lipd.LiPD.convert_lipd_dir_to_rdf">convert_lipd_dir_to_rdf() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.convert_lipd_dir_to_rdf">[1]</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.convert_lipd_dir_to_rdf">convert_lipd_dir_to_rdf() (pylipd.lipd.LiPD method)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.multi_processing.convert_lipd_to_graph">convert_lipd_to_graph() (in module pylipd.utils.multi_processing)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.multi_processing.convert_to_pickle">convert_to_pickle() (in module pylipd.multi_processing)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.rdf_to_lipd.RDFToLiPD.convert_to_json">convert_to_json() (pylipd.utils.rdf_to_lipd.RDFToLiPD method)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.multi_processing.convert_to_rdf">convert_to_rdf() (in module pylipd.multi_processing)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.multi_processing.convert_to_rdf">convert_to_rdf() (in module pylipd.utils.multi_processing)</a>
+</li>
+      <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.copy">copy() (pylipd.rdf_graph.RDFGraph method)</a>
+
+      <ul>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.copy">(pylipd.utils.rdf_graph.RDFGraph method)</a>
+</li>
+      </ul></li>
+      <li><a href="api.html#pylipd.lipd.LiPD.create_lipd">create_lipd() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.create_lipd">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -118,13 +145,15 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.escape">escape() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.escape">escape() (in module pylipd.utils.utils)</a>
+</li>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.expand_schema">expand_schema() (in module pylipd.utils.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.expand_schema">expand_schema() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.legacy_utils.LiPD_Legacy.extract">extract() (pylipd.utils.legacy_utils.LiPD_Legacy method)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.legacy_utils.LiPD_Legacy.extract">extract() (pylipd.legacy_utils.LiPD_Legacy method)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.multi_processing.extract_variables_graph">extract_variables_graph() (in module pylipd.utils.multi_processing)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -132,11 +161,15 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.find_ensemble_table_for_variable">find_ensemble_table_for_variable() (pylipd.lipd.LiPD method)</a>
+      <li><a href="api.html#pylipd.lipd.LiPD.filter_by_archive_type">filter_by_archive_type() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.filter_by_archive_type">[1]</a>
+</li>
+      <li><a href="api.html#pylipd.lipd.LiPD.filter_by_geo_bbox">filter_by_geo_bbox() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.filter_by_geo_bbox">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.fromCamelCase">fromCamelCase() (in module pylipd.utils)</a>
+      <li><a href="api.html#pylipd.lipd_series.LiPDSeries.filter_by_name">filter_by_name() (pylipd.lipd_series.LiPDSeries method)</a>
+</li>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.fromCamelCase">fromCamelCase() (in module pylipd.utils.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -144,21 +177,41 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.get_all_dataset_ids">get_all_dataset_ids() (pylipd.lipd.LiPD method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.get_lipd">get_lipd() (pylipd.lipd.LiPD method)</a>
-</li>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.get_timeseries">get_timeseries() (pylipd.lipd.LiPD method)</a>
-</li>
-  </ul></td>
-</tr></table>
+      <li><a href="api.html#pylipd.lipd.LiPD.get">get() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get">[1]</a>
 
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
+      <ul>
+        <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.get">(pylipd.rdf_graph.RDFGraph method)</a>
+</li>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.get">(pylipd.utils.rdf_graph.RDFGraph method)</a>
+</li>
+      </ul></li>
+      <li><a href="api.html#pylipd.lipd.LiPD.get_all_archiveTypes">get_all_archiveTypes() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get_all_archiveTypes">[1]</a>
+</li>
+      <li><a href="api.html#pylipd.lipd.LiPD.get_all_dataset_ids">get_all_dataset_ids() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get_all_dataset_ids">[1]</a>
+</li>
+      <li><a href="api.html#pylipd.lipd.LiPD.get_all_dataset_names">get_all_dataset_names() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get_all_dataset_names">[1]</a>
+</li>
+      <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.get_all_graph_ids">get_all_graph_ids() (pylipd.rdf_graph.RDFGraph method)</a>
+
+      <ul>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.get_all_graph_ids">(pylipd.utils.rdf_graph.RDFGraph method)</a>
+</li>
+      </ul></li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.initialize_graph">initialize_graph() (pylipd.lipd.LiPD method)</a>
+      <li><a href="api.html#pylipd.lipd.LiPD.get_all_variables">get_all_variables() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get_all_variables">[1]</a>
+
+      <ul>
+        <li><a href="api.html#pylipd.lipd_series.LiPDSeries.get_all_variables">(pylipd.lipd_series.LiPDSeries method)</a>
+</li>
+      </ul></li>
+      <li><a href="api.html#pylipd.lipd.LiPD.get_bibtex">get_bibtex() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get_bibtex">[1]</a>
+</li>
+      <li><a href="api.html#pylipd.lipd.LiPD.get_ensemble_tables">get_ensemble_tables() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get_ensemble_tables">[1]</a>
+</li>
+      <li><a href="api.html#pylipd.lipd.LiPD.get_lipd">get_lipd() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get_lipd">[1]</a>
+</li>
+      <li><a href="api.html#pylipd.lipd.LiPD.get_timeseries">get_timeseries() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.get_timeseries">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -166,21 +219,31 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.lcfirst">lcfirst() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.lcfirst">lcfirst() (in module pylipd.utils.utils)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD">LiPD (class in pylipd.lipd)</a>
+      <li><a href="api.html#pylipd.lipd.LiPD">LiPD (class in pylipd.lipd)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD">[1]</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.legacy_utils.LiPD_Legacy">LiPD_Legacy (class in pylipd.legacy_utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.legacy_utils.LiPD_Legacy">LiPD_Legacy (class in pylipd.utils.legacy_utils)</a>
+</li>
+      <li><a href="api.html#pylipd.lipd_series.LiPDSeries">LiPDSeries (class in pylipd.lipd_series)</a>
+</li>
+      <li><a href="source/pylipd.html#pylipd.utils.lipd_to_rdf.LipdToRDF">LipdToRDF (class in pylipd.utils.lipd_to_rdf)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.lipd_to_rdf.LipdToRDF">LipdToRDF (class in pylipd.lipd_to_rdf)</a>
+      <li><a href="api.html#pylipd.lipd.LiPD.load">load() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.load">[1]</a>
+
+      <ul>
+        <li><a href="api.html#pylipd.lipd_series.LiPDSeries.load">(pylipd.lipd_series.LiPDSeries method)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.load">load() (pylipd.lipd.LiPD method)</a>
+        <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.load">(pylipd.rdf_graph.RDFGraph method)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.load_from_dir">load_from_dir() (pylipd.lipd.LiPD method)</a>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.load">(pylipd.utils.rdf_graph.RDFGraph method)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.load_remote_datasets">load_remote_datasets() (pylipd.lipd.LiPD method)</a>
+      </ul></li>
+      <li><a href="api.html#pylipd.lipd.LiPD.load_from_dir">load_from_dir() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.load_from_dir">[1]</a>
+</li>
+      <li><a href="api.html#pylipd.lipd.LiPD.load_remote_datasets">load_remote_datasets() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.load_remote_datasets">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -188,6 +251,12 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.merge">merge() (pylipd.rdf_graph.RDFGraph method)</a>
+
+      <ul>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.merge">(pylipd.utils.rdf_graph.RDFGraph method)</a>
+</li>
+      </ul></li>
       <li>
     module
 
@@ -202,30 +271,32 @@
 </li>
         <li><a href="source/pylipd.globals.html#module-pylipd.globals.urls">pylipd.globals.urls</a>
 </li>
-        <li><a href="source/pylipd.html#module-pylipd.legacy_utils">pylipd.legacy_utils</a>
-</li>
         <li><a href="source/pylipd.html#module-pylipd.lipd">pylipd.lipd</a>
-</li>
-        <li><a href="source/pylipd.html#module-pylipd.lipd_to_rdf">pylipd.lipd_to_rdf</a>
-</li>
-        <li><a href="source/pylipd.html#module-pylipd.multi_processing">pylipd.multi_processing</a>
-</li>
-        <li><a href="source/pylipd.html#module-pylipd.rdf_to_lipd">pylipd.rdf_to_lipd</a>
 </li>
         <li><a href="source/pylipd.series.html#module-pylipd.series">pylipd.series</a>
 </li>
         <li><a href="source/pylipd.series.html#module-pylipd.series.regexes">pylipd.series.regexes</a>
 </li>
-        <li><a href="source/pylipd.html#module-pylipd.usage">pylipd.usage</a>
+        <li><a href="source/pylipd.html#module-pylipd.utils.legacy_utils">pylipd.utils.legacy_utils</a>
 </li>
-        <li><a href="source/pylipd.html#module-pylipd.utils">pylipd.utils</a>
+        <li><a href="source/pylipd.html#module-pylipd.utils.lipd_to_rdf">pylipd.utils.lipd_to_rdf</a>
+</li>
+        <li><a href="source/pylipd.html#module-pylipd.utils.multi_processing">pylipd.utils.multi_processing</a>
+</li>
+        <li><a href="source/pylipd.html#module-pylipd.utils.rdf_graph">pylipd.utils.rdf_graph</a>
+</li>
+        <li><a href="source/pylipd.html#module-pylipd.utils.rdf_to_lipd">pylipd.utils.rdf_to_lipd</a>
+</li>
+        <li><a href="source/pylipd.html#module-pylipd.utils.utils">pylipd.utils.utils</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.multi_processing.multi_convert_to_pickle">multi_convert_to_pickle() (in module pylipd.multi_processing)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.multi_processing.multi_convert_to_rdf">multi_convert_to_rdf() (in module pylipd.utils.multi_processing)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.multi_processing.multi_convert_to_rdf">multi_convert_to_rdf() (in module pylipd.multi_processing)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.multi_processing.multi_load_lipd">multi_load_lipd() (in module pylipd.utils.multi_processing)</a>
+</li>
+      <li><a href="source/pylipd.html#pylipd.utils.multi_processing.multi_load_lipd_series">multi_load_lipd_series() (in module pylipd.utils.multi_processing)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -233,6 +304,14 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#pylipd.lipd.LiPD.pop">pop() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.pop">[1]</a>
+
+      <ul>
+        <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.pop">(pylipd.rdf_graph.RDFGraph method)</a>
+</li>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.pop">(pylipd.utils.rdf_graph.RDFGraph method)</a>
+</li>
+      </ul></li>
       <li>
     pylipd
 
@@ -269,13 +348,6 @@
 </li>
       </ul></li>
       <li>
-    pylipd.legacy_utils
-
-      <ul>
-        <li><a href="source/pylipd.html#module-pylipd.legacy_utils">module</a>
-</li>
-      </ul></li>
-      <li>
     pylipd.lipd
 
       <ul>
@@ -284,27 +356,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    pylipd.lipd_to_rdf
-
-      <ul>
-        <li><a href="source/pylipd.html#module-pylipd.lipd_to_rdf">module</a>
-</li>
-      </ul></li>
-      <li>
-    pylipd.multi_processing
-
-      <ul>
-        <li><a href="source/pylipd.html#module-pylipd.multi_processing">module</a>
-</li>
-      </ul></li>
-      <li>
-    pylipd.rdf_to_lipd
-
-      <ul>
-        <li><a href="source/pylipd.html#module-pylipd.rdf_to_lipd">module</a>
-</li>
-      </ul></li>
       <li>
     pylipd.series
 
@@ -320,17 +371,45 @@
 </li>
       </ul></li>
       <li>
-    pylipd.usage
+    pylipd.utils.legacy_utils
 
       <ul>
-        <li><a href="source/pylipd.html#module-pylipd.usage">module</a>
+        <li><a href="source/pylipd.html#module-pylipd.utils.legacy_utils">module</a>
 </li>
       </ul></li>
       <li>
-    pylipd.utils
+    pylipd.utils.lipd_to_rdf
 
       <ul>
-        <li><a href="source/pylipd.html#module-pylipd.utils">module</a>
+        <li><a href="source/pylipd.html#module-pylipd.utils.lipd_to_rdf">module</a>
+</li>
+      </ul></li>
+      <li>
+    pylipd.utils.multi_processing
+
+      <ul>
+        <li><a href="source/pylipd.html#module-pylipd.utils.multi_processing">module</a>
+</li>
+      </ul></li>
+      <li>
+    pylipd.utils.rdf_graph
+
+      <ul>
+        <li><a href="source/pylipd.html#module-pylipd.utils.rdf_graph">module</a>
+</li>
+      </ul></li>
+      <li>
+    pylipd.utils.rdf_to_lipd
+
+      <ul>
+        <li><a href="source/pylipd.html#module-pylipd.utils.rdf_to_lipd">module</a>
+</li>
+      </ul></li>
+      <li>
+    pylipd.utils.utils
+
+      <ul>
+        <li><a href="source/pylipd.html#module-pylipd.utils.utils">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -339,29 +418,69 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.query">query() (pylipd.lipd.LiPD method)</a>
+      <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.query">query() (pylipd.rdf_graph.RDFGraph method)</a>
+
+      <ul>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.query">(pylipd.utils.rdf_graph.RDFGraph method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.rdf_to_lipd.RDFToLiPD">RDFToLiPD (class in pylipd.rdf_to_lipd)</a>
+      <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph">RDFGraph (class in pylipd.rdf_graph)</a>
+
+      <ul>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph">(class in pylipd.utils.rdf_graph)</a>
 </li>
+      </ul></li>
+      <li><a href="source/pylipd.html#pylipd.utils.rdf_to_lipd.RDFToLiPD">RDFToLiPD (class in pylipd.utils.rdf_to_lipd)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#pylipd.lipd.LiPD.remove">remove() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.remove">[1]</a>
+
+      <ul>
+        <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.remove">(pylipd.rdf_graph.RDFGraph method)</a>
+</li>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.remove">(pylipd.utils.rdf_graph.RDFGraph method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.sanitizeId">sanitizeId() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.sanitizeId">sanitizeId() (in module pylipd.utils.utils)</a>
 </li>
+      <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.serialize">serialize() (pylipd.rdf_graph.RDFGraph method)</a>
+
+      <ul>
+        <li><a href="source/pylipd.html#pylipd.utils.lipd_to_rdf.LipdToRDF.serialize">(pylipd.utils.lipd_to_rdf.LipdToRDF method)</a>
+</li>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.serialize">(pylipd.utils.rdf_graph.RDFGraph method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.search_datasets">search_datasets() (pylipd.lipd.LiPD method)</a>
+      <li><a href="source/rdfgraph.html#pylipd.rdf_graph.RDFGraph.set_endpoint">set_endpoint() (pylipd.rdf_graph.RDFGraph method)</a>
+
+      <ul>
+        <li><a href="source/pylipd.html#pylipd.utils.rdf_graph.RDFGraph.set_endpoint">(pylipd.utils.rdf_graph.RDFGraph method)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.lipd.LiPD.set_endpoint">set_endpoint() (pylipd.lipd.LiPD method)</a>
+      </ul></li>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.sparql_results_to_df">sparql_results_to_df() (in module pylipd.utils.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#pylipd.lipd.LiPD.to_lipd_series">to_lipd_series() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.to_lipd_series">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -369,15 +488,17 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.ucfirst">ucfirst() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.ucfirst">ucfirst() (in module pylipd.utils.utils)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.utils.unCamelCase">unCamelCase() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.unCamelCase">unCamelCase() (in module pylipd.utils.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.uniqid">uniqid() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.uniqid">uniqid() (in module pylipd.utils.utils)</a>
 </li>
-      <li><a href="source/pylipd.html#pylipd.utils.unzip_string">unzip_string() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.unzip_string">unzip_string() (in module pylipd.utils.utils)</a>
+</li>
+      <li><a href="api.html#pylipd.lipd.LiPD.update_remote_datasets">update_remote_datasets() (pylipd.lipd.LiPD method)</a>, <a href="source/pylipd.html#pylipd.lipd.LiPD.update_remote_datasets">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -385,7 +506,7 @@
 <h2 id="Z">Z</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/pylipd.html#pylipd.utils.zip_string">zip_string() (in module pylipd.utils)</a>
+      <li><a href="source/pylipd.html#pylipd.utils.utils.zip_string">zip_string() (in module pylipd.utils.utils)</a>
 </li>
   </ul></td>
 </tr></table>

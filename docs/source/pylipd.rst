@@ -13,10 +13,10 @@ Subpackages
 Submodules
 ----------
 
-pylipd.legacy\_utils module
----------------------------
+pylipd.utils.legacy\_utils module
+---------------------------------
 
-.. automodule:: pylipd.legacy_utils
+.. automodule:: pylipd.utils.legacy_utils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -29,26 +29,34 @@ pylipd.lipd module
    :undoc-members:
    :show-inheritance:
 
-pylipd.lipd\_to\_rdf module
----------------------------
+pylipd.utils.lipd\_to\_rdf module
+---------------------------------
 
-.. automodule:: pylipd.lipd_to_rdf
+.. automodule:: pylipd.utils.lipd_to_rdf
    :members:
    :undoc-members:
    :show-inheritance:
 
-pylipd.multi\_processing module
--------------------------------
+pylipd.utils.multi\_processing module
+-------------------------------------
 
-.. automodule:: pylipd.multi_processing
+.. automodule:: pylipd.utils.multi_processing
    :members:
    :undoc-members:
    :show-inheritance:
 
-pylipd.rdf\_to\_lipd module
----------------------------
+pylipd.utils.rdf\_to\_lipd module
+---------------------------------
 
-.. automodule:: pylipd.rdf_to_lipd
+.. automodule:: pylipd.utils.rdf_to_lipd
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pylipd.utils.rdf\rdf_graph module
+---------------------------------
+
+.. automodule:: pylipd.utils.rdf_graph
    :members:
    :undoc-members:
    :show-inheritance:
@@ -61,10 +69,10 @@ pylipd.usage module
    :undoc-members:
    :show-inheritance:
 
-pylipd.utils module
--------------------
+pylipd.utils.utils module
+--------------------------
 
-.. automodule:: pylipd.utils
+.. automodule:: pylipd.utils.utils
    :members:
    :undoc-members:
    :show-inheritance:

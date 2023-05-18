@@ -20,9 +20,9 @@ from io import BytesIO
 from urllib.request import urlopen
 from urllib.parse import urlparse, urlunparse, quote
 
-from .globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
-from .globals.blacklist import BLACKLIST
-from .globals.schema import SCHEMA
+from ..globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
+from ..globals.blacklist import BLACKLIST
+from ..globals.schema import SCHEMA
 
 from .utils import expand_schema, ucfirst, lcfirst, camelCase, unCamelCase, escape, uniqid, sanitizeId
 

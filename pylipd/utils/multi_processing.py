@@ -1,6 +1,6 @@
 from tqdm import tqdm
-from pylipd.globals.queries import QUERY_ALL_VARIABLES_GRAPH
-from pylipd.lipd_to_rdf import LipdToRDF
+from ..globals.queries import QUERY_ALL_VARIABLES_GRAPH
+from .lipd_to_rdf import LipdToRDF
 import multiprocessing as mp
 import copy
 

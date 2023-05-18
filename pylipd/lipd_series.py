@@ -1,11 +1,11 @@
 from rdflib import ConjunctiveGraph, Namespace, URIRef
 from tqdm import tqdm
-from pylipd.globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE
+from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE
 
 from pylipd.globals.urls import ONTONS
-from pylipd.multi_processing import multi_load_lipd_series
-from pylipd.rdf_graph import RDFGraph
-from pylipd.utils import sanitizeId
+from .utils.multi_processing import multi_load_lipd_series
+from .utils.rdf_graph import RDFGraph
+from .utils.utils import sanitizeId
 
 
 class LiPDSeries(RDFGraph):
@@ -19,9 +19,7 @@ class LiPDSeries(RDFGraph):
     --------
     In this example, we read an online LiPD file and convert it into a time series object dictionary.
 
-    .. ipython:: python
-        :okwarning:
-        :okexcept:
+    .. jupyter-execute::
 
         from pylipd.lipd_series import LiPDSeries
 
@@ -41,6 +39,17 @@ class LiPDSeries(RDFGraph):
         ----------
         lipd : LiPD
             A LiPD object
+        
+               
+        Examples
+        --------
+        .. jupyter-execute::
+
+            from pylipd.lipd_series import LiPDSeries
+
+            lipd = LiPD()
+            lipd.load(["https://lipdverse.org/data/LCf20b99dfe8d78840ca60dfb1f832b9ec/1_0_1//Nunalleq.Ledger.2018.lpd"])
+            lipd_series = lipd.to_lipd_series()
         '''
 
         print(f"Creating LiPD Series...")
@@ -66,7 +75,21 @@ class LiPDSeries(RDFGraph):
 
         pandas.DataFrame
             A dataframe of all variables in the graph with columns uri, varid, varname
+        
+        Examples
+        --------
+        
+        .. jupyter-execute::
 
+            from pylipd.utils.dataset import load_dir
+
+            lipd = load_dir()
+            S = lipd.to_lipd_series()
+            df = S.get_all_variables()
+            
+            print(df)
+        
+        
         '''        
         return self.query(QUERY_VARIABLE)[1]
 

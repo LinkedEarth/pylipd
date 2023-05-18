@@ -14,9 +14,9 @@ import zipfile
 
 from rdflib.graph import ConjunctiveGraph, URIRef
 
-from .globals.urls import NSURL
-from .globals.blacklist import REVERSE_BLACKLIST
-from .globals.schema import SCHEMA
+from ..globals.urls import NSURL
+from ..globals.blacklist import REVERSE_BLACKLIST
+from ..globals.schema import SCHEMA
 
 from .utils import ucfirst, lcfirst, unCamelCase, unzip_string
 

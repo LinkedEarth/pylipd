@@ -14,14 +14,14 @@ import io
 
 from rdflib import ConjunctiveGraph, URIRef
 from tqdm import tqdm
-from pylipd.globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE
-from pylipd.lipd_series import LiPDSeries
-from pylipd.multi_processing import multi_convert_to_rdf, multi_load_lipd
-from pylipd.rdf_graph import RDFGraph
+from .globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE
+from .lipd_series import LiPDSeries
+from .utils.multi_processing import multi_convert_to_rdf, multi_load_lipd
+from .utils.rdf_graph import RDFGraph
 
-from pylipd.rdf_to_lipd import RDFToLiPD
-from pylipd.legacy_utils import LiPD_Legacy
-from pylipd.utils import sanitizeId
+from .utils.rdf_to_lipd import RDFToLiPD
+from .utils.legacy_utils import LiPD_Legacy
+from .utils.utils import sanitizeId
 
 #import bibtexparser
 #from bibtexparser.bibdatabase import BibDatabase
@@ -38,10 +38,8 @@ class LiPD(RDFGraph):
     --------
     In this example, we read an online LiPD file and convert it into a time series object dictionary.
 
-    .. ipython:: python
-        :okwarning:
-        :okexcept:
-
+    .. jupyter-execute::
+        
         from pylipd.lipd import LiPD
 
         lipd = LiPD()        
@@ -60,8 +58,7 @@ class LiPD(RDFGraph):
     
     def load_from_dir(self, dir_path, parallel=False, cutoff=None):
         '''Load LiPD files from a directory
-        Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the "__main__" process
-
+       
         Parameters
         ----------
 
@@ -70,15 +67,16 @@ class LiPD(RDFGraph):
 
         parallel: bool
             (Optional) set to True to process lipd files in parallel. You *must* run this function under the "__main__" process for this to work
-
+        
+        cutoff : int
+            (Optional) the maximum number of files to load at once.
+            
         Examples
         --------
         In this example, we load LiPD files from a directory.
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
-
+        .. jupyter-execute::
+            
             from pylipd.lipd import LiPD
 
             lipd = LiPD()        
@@ -103,7 +101,7 @@ class LiPD(RDFGraph):
     # Allows loading http locations
     def load(self, lipdfiles, parallel=False):
         '''Load LiPD files. 
-        Note: This function creates multiple process to process lipd files in parallel, therefore it is important that this call be made under the "__main__" process
+        
 
         Parameters
         ----------
@@ -119,9 +117,7 @@ class LiPD(RDFGraph):
         --------
         In this example, we load LiPD files for an array of paths.
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
@@ -156,20 +152,6 @@ class LiPD(RDFGraph):
         rdf_file : str
             Path to the output rdf file
 
-
-        Examples
-        --------
-
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
-
-            from pylipd.lipd import LiPD
-
-            # Fetch LiPD data from remote RDF Graph
-            lipd = LiPD()
-
-            lipd.convert_lipd_dir_to_rdf("../examples/data", "all-lipd.nq")
         '''
 
         filemap = {}
@@ -210,9 +192,7 @@ class LiPD(RDFGraph):
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
@@ -270,12 +250,13 @@ class LiPD(RDFGraph):
         bibs : list
             List of BiBTex entry
         
+        df : pandas.DataFrame
+            Bibliography information in a Pandas DataFrame
+        
         Examples
-        --------
-
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        --------    
+        
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
@@ -285,7 +266,7 @@ class LiPD(RDFGraph):
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
                 "../examples/data/MD98_2181.Stott.2007.lpd"
             ])
-            print(lipd.get_bibtex())
+            print(lipd.get_bibtex(save=False))
         '''
 
         def establish_type(pub_type):
@@ -421,9 +402,7 @@ class LiPD(RDFGraph):
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
@@ -460,6 +439,7 @@ class LiPD(RDFGraph):
                 tss = LiPD_Legacy().extract(d)
                 timeseries[dsname] = tss
         return timeseries
+    
 
     def get_lipd(self, dsname):
         '''Get LiPD json for a dataset
@@ -479,13 +459,11 @@ class LiPD(RDFGraph):
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
-            # Fetch LiPD data from remote RDF Graph
+            # Load a local LiPD file
             lipd = LiPD()
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
@@ -517,13 +495,12 @@ class LiPD(RDFGraph):
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
+
 
             from pylipd.lipd import LiPD
 
-            # Fetch LiPD data from remote RDF Graph
+            # Load a local file
             lipd = LiPD()
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
@@ -537,6 +514,7 @@ class LiPD(RDFGraph):
 
     def get(self, dsnames):
         '''Gets dataset(s) from the graph and returns the popped LiPD object
+        
         Parameters
         ----------
         dsnames : str or list of str
@@ -550,13 +528,11 @@ class LiPD(RDFGraph):
 
         Examples
         --------
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
-            # Fetch LiPD data from remote RDF Graph
+            # Load LiPD files from a local directory
             lipd = LiPD()
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
@@ -590,13 +566,12 @@ class LiPD(RDFGraph):
 
         Examples
         --------
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
+
 
             from pylipd.lipd import LiPD
 
-            # Fetch LiPD data from remote RDF Graph
+            # Load local files
             lipd = LiPD()
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
@@ -624,13 +599,12 @@ class LiPD(RDFGraph):
         
         Examples
         --------
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
+
 
             from pylipd.lipd import LiPD
             
-            # Fetch LiPD data from remote RDF Graph
+            # Load local files
             lipd = LiPD()
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
@@ -661,13 +635,11 @@ class LiPD(RDFGraph):
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
-            # Fetch LiPD data from remote RDF Graph
+            # Load local files
             lipd = LiPD()
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
@@ -691,13 +663,11 @@ class LiPD(RDFGraph):
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
-            # Fetch LiPD data from remote RDF Graph
+            # Load local files
             lipd = LiPD()
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
@@ -720,13 +690,11 @@ class LiPD(RDFGraph):
         Examples
         --------
         
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
-            # Fetch LiPD data from remote RDF Graph
+            # Load Local files
             lipd = LiPD()
             lipd.load([
                 "../examples/data/Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001.lpd",
@@ -741,7 +709,6 @@ class LiPD(RDFGraph):
         
         
 
-
     def get_ensemble_tables(self, dsname = None, ensembleVarName = None, ensembleDepthVarName = 'depth'):
         '''Gets ensemble tables from the LiPD graph
 
@@ -750,8 +717,10 @@ class LiPD(RDFGraph):
 
         dsname : str
             The name of the dataset if you wish to analyse one at a time (Set to ".*" to match all datasets with a common root)
+        
         ensembleVarName : None or str
             ensemble variable name. Default is None, which searches for names that contain "year" or "age" (Set to ".*" to match all ensemble variable names)
+        
         ensembleDepthVarName : str
             ensemble depth variable name. Default is 'depth' (Set to ".*" to match all ensemble depth variable names)
 
@@ -765,9 +734,7 @@ class LiPD(RDFGraph):
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
             from pylipd.lipd import LiPD
 
@@ -782,7 +749,6 @@ class LiPD(RDFGraph):
                 ensembleVarName="age",
                 ensembleDepthVarName="depth"
             )
-            print("Ensemble tables:")
             print(ens_df)
         '''
         
@@ -814,6 +780,21 @@ class LiPD(RDFGraph):
 
         pandas.DataFrame
             A dataframe of all variables in the graph with columns uri, varid, varname
+            
+        Examples
+        --------
+        
+        .. jupyter-execute::
+
+            from pylipd.lipd import LiPD
+
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/ODP846.Lawrence.2006.lpd"
+            ])
+            
+            df = lipd.get_all_variables()
+            print(df)
 
         '''
         return self.query(QUERY_VARIABLE)[1]
@@ -832,7 +813,21 @@ class LiPD(RDFGraph):
         -------
         pylipd.lipd.LiPDSeries
             A LiPDSeries object
+            
+        Examples
+        --------
+        
+        .. jupyter-execute::
 
+            from pylipd.lipd import LiPD
+
+            lipd = LiPD()
+            lipd.load([
+                "../examples/data/ODP846.Lawrence.2006.lpd"
+            ])
+            
+            S = lipd.to_lipd_series()
+        
         '''
         S = LiPDSeries()    
         S.load(self, parallel)
@@ -864,7 +859,20 @@ class LiPD(RDFGraph):
 
         pylipd.lipd.LiPD
             A new LiPD object that only contains datasets that fall within the bounding box
+        
+        Examples
+        --------
+        
+        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Euro2k sample datasets using this method.
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
 
+            lipd = load_dir()
+            Lfiltered = lipd.filter_by_geo_bbox(0,25,50,50)
+            Lfiltered.get_all_dataset_names()           
+        
         '''
         query = QUERY_FILTER_GEO
         query = query.replace("[lonMin]", str(lonMin))
@@ -891,7 +899,20 @@ class LiPD(RDFGraph):
         
         pylipd.lipd.LiPD
             A new LiPD object that only contains datasets that have the specified archive type (regex)
+        
+        Examples
+        --------
+        
+        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Euro2k sample datasets using this method.
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
 
+            lipd = load_dir()
+            Lfiltered = lipd.filter_by_archive_type('marine')
+            Lfiltered.get_all_dataset_names()
+        
         '''
         query = QUERY_FILTER_ARCHIVE_TYPE
         query = query.replace("[archiveType]", archiveType)

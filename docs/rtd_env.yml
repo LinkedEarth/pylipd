@@ -5,7 +5,8 @@ channels:
 dependencies:
   - python=3.10
   - numpy
-  - cartopy=0.21
+  - pandas
+  - Sphinx<6.0
   - pip:
     - sphinx
     - pylint
@@ -14,4 +15,7 @@ dependencies:
     - nbsphinx
     - IPython
     - readthedocs-sphinx-search>=0.1.0
+    - sphinx-rtd-theme>=1.0.0
+    - jupyter-sphinx
+    - sphinx-copybutton
     - pylipd

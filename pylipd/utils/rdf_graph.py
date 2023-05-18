@@ -7,8 +7,8 @@ from copy import deepcopy
 import re
 from rdflib import ConjunctiveGraph, Namespace, URIRef
 
-from pylipd.globals.urls import ONTONS
-from pylipd.utils import sparql_results_to_df
+from ..globals.urls import ONTONS
+from ..utils import sparql_results_to_df
 
 class RDFGraph:
     '''
@@ -17,17 +17,15 @@ class RDFGraph:
     Examples
     --------
     
-    .. ipython:: python
-        :okwarning:
-        :okexcept:
+    .. jupyter-execute::
 
-        from pylipd.rdf_graph import RDFGraph
+        from pylipd.utils.rdf_graph import RDFGraph
 
         # Load RDF file into graph
         rdf = RDFGraph()
         rdf.load(["../examples/rdf/graph.ttl"])
         (result, result_df) = rdf.query("SELECT ?s ?p ?o WHERE {?s ?p ?o} LIMIT 10")
-        result_df    
+        print(result_df)    
 
     '''
 
@@ -54,17 +52,15 @@ class RDFGraph:
         Examples
         --------
         
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
-            from pylipd.rdf_graph import RDFGraph
+            from pylipd.utils.rdf_graph import RDFGraph
 
             # Load RDF file into graph
             rdf = RDFGraph()
             rdf.load(["../examples/rdf/graph.ttl"])
             (result, result_df) = rdf.query("SELECT ?s ?p ?o WHERE {?s ?p ?o} LIMIT 10")
-            result_df
+            print(result_df)
         '''
 
         for file in files:
@@ -82,7 +78,7 @@ class RDFGraph:
 
         Returns
         -------
-        pylipd.rdf_graph.RDFGraph
+        pylipd.utils.rdf_graph.RDFGraph
             a copy of the original object
 
         '''
@@ -100,7 +96,7 @@ class RDFGraph:
 
         Returns
         -------
-        pylipd.rdf_graph.RDFGraph
+        pylipd.utils.rdf_graph.RDFGraph
             merged RDFGraph object
 
         '''
@@ -121,11 +117,9 @@ class RDFGraph:
         Examples
         --------
         
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
-            from pylipd.rdf_graph import RDFGraph
+            from pylipd.utils.rdf_graph import RDFGraph
 
             # Fetch LiPD data from remote RDF Graph
             rdf = RDFGraph()
@@ -163,11 +157,9 @@ class RDFGraph:
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
-            from pylipd.rdf_graph import RDFGraph
+            from pylipd.utils.rdf_graph import RDFGraph
 
             rdf = RDFGraph()
             rdf.load(["../examples/rdf/graph.ttl"])
@@ -176,7 +168,7 @@ class RDFGraph:
                         ?s ?p ?o 
                     } LIMIT 10 """
             result, result_df = rdf.query(query)
-            result_df
+            print(result_df)
         '''
 
         if remote and self.endpoint:
@@ -206,11 +198,9 @@ class RDFGraph:
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
-            from pylipd.rdf_graph import RDFGraph
+            from pylipd.utils.rdf_graph import RDFGraph
 
             # Remove RDF graph data for given id(s)
             rdf = RDFGraph()
@@ -240,17 +230,15 @@ class RDFGraph:
         Returns
         -------
 
-        pylipd.rdf_graph.RDFGraph
+        pylipd.utils.utils.rdf_graph.RDFGraph
             RDFGraph object with the retrieved graph(s)
 
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
-            from pylipd.rdf_graph import RDFGraph
+            from pylipd.utils.rdf_graph import RDFGraph
 
             # Fetch RDF graph data for given id(s)
             rdf = RDFGraph()
@@ -288,17 +276,15 @@ class RDFGraph:
         Returns
         -------
 
-        pylipd.rdf_graph.RDFGraph
+        pylipd.utils.rdf_graph.RDFGraph
             RDFGraph object with the popped graph(s)
 
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
-            from pylipd.rdf_graph import RDFGraph
+            from pylipd.utils.rdf_graph import RDFGraph
 
             # Pop RDF graph data for given id(s)
             rdf = RDFGraph()
@@ -325,11 +311,9 @@ class RDFGraph:
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
-            from pylipd.rdf_graph import RDFGraph
+            from pylipd.utils.rdf_graph import RDFGraph
 
             # Fetch RDF Graph Data
             rdf = RDFGraph()
@@ -345,11 +329,9 @@ class RDFGraph:
         Examples
         --------
 
-        .. ipython:: python
-            :okwarning:
-            :okexcept:
+        .. jupyter-execute::
 
-            from pylipd.rdf_graph import RDFGraph
+            from pylipd.utils.rdf_graph import RDFGraph
 
             # Fetch RDF data
             rdf = RDFGraph()
