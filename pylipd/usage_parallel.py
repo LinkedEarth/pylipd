@@ -5,11 +5,16 @@ if __name__ == "__main__":
 
     L = LiPD()
 
+    L.load_from_dir("examples/data/Euro2k", parallel=True, cutoff=1000)
+    Lfiltered = L.filter_by_archive_type("marine")
+    print(len(Lfiltered.get_all_dataset_names()))
+    print(Lfiltered.get_all_archiveTypes())
+
     # Convert LiPD files to RDF    
-    L.convert_lipd_dir_to_rdf(
-        local_lipd_dir,
-        local_lipd_dir+".nq", 
-        parallel=True)
+    # L.convert_lipd_dir_to_rdf(
+    #     local_lipd_dir,
+    #     local_lipd_dir+".nq", 
+    #     parallel=True)
     
     '''
     L.load_from_dir(local_lipd_dir, parallel=True, cutoff=1000)

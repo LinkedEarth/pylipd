@@ -26,7 +26,7 @@ def multi_convert_to_rdf(filemap, parallel=True):
         pool.close()
     else:
         for lipdfile, rdffile in filemap.items():
-            convert_to_rdf(lipdfile, rdffile)
+            convert_to_rdf((lipdfile, rdffile))
 
 
 def convert_lipd_to_graph(lipdfile):

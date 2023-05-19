@@ -85,13 +85,13 @@ class TestFilter():
     def test_geo_t0(self,euro2k):
         D=euro2k
         Lfiltered = D.filter_by_geo_bbox(0,25,50,50)
-        assert len(Lfiltered.get_all_dataset_names()) == 10
+        assert len(Lfiltered.get_all_dataset_names()) == 15
     
     def test_archive_to(self,euro2k):
         D=euro2k
-        Lfiltered = D.filter_by_archive_type('marine')
+        Lfiltered = D.filter_by_archive_type('marine sediment')
         assert len(Lfiltered.get_all_archiveTypes())==1
-        assert Lfiltered.get_all_archiveTypes()[0] == 'marine_sediment'
+        assert Lfiltered.get_all_archiveTypes()[0] == 'marine sediment'
 
         
 class TestGet():
@@ -148,7 +148,7 @@ class TestRdf():
     
     def test_convert_to_rdf_t0(self):
         lipd = LiPD()
-        lipd.convert_lipd_dir_to_rdf("./examples/data", "all-lipd.nq")
+        lipd.convert_lipd_dir_to_rdf("./examples/data/Euro2k", "all-lipd.nq")
 
         
                 

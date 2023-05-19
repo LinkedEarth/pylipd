@@ -1126,6 +1126,8 @@ class LipdToRDF:
         
         with open(jsonpath) as f:
             obj = json.load(f)
+            if "dataSetName" in obj:
+                self.graphurl = NSURL + "/" + sanitizeId(obj["dataSetName"])
             
             self._map_lipd_to_json(obj, None, None, "Dataset", "Dataset", objhash)
             if url:

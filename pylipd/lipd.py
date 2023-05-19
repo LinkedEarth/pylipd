@@ -705,7 +705,7 @@ class LiPD(RDFGraph):
         '''
         
         qres, qres_df = self.query(QUERY_UNIQUE_ARCHIVE_TYPE)
-        return [sanitizeId(row.archiveType) for row in qres]
+        return [str(row.archiveType) for row in qres]
         
         
 
