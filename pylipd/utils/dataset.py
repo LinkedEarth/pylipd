@@ -63,7 +63,11 @@ def load_datasets(names):
    
     return L
 
-def load_dir():
+def load_dir(name = 'Euro2k'):
+    
+    if name!= 'Euro2k':
+        raise ValueError("Option for folder is 'Euro2k")
+    
     L = LiPD()
     L.load_from_dir(str(FOLDER_DIR))
     
