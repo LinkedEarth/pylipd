@@ -121,6 +121,15 @@ class TestGet():
         ens_df = D.get_ensemble_tables()
         assert len(ens_df.index) == 1
     
+    @pytest.mark.parametrize('mode',['chron', 'paleo'])
+    def test_get_timeseries_essentials_t0(self, odp846, mode):
+        D = odp846
+        df = D.get_timeseries_essentials(mode=mode)
+    
+    def test_get_timeseries_essentials_t0(self, odp846):
+        D = odp846
+        df = D.get_timeseries_essentials(dsname=D.get_all_dataset_names()[0])
+    
     @pytest.mark.parametrize('ensname',['year','age'])
     def test_ens_t1(self,odp846, ensname):
         D=odp846

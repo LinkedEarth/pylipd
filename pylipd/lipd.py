@@ -14,7 +14,7 @@ import io
 
 from rdflib import ConjunctiveGraph, URIRef
 from tqdm import tqdm
-from .globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE
+from .globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO
 from .lipd_series import LiPDSeries
 from .utils.multi_processing import multi_convert_to_rdf, multi_load_lipd
 from .utils.rdf_graph import RDFGraph
@@ -440,6 +440,68 @@ class LiPD(RDFGraph):
                 timeseries[dsname] = tss
         return timeseries
     
+    def get_timeseries_essentials(self, dsname = None, mode='paleo'):
+        ''' Returns specific properties for timeseries: 'dataSetName', 'archiveType', 'geo_meanLat', 'geo_meanLon',
+               'geo_meanElev', 'paleoData_variableName', 'paleoData_values',
+               'paleoData_units', 'paleoData_proxy' (paleo only), 'paleoData_proxyGeneral' (paleo only),
+               'time_variableName', 'time_values', 'time_units', 'depth_variableName',
+               'depth_values', 'depth_units'
+        
+
+        Parameters
+        ----------
+        dsname : str, optional
+            The name of the dataset for which to return the timeseries information. The default is None.
+        mode : paleo, chron
+            Whether to retrun the information stored in the PaleoMeasurementTable or the ChronMeasurementTable. The default is 'paleo'.
+
+        Raises
+        ------
+        ValueError
+            Need to select either 'chron' or 'paleo'
+
+        Returns
+        -------
+        qres_df : pandas.DataFrame
+            A pandas dataframe returning the properties in columns for each series stored in a row of the dataframe
+
+        Example
+        --------
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_datasets
+            lipd = load_datasets('ODP846.Lawrence.2006.lpd')
+            df_paleo = lipd.get_timeseries_essentials(mode='paleo')
+            print(df_paleo)
+        
+        To return the information stored in the ChronTable:
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_datasets
+            lipd = load_datasets('ODP846.Lawrence.2006.lpd')  
+            df_chron = lipd.get_timeseries_essentials(mode='chron')
+            print(df_chron)
+    
+        '''
+        
+        if dsname is None:
+            dsname= ''
+        
+        if mode == 'paleo':
+            query = QUERY_TIMESERIES_ESSENTIALS_PALEO
+            query = query.replace("[dsname]", dsname)
+        elif mode == 'chron':
+            query = QUERY_TIMESERIES_ESSENTIALS_CHRON
+            query = query.replace("[dsname]", dsname)
+        else:
+            raise ValueError("The mode should be either 'paleo' or 'chron'")
+    
+        qres, qres_df = self.query(query)
+        
+        return qres_df
+            
 
     def get_lipd(self, dsname):
         '''Get LiPD json for a dataset
@@ -909,7 +971,7 @@ class LiPD(RDFGraph):
             
             from pylipd.utils.dataset import load_dir
 
-            lipd = load_dir()
+            lipd = load_dir(name='Euro2k')
             Lfiltered = lipd.filter_by_archive_type('marine')
             Lfiltered.get_all_dataset_names()
         
