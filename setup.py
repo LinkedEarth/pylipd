@@ -11,6 +11,8 @@ setup(
     name='pylipd',
     packages=find_packages(),
     include_package_data=True,
+    package_data={'': ['data/*.lpd', 'data/Euro2k/*.lpd']}
+    include_package_data=True,
     zip_safe=False,
     version=version,
     license='Apache 2-0 License',
