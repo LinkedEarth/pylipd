@@ -14,7 +14,7 @@ import io
 
 from rdflib import ConjunctiveGraph, URIRef
 from tqdm import tqdm
-from .globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO
+from .globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE
 from .lipd_series import LiPDSeries
 from .utils.multi_processing import multi_convert_to_rdf, multi_load_lipd
 from .utils.rdf_graph import RDFGraph
@@ -861,6 +861,19 @@ class LiPD(RDFGraph):
         '''
         return self.query(QUERY_VARIABLE)[1]
 
+    def get_all_variable_names(self):
+        """
+        Get a list of all possible distinct variableNames. Useful for filtering and qeurying. 
+
+        Returns
+        -------
+        list
+            A list of unique variableName 
+
+        """
+        
+        return self.query(QUERY_DISTINCT_VARIABLE)[1].iloc[:,0].values.tolist()
+    
 
     def to_lipd_series(self, parallel=False):
         '''

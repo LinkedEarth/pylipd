@@ -109,13 +109,25 @@ QUERY_BIBLIO = """
     GROUP BY ?pub ?dsname ?title ?doi ?year ?pubyear ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution ?url ?url2
 """
 
+QUERY_DISTINCT_VARIABLE="""
+    PREFIX le: <http://linked.earth/ontology#>
+    
+    SELECT distinct ?variableName 
+    WHERE {
+        ?uri le:name ?variableName .
+        ?uri le:hasVariableID ?TSID
+    }
+    
+
+"""
+
 QUERY_VARIABLE = """
     PREFIX le: <http://linked.earth/ontology#>
 
-    SELECT ?uri ?varid ?varname 
+    SELECT ?uri ?TSID ?variableName 
     WHERE {
-        ?uri le:name ?varname .
-        ?uri le:hasVariableID ?varid
+        ?uri le:name ?variableName .
+        ?uri le:hasVariableID ?TSID
     }
 """
 

@@ -22,6 +22,7 @@ Notes on how to test:
 
 import pytest
 from pylipd.lipd import LiPD
+import urllib as urllib
 
 class TestLiPDLoad():
     
@@ -35,7 +36,10 @@ class TestLiPDLoad():
         
         lipd_remote = LiPD()
         lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
-        lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
+        try:
+            lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
+        except(urllib.error.HTTPError):
+            pass
     
     def test_load_t3(self,euro2k):
         lipd = euro2k
@@ -145,6 +149,11 @@ class TestGet():
         names = D.get_all_dataset_names()
         ens_df = D.get_ensemble_tables(dsname=names[0])
         assert len(ens_df.index) == 1
+    
+    def test_var_name_t0(self,euro2k):
+        
+        D=euro2k
+        D.get_all_variable_names()
         
                 
 class TestTransform():
