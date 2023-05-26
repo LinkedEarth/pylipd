@@ -252,30 +252,30 @@ QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
         OPTIONAL{?ds le:proxyArchiveType ?archiveType .}
         
         ?ds le:collectedFrom ?loc .
-        ?loc wgs84:lat ?geo_meanLat .
-        ?loc wgs84:long ?geo_meanLon .
+        OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
+        OPTIONAL{?loc wgs84:long ?geo_meanLon .}
         OPTIONAL {?loc wgs84:alt ?geo_meanElev .}
         
         ?ds le:includesPaleoData ?data .
         ?data le:foundInMeasurementTable ?table .
         ?table le:includesVariable ?var .
-        ?var le:name ?paleoData_variableName .
+        OPTIONAL{?var le:name ?paleoData_variableName .}
         ?var le:hasValues ?paleoData_values .
         OPTIONAL{?var le:hasUnits ?paleoData_units .}
         OPTIONAL{?var le:proxy ?paleoData_proxy .}
         OPTIONAL{?var le:proxyGeneral ?paleoData_proxyGeneral .}
         
-        ?table le:includesVariable ?timevar .
+        OPTIONAL{?table le:includesVariable ?timevar .
         ?timevar le:name ?time_variableName .
             FILTER (regex(?time_variableName, "year.*") || regex(?time_variableName, "age.*")) .
         ?timevar le:hasValues ?time_values .
-            OPTIONAL{?timevar le:hasUnits ?time_units .}
+            OPTIONAL{?timevar le:hasUnits ?time_units .}}
         
-        ?table le:includesVariable ?depthvar .
+        OPTIONAL{?table le:includesVariable ?depthvar .
         ?depthvar le:name ?depth_variableName .
             FILTER (regex(?depth_variableName, "depth.*")) .
         ?depthvar le:hasValues ?depth_values .
-            OPTIONAL{?depthvar le:hasUnits ?depth_units .}
+            OPTIONAL{?depthvar le:hasUnits ?depth_units .}}
     }
 """
 
@@ -291,28 +291,28 @@ QUERY_TIMESERIES_ESSENTIALS_CHRON ="""
         OPTIONAL{?ds le:proxyArchiveType ?archiveType .}
         
         ?ds le:collectedFrom ?loc .
-        ?loc wgs84:lat ?geo_meanLat .
-        ?loc wgs84:long ?geo_meanLon .
+        OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
+        OPTIONAL{?loc wgs84:long ?geo_meanLon .}
         OPTIONAL {?loc wgs84:alt ?geo_meanElev .}
         
         ?ds le:includesChronData ?data .
         ?data le:foundInMeasurementTable ?table .
         ?table le:includesVariable ?var .
-        ?var le:name ?chronData_variableName .
+        OPTIONAL{?var le:name ?chronData_variableName .}
         ?var le:hasValues ?chronData_values .
         OPTIONAL{?var le:hasUnits ?chronData_units .}
         
-        ?table le:includesVariable ?timevar .
+        OPTIONAL{?table le:includesVariable ?timevar .
         ?timevar le:name ?time_variableName .
             FILTER (regex(?time_variableName, "year.*") || regex(?time_variableName, "age.*")) .
         ?timevar le:hasValues ?time_values .
-            OPTIONAL{?timevar le:hasUnits ?time_units .}
+            OPTIONAL{?timevar le:hasUnits ?time_units .}}
         
-        ?table le:includesVariable ?depthvar .
+        OPTIONAL{?table le:includesVariable ?depthvar .
         ?depthvar le:name ?depth_variableName .
             FILTER (regex(?depth_variableName, "depth.*")) .
         ?depthvar le:hasValues ?depth_values .
-            OPTIONAL{?depthvar le:hasUnits ?depth_units .}
+            OPTIONAL{?depthvar le:hasUnits ?depth_units .}}
     }
 """
 

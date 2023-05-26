@@ -138,6 +138,9 @@ class LiPD(RDFGraph):
         print(f"Loading {numfiles} LiPD files")
         self.graph = multi_load_lipd(self.graph, lipdfiles, parallel)
         print("Loaded..")
+    
+    #def load_from_lipdverse(self, datasetID, version=None):
+        
 
 
     def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file, parallel=False):
