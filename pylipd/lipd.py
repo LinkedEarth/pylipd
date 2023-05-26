@@ -11,6 +11,7 @@ import pandas as pd
 import random
 import string
 import io
+import numpy as np
 
 from rdflib import ConjunctiveGraph, URIRef
 from tqdm import tqdm
@@ -502,6 +503,12 @@ class LiPD(RDFGraph):
             raise ValueError("The mode should be either 'paleo' or 'chron'")
     
         qres, qres_df = self.query(query)
+        
+        qres_df['paleoData_values']=qres_df['paleoData_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        qres_df['time_values']=qres_df['time_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        for _,row in qres_df.iterrows():
+            if row['depth_values'] is not None:
+                row['depth_values']=row['depth_values'].apply(lambda x : np.fromstring(x.strip("[]"), sep=','))
         
         return qres_df
             

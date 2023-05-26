@@ -31,7 +31,8 @@ setup(
         "doi2bib",
         "pybtex",
         "tqdm",
-        "bagit"
+        "bagit",
+        "numpy"
     ],
     python_requires=">=3.9.0"
 )
