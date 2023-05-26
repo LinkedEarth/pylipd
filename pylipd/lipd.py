@@ -14,7 +14,7 @@ import io
 
 from rdflib import ConjunctiveGraph, URIRef
 from tqdm import tqdm
-from .globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE
+from .globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE, QUERY_DATASET_PROPERTIES, QUERY_VARIABLE_PROPERTIES, QUERY_MODEL_PROPERTIES
 from .lipd_series import LiPDSeries
 from .utils.multi_processing import multi_convert_to_rdf, multi_load_lipd
 from .utils.rdf_graph import RDFGraph
@@ -869,11 +869,102 @@ class LiPD(RDFGraph):
         -------
         list
             A list of unique variableName 
+        
+        Example
+        -------
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+            lipd = load_dir(name='Euro2k')
+            varName = lipd.get_all_variable_names()
+            print(varName)
+        
 
         """
         
         return self.query(QUERY_DISTINCT_VARIABLE)[1].iloc[:,0].values.tolist()
     
+    def get_dataset_properties(self):
+        """Get a list of unique properties attached to a dataset. 
+        
+        Note: Some properties will return another object (e.g., 'publishedIn' will give you a Publication object with its own properties)
+        Note: Not all datasets will have the same available properties (i.e., not filled in by a user)
+        
+
+        Returns
+        -------
+        clean_list : list
+            A list of avialable properties that can queried
+
+        Example
+        -------
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+            lipd = load_dir(name='Euro2k')
+            dataset_properties = lipd.get_dataset_properties()
+            print(dataset_properties)
+        """
+        
+        query_list = self.query(QUERY_DATASET_PROPERTIES)[1].iloc[:,0].values.tolist()
+        clean_list = [item.split("#")[-1] for item in query_list]
+        
+        return clean_list
+    
+    def get_variable_properties(self):
+        '''Get a list of variable properties that can be used for querying
+        
+
+        Returns
+        -------
+        list
+            A list of unique variable properties
+        
+        Example
+        -------
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+            lipd = load_dir(name='Euro2k')
+            variable_properties = lipd.get_variable_properties()
+            print(variable_properties)
+
+        '''
+        
+        query_list = self.query(QUERY_VARIABLE_PROPERTIES)[1].iloc[:,0].values.tolist()
+        clean_list = [item.split("#")[-1] for item in query_list]
+        
+        return clean_list
+    
+    def get_model_properties(self):
+        '''Get all the properties associated with a model
+        
+
+        Returns
+        -------
+        List
+            A list of unique properties attached to models
+        
+        Example
+        -------
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_datasets
+            lipd = load_datasets(name='ODP846')
+            model_properties = lipd.get_model_properties()
+            print(model_properties)
+
+
+        '''
+        
+        query_list = self.query(QUERY_MODEL_PROPERTIES)[1].iloc[:,0].values.tolist()
+        clean_list = [item.split("#")[-1] for item in query_list]
+        
+        return clean_list
 
     def to_lipd_series(self, parallel=False):
         '''

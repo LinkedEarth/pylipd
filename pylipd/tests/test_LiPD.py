@@ -130,7 +130,7 @@ class TestGet():
         D = odp846
         df = D.get_timeseries_essentials(mode=mode)
     
-    def test_get_timeseries_essentials_t0(self, odp846):
+    def test_get_timeseries_essentials_t1(self, odp846):
         D = odp846
         df = D.get_timeseries_essentials(dsname=D.get_all_dataset_names()[0])
     
@@ -154,6 +154,18 @@ class TestGet():
         
         D=euro2k
         D.get_all_variable_names()
+    
+    def test_get_dataset_properties_t0(self,euro2k):
+        D=euro2k
+        D.get_dataset_properties()
+    
+    def test_get_variable_properties_t0(self,euro2k):
+        D=euro2k
+        D.get_variable_properties()
+    
+    def test_get_model_properties_t0(self,odp846):
+        D=odp846
+        D.get_model_properties()
         
                 
 class TestTransform():

@@ -316,3 +316,51 @@ QUERY_TIMESERIES_ESSENTIALS_CHRON ="""
     }
 """
 
+QUERY_VARIABLE_PROPERTIES="""
+    PREFIX le: <http://linked.earth/ontology#>
+    SELECT  DISTINCT ?property where {
+    
+    ?ds a le:Dataset .
+    
+    {?ds le:includesPaleoData ?data .
+    ?data le:foundInMeasurementTable ?table .
+    ?table le:includesVariable ?var .
+    ?var ?property ?value .}
+    
+    UNION
+    
+    {OPTIONAL{?ds le:includesChronData ?data1 .
+    ?data1 le:foundInMeasurementTable ?table1 .
+    ?table1 le:includesVariable ?var1 .
+    ?var1 ?property ?value1 .}}
+    
+    }
+"""
+
+
+QUERY_DATASET_PROPERTIES="""
+    PREFIX le: <http://linked.earth/ontology#>
+    SELECT DISTINCT ?property where {
+    ?ds a le:Dataset .
+    ?ds ?property ?value .
+    }
+"""
+
+QUERY_MODEL_PROPERTIES="""
+    PREFIX le: <http://linked.earth/ontology#>
+    SELECT  DISTINCT ?property where {
+    
+    ?ds a le:Dataset .
+    
+    {OPTIONAL{?ds le:includesPaleoData ?data .
+              ?data le:paleoModeledBy ?paleomodel .
+              ?paleomodel ?property ?value .}}
+    
+    UNION
+    
+    {OPTIONAL{?ds le:includesChronData ?chron .
+              ?chron le:paleoModeledBy ?chronmodel .
+              ?chronmodel ?property ?value .}}
+    
+    }
+"""
