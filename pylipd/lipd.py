@@ -419,6 +419,10 @@ class LiPD(RDFGraph):
                     if 'paleoData_variableName' in tso:
                         print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
         '''
+        
+        if type(dsnames)==str:
+            dsnames=[dsnames]
+        
         ts = self._get_timeseries(dsnames)
         if to_dataframe == False:
             return ts
@@ -504,11 +508,20 @@ class LiPD(RDFGraph):
     
         qres, qres_df = self.query(query)
         
-        qres_df['paleoData_values']=qres_df['paleoData_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
-        qres_df['time_values']=qres_df['time_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        try:
+            qres_df['paleoData_values']=qres_df['paleoData_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        except:
+            qres_df['chronData_values']=qres_df['chronData_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        
+        
+        for _,row in qres_df.iterrows():
+            if row['time_values'] is not None:
+                row['time_values']=np.fromstring(row['time_values'].strip("[]"), sep=',')
+        
+        
         for _,row in qres_df.iterrows():
             if row['depth_values'] is not None:
-                row['depth_values']=row['depth_values'].apply(lambda x : np.fromstring(x.strip("[]"), sep=','))
+                row['depth_values']=np.fromstring(row['depth_values'].strip("[]"), sep=',')
         
         return qres_df
             
@@ -840,6 +853,11 @@ class LiPD(RDFGraph):
             query = query.replace("[ensembleDepthVarName]", ensembleDepthVarName)
 
         qres, qres_df = self.query(query)
+        
+        qres_df['ensembleDepthValues']=qres_df['ensembleDepthValues'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        qres_df['ensembleVariableValues']=qres_df['ensembleVariableValues'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        
+        
         return qres_df
 
 
