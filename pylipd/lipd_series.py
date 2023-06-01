@@ -126,6 +126,19 @@ class LiPDSeries(RDFGraph):
         -------
         qres_df : pandas.DataFrame
             A dataframe containing the information in each column
+        
+        Examples
+        --------
+        
+        .. jupyter-execute::
+
+            from pylipd.utils.dataset import load_dir
+
+            lipd = load_dir()
+            S = lipd.to_lipd_series()
+            df = S.get_timeseries_essentials()
+            
+            print(df)
 
         '''
         

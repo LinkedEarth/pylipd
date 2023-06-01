@@ -13,7 +13,7 @@ import glob
 from pylipd.lipd import LiPD
 
 DATA_DIR = Path(__file__).parents[1].joinpath("data").resolve()
-FOLDER_DIR = DATA_DIR.joinpath('Euro2k/')
+FOLDER_DIR = DATA_DIR.joinpath('Pages2k/')
 
 def available_dataset_names():
     '''Helper function to easily see what datasets are available to load
@@ -63,10 +63,10 @@ def load_datasets(names):
    
     return L
 
-def load_dir(name = 'Euro2k'):
+def load_dir(name = 'Pages2k'):
     
-    if name!= 'Euro2k':
-        raise ValueError("Option for folder is 'Euro2k")
+    if name!= 'Pages2k':
+        raise ValueError("Option for folder is 'Pages2k")
     
     L = LiPD()
     L.load_from_dir(str(FOLDER_DIR))

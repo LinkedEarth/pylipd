@@ -810,7 +810,7 @@ class LiPD(RDFGraph):
         .. jupyter-execute::
             
             from pylipd.utils.dataset import load_dir
-            lipd = load_dir('Euro2k')
+            lipd = load_dir('Pages2k')
             df = lipd.get_all_locations()
             print(df)
 
@@ -935,7 +935,7 @@ class LiPD(RDFGraph):
         .. jupyter-execute::
             
             from pylipd.utils.dataset import load_dir
-            lipd = load_dir(name='Euro2k')
+            lipd = load_dir(name='Pages2k')
             varName = lipd.get_all_variable_names()
             print(varName)
         
@@ -962,7 +962,7 @@ class LiPD(RDFGraph):
         .. jupyter-execute::
             
             from pylipd.utils.dataset import load_dir
-            lipd = load_dir(name='Euro2k')
+            lipd = load_dir(name='Pages2k')
             dataset_properties = lipd.get_dataset_properties()
             print(dataset_properties)
         """
@@ -987,7 +987,7 @@ class LiPD(RDFGraph):
         .. jupyter-execute::
             
             from pylipd.utils.dataset import load_dir
-            lipd = load_dir(name='Euro2k')
+            lipd = load_dir(name='Pages2k')
             variable_properties = lipd.get_variable_properties()
             print(variable_properties)
 
@@ -1088,7 +1088,7 @@ class LiPD(RDFGraph):
         Examples
         --------
         
-        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Euro2k sample datasets using this method.
+        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Pages2k sample datasets using this method.
         
         .. jupyter-execute::
             
@@ -1128,13 +1128,13 @@ class LiPD(RDFGraph):
         Examples
         --------
         
-        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Euro2k sample datasets using this method.
+        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Pages2k sample datasets using this method.
         
         .. jupyter-execute::
             
             from pylipd.utils.dataset import load_dir
 
-            lipd = load_dir(name='Euro2k')
+            lipd = load_dir(name='Pages2k')
             Lfiltered = lipd.filter_by_archive_type('marine')
             Lfiltered.get_all_dataset_names()
         

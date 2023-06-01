@@ -41,8 +41,8 @@ class TestLiPDLoad():
         except(urllib.error.HTTPError):
             pass
     
-    def test_load_t3(self,euro2k):
-        lipd = euro2k
+    def test_load_t3(self,pages2k):
+        lipd = pages2k
 
 class Testgetall():
     
@@ -55,8 +55,8 @@ class Testgetall():
         lipd, true_ids = multipleLipds
         ids = lipd.get_all_dataset_ids()
         
-    def test_archiveTypes_t0(self,euro2k):
-        lipd = euro2k
+    def test_archiveTypes_t0(self,pages2k):
+        lipd = pages2k
         archive = lipd.get_all_archiveTypes()
     
     def test_variables_t0(self,odp846):
@@ -66,18 +66,18 @@ class Testgetall():
 
 class TestManipulation():
     
-    def test_remove_to(self,euro2k):
+    def test_remove_to(self,pages2k):
                
-        D=euro2k
+        D=pages2k
         names = D.get_all_dataset_names()
         names_compare = names[1:]
         D_test = D.copy()
         D_test.remove(names[0])
         assert D_test.get_all_dataset_names() == names_compare
 
-    def test_pop_t0(self,euro2k):
+    def test_pop_t0(self,pages2k):
         
-        D=euro2k
+        D=pages2k
         names = D.get_all_dataset_names()
         D_test = D.copy()
         D_popped = D_test.pop(names[0])
@@ -86,13 +86,13 @@ class TestManipulation():
 
 class TestFilter():
     
-    def test_geo_t0(self,euro2k):
-        D=euro2k
+    def test_geo_t0(self,pages2k):
+        D=pages2k
         Lfiltered = D.filter_by_geo_bbox(0,25,50,50)
-        assert len(Lfiltered.get_all_dataset_names()) == 15
+        assert len(Lfiltered.get_all_dataset_names()) == 5
     
-    def test_archive_to(self,euro2k):
-        D=euro2k
+    def test_archive_to(self,pages2k):
+        D=pages2k
         Lfiltered = D.filter_by_archive_type('marine sediment')
         assert len(Lfiltered.get_all_archiveTypes())==1
         assert Lfiltered.get_all_archiveTypes()[0] == 'marine sediment'
@@ -150,25 +150,25 @@ class TestGet():
         ens_df = D.get_ensemble_tables(dsname=names[0])
         assert len(ens_df.index) == 1
     
-    def test_var_name_t0(self,euro2k):
+    def test_var_name_t0(self,pages2k):
         
-        D=euro2k
+        D=pages2k
         D.get_all_variable_names()
     
-    def test_get_dataset_properties_t0(self,euro2k):
-        D=euro2k
+    def test_get_dataset_properties_t0(self,pages2k):
+        D=pages2k
         D.get_dataset_properties()
     
-    def test_get_variable_properties_t0(self,euro2k):
-        D=euro2k
+    def test_get_variable_properties_t0(self,pages2k):
+        D=pages2k
         D.get_variable_properties()
     
     def test_get_model_properties_t0(self,odp846):
         D=odp846
         D.get_model_properties()
     
-    def test_get_locations_t0(self,euro2k):
-        D=euro2k
+    def test_get_locations_t0(self,pages2k):
+        D=pages2k
         D.get_all_locations()
                 
 class TestTransform():
@@ -181,7 +181,7 @@ class TestRdf():
     
     def test_convert_to_rdf_t0(self):
         lipd = LiPD()
-        lipd.convert_lipd_dir_to_rdf("./examples/data/Euro2k", "all-lipd.nq")
+        lipd.convert_lipd_dir_to_rdf("./examples/data/pages2k", "all-lipd.nq")
 
         
                 

@@ -17,7 +17,7 @@ def multipleLipds(seed = 20):
     return D, name_rand
 
 @pytest.fixture
-def euro2k():
+def pages2k():
     D = load_dir()
     return D
     
