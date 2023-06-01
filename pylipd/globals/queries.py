@@ -170,6 +170,7 @@ QUERY_ALL_VARIABLES_GRAPH = """
             ?o2 ?pv3 ?v3 .
             ?var le:foundInTable ?table .
             ?var le:foundInDataset ?ds .
+            ?var le:foundInDatasetName ?dsname
         }
     }
     WHERE {
@@ -178,6 +179,7 @@ QUERY_ALL_VARIABLES_GRAPH = """
             {
                 # level 1
                 ?var le:foundInDataset ?ds .
+                ?ds le:name ?dsname .
                 ?var ?pv1 ?v1  # get primitives
                     FILTER (isLiteral(?v1)) .
             }
@@ -231,11 +233,12 @@ QUERY_FILTER_ARCHIVE_TYPE = """
 """
 
 QUERY_FILTER_VARIABLE_NAME = """
-    SELECT ?uri ?dsuri ?tableuri ?id ?name WHERE {
+    SELECT ?uri ?dsuri ?dsname ?tableuri ?id ?name WHERE {
         ?uri le:hasVariableID ?id .
         ?uri le:name ?name .
         FILTER regex(?name, "[name].*", "i") .
         ?uri le:foundInDataset ?dsuri .
+        ?dsuri le:name ?dsname .
         ?uri le:foundInTable ?tableuri .
     }
 """
@@ -369,7 +372,7 @@ QUERY_VARIABLE_ESSENTIALS="""
     PREFIX le: <http://linked.earth/ontology#>
     SELECT ?dataSetName ?archiveType ?name ?TSID ?values ?units ?proxy where {
         ?var le:name ?name .
-        ?var le:foundInDataset ?dataSetName .
+        ?var le:foundInDatasetName ?dataSetName .
             #FILTER regex(?dataSetName, "[dsname].*", "i").
             
         OPTIONAL{?var le:hasVariableID ?TSID .}
