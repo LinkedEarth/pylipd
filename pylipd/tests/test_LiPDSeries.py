@@ -33,6 +33,16 @@ class TestGetAll():
         D =odp846
         S = D.to_lipd_series()
         df = S.get_all_variables()
+    
+    def test_variable_names_t0(self,euro2k):
+        D=euro2k
+        S = D.to_lipd_series()
+        names = S.get_all_variable_names()
+    
+    def test_timeseries_essentials_t0(self, euro2k):
+        D=euro2k
+        S = D.to_lipd_series()
+        names = S.get_timeseries_essentials()
 
 class TestFiler():
     
@@ -40,4 +50,5 @@ class TestFiler():
         D=euro2k
         S = D.to_lipd_series()
         Sfiltered = S.filter_by_name('temperature')
+
         

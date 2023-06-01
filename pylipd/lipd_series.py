@@ -1,11 +1,13 @@
 from rdflib import ConjunctiveGraph, Namespace, URIRef
 from tqdm import tqdm
-from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE
+from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE, QUERY_DISTINCT_VARIABLE, QUERY_VARIABLE_ESSENTIALS
 
 from pylipd.globals.urls import ONTONS
 from .utils.multi_processing import multi_load_lipd_series
 from .utils.rdf_graph import RDFGraph
 from .utils.utils import sanitizeId
+
+import numpy as np
 
 
 class LiPDSeries(RDFGraph):
@@ -92,7 +94,53 @@ class LiPDSeries(RDFGraph):
         
         '''        
         return self.query(QUERY_VARIABLE)[1]
+    
+    def get_all_variable_names(self):
+        
+        """
+        Get a list of all possible distinct variableNames. Useful for filtering and qeurying. 
 
+        Returns
+        -------
+        list
+            A list of unique variableName 
+        
+        Example
+        -------
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+            lipd = load_dir(name='Euro2k')
+            S = lipd.to_lipd_series()
+            varName = S.get_all_variable_names()
+            print(varName)
+        """
+
+        return self.query(QUERY_DISTINCT_VARIABLE)[1].iloc[:,0].values.tolist()
+
+    def get_timeseries_essentials(self):
+        '''This function returns information about each variable: `dataSetName`, `archiveType`, `name`, `values`, `units`, `TSID`, `proxy`.
+
+        Returns
+        -------
+        qres_df : pandas.DataFrame
+            A dataframe containing the information in each column
+
+        '''
+        
+    
+        query = QUERY_VARIABLE_ESSENTIALS
+        qres, qres_df = self.query(query)
+        
+        #fix the dataframe
+        for _,row in qres_df.iterrows():
+            string = row['dataSetName'].split('/')[-1]
+            row['dataSetName'] = string
+        
+        qres_df['values']=qres_df['values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        
+        return qres_df
 
     def filter_by_name(self, name):
         '''

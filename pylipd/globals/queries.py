@@ -364,3 +364,35 @@ QUERY_MODEL_PROPERTIES="""
     
     }
 """
+
+QUERY_VARIABLE_ESSENTIALS="""
+    PREFIX le: <http://linked.earth/ontology#>
+    SELECT ?dataSetName ?archiveType ?name ?TSID ?values ?units ?proxy where {
+        ?var le:name ?name .
+        ?var le:foundInDataset ?dataSetName .
+            #FILTER regex(?dataSetName, "[dsname].*", "i").
+            
+        OPTIONAL{?var le:hasVariableID ?TSID .}
+        ?var le:hasValues ?values .
+        OPTIONAL{?var le:hasUnits ?units .}
+        OPTIONAL{?var le:archiveType ?archiveType .}
+        OPTIONAL{?var le:proxy ?proxy .}
+        
+        
+        
+        }
+"""
+
+QUERY_LOCATION ="""
+    PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    SELECT ?dataSetName ?geo_meanLat ?geo_meanLon ?geo_meanElev WHERE {
+        ?ds a le:Dataset .
+        ?ds le:name ?dataSetName .
+            FILTER regex(?dataSetName, "[dsname].*", "i").
+        
+        ?ds le:collectedFrom ?loc .
+        OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
+        OPTIONAL{?loc wgs84:long ?geo_meanLon .}
+        OPTIONAL{?loc wgs84:alt ?geo_meanElev .}
+        }
+"""

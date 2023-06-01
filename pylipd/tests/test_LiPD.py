@@ -166,7 +166,10 @@ class TestGet():
     def test_get_model_properties_t0(self,odp846):
         D=odp846
         D.get_model_properties()
-        
+    
+    def test_get_locations_t0(self,euro2k):
+        D=euro2k
+        D.get_all_locations()
                 
 class TestTransform():
 
