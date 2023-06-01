@@ -514,14 +514,9 @@ class LiPD(RDFGraph):
             qres_df['chronData_values']=qres_df['chronData_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
         
         
-        for _,row in qres_df.iterrows():
-            if row['time_values'] is not None:
-                row['time_values']=np.fromstring(row['time_values'].strip("[]"), sep=',')
+        qres_df['time_values']=qres_df['time_values'].apply(lambda x : np.fromstring(x.strip("[]"), sep=',') if x is not None else None)
+        qres_df['depth_values']=qres_df['depth_values'].apply(lambda x : np.fromstring(x.strip("[]"), sep=',') if x is not None else None)
         
-        
-        for _,row in qres_df.iterrows():
-            if row['depth_values'] is not None:
-                row['depth_values']=np.fromstring(row['depth_values'].strip("[]"), sep=',')
         
         return qres_df
             

@@ -181,7 +181,7 @@ class TestRdf():
     
     def test_convert_to_rdf_t0(self):
         lipd = LiPD()
-        lipd.convert_lipd_dir_to_rdf("./examples/data/pages2k", "all-lipd.nq")
+        lipd.convert_lipd_dir_to_rdf("./examples/data/Pages2k", "all-lipd.nq")
 
         
                 
