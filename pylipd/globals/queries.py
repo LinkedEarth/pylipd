@@ -238,7 +238,7 @@ QUERY_FILTER_VARIABLE_NAME = """
         ?uri le:name ?name .
         FILTER regex(?name, "[name].*", "i") .
         ?uri le:foundInDataset ?dsuri .
-        ?dsuri le:name ?dsname .
+        ?uri le:foundInDatasetName ?dataSetName .
         ?uri le:foundInTable ?tableuri .
     }
 """

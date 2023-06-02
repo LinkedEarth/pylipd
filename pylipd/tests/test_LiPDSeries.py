@@ -50,5 +50,7 @@ class TestFiler():
         D=pages2k
         S = D.to_lipd_series()
         Sfiltered = S.filter_by_name('temperature')
+        df=Sfiltered.get_timeseries_essentials()
+        assert len(df.index)==11
 
         
