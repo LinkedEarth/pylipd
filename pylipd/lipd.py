@@ -12,6 +12,7 @@ import random
 import string
 import io
 import numpy as np
+import ast
 
 from rdflib import ConjunctiveGraph, URIRef
 from tqdm import tqdm
@@ -881,7 +882,7 @@ class LiPD(RDFGraph):
         qres, qres_df = self.query(query)
         
         qres_df['ensembleDepthValues']=qres_df['ensembleDepthValues'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
-        qres_df['ensembleVariableValues']=qres_df['ensembleVariableValues'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+        qres_df['ensembleVariableValues']=qres_df['ensembleVariableValues'].apply(lambda row : np.array(ast.literal_eval(row)))
         
         
         return qres_df
