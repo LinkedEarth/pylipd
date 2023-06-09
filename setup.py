@@ -18,7 +18,7 @@ setup(
     description='Python utilities for handling LiPD data',
     long_description=read("README.md"),
     long_description_content_type = 'text/markdown',
-    author='Varun Ratnakar, Deborah Khider'
+    author='Varun Ratnakar, Deborah Khider',
     author_email='varunratnakar@gmail.com',
     url='https://github.com/linkedearth/pylipd',
     download_url='https://github.com/linkedearth/pylipd/tarball/'+version,
