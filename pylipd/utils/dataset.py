@@ -14,6 +14,7 @@ from pylipd.lipd import LiPD
 
 DATA_DIR = Path(__file__).parents[1].joinpath("data").resolve()
 FOLDER_DIR = DATA_DIR.joinpath('Pages2k/')
+print(DATA_DIR)
 
 def available_dataset_names():
     '''Helper function to easily see what datasets are available to load
