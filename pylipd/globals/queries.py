@@ -262,11 +262,15 @@ QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
         ?ds le:includesPaleoData ?data .
         ?data le:foundInMeasurementTable ?table .
         ?table le:includesVariable ?var .
-        OPTIONAL{?var le:name ?paleoData_variableName .}
+        
+        ?var le:name ?paleoData_variableName .
+        FILTER (!regex(?paleoData_variableName, "year.*") && !regex(?paleoData_variableName, "age.*") && !regex(?paleoData_variableName, "depth.*")) .
+   		
         ?var le:hasValues ?paleoData_values .
         OPTIONAL{?var le:hasUnits ?paleoData_units .}
         OPTIONAL{?var le:proxy ?paleoData_proxy .}
         OPTIONAL{?var le:proxyGeneral ?paleoData_proxyGeneral .}
+        
         
         OPTIONAL{?table le:includesVariable ?timevar .
         ?timevar le:name ?time_variableName .
@@ -279,6 +283,7 @@ QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
             FILTER (regex(?depth_variableName, "depth.*")) .
         ?depthvar le:hasValues ?depth_values .
             OPTIONAL{?depthvar le:hasUnits ?depth_units .}}
+        
     }
 """
 
@@ -301,7 +306,9 @@ QUERY_TIMESERIES_ESSENTIALS_CHRON ="""
         ?ds le:includesChronData ?data .
         ?data le:foundInMeasurementTable ?table .
         ?table le:includesVariable ?var .
-        OPTIONAL{?var le:name ?chronData_variableName .}
+        ?var le:name ?chronData_variableName .
+        FILTER (!regex(?chron_variableName, "year.*") && !regex(?chron_variableName, "age.*") && !regex(?chron_variableName, "depth.*")) .
+   		
         ?var le:hasValues ?chronData_values .
         OPTIONAL{?var le:hasUnits ?chronData_units .}
         
