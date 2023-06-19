@@ -61,14 +61,6 @@ pylipd.utils.rdf\rdf_graph module
    :undoc-members:
    :show-inheritance:
 
-pylipd.usage module
--------------------
-
-.. automodule:: pylipd.usage
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pylipd.utils.utils module
 --------------------------
 

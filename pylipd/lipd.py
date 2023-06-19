@@ -932,7 +932,7 @@ class LiPD(RDFGraph):
         .. jupyter-execute::
             
             from pylipd.utils.dataset import load_dir
-            lipd = load_dir(name='Pages2k')
+            lipd = load_dir('Pages2k')
             varName = lipd.get_all_variable_names()
             print(varName)
         
@@ -1131,7 +1131,7 @@ class LiPD(RDFGraph):
             
             from pylipd.utils.dataset import load_dir
 
-            lipd = load_dir(name='Pages2k')
+            lipd = load_dir('Pages2k')
             Lfiltered = lipd.filter_by_archive_type('marine')
             Lfiltered.get_all_dataset_names()
         
