@@ -800,7 +800,8 @@ class LiPD(RDFGraph):
         -------
         df : pandas.DataFrame
             A pandas dataframe returning the latitude, longitude and elevation for each dataset
-        Example
+        
+        Examples
         --------
         
         .. jupyter-execute::
@@ -925,8 +926,8 @@ class LiPD(RDFGraph):
         list
             A list of unique variableName 
         
-        Example
-        -------
+        Examples
+        --------
         
         .. jupyter-execute::
             
@@ -952,8 +953,8 @@ class LiPD(RDFGraph):
         clean_list : list
             A list of avialable properties that can queried
 
-        Example
-        -------
+        Examples
+        --------
         
         .. jupyter-execute::
             
@@ -977,8 +978,8 @@ class LiPD(RDFGraph):
         list
             A list of unique variable properties
         
-        Example
-        -------
+        Examples
+        --------
         
         .. jupyter-execute::
             
@@ -1003,13 +1004,13 @@ class LiPD(RDFGraph):
         List
             A list of unique properties attached to models
         
-        Example
-        -------
+        Examples
+        --------
         
         .. jupyter-execute::
             
             from pylipd.utils.dataset import load_datasets
-            lipd = load_datasets(name='ODP846')
+            lipd = load_datasets(names='ODP846')
             model_properties = lipd.get_model_properties()
             print(model_properties)
 

@@ -105,13 +105,13 @@ class LiPDSeries(RDFGraph):
         list
             A list of unique variableName 
         
-        Example
-        -------
+        Examples
+        --------
         
         .. jupyter-execute::
             
             from pylipd.utils.dataset import load_dir
-            lipd = load_dir(name='Euro2k')
+            lipd = load_dir(names='Euro2k')
             S = lipd.to_lipd_series()
             varName = S.get_all_variable_names()
             print(varName)
