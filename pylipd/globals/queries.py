@@ -307,7 +307,6 @@ QUERY_TIMESERIES_ESSENTIALS_CHRON ="""
         ?data le:foundInMeasurementTable ?table .
         ?table le:includesVariable ?var .
         ?var le:name ?chronData_variableName .
-        FILTER (!regex(?chron_variableName, "year.*") && !regex(?chron_variableName, "age.*") && !regex(?chron_variableName, "depth.*")) .
    		
         ?var le:hasValues ?chronData_values .
         OPTIONAL{?var le:hasUnits ?chronData_units .}
