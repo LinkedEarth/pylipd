@@ -885,7 +885,7 @@ class LiPD(RDFGraph):
         nan_replace = re.compile(re.escape('NaN'), re.IGNORECASE)
 
         qres_df['ensembleDepthValues']=qres_df['ensembleDepthValues'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
-        qres_df['ensembleVariableValues']=qres_df['ensembleVariableValues'].apply(lambda row : np.array(ast.literal_eval(nan_replace.sub(row, 'None'))))        
+        qres_df['ensembleVariableValues']=qres_df['ensembleVariableValues'].apply(lambda row : np.array(ast.literal_eval(nan_replace.sub('None', row))))        
         
         
         return qres_df
