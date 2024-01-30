@@ -66,8 +66,25 @@ class LipdToRDF:
                 self.lipd_csvs = {}
                 for csvpath, _ in csvs:
                     csvname = os.path.basename(csvpath)        
-                    self.lipd_csvs[csvname] = pd.read_csv(csvpath, header=None)
-                self._load_lipd_json_to_graph(jsonpath)                    
+                    try:
+                        self.lipd_csvs[csvname] = pd.read_csv(csvpath, header=None)
+                    except:
+                        # If normal load doesn't work, try to detect the number of columns and load it that way
+                        print(f"WARNING: CSV file '{csvname}' might have inconsistent number of columns !!\nDetecting number of columns to load ..\n")
+                        self.lipd_csvs[csvname] = self._detect_columns_and_load(csvpath)
+                self._load_lipd_json_to_graph(jsonpath)
+
+    def _detect_columns_and_load(self, filename):
+        # detect number of columns
+        num_columns=0
+        with open(filename) as f:
+            for line in f.readlines():
+                num = len(line.split(','))
+                if num > num_columns:
+                    num_columns=num
+        # load with pre-determined number of columns
+        df=pd.read_csv(filename,names=range(num_columns))
+        return df
 
 
     def serialize(self, topath, type="rdf"):

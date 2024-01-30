@@ -70,20 +70,21 @@ print(S)
 exit()
 '''
 
-
 # Load from local
 lipd = LiPD()
-data_path = local_lipd_dir + '/Ocn-Palmyra.Nurhati.2011.lpd'
-lipd.load(data_path)
+# data_path = local_lipd_dir + '/Ocn-Palmyra.Nurhati.2011.lpd'
+# lipd.load(data_path)
+
+lipd.load("/Users/varun/Downloads/18.1.Franklin.Bolshoye.2024.lpd")
 print(lipd.get_all_dataset_names())
 
 #lipdfiles = [local_lipd_dir + "/" + dsname + ".lpd" for dsname in dsnames]
 #print(lipdfiles)
 
 #lipd.load(lipdfiles)
-lipd.load_from_dir("examples/data")
+# lipd.load_from_dir("examples/data")
 
-lipd.load_from_dir("/Users/varun/Downloads/example_sisal_lipds")
+# lipd.load_from_dir("/Users/varun/Downloads/example_sisal_lipds")
 print(lipd.get_all_dataset_names())
 
 lat = -77.08
