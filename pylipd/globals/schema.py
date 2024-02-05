@@ -27,7 +27,7 @@ SCHEMA = {
             'fromJson': '_parse_persons'
         },
         'archiveType': {
-            'name': 'archiveType', # Changed from proxyArchiveType
+            'name': 'proxyArchiveType', 
             'alternates':[
                 'archive',
                 'paleoDataArchive',
