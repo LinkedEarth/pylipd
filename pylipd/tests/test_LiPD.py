@@ -35,7 +35,7 @@ class TestLiPDLoad():
     def test_load_t2(self):
         
         lipd_remote = LiPD()
-        lipd_remote.set_endpoint("http://localhost:7200/repositories/LiPDVerse-dynamic") #https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+        lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic")
         try:
             lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
         except(urllib.error.HTTPError):

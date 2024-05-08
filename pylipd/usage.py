@@ -10,8 +10,8 @@ from pylipd.utils.multi_processing import convert_to_rdf
 
 
 local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd.latest"
-#remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic"
-remote_lipd_endpoint = "https://localhost:7200/repositories/LiPDVerse-dynamic"
+remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic"
+#remote_lipd_endpoint = "https://localhost:7200/repositories/LiPDVerse-dynamic"
 
 '''
 lipd = LiPD()
