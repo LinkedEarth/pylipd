@@ -13,6 +13,7 @@ import zipfile
 import tempfile
 import pandas as pd
 
+from rdflib import RDFS
 from rdflib.graph import ConjunctiveGraph, Literal, RDF, URIRef, BNode, Collection
 from rdflib.namespace import XSD
 
@@ -22,6 +23,7 @@ from urllib.parse import urlparse, urlunparse, quote
 
 from ..globals.urls import NSURL, DATAURL, ONTONS, NAMESPACES
 from ..globals.blacklist import BLACKLIST
+from ..globals.synonyms import SYNONYMS
 from ..globals.schema import SCHEMA
 
 from .utils import expand_schema, ucfirst, lcfirst, camelCase, unCamelCase, escape, uniqid, sanitizeId
@@ -124,16 +126,6 @@ class LipdToRDF:
             # Unzip file
             with zipfile.ZipFile(lipdfile, 'r') as zip_ref:
                 zip_ref.extractall(unzipdir)
-
-    def _add_extra_dataset_properties(self, obj, objhash) :
-        _REQUEST = {} # This is not really used here is it ?
-        for key,value in _REQUEST.items() :
-            m = re.search(r"^extra_(.+)", key)
-            if m is not None:
-                prop = m.groups()[0]
-                if (not (prop in obj)) :
-                    obj[prop] = value
-        return [obj, objhash, []]
 
     def _parse_persons_string(self, author_string, parent = None) :
         # Check for semi-colon delimiter and split accordingly
@@ -273,39 +265,6 @@ class LipdToRDF:
                 obj["values"] = ", ".join(obj["values"])
         return [obj, objhash, []]
 
-
-    def _set_variable_category(self, obj, objhash) :
-        # Default category
-        obj["@category"] = "MeasuredVariable"
-        obj["@schema"] = "Variable"
-        if (("variableType" in obj)) :
-            varcat = str(obj["variableType"]) + "Variable"
-            obj["@category"] = ucfirst(varcat)
-            del obj["variableType"]
-        else : 
-            if (("calibration" in obj)) :
-                obj["@category"] = "InferredVariable"
-        return [obj, objhash, []]
-    
-    def _get_lipd_archive_type(self, archiveType) :
-        return unCamelCase(archiveType)
-
-    def _get_archive_type(self, id, latitude) :
-        if not id:
-            return None
-        id = id.lower()
-        if (id == "tree") :
-            return "Wood"
-        else : 
-            if (id == "bivalve") :
-                return "MolluskShell"
-            else : 
-                if (id == "borehole") :
-                    if (latitude > 65 or latitude < -65) :
-                        return "GlacierIce"
-                    else : 
-                        return "Rock"
-        return camelCase(id)
     
     def _guess_sensor_type(self, archive, observation, sensor) :
         if (('sensorGenus' in sensor) or ('sensorSpecies' in sensor)) :
@@ -378,207 +337,6 @@ class LipdToRDF:
         id =  parentid + "." + iobj["tsid"]
         id += "." + str(iobj.get("variablename", ""))
         return id
-    
-    def _set_inter_variable_links(self, obj, objhash) :
-        depthcol = None
-        vobjhash = {}
-        if "columns" not in obj:
-            return [obj, objhash, []]
-
-        for col in obj["columns"] : 
-            vobjhash[col["variableName"].lower()] = self._get_variable_id(col, obj["@id"])
-        
-        depthcol =  vobjhash["depth"] if ("depth" in vobjhash) else None
-        for col in obj["columns"] : 
-            thiscol = self._get_variable_id(col, obj["@id"])
-            if (("inferredFrom" in col)) :
-                infcol = col["inferredFrom"].lower()
-                if ((infcol in vobjhash)) :
-                    col["inferredFrom"] = vobjhash[infcol]
-
-            # FIXME: Adding takenAtDepth is messing stuff up   
-            #if (depthcol and thiscol != depthcol) :
-            #    col["takenAtDepth"] = depthcol
-
-        return [obj, objhash, []]
-    
-    # proxy (could be specific)
-    # proxyGeneral (more general than proxy)
-    # proxyDetail (more specific than proxy)
-    # proxyLumps ?
-    # archiveType -> keep at dataset level ?
-
-    # proxyArchiveType
-
-    # don't create proxy system model ?
-
-    # if there is an proxyObservationType or inferredVariableType -> Existing Variable . Variable Name
-    # - keep the proxyObservationType and inferredVariableType properties ?
-
-    # Schema alignment with LiPD:
-    # - https://docs.google.com/spreadsheets/d/11WjpY8PtdwoX98n5MK8VhwgqSSB0ubS42spj06nVq9o/edit#gid=1904012337
-    # Types
-    # - [classkey]_[key]
-    # - [classkey[number]]_[key] : for arrays
-
-    # ^^ Essentially, can skip this function
-    def _create_proxy_system(self, obj, hash) :
-        varid = obj["@id"]
-        # Deal with proxies
-        proxyobs = None
-        sampleid = None
-        if ("proxy" in obj and obj["proxy"]) :
-            proxyobs = obj["proxy"]
-            #del obj["proxy"]
-        elif ("OnProxyObservationProperty" in obj and obj["OnProxyObservationProperty"]) :
-            proxyobs = obj["OnProxyObservationProperty"]
-            del obj["OnProxyObservationProperty"]
-        elif ("ProxyObservationType" in obj and obj["ProxyObservationType"]) :
-            proxyobs = obj["ProxyObservationType"]
-            if "variableName" in obj and obj["variableName"] :
-                varname = str(obj["variableName"])
-                if varname.lower() != proxyobs.lower() :
-                    obj["variableName"] = obj["variableName"] + "." + proxyobs
-            else:
-                obj["variableName"] = proxyobs
-        elif ("proxyObservationType" in obj and obj["proxyObservationType"]) :
-            proxyobs = obj["proxyObservationType"]
-            if "variableName" in obj and obj["variableName"] :
-                varname = str(obj["variableName"])
-                if varname.lower() != proxyobs.lower() :
-                    obj["variableName"] = obj["variableName"] + "." + proxyobs
-            else:
-                obj["variableName"] = proxyobs
-        elif ("inferredVariableType" in obj and obj["inferredVariableType"]) :
-            infvar = obj["inferredVariableType"]
-            if "variableName" in obj and obj["variableName"] :
-                varname = str(obj["variableName"])
-                if varname.lower() != infvar.lower() :
-                    obj["variableName"] = varname + "." + infvar
-            else:
-                obj["variableName"] = infvar
-
-        vartype = obj["@category"]
-        if (vartype and vartype == "MeasuredVariable") :
-            # Get the archive type
-            dsname = self._get_parent_property(obj, "dataSetName")
-            geo = self._get_parent_property(obj, "geo")
-            latitude = 0
-            if (("geometry" in geo) and len(geo["geometry"]["coordinates"]) > 1) :
-                latitude = geo["geometry"]["coordinates"][1]
-            
-            archivetype = self._get_parent_property(obj, "archiveType")
-            if (not archivetype) :
-                archivetype = self._get_parent_property(obj, "archive")
-            
-            archivetype = self._get_archive_type(archivetype, latitude)
-            # Create sample (archive)
-            if (not ("physicalSample" in obj)) :
-                cname = self._get_parent_property(obj, "collectionName")
-                if (cname) :
-                    obj["physicalSample"] = {"name" : cname}
-                
-            
-            if (("physicalSample" in obj)) :
-                sample = obj["physicalSample"]
-                sampleid =  sample["hasname"] if ("hasname" in sample) else sample["name"]
-                if (("hasidentifier" in sample)) :
-                    sampleid += "." + str(sample["hasidentifier"])
-                else : 
-                    if (("identifier" in sample)) :
-                        sampleid += "." + str(sample["identifier"])
-                if (not (sampleid in hash)) :
-                    sampleobj = {
-                        "@id" : sampleid, 
-                        "@category" : "PhysicalSample", 
-                        "@extracats" : [archivetype]
-                    }
-                    for pkey,pval in sample.items() :
-                        sampleobj[pkey] = pval
-
-                    hash[sampleid] = sampleobj
-                #del obj["physicalSample"]
-            
-            if type(proxyobs) is list:
-                proxyobs = proxyobs[0]
-
-            observationid = self._get_observation(proxyobs)
-            #obj["proxy"])
-            # Create sensor
-            sensorid = ((str(observationid) + ".") if observationid is not None else "") + "DefaultSensor"
-            sensor = {
-                "@id" : sensorid, 
-                "@category" : "Sensor"
-            }
-            if (("archiveGenus" in obj)) :
-                sensor["sensorGenus"] = obj["archiveGenus"]
-                sensorid = ucfirst(sensor["sensorGenus"].lower())
-                #del obj["archiveGenus"]
-                if (("archiveSpecies" in obj)) :
-                    sensor["sensorSpecies"] = obj["archiveSpecies"]
-                    sensorid += " " + sensor["sensorSpecies"].lower()
-                    #del obj["archiveSpecies"]
-                
-            
-            if (("sensorGenus" in obj)) :
-                sensor["sensorGenus"] = obj["sensorGenus"]
-                sensorid = ucfirst(sensor["sensorGenus"].lower())
-                #del obj["sensorGenus"]
-                if (("sensorSpecies" in obj)) :
-                    sensor["sensorSpecies"] = obj["sensorSpecies"]
-                    sensorid += " " + sensor["sensorSpecies"].lower()
-                    #del obj["sensorSpecies"]
-                
-            
-            if (not (sensorid in hash)) :
-                sensor["@id"] = sensorid
-                sensor["@category"] = self._guess_sensor_type(archivetype, observationid, sensor)
-                hash[sensorid] = sensor
-            
-            #$hash[$sampleid]["ProxySensorType"] = $sensorid
-            # Create a proxy
-            #$proxyid = $obj["@id"].".$archivetype.$sensorid.ProxySystem"
-            proxyid = "ProxySystem." + str(archivetype)
-            if (sensorid) :
-                proxyid += "." + str(sensorid) + ""
-            
-            if (observationid) :
-                proxyid += "." + str(observationid) + ""
-            
-            # TODO: $proxyid .= ".$chronmodel"
-            # TODO: $proxyid .= ".$paleomodel"
-            if (not (proxyid in hash)) :
-                proxy = {
-                    "@id" : proxyid, 
-                    "@category" : "ProxySystem", 
-                    "ProxySensorType" : sensorid,
-                    "ProxyArchiveType" : archivetype,
-                    "ProxyObservationType" : observationid
-                }
-                if (("proxySystemModel" in obj)) :
-                    proxymodelid = "" + str(proxyid) + ".Model"
-                    # TODO: Create proxy sensor/archive/observation models
-                    proxymodel = {
-                        "@id" : proxymodelid, 
-                        "@category" : "ProxySystemModel", 
-                        "name" : observationid,
-                        "hasProxySensorModel" : "" + str(sensorid) + ".Model",
-                        "hasProxyArchiveModel" : "" + str(archivetype) + ".Model",
-                        "hasProxyObservationModel" : "" + str(observationid) + ".Model"
-                    }
-                    proxy["modeledBy"] = proxymodelid
-                    hash[proxymodelid] = proxymodel
-                    del obj["proxySystemModel"]
-                hash[proxyid] = proxy
-            
-            obj["measuredOn"] = sampleid
-            obj["ProxyObservationType"] = observationid
-            obj["hasProxySystem"] = proxyid
-            #if "proxy" in obj:
-            #    del obj["proxy"]
-            return [obj, hash, [sampleid, proxyid, sensorid]]
-        
-        return [obj, hash, []]
     
     def _wrap_integration_time(self, obj, objhash) :
         objid = obj["@id"]
@@ -700,7 +458,15 @@ class LipdToRDF:
 
             return [obj, objhash, []]
         return [obj, objhash, []]
-    
+
+    def _add_standard_variable(self, obj, objhash) :
+        if "variableName" in obj:
+            name = obj["variableName"]
+            synonyms = SYNONYMS["VARIABLES"]["PaleoVariable"]
+            if type(name) is str and name.lower() in synonyms:
+                obj["hasStandardVariable"] = synonyms[name.lower()]["id"]
+        return [obj, objhash, []]
+
     def _stringify_column_numbers_array(self, obj, objhash):
         if "number" in obj and isinstance(obj["number"], list) and len(obj["number"]) > 1:
             obj["hasColumnNumber"] = json.dumps(obj["number"])
@@ -826,7 +592,6 @@ class LipdToRDF:
                 cat =  details["category"] if ("category" in details) else None
                 sch =  details["schema"] if ("schema" in details) else None
                 fromJson =  details["fromJson"] if ("fromJson" in details) else None
-                subobject =  details["subobject"] if ("subobject" in details) else False
                 if (sch and not cat) :
                     cat = sch
                 if (fromJson) :
@@ -858,12 +623,6 @@ class LipdToRDF:
                     continue
                 
                 if (not pname) :
-                    continue
-                
-                if (subobject) :
-                    if "@subobjects" not in item:
-                        item["@subobjects"] = []
-                    item["@subobjects"].append({ propkey : value })
                     continue
                 
                 if (type(value) is list):
@@ -1008,6 +767,16 @@ class LipdToRDF:
                     URIRef(self.graphurl)
                 ))
     
+    # Set object label
+    def _set_object_label(self, objid, label) :
+        if objid and label:
+            self.graph.add((
+                URIRef(objid),
+                RDFS.label,
+                Literal(label),
+                URIRef(self.graphurl)
+            ))
+
     # Set property value
     def _set_property_value( self, objid, prop, value ):
         if (type(value) is list) :
@@ -1051,6 +820,9 @@ class LipdToRDF:
                 value = self._create_individual(value)
                 objitem = URIRef(value)
             
+            elif dtype == "EnumeratedIndividual":
+                objitem = URIRef(value)
+            
             elif dtype == "List":
                 objitem = value
             
@@ -1079,7 +851,6 @@ class LipdToRDF:
         if (not objid) :
             return
         
-        subobjects = {}
         # Create category
         if (category) :
             category = self._create_class(category)
@@ -1096,6 +867,7 @@ class LipdToRDF:
             details = self._get_property_details(key, schema, value)
             prop = details["name"]
             dtype = details["type"]
+            synonyms = details.get("synonyms", {})
             cat =  details["category"] if ("category" in details) else None
             sch =  details["schema"] if ("schema" in details) else None
             if (sch and not cat) :
@@ -1103,7 +875,6 @@ class LipdToRDF:
             
             fromJson =  details["fromJson"] if ("fromJson" in details) else None
             multiple =  details["multiple"] if ("multiple" in details) else False
-            subobject =  details["subobject"] if ("subobject" in details) else False
             if (not prop) :
                 continue
                 
@@ -1111,7 +882,16 @@ class LipdToRDF:
             propDI = self._create_property(prop, dtype, cat, multiple)
 
             # Set property value
-            if (dtype == "Individual" or type(value) is dict) :
+            if dtype == "Individual":
+                if type(value) is str and value.lower() in synonyms:
+                    propDI[1] = "EnumeratedIndividual" # Rename property type to be an enumeration
+                    synid = synonyms[value.lower()]["id"]
+                    label = synonyms[value.lower()]["label"]
+                    self._set_property_value(objid, propDI, synid)
+                    self._set_object_label(synid, label)
+                else:
+                    self._set_property_value(objid, propDI, value)
+            elif  type(value) is dict:
                 self._set_property_value(objid, propDI, value)
             else : 
                 if (dtype == "File") :

@@ -1,11 +1,11 @@
 if __name__ == "__main__":
     from pylipd.lipd import LiPD
 
-    local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd.latest"
+    local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd"
 
     L = LiPD()
 
-    L.load_from_dir("examples/data/Euro2k", parallel=True, cutoff=1000)
+    # L.load_from_dir("examples/data/Euro2k", parallel=True, cutoff=1000)
     # Lfiltered = L.filter_by_geo_bbox(0,25,50,50)
     # print(Lfiltered.get_all_dataset_names())
 
@@ -15,10 +15,11 @@ if __name__ == "__main__":
     # print(Lfiltered.get_all_dataset_names())
 
     # Convert LiPD files to RDF    
-    # L.convert_lipd_dir_to_rdf(
-    #     local_lipd_dir,
-    #     local_lipd_dir+".nq", 
-    #     parallel=True)
+    L.convert_lipd_dir_to_rdf(
+        local_lipd_dir,
+        local_lipd_dir+".nq", 
+        parallel=True)
+    exit()
     
 
     #L.load_from_dir(local_lipd_dir, parallel=True, cutoff=100)

@@ -11,7 +11,7 @@ setup(
     name='pylipd',
     packages=find_packages(),
     include_package_data=True,
-    package_data={'': ['data/*.lpd', 'data/Pages2k/*.lpd']},
+    package_data={'': ['data/*.lpd', 'data/Pages2k/*.lpd', 'globals/synonyms.json']},
     zip_safe=False,
     version=version,
     license='Apache 2-0 License',

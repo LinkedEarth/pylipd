@@ -3,6 +3,7 @@ The LiPD class describes a `LiPD (Linked Paleo Data) <https://cp.copernicus.org/
 How to browse and query LiPD objects is described in a short example below, while `this notebook <https://nbviewer.jupyter.org/github/LinkedEarth/pylipd/blob/master/example_notebooks/pylipd_tutorial.ipynb>`_ demonstrates how to use PyLiPD to view and query LiPD datasets.
 """
 
+import ast
 import os
 import re
 import os.path
@@ -12,11 +13,9 @@ import random
 import string
 import io
 import numpy as np
-import ast
+import json
 
-from rdflib import ConjunctiveGraph, URIRef
-from tqdm import tqdm
-from .globals.queries import QUERY_ALL_VARIABLES_GRAPH, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE, QUERY_DATASET_PROPERTIES, QUERY_VARIABLE_PROPERTIES, QUERY_MODEL_PROPERTIES, QUERY_LOCATION
+from .globals.queries import QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE, QUERY_DATASET_PROPERTIES, QUERY_VARIABLE_PROPERTIES, QUERY_MODEL_PROPERTIES, QUERY_LOCATION
 from .lipd_series import LiPDSeries
 from .utils.multi_processing import multi_convert_to_rdf, multi_load_lipd
 from .utils.rdf_graph import RDFGraph
@@ -203,7 +202,7 @@ class LiPD(RDFGraph):
 
             # Fetch LiPD data from remote RDF Graph
             lipd_remote = LiPD()
-            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic")
             lipd_remote.load_remote_datasets(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
             print(lipd_remote.get_all_dataset_names())
         '''
@@ -413,7 +412,7 @@ class LiPD(RDFGraph):
 
             # Fetch LiPD data from remote RDF Graph
             lipd_remote = LiPD()
-            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2")
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic")
             ts_list = lipd_remote.get_timeseries(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"])
             for dsname, tsos in ts_list.items():
                 for tso in tsos:
@@ -510,13 +509,13 @@ class LiPD(RDFGraph):
         qres, qres_df = self.query(query)
         
         try:
-            qres_df['paleoData_values']=qres_df['paleoData_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+            qres_df['paleoData_values']=qres_df['paleoData_values'].apply(lambda row : np.array(json.loads(row)))
         except:
-            qres_df['chronData_values']=qres_df['chronData_values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
+            qres_df['chronData_values']=qres_df['chronData_values'].apply(lambda row : np.array(json.loads(row)))
         
         
-        qres_df['time_values']=qres_df['time_values'].apply(lambda x : np.fromstring(x.strip("[]"), sep=',') if x is not None else None)
-        qres_df['depth_values']=qres_df['depth_values'].apply(lambda x : np.fromstring(x.strip("[]"), sep=',') if x is not None else None)
+        qres_df['time_values']=qres_df['time_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
+        qres_df['depth_values']=qres_df['depth_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
         
         
         return qres_df
@@ -884,9 +883,8 @@ class LiPD(RDFGraph):
 
         nan_replace = re.compile(re.escape('NaN'), re.IGNORECASE)
 
-        qres_df['ensembleDepthValues']=qres_df['ensembleDepthValues'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
-        qres_df['ensembleVariableValues']=qres_df['ensembleVariableValues'].apply(lambda row : np.array(ast.literal_eval(nan_replace.sub('None', row))))        
-        
+        qres_df['ensembleDepthValues']=qres_df['ensembleDepthValues'].apply(lambda row : np.array(json.loads(row)))
+        qres_df['ensembleVariableValues']=qres_df['ensembleVariableValues'].apply(lambda row : np.array(ast.literal_eval(nan_replace.sub('None', row))))
         
         return qres_df
 

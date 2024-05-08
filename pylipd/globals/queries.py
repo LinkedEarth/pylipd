@@ -3,7 +3,7 @@ from pylipd.globals.urls import ONTONS, NAMESPACES
 QUERY_DSNAME = """
     SELECT ?dsname WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?dsname
+        ?ds le:hasName ?dsname
     }
 """
 
@@ -17,7 +17,8 @@ QUERY_DSID = """
 QUERY_UNIQUE_ARCHIVE_TYPE = """
     SELECT distinct ?archiveType WHERE {
         ?ds a le:Dataset .
-        ?ds le:proxyArchiveType ?archiveType .
+        ?ds le:hasArchiveType ?archiveTypeObj .
+        ?archiveTypeObj rdfs:label ?archiveType .
     }
 """
 
@@ -27,25 +28,31 @@ QUERY_ENSEMBLE_TABLE_SHORT = """
     SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits ?notes 
     WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?datasetName .
+        ?ds le:hasName ?datasetName .
             FILTER regex(?datasetName, "[dsname].*", "i").
     
-        ?ds le:includesChronData ?chron .
-        ?chron le:chronModeledBy ?model .
-        ?model le:foundInEnsembleTable ?ensembleTable .
-            OPTIONAL{?ensembleTable le:notes ?notes}
+        ?ds le:hasChronData ?chron .
+        ?chron le:modeledBy ?model .
+        ?model le:hasEnsembleTable ?ensembleTable .
+            OPTIONAL{?ensembleTable le:hasNotes ?notes}
         
-        ?ensembleTable le:includesVariable ?ensvar .
-        ?ensvar le:name ?ensembleVariableName .
+        ?ensembleTable le:hasVariable ?ensvar .
+        ?ensvar le:hasName ?ensembleVariableName .
             FILTER (regex(lcase(?ensembleVariableName), "year.*", "i") || regex(?ensembleVariableName, "age.*", "i")) .
         ?ensvar le:hasValues ?ensembleVariableValues
-            OPTIONAL{?ensvar le:hasUnits ?ensembleVariableUnits .}
+            OPTIONAL{
+                ?ensvar le:hasUnits ?ensembleVariableUnitsObj .
+                ?ensembleVariableUnitsObj rdfs:label ?ensembleVariableUnits .
+            }
         
-        ?ensembleTable le:includesVariable ?ensdepthvar .
-        ?ensdepthvar le:name ?ensembleDepthName .
+        ?ensembleTable le:hasVariable ?ensdepthvar .
+        ?ensdepthvar le:hasName ?ensembleDepthName .
             FILTER regex(lcase(?ensembleDepthName), "[ensembleDepthVarName].*").
         ?ensdepthvar le:hasValues ?ensembleDepthValues .
-            OPTIONAL{?ensdepthvar le:hasUnits ?ensembleDepthUnits .}
+            OPTIONAL{
+                ?ensdepthvar le:hasUnits ?ensembleDepthUnitsObj .
+                ?ensembleDepthUnitsObj rdfs:label ?ensembleDepthUnits .
+            }
     }
 """
 
@@ -55,25 +62,31 @@ QUERY_ENSEMBLE_TABLE = """
     SELECT ?datasetName ?ensembleTable ?ensembleVariableName ?ensembleVariableValues ?ensembleVariableUnits ?ensembleDepthName ?ensembleDepthValues ?ensembleDepthUnits ?notes ?methodobj ?methods
     WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?datasetName .
+        ?ds le:hasName ?datasetName .
             FILTER regex(?datasetName, "[dsname].*", "i").
     
-        ?ds le:includesChronData ?chron .
-        ?chron le:chronModeledBy ?model .
-        ?model le:foundInEnsembleTable ?ensembleTable .
-            OPTIONAL{?ensembleTable le:notes ?notes}
+        ?ds le:hasChronData ?chron .
+        ?chron le:modeledBy ?model .
+        ?model le:hasEnsembleTable ?ensembleTable .
+            OPTIONAL{?ensembleTable le:hasNotes ?notes}
         
-        ?ensembleTable le:includesVariable ?ensvar .
-        ?ensvar le:name ?ensembleVariableName .
+        ?ensembleTable le:hasVariable ?ensvar .
+        ?ensvar le:hasName ?ensembleVariableName .
             FILTER regex(lcase(?ensembleVariableName), "[ensembleVarName].*", "i").
         ?ensvar le:hasValues ?ensembleVariableValues
-            OPTIONAL{?ensvar le:hasUnits ?ensembleVariableUnits .}
+            OPTIONAL{
+                ?ensvar le:hasUnits ?ensembleVariableUnitsObj .
+                ?ensembleVariableUnitsObj rdfs:label ?ensembleVariableUnits .
+            }
         
-        ?ensembleTable le:includesVariable ?ensdepthvar .
-        ?ensdepthvar le:name ?ensembleDepthName .
+        ?ensembleTable le:hasVariable ?ensdepthvar .
+        ?ensdepthvar le:hasName ?ensembleDepthName .
             FILTER regex(lcase(?ensembleDepthName), "[ensembleDepthVarName].*", "i").
         ?ensdepthvar le:hasValues ?ensembleDepthValues .
-            OPTIONAL{?ensdepthvar le:hasUnits ?ensembleDepthUnits .}
+            OPTIONAL{
+                ?ensdepthvar le:hasUnits ?ensembleDepthUnitsObj .
+                ?ensembleDepthUnitsObj rdfs:label ?ensembleDepthUnits .
+            }
     }
 """
 
@@ -83,28 +96,28 @@ QUERY_BIBLIO = """
     ?doi ?pubyear ?year ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution ?url ?url2
     WHERE { 
         ?ds a le:Dataset .
-        ?ds le:name ?dsname .
+        ?ds le:hasName ?dsname .
         ?ds le:publishedIn ?pub .
         OPTIONAL{?pub le:hasDOI ?doi .}
         OPTIONAL{
             ?pub le:author ?author .
-            ?author le:name ?authorName .
+            ?author le:hasName ?authorName .
         }
         OPTIONAL{?pub le:publicationYear ?year .}
         OPTIONAL{?pub le:pubYear ?pubyear .}
-        OPTIONAL{?pub le:title ?title .}
-        OPTIONAL{?pub le:journal ?journal .}
-        OPTIONAL{?pub le:volume ?volume .}
-        OPTIONAL{?pub le:issue ?issue .}
-        OPTIONAL{?pub le:pages ?pages .}
-        OPTIONAL{?pub le:type ?type .}
-        OPTIONAL{?pub le:publisher ?publisher .}
-        OPTIONAL{?pub le:report ?report .}
-        OPTIONAL{?pub le:citeKey ?citeKey .}
-        OPTIONAL{?pub le:edition ?edition .}
-        OPTIONAL{?pub le:institution ?institution .}
+        OPTIONAL{?pub le:hasTitle ?title .}
+        OPTIONAL{?pub le:hasJournal ?journal .}
+        OPTIONAL{?pub le:hasVolume ?volume .}
+        OPTIONAL{?pub le:hasIssue ?issue .}
+        OPTIONAL{?pub le:hasPages ?pages .}
+        OPTIONAL{?pub le:hasType ?type .}
+        OPTIONAL{?pub le:hasPublisher ?publisher .}
+        OPTIONAL{?pub le:hasReport ?report .}
+        OPTIONAL{?pub le:hasCiteKey ?citeKey .}
+        OPTIONAL{?pub le:hasEdition ?edition .}
+        OPTIONAL{?pub le:hasInstitution ?institution .}
         OPTIONAL{?pub le:hasLink ?url .}
-        OPTIONAL{?pub le:url ?url2 .}
+        OPTIONAL{?pub le:hasUrl ?url2 .}
     }
     GROUP BY ?pub ?dsname ?title ?doi ?year ?pubyear ?journal ?volume ?issue ?pages ?type ?publisher ?report ?citeKey ?edition ?institution ?url ?url2
 """
@@ -114,8 +127,8 @@ QUERY_DISTINCT_VARIABLE="""
     
     SELECT distinct ?variableName 
     WHERE {
-        ?uri le:name ?variableName .
-        ?uri le:hasVariableID ?TSID
+        ?uri le:hasName ?variableName .
+        ?uri le:hasVariableId ?TSID
     }
     
 
@@ -126,8 +139,8 @@ QUERY_VARIABLE = """
 
     SELECT ?uri ?TSID ?variableName 
     WHERE {
-        ?uri le:name ?variableName .
-        ?uri le:hasVariableID ?TSID
+        ?uri le:hasName ?variableName .
+        ?uri le:hasVariableId ?TSID
     }
 """
 
@@ -174,12 +187,12 @@ QUERY_ALL_VARIABLES_GRAPH = """
         }
     }
     WHERE {
-        ?table le:includesVariable ?var .
+        ?table le:hasVariable ?var .
         {
             {
                 # level 1
                 ?var le:foundInDataset ?ds .
-                ?ds le:name ?dsname .
+                ?ds le:hasName ?dsname .
                 ?var ?pv1 ?v1  # get primitives
                     FILTER (isLiteral(?v1)) .
             }
@@ -188,7 +201,7 @@ QUERY_ALL_VARIABLES_GRAPH = """
                 # level 2
                 {
                     ?var ?p1 ?o1
-                        FILTER (?p1 NOT IN (le:foundInTable, le:foundInDataset, le:takenAtDepth)) .
+                        FILTER (?p1 NOT IN (le:foundInTable, le:foundInDataset)) .
                     ?o1 ?pv2 ?v2 
                         FILTER (isLiteral(?v2)) .
                 } .
@@ -198,9 +211,9 @@ QUERY_ALL_VARIABLES_GRAPH = """
             #    # level 3
             #    {
             #        ?var ?p1 ?o1
-            #            FILTER (?p1 NOT IN (le:foundInTable, le:foundInDataset, le:takenAtDepth)) .
+            #            FILTER (?p1 NOT IN (le:foundInTable, le:foundInDataset)) .
             #        ?o1 ?p2 ?o2
-            #            FILTER (?p1 NOT IN (le:foundInTable, le:foundInDataset, le:takenAtDepth)) .
+            #            FILTER (?p1 NOT IN (le:foundInTable, le:foundInDataset)) .
             #        ?o2 ?pv3 ?v3
             #            FILTER (isLiteral(?v2)) .
             #    } .
@@ -215,8 +228,8 @@ QUERY_FILTER_GEO = """
 
     SELECT ?dsname WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?dsname .
-        ?ds le:collectedFrom ?loc .
+        ?ds le:hasName ?dsname .
+        ?ds le:hasLocation ?loc .
         ?loc wgs84:lat ?lat .
         ?loc wgs84:long ?lon .
         FILTER ( ?lat >= [latMin] && ?lat < [latMax] && ?lon >= [lonMin] && ?lon < [lonMax] ) .
@@ -226,16 +239,17 @@ QUERY_FILTER_GEO = """
 QUERY_FILTER_ARCHIVE_TYPE = """
     SELECT ?dsname WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?dsname .
-        ?ds le:proxyArchiveType ?archiveType .
+        ?ds le:hasName ?dsname .
+        ?ds le:hasArchiveType ?archiveTypeObj .
+        ?archiveTypeObj rdfs:label ?archiveType .
         FILTER regex(?archiveType, "[archiveType].*", "i")
     }
 """
 
 QUERY_FILTER_VARIABLE_NAME = """
     SELECT ?uri ?dsuri ?dsname ?tableuri ?id ?name WHERE {
-        ?uri le:hasVariableID ?id .
-        ?uri le:name ?name .
+        ?uri le:hasVariableId ?id .
+        ?uri le:hasName ?name .
         FILTER regex(?name, "[name].*", "i") .
         ?uri le:foundInDataset ?dsuri .
         ?uri le:foundInDatasetName ?dataSetName .
@@ -250,39 +264,56 @@ QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
     ?paleoData_proxy ?paleoData_proxyGeneral ?time_variableName ?time_values 
     ?time_units ?depth_variableName ?depth_values ?depth_units WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?dataSetName .
+        ?ds le:hasName ?dataSetName .
             FILTER regex(?dataSetName, "[dsname].*", "i").
-        OPTIONAL{?ds le:proxyArchiveType ?archiveType .}
         
-        ?ds le:collectedFrom ?loc .
+        OPTIONAL{
+            ?ds le:hasArchiveType ?archiveTypeObj .
+            ?archiveTypeObj rdfs:label ?archiveType .
+        }
+        
+        ?ds le:hasLocation ?loc .
         OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
         OPTIONAL{?loc wgs84:long ?geo_meanLon .}
         OPTIONAL {?loc wgs84:alt ?geo_meanElev .}
         
-        ?ds le:includesPaleoData ?data .
-        ?data le:foundInMeasurementTable ?table .
-        ?table le:includesVariable ?var .
+        ?ds le:hasPaleoData ?data .
+        ?data le:hasMeasurementTable ?table .
+        ?table le:hasVariable ?var .
         
-        ?var le:name ?paleoData_variableName .
+        ?var le:hasName ?paleoData_variableName .
         FILTER (!regex(?paleoData_variableName, "year.*") && !regex(?paleoData_variableName, "age.*") && !regex(?paleoData_variableName, "depth.*")) .
    		
         ?var le:hasValues ?paleoData_values .
-        OPTIONAL{?var le:hasUnits ?paleoData_units .}
-        OPTIONAL{?var le:proxy ?paleoData_proxy .}
-        OPTIONAL{?var le:proxyGeneral ?paleoData_proxyGeneral .}
+        OPTIONAL{
+            ?var le:hasUnits ?paleoData_unitsObj .
+            ?paleoData_unitsObj rdfs:label ?paleoData_units .
+        }
+        OPTIONAL{?var le:hasProxy ?paleoData_proxy .}
+        OPTIONAL{?var le:hasProxyGeneral ?paleoData_proxyGeneral .}
         
         
-        OPTIONAL{?table le:includesVariable ?timevar .
-        ?timevar le:name ?time_variableName .
-            FILTER (regex(?time_variableName, "year.*") || regex(?time_variableName, "age.*")) .
-        ?timevar le:hasValues ?time_values .
-            OPTIONAL{?timevar le:hasUnits ?time_units .}}
+        OPTIONAL{
+            ?table le:hasVariable ?timevar .
+            ?timevar le:hasName ?time_variableName .
+                FILTER (regex(?time_variableName, "year.*") || regex(?time_variableName, "age.*")) .
+            ?timevar le:hasValues ?time_values .
+            OPTIONAL{
+                ?timevar le:hasUnits ?time_unitsObj .
+                ?time_unitsObj rdfs:label ?time_units .
+            }
+        }
         
-        OPTIONAL{?table le:includesVariable ?depthvar .
-        ?depthvar le:name ?depth_variableName .
-            FILTER (regex(?depth_variableName, "depth.*")) .
-        ?depthvar le:hasValues ?depth_values .
-            OPTIONAL{?depthvar le:hasUnits ?depth_units .}}
+        OPTIONAL{
+            ?table le:hasVariable ?depthvar .
+            ?depthvar le:hasName ?depth_variableName .
+                FILTER (regex(?depth_variableName, "depth.*")) .
+            ?depthvar le:hasValues ?depth_values .
+            OPTIONAL{
+                ?depthvar le:hasUnits ?depth_unitsObj .
+                ?depth_unitsObj rdfs:label ?depth_units .
+            }
+        }
         
     }
 """
@@ -294,34 +325,49 @@ QUERY_TIMESERIES_ESSENTIALS_CHRON ="""
     ?time_variableName ?time_values 
     ?time_units ?depth_variableName ?depth_values ?depth_units WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?dataSetName .
+        ?ds le:hasName ?dataSetName .
             FILTER regex(?dataSetName, "[dsname].*", "i").
-        OPTIONAL{?ds le:proxyArchiveType ?archiveType .}
         
-        ?ds le:collectedFrom ?loc .
+        OPTIONAL{
+            ?ds le:hasArchiveType ?archiveTypeObj .
+            ?archiveTypeObj rdfs:label ?archiveType .
+        }
+        
+        ?ds le:hasLocation ?loc .
         OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
         OPTIONAL{?loc wgs84:long ?geo_meanLon .}
         OPTIONAL {?loc wgs84:alt ?geo_meanElev .}
         
-        ?ds le:includesChronData ?data .
-        ?data le:foundInMeasurementTable ?table .
-        ?table le:includesVariable ?var .
-        ?var le:name ?chronData_variableName .
+        ?ds le:hasChronData ?data .
+        ?data le:hasMeasurementTable ?table .
+        ?table le:hasVariable ?var .
+        ?var le:hasName ?chronData_variableName .
    		
         ?var le:hasValues ?chronData_values .
-        OPTIONAL{?var le:hasUnits ?chronData_units .}
+        OPTIONAL{
+            ?var le:hasUnits ?chronData_unitsObj .
+            ?chronData_unitsObj rdfs:label ?chronData_units .
+        }
         
-        OPTIONAL{?table le:includesVariable ?timevar .
-        ?timevar le:name ?time_variableName .
+        OPTIONAL{?table le:hasVariable ?timevar .
+        ?timevar le:hasName ?time_variableName .
             FILTER (regex(?time_variableName, "year.*") || regex(?time_variableName, "age.*")) .
         ?timevar le:hasValues ?time_values .
-            OPTIONAL{?timevar le:hasUnits ?time_units .}}
+            OPTIONAL{
+                ?timevar le:hasUnits ?time_unitsObj .
+                ?time_unitsObj rdfs:label ?time_units .
+            }
+        }
         
-        OPTIONAL{?table le:includesVariable ?depthvar .
-        ?depthvar le:name ?depth_variableName .
+        OPTIONAL{?table le:hasVariable ?depthvar .
+        ?depthvar le:hasName ?depth_variableName .
             FILTER (regex(?depth_variableName, "depth.*")) .
         ?depthvar le:hasValues ?depth_values .
-            OPTIONAL{?depthvar le:hasUnits ?depth_units .}}
+            OPTIONAL{
+                ?depthvar le:hasUnits ?depth_unitsObj .
+                ?depth_unitsObj rdfs:label ?depth_units .
+            }
+        }
     }
 """
 
@@ -331,16 +377,16 @@ QUERY_VARIABLE_PROPERTIES="""
     
     ?ds a le:Dataset .
     
-    {?ds le:includesPaleoData ?data .
-    ?data le:foundInMeasurementTable ?table .
-    ?table le:includesVariable ?var .
+    {?ds le:hasPaleoData ?data .
+    ?data le:hasMeasurementTable ?table .
+    ?table le:hasVariable ?var .
     ?var ?property ?value .}
     
     UNION
     
-    {OPTIONAL{?ds le:includesChronData ?data1 .
-    ?data1 le:foundInMeasurementTable ?table1 .
-    ?table1 le:includesVariable ?var1 .
+    {OPTIONAL{?ds le:hasChronData ?data1 .
+    ?data1 le:hasMeasurementTable ?table1 .
+    ?table1 le:hasVariable ?var1 .
     ?var1 ?property ?value1 .}}
     
     }
@@ -361,14 +407,14 @@ QUERY_MODEL_PROPERTIES="""
     
     ?ds a le:Dataset .
     
-    {OPTIONAL{?ds le:includesPaleoData ?data .
-              ?data le:paleoModeledBy ?paleomodel .
+    {OPTIONAL{?ds le:hasPaleoData ?data .
+              ?data le:modeledBy ?paleomodel .
               ?paleomodel ?property ?value .}}
     
     UNION
     
-    {OPTIONAL{?ds le:includesChronData ?chron .
-              ?chron le:paleoModeledBy ?chronmodel .
+    {OPTIONAL{?ds le:hasChronData ?chron .
+              ?chron le:modeledBy ?chronmodel .
               ?chronmodel ?property ?value .}}
     
     }
@@ -377,15 +423,18 @@ QUERY_MODEL_PROPERTIES="""
 QUERY_VARIABLE_ESSENTIALS="""
     PREFIX le: <http://linked.earth/ontology#>
     SELECT ?dataSetName ?archiveType ?name ?TSID ?values ?units ?proxy where {
-        ?var le:name ?name .
+        ?var le:hasName ?name .
         ?var le:foundInDatasetName ?dataSetName .
             #FILTER regex(?dataSetName, "[dsname].*", "i").
             
-        OPTIONAL{?var le:hasVariableID ?TSID .}
+        OPTIONAL{?var le:hasVariableId ?TSID .}
         ?var le:hasValues ?values .
-        OPTIONAL{?var le:hasUnits ?units .}
+        OPTIONAL{
+            ?var le:hasUnits ?unitsObj .
+            ?unitsObj rdfs:label ?units .
+        }
         OPTIONAL{?var le:archiveType ?archiveType .}
-        OPTIONAL{?var le:proxy ?proxy .}
+        OPTIONAL{?var le:hasProxy ?proxy .}
         
         
         
@@ -396,10 +445,10 @@ QUERY_LOCATION ="""
     PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
     SELECT ?dataSetName ?geo_meanLat ?geo_meanLon ?geo_meanElev WHERE {
         ?ds a le:Dataset .
-        ?ds le:name ?dataSetName .
+        ?ds le:hasName ?dataSetName .
             FILTER regex(?dataSetName, "[dsname].*", "i").
         
-        ?ds le:collectedFrom ?loc .
+        ?ds le:hasLocation ?loc .
         OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
         OPTIONAL{?loc wgs84:long ?geo_meanLon .}
         OPTIONAL{?loc wgs84:alt ?geo_meanElev .}

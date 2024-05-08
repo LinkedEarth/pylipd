@@ -17,6 +17,7 @@ from rdflib.graph import ConjunctiveGraph, URIRef
 from ..globals.urls import NSURL
 from ..globals.blacklist import REVERSE_BLACKLIST
 from ..globals.schema import SCHEMA
+from ..globals.synonyms import RSYNONYMS
 
 from .utils import ucfirst, lcfirst, unCamelCase, unzip_string
 
@@ -212,7 +213,7 @@ class RDFToLiPD:
                 if (prop[0] == "@") :
                     continue
                 
-                if (("hack" in details)) :
+                if (("skip_auto_convert_to_json" in details)) :
                     continue
                 
                 pdetails = self._get_property_details(prop, sch)
@@ -457,58 +458,6 @@ class RDFToLiPD:
         if "foundInDataset" in var :
             del var["foundInDataset"]
         return var
-    
-    def __get_variable_archive_types(self, item, atypes) :
-        if type(item) is dict:
-            nitem = {}
-            for key,value in item.items() :
-                if (key == "archiveType") :
-                    atypes[value] = 1
-                else : 
-                    [nitem[key], atypes] = self.__get_variable_archive_types(value, atypes)
-            
-        elif type(item) is list:
-            nitem = []
-            for value in item :
-                [nit, atypes] = self.__get_variable_archive_types(value, atypes)
-                nitem.append(nit)
-                
-        else : 
-            nitem = item
-        return [nitem, atypes]
-
-    def _get_variable_archive_types(self, var, parent = None) :
-        [var, atypes] = self.__get_variable_archive_types(var, {})
-        for atype,ok in atypes.items() :
-            var["archiveType"] = atype
-        return var
-
-    def _get_lipd_archive_type(self, archiveType):
-        return unCamelCase(archiveType)
-
-    def _extract_from_proxy_system(self, var, parent = None) :
-        if (("hasProxySystem" in var)) :
-            ps = var["hasProxySystem"]
-            #var["proxy"] = ps["name"]
-            if (("hasProxySensor" in ps)) :
-                psensor = ps["hasProxySensor"]
-                if type(psensor) is dict:
-                    if (("sensorGenus" in psensor)) :
-                        var["sensorGenus"] = psensor["sensorGenus"]
-                    
-                    if (("sensorSpecies" in psensor)) :
-                        var["sensorSpecies"] = psensor["sensorSpecies"]
-
-            del var["hasProxySystem"]
-        if (("measuredOn" in var)) :
-            archive = var["measuredOn"]
-            if type(archive) is dict and "@category" in archive:
-                archiveType = archive["@category"]
-                var["archiveType"] = self._get_lipd_archive_type(archiveType)
-            elif type(archive) is str:
-                var["archiveType"] = self._get_lipd_archive_type(archive)
-            del var["measuredOn"]
-        return var
 
     def _unwrap_uncertainty(self, var, parent = None) :
         if (("hasUncertainty" in var)) :
@@ -551,18 +500,58 @@ class RDFToLiPD:
                     arr = self._collect_variables_by_id(item[key], arr)
         return arr
 
-    def _set_variable_type(self, var, parent = None) :
-        if (var["@category"] == "MeasuredVariable") :
-            var["variableType"] = "measured"
-        
-        if (var["@category"] == "InferredVariable") :
-            var["variableType"] = "inferred"
-        return var
 
-    def _remove_depth_property(self, val, parent = None) :
-        if "takenAtDepth" in val :
-            del val["takenAtDepth"]
-        return val
+    def _set_archive_type_label(self, ds, parent = None) :
+        if "hasArchiveType" in ds :
+            id = ds["hasArchiveType"]["@id"]
+            if id in RSYNONYMS:
+                ds["archiveType"] = RSYNONYMS[id]
+            del ds["hasArchiveType"]
+        return ds
+
+
+    def _set_units_label(self, var, parent = None) :
+        if "hasUnits" in var :
+            id = var["hasUnits"]["@id"]
+            if id in RSYNONYMS:
+                var["units"] = RSYNONYMS[id]
+            del var["hasUnits"]
+        return var
+    
+
+    def _set_proxy_label(self, var, parent = None) :
+        if "hasProxy" in var :
+            id = var["hasProxy"]["@id"]
+            if id in RSYNONYMS:
+                var["proxy"] = RSYNONYMS[id]
+            del var["hasProxy"]
+        return var
+    
+
+    def _set_proxy_general_label(self, var, parent = None) :
+        if "hasProxyGeneral" in var :
+            id = var["hasProxyGeneral"]["@id"]
+            if id in RSYNONYMS:
+                var["proxyGeneral"] = RSYNONYMS[id]
+            del var["hasProxyGeneral"]
+        return var
+    
+
+    def _set_seasonality_labels(self, interp, parent = None) :
+        convs = {
+            "hasSeasonality": "seasonality",
+            "hasSeasonalityGeneral": "seasonalityGeneral",
+            "hasSeasonalityOriginal": "seasonalityOriginal"
+        }
+        for pid in convs:
+            if pid in interp :
+                id = interp[pid]["@id"]
+                nid = convs[pid]
+                if id in RSYNONYMS:
+                    interp[nid] = RSYNONYMS[id]
+                del interp[pid]
+        return interp
+
 
     def _create_publication_identifier(self, pub, parent = None) :
         identifiers = []
@@ -581,14 +570,6 @@ class RDFToLiPD:
         pub["identifier"] = identifiers
         return pub
 
-    def _change_seasonality_type(self, interp, parent = None) :
-        if (("seasonality" in interp)) :
-            if type(interp["seasonality"]) is list:
-                newseasonality = []
-                for svalue in interp["seasonality"]:
-                    newseasonality.append(float(svalue))
-                interp["seasonality"] = newseasonality
-        return interp
 
     def _values_to_array(self, resolution, parent = None) :
         if (("values" in resolution)) :

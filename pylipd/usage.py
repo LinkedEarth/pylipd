@@ -1,7 +1,7 @@
 from pylipd.lipd import LiPD
 import json
 from pylipd.lipd_series import LiPDSeries
-from pylipd.multi_processing import convert_to_rdf
+from pylipd.utils.multi_processing import convert_to_rdf
 
 ####################
 # TODO:
@@ -10,7 +10,8 @@ from pylipd.multi_processing import convert_to_rdf
 
 
 local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd.latest"
-remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse2"
+#remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic"
+remote_lipd_endpoint = "https://localhost:7200/repositories/LiPDVerse-dynamic"
 
 '''
 lipd = LiPD()
@@ -26,11 +27,12 @@ exit()
 '''
 # Convert one LiPD file to RDF
 convert_to_rdf(
-    "/Users/varun/git/LiPD/PyLiPD/data/lpd/CO03COPM.lpd",
-    "/Users/varun/git/LiPD/PyLiPD/data/MD98_2181.Stott.2007.nq"
+    ("/Users/varun/Downloads/Pella.Lim.2016.lpd",
+    "/Users/varun/Downloads/Pella.Lim.2016.nq")
 )
 exit()
 '''
+
 
 '''    
 data = ['https://lipdverse.org/data/TjhHrDv0LQ4aazHolZkR/1_0_0//Ocn-WEqPacific.Stott.2007.lpd']
@@ -72,6 +74,13 @@ exit()
 
 # Load from local
 lipd = LiPD()
+
+# lipd.load("/Users/varun/git/pylipd/pylipd/data/ODP846.Lawrence.2006.lpd")
+# series = lipd.to_lipd_series()
+# print(series.get_all_variable_names())
+# print(series.get_timeseries_essentials())
+
+
 # data_path = local_lipd_dir + '/Ocn-Palmyra.Nurhati.2011.lpd'
 # lipd.load(data_path)
 
@@ -84,7 +93,7 @@ print(lipd.get_all_dataset_names())
 #lipd.load(lipdfiles)
 # lipd.load_from_dir("examples/data")
 
-# lipd.load_from_dir("/Users/varun/Downloads/example_sisal_lipds")
+lipd.load_from_dir("/Users/varun/Downloads/example_sisal_lipds")
 print(lipd.get_all_dataset_names())
 
 lat = -77.08

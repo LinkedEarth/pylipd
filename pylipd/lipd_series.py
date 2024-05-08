@@ -1,14 +1,11 @@
-from rdflib import ConjunctiveGraph, Namespace, URIRef
 from tqdm import tqdm
 from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE, QUERY_DISTINCT_VARIABLE, QUERY_VARIABLE_ESSENTIALS
 
-from pylipd.globals.urls import ONTONS
 from .utils.multi_processing import multi_load_lipd_series
 from .utils.rdf_graph import RDFGraph
-from .utils.utils import sanitizeId
 
 import numpy as np
-
+import json
 
 class LiPDSeries(RDFGraph):
     '''The LiPD Series class describes a collection of `LiPD (Linked Paleo Data) <https://cp.copernicus.org/articles/12/1093/2016/cp-12-1093-2016.html>`_ 
@@ -151,8 +148,8 @@ class LiPDSeries(RDFGraph):
             string = row['dataSetName'].split('/')[-1]
             row['dataSetName'] = string
         
-        qres_df['values']=qres_df['values'].apply(lambda row : np.fromstring(row.strip("[]"), sep=','))
-        
+        qres_df['values']=qres_df['values'].apply(lambda row : np.array(json.loads(row)))
+
         return qres_df
 
     def filter_by_name(self, name):

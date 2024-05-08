@@ -60,6 +60,7 @@ def load_datasets(names):
            pass
     
     L = LiPD()
+    print(full_paths)
     L.load(full_paths)
    
     return L
