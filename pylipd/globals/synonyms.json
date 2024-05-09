@@ -6766,8 +6766,8 @@
             "label": "accumulation"
          },
          "age": {
-            "id": "http://linked.earth/ontology/variables#uncertainty",
-            "label": "uncertainty"
+            "id": "http://linked.earth/ontology/variables#age",
+            "label": "age"
          },
          "age_original": {
             "id": "http://linked.earth/ontology/variables#age",
