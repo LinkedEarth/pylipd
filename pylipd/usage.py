@@ -75,11 +75,16 @@ exit()
 # Load from local
 lipd = LiPD()
 
-# lipd.load("/Users/varun/git/pylipd/pylipd/data/ODP846.Lawrence.2006.lpd")
-# series = lipd.to_lipd_series()
-# print(series.get_all_variable_names())
-# print(series.get_timeseries_essentials())
-
+#lipd.load("/Users/varun/git/pylipd/pylipd/data/ODP846.Lawrence.2006.lpd")
+lipd.load(local_lipd_dir + "/MS07LSPG.lpd")
+print(lipd.get_all_dataset_names())
+ts, ts_df = lipd.get_timeseries(lipd.get_all_dataset_names(), to_dataframe=True)
+print(ts_df["archiveType"])
+exit()
+series = lipd.to_lipd_series()
+print(series.get_all_variable_names())
+print(series.get_timeseries_essentials())
+exit()
 
 # data_path = local_lipd_dir + '/Ocn-Palmyra.Nurhati.2011.lpd'
 # lipd.load(data_path)

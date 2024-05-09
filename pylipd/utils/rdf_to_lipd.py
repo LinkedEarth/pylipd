@@ -503,36 +503,40 @@ class RDFToLiPD:
 
     def _set_archive_type_label(self, ds, parent = None) :
         if "hasArchiveType" in ds :
-            id = ds["hasArchiveType"]["@id"]
-            if id in RSYNONYMS:
-                ds["archiveType"] = RSYNONYMS[id]
+            if "@id" in ds["hasArchiveType"]:
+                id = ds["hasArchiveType"]["@id"]
+                if id in RSYNONYMS:
+                    ds["archiveType"] = RSYNONYMS[id]
             del ds["hasArchiveType"]
         return ds
 
 
     def _set_units_label(self, var, parent = None) :
         if "hasUnits" in var :
-            id = var["hasUnits"]["@id"]
-            if id in RSYNONYMS:
-                var["units"] = RSYNONYMS[id]
+            if "@id" in var["hasUnits"]:
+                id = var["hasUnits"]["@id"]
+                if id in RSYNONYMS:
+                    var["units"] = RSYNONYMS[id]
             del var["hasUnits"]
         return var
     
 
     def _set_proxy_label(self, var, parent = None) :
         if "hasProxy" in var :
-            id = var["hasProxy"]["@id"]
-            if id in RSYNONYMS:
-                var["proxy"] = RSYNONYMS[id]
+            if "@id" in var["hasProxy"]:
+                id = var["hasProxy"]["@id"]
+                if id in RSYNONYMS:
+                    var["proxy"] = RSYNONYMS[id]
             del var["hasProxy"]
         return var
     
 
     def _set_proxy_general_label(self, var, parent = None) :
         if "hasProxyGeneral" in var :
-            id = var["hasProxyGeneral"]["@id"]
-            if id in RSYNONYMS:
-                var["proxyGeneral"] = RSYNONYMS[id]
+            if "@id" in var["hasProxyGeneral"]:
+                id = var["hasProxyGeneral"]["@id"]
+                if id in RSYNONYMS:
+                    var["proxyGeneral"] = RSYNONYMS[id]
             del var["hasProxyGeneral"]
         return var
     
@@ -545,10 +549,11 @@ class RDFToLiPD:
         }
         for pid in convs:
             if pid in interp :
-                id = interp[pid]["@id"]
-                nid = convs[pid]
-                if id in RSYNONYMS:
-                    interp[nid] = RSYNONYMS[id]
+                if "@id" in interp[pid]:
+                    id = interp[pid]["@id"]
+                    nid = convs[pid]
+                    if id in RSYNONYMS:
+                        interp[nid] = RSYNONYMS[id]
                 del interp[pid]
         return interp
 
