@@ -9,7 +9,7 @@ from pylipd.utils.multi_processing import convert_to_rdf
 ####################
 
 
-local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd.latest"
+local_lipd_dir = "/Users/varun/git/LiPD/PyLiPD/data/lpd"
 remote_lipd_endpoint = "https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic"
 #remote_lipd_endpoint = "https://localhost:7200/repositories/LiPDVerse-dynamic"
 
@@ -76,10 +76,10 @@ exit()
 lipd = LiPD()
 
 #lipd.load("/Users/varun/git/pylipd/pylipd/data/ODP846.Lawrence.2006.lpd")
-lipd.load(local_lipd_dir + "/MS07LSPG.lpd")
+lipd.load("/Users/varun/Downloads/IC06THPR.lpd")
 print(lipd.get_all_dataset_names())
 ts, ts_df = lipd.get_timeseries(lipd.get_all_dataset_names(), to_dataframe=True)
-print(ts_df["archiveType"])
+print(ts_df[["dataSetName", "year", "archiveType", "paleoData_variableName", "paleoData_units"]])
 exit()
 series = lipd.to_lipd_series()
 print(series.get_all_variable_names())

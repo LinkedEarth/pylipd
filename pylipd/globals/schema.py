@@ -327,6 +327,7 @@ SCHEMA = {
         '@toJson_pre': [
             '_remove_found_in_table',
             '_remove_found_in_dataset',
+            '_set_variable_name_from_standard_variable_label',
             '_set_units_label',
             '_set_proxy_label',
             '_set_proxy_general_label'

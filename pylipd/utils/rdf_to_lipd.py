@@ -511,6 +511,16 @@ class RDFToLiPD:
         return ds
 
 
+    def _set_variable_name_from_standard_variable_label(self, var, parent = None) :
+        if "hasStandardVariable" in var :
+            if "@id" in var["hasStandardVariable"]:
+                id = var["hasStandardVariable"]["@id"]
+                if id in RSYNONYMS:
+                    var["variableName"] = RSYNONYMS[id]
+            del var["hasStandardVariable"]
+        return var
+    
+
     def _set_units_label(self, var, parent = None) :
         if "hasUnits" in var :
             if "@id" in var["hasUnits"]:
