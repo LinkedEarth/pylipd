@@ -10,7 +10,7 @@ QUERY_DSNAME = """
 QUERY_DSID = """
     SELECT ?dsid WHERE {
         ?ds a le:Dataset .
-        OPTIONAL{?ds le:datasetId ?dsid}
+        OPTIONAL{?ds le:hasDatasetId ?dsid}
     }
 """
 
@@ -289,8 +289,14 @@ QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
             ?var le:hasUnits ?paleoData_unitsObj .
             ?paleoData_unitsObj rdfs:label ?paleoData_units .
         }
-        OPTIONAL{?var le:hasProxy ?paleoData_proxy .}
-        OPTIONAL{?var le:hasProxyGeneral ?paleoData_proxyGeneral .}
+        OPTIONAL{
+            ?var le:hasProxy ?paleoData_proxyObj .
+            ?paleoData_proxyObj rdfs:label ?paleoData_proxy .
+        }
+        OPTIONAL{
+            ?var le:hasProxyGeneral ?paleoData_proxyGeneralObj .
+            ?paleoData_proxyGeneralObj rdfs:label ?paleoData_proxyGeneral .
+        }
         
         
         OPTIONAL{
@@ -434,11 +440,11 @@ QUERY_VARIABLE_ESSENTIALS="""
             ?unitsObj rdfs:label ?units .
         }
         OPTIONAL{?var le:archiveType ?archiveType .}
-        OPTIONAL{?var le:hasProxy ?proxy .}
-        
-        
-        
-        }
+        OPTIONAL{
+            ?var le:hasProxy ?paleoData_proxyObj .
+            ?paleoData_proxyObj rdfs:label ?paleoData_proxy .
+        }    
+    }
 """
 
 QUERY_LOCATION ="""
