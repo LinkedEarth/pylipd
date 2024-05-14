@@ -361,7 +361,7 @@ class LiPD(RDFGraph):
                     if f[0]==True:
                         bibs.append(f[1])
                     else:
-                        print("Cannot find a matching record for the provided DOI, creating the entry manually")
+                        print(f"Cannot find a matching record for the provided DOI ({row['doi']}), creating the entry manually")
                         bibs.append(make_bib(row).to_string('bibtex'))
                 except:
                     print("Cannot parse the provided DOI, creating the entry manually")

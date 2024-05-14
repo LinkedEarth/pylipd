@@ -97,14 +97,14 @@ QUERY_BIBLIO = """
     WHERE { 
         ?ds a le:Dataset .
         ?ds le:hasName ?dsname .
-        ?ds le:publishedIn ?pub .
+        ?ds le:hasPublication ?pub .
         OPTIONAL{?pub le:hasDOI ?doi .}
         OPTIONAL{
-            ?pub le:author ?author .
+            ?pub le:hasAuthor ?author .
             ?author le:hasName ?authorName .
         }
-        OPTIONAL{?pub le:publicationYear ?year .}
-        OPTIONAL{?pub le:pubYear ?pubyear .}
+        OPTIONAL{?pub le:publicationYear ?pubyear .}
+        OPTIONAL{?pub le:hasYear ?year .}
         OPTIONAL{?pub le:hasTitle ?title .}
         OPTIONAL{?pub le:hasJournal ?journal .}
         OPTIONAL{?pub le:hasVolume ?volume .}
