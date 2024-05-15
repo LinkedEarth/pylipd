@@ -57,7 +57,7 @@ class LiPD(RDFGraph):
         super().__init__(graph)
 
     
-    def load_from_dir(self, dir_path, parallel=False, cutoff=None):
+    def load_from_dir(self, dir_path, parallel=False, cutoff=None, standardize=True, add_labels=True):
         '''Load LiPD files from a directory
        
         Parameters
@@ -96,7 +96,7 @@ class LiPD(RDFGraph):
                 lipdfiles.append(file_path)
         if cutoff:
             lipdfiles = lipdfiles[0:cutoff]
-        self.load(lipdfiles, parallel)
+        self.load(lipdfiles, parallel, standardize, add_labels)
 
 
     # Allows loading http locations

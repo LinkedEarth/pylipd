@@ -890,14 +890,19 @@ class LipdToRDF:
 
             # Set property value
             if dtype == "Individual":
-                if self.standardize and type(value) is str and value.lower() in synonyms:
+                if type(value) is str and value.lower() in synonyms:
                     # Only standardize if set to standardize
                     propDI[1] = "EnumeratedIndividual" # Rename property type to be an enumeration
                     synid = synonyms[value.lower()]["id"]
+                    if not self.standardize:
+                        synid += "." + uniqid()
                     self._set_property_value(objid, propDI, synid)
                     # Only add object label in the current graph if set
                     if self.add_labels:
-                        label = synonyms[value.lower()]["label"]                        
+                        if self.standardize:
+                            label = synonyms[value.lower()]["label"]
+                        else:
+                            label = value
                         self._set_object_label(synid, label)
                 else:
                     self._set_property_value(objid, propDI, value)
