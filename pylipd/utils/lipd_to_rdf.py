@@ -34,11 +34,13 @@ class LipdToRDF:
     It uses the SCHEMA dictionary (from globals/schema.py) to do the conversion
     """
 
-    def __init__(self):
+    def __init__(self, standardize=True, add_labels=True):
         self.graph = ConjunctiveGraph()
         self.lipd_csvs = {}
         self.graphurl = NSURL
         self.namespace = NSURL + "/"
+        self.standardize = standardize
+        self.add_labels = add_labels
         self.schema = expand_schema(copy.deepcopy(SCHEMA))  
 
 
@@ -465,6 +467,11 @@ class LipdToRDF:
             synonyms = SYNONYMS["VARIABLES"]["PaleoVariable"]
             if type(name) is str and name.lower() in synonyms:
                 obj["hasStandardVariable"] = synonyms[name.lower()]["id"]
+                # Only add object label in the current graph if set
+                if self.add_labels:
+                    label = synonyms[name.lower()]["label"]                        
+                    self._set_object_label(obj["hasStandardVariable"], label)
+
         return [obj, objhash, []]
 
     def _stringify_column_numbers_array(self, obj, objhash):
@@ -883,12 +890,15 @@ class LipdToRDF:
 
             # Set property value
             if dtype == "Individual":
-                if type(value) is str and value.lower() in synonyms:
+                if self.standardize and type(value) is str and value.lower() in synonyms:
+                    # Only standardize if set to standardize
                     propDI[1] = "EnumeratedIndividual" # Rename property type to be an enumeration
                     synid = synonyms[value.lower()]["id"]
-                    label = synonyms[value.lower()]["label"]
                     self._set_property_value(objid, propDI, synid)
-                    self._set_object_label(synid, label)
+                    # Only add object label in the current graph if set
+                    if self.add_labels:
+                        label = synonyms[value.lower()]["label"]                        
+                        self._set_object_label(synid, label)
                 else:
                     self._set_property_value(objid, propDI, value)
             elif  type(value) is dict:

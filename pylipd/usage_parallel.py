@@ -18,7 +18,9 @@ if __name__ == "__main__":
     L.convert_lipd_dir_to_rdf(
         local_lipd_dir,
         local_lipd_dir+".nq", 
-        parallel=True)
+        parallel=True,
+        standardize=True,
+        add_labels=False)
     exit()
     
 

@@ -100,7 +100,7 @@ class LiPD(RDFGraph):
 
 
     # Allows loading http locations
-    def load(self, lipdfiles, parallel=False):
+    def load(self, lipdfiles, parallel=False, standardize=True, add_labels=True):
         '''Load LiPD files. 
         
 
@@ -137,14 +137,14 @@ class LiPD(RDFGraph):
             
         numfiles = len(lipdfiles)
         print(f"Loading {numfiles} LiPD files")
-        self.graph = multi_load_lipd(self.graph, lipdfiles, parallel)
+        self.graph = multi_load_lipd(self.graph, lipdfiles, parallel, standardize, add_labels)
         print("Loaded..")
     
     #def load_from_lipdverse(self, datasetID, version=None):
         
 
 
-    def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file, parallel=False):
+    def convert_lipd_dir_to_rdf(self, lipd_dir, rdf_file, parallel=False, standardize=True, add_labels=False):
         '''Convert a directory containing LiPD files into a single RDF file (to be used for uploading to Knowledge Bases like GraphDB)
 
         Parameters
@@ -166,7 +166,7 @@ class LiPD(RDFGraph):
         
         print(f"Converting {len(filemap.keys())} LiPD files to RDF..")
 
-        multi_convert_to_rdf(filemap, parallel)
+        multi_convert_to_rdf(filemap, parallel, standardize, add_labels)
         
         print("Conversion to RDF done..")
 

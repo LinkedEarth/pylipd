@@ -2,11 +2,10 @@ from tqdm import tqdm
 from ..globals.queries import QUERY_ALL_VARIABLES_GRAPH
 from .lipd_to_rdf import LipdToRDF
 import multiprocessing as mp
-import copy
 
 def convert_to_rdf(files):
-    (lipdfile, rdffile) = files
-    converter = LipdToRDF()    
+    (lipdfile, rdffile, standardize, add_labels) = files
+    converter = LipdToRDF(standardize, add_labels)    
     """Worker that converts one lipdfile to an rdffile"""
     try:
         converter.convert(lipdfile)
@@ -16,23 +15,24 @@ def convert_to_rdf(files):
         raise e
 
 
-def multi_convert_to_rdf(filemap, parallel=True):
+def multi_convert_to_rdf(filemap, parallel=True, standardize=True, add_labels=True):
     if parallel:
         """Create a pool to convert all lipdfiles to rdffiles"""
-        args = [(lipdfile, rdffile) for lipdfile, rdffile in filemap.items()]
+        args = [(lipdfile, rdffile, standardize, add_labels) for lipdfile, rdffile in filemap.items()]
         pool = mp.Pool(mp.cpu_count())
         for file in tqdm(pool.imap_unordered(convert_to_rdf, args, chunksize=1), total=len(args)):
             pass
         pool.close()
     else:
         for lipdfile, rdffile in filemap.items():
-            convert_to_rdf((lipdfile, rdffile))
+            convert_to_rdf((lipdfile, rdffile, standardize, add_labels))
 
 
-def convert_lipd_to_graph(lipdfile):
+def convert_lipd_to_graph(arg):
+    (lipdfile, standardize, add_labels) = arg
     """Worker that converts one lipdfile to an RDF graph"""
     try:
-        converter = LipdToRDF()
+        converter = LipdToRDF(standardize, add_labels)
         converter.convert(lipdfile)
         return converter.graph
     except Exception as e:
@@ -40,20 +40,21 @@ def convert_lipd_to_graph(lipdfile):
         raise e
 
 
-def multi_load_lipd(graph, lipdfiles, parallel=True):
+def multi_load_lipd(graph, lipdfiles, parallel=True, standardize=True, add_labels=True):
     """Load all lipdfiles to the RDF graph"""
+    args = [(file, standardize, add_labels) for file in lipdfiles]
     if parallel:            
         with mp.Pool(mp.cpu_count()) as pool:
-            for subgraph in tqdm(pool.imap_unordered(convert_lipd_to_graph, lipdfiles, chunksize=1), total=len(lipdfiles)):
+            for subgraph in tqdm(pool.imap_unordered(convert_lipd_to_graph, args, chunksize=1), total=len(lipdfiles)):
                 graph.addN(subgraph.quads())
                 del subgraph
             pool.close()
             pool.join()
 
     else:
-        for i in tqdm(range(0, len(lipdfiles))):
-            lipdfile = lipdfiles[i]
-            subgraph = convert_lipd_to_graph(lipdfile)
+        for i in tqdm(range(0, len(args))):
+            arg = args[i]
+            subgraph = convert_lipd_to_graph(arg)
             graph.addN(subgraph.quads())
             del subgraph
     return graph
