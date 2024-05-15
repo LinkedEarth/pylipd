@@ -351,6 +351,18 @@ SCHEMA = {
         'variableType': { 
             'name': 'hasType' 
         },
+        'archiveType': {
+            'name': 'hasArchiveType', 
+            'alternates':[
+                'archive',
+                'paleoDataArchive',
+                'paleoData_Archive',
+                'Archive'
+            ],
+            'type': 'Individual',
+            'synonyms': SYNONYMS['ARCHIVES']['ArchiveType'],
+            'skip_auto_convert_to_json': True
+        },
         'units': { 
             'name': 'hasUnits',
             'type': 'Individual',

@@ -439,7 +439,10 @@ QUERY_VARIABLE_ESSENTIALS="""
             ?var le:hasUnits ?unitsObj .
             ?unitsObj rdfs:label ?units .
         }
-        OPTIONAL{?var le:archiveType ?archiveType .}
+        OPTIONAL{
+            ?var le:hasArchiveType ?archiveTypeObj .
+            ?archiveTypeObj rdfs:label ?archiveType .
+        }
         OPTIONAL{
             ?var le:hasProxy ?paleoData_proxyObj .
             ?paleoData_proxyObj rdfs:label ?paleoData_proxy .
