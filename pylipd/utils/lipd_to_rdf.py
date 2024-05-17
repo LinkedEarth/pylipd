@@ -890,23 +890,36 @@ class LipdToRDF:
 
             # Set property value
             if dtype == "Individual":
-                if type(value) is str and value.lower() in synonyms:
-                    # Only standardize if set to standardize
-                    propDI[1] = "EnumeratedIndividual" # Rename property type to be an enumeration
-                    synid = synonyms[value.lower()]["id"]
-                    if not self.standardize:
-                        synid += "." + uniqid()
-                    self._set_property_value(objid, propDI, synid)
-                    # Only add object label in the current graph if set
-                    if self.add_labels:
-                        if self.standardize:
-                            label = synonyms[value.lower()]["label"]
-                        else:
-                            label = value
-                        self._set_object_label(synid, label)
+                if type(value) is str and synonyms:
+                    # If the value is a string and there are synonyms for this Individual
+                    if value.lower() in synonyms:
+                        # If we have a synonym-mapping for the value to an Individual
+                        
+                        propDI[1] = "EnumeratedIndividual" # Rename property type to be an enumeration
+                        synid = synonyms[value.lower()]["id"]
+                        if not self.standardize:
+                            # If we don't want to standardize, then create a unique id for the individual
+                            synid += "." + uniqid()
+                        self._set_property_value(objid, propDI, synid)
+                        # Only add object label in the current graph if set
+                        if self.add_labels:
+                            if self.standardize:
+                                # Set the standard label for the individual
+                                label = synonyms[value.lower()]["label"]
+                            else:
+                                # Set the user label for the individual
+                                label = value
+                            self._set_object_label(synid, label)
+                    else:
+                        # We don't have a synonym-mapping for the value. Create an individual and set its label to the value
+                        propDI[1] = "EnumeratedIndividual"
+                        synid = self._create_individual(value) + "." + uniqid()
+                        self._set_property_value(objid, propDI, synid)
+                        self._set_object_label(synid, value)
                 else:
+                    # There are no synonyms, and value is not a string. Just use it directly
                     self._set_property_value(objid, propDI, value)
-            elif  type(value) is dict:
+            elif type(value) is dict:
                 self._set_property_value(objid, propDI, value)
             else : 
                 if (dtype == "File") :
