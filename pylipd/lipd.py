@@ -29,7 +29,7 @@ from .utils.utils import sanitizeId
 from doi2bib import crossref
 from pybtex.database import BibliographyData, Entry
 
-from .globals.urls import NSURL
+from .globals.urls import NSURL, DEFAULT_GRAPH_URI
 
 class LiPD(RDFGraph):
     '''The LiPD class describes a `LiPD (Linked Paleo Data) <https://cp.copernicus.org/articles/12/1093/2016/cp-12-1093-2016.html>`_ object. It contains an `RDF <https://www.w3.org/RDF/>`_ Graph which is serialization of the LiPD data into an RDF graph containing terms from the `LiPD Ontology <http://linked.earth/Ontology/release/core/1.2.0/index-en.html>`
@@ -184,7 +184,7 @@ class LiPD(RDFGraph):
         print("Written..")
 
 
-    def load_remote_datasets(self, dsnames):
+    def load_remote_datasets(self, dsnames, load_default_graph=True):
         '''Loads remote datasets into cache if a remote endpoint is set
 
         Parameters
@@ -215,6 +215,9 @@ class LiPD(RDFGraph):
         if dsnames == None or len(dsnames) == 0:
             raise Exception("No dataset names to cache")
         dsnamestr = (' '.join('<' + NSURL + "/" + dsname + '>' for dsname in dsnames))
+
+        if load_default_graph:
+            dsnamestr += f" <{DEFAULT_GRAPH_URI}>"
         print("Caching datasets from remote endpoint..")
         qres, qres_df = self.query(f"SELECT ?s ?p ?o ?g WHERE {{ GRAPH ?g {{ ?s ?p ?o }} VALUES ?g {{ {dsnamestr} }} }}", remote=True)
 
