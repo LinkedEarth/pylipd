@@ -4,6 +4,7 @@
 ##############################
 
 import re
+from pylipd.utils import uniqid
 from pylipd.classes.integrationtime import IntegrationTime
 from pylipd.classes.interpretationvariable import InterpretationVariable
 from pylipd.classes.interpretationseasonality import InterpretationSeasonality
@@ -11,77 +12,52 @@ from pylipd.classes.interpretationseasonality import InterpretationSeasonality
 class Interpretation:
 
     def __init__(self):
-        self.local: str = None
-        self.variable: InterpretationVariable = None
         self.variableGeneral: str = None
-        self.seasonalityGeneral: InterpretationSeasonality = None
-        self.interpretationDirection: str = None
-        self.variableGeneralDirection: str = None
-        self.rank: str = None
-        self.integrationTime: IntegrationTime = None
-        self.notes: str = None
-        self.seasonality: InterpretationSeasonality = None
-        self.variableDetail: str = None
-        self.scope: str = None
+        self.local: str = None
         self.seasonalityOriginal: InterpretationSeasonality = None
+        self.variableDetail: str = None
+        self.rank: str = None
+        self.variable: InterpretationVariable = None
+        self.variableGeneralDirection: str = None
         self.basis: str = None
+        self.seasonalityGeneral: InterpretationSeasonality = None
+        self.notes: str = None
+        self.scope: str = None
+        self.interpretationDirection: str = None
         self.mathematicalRelation: str = None
+        self.integrationTime: IntegrationTime = None
+        self.seasonality: InterpretationSeasonality = None
         self.misc = {}
+        self.ontns = "http://linked.earth/ontology#"
+        self.ns = "http://linked.earth/lipd"
+        self.type = "http://linked.earth/ontology#Interpretation"
+        self.id = self.ns + "/" + uniqid("Interpretation")
 
     @staticmethod
     def from_data(id, data) -> 'Interpretation':
         self = Interpretation()
+        self.id = id
         mydata = data[id]
         for key in mydata:
             value = mydata[key]
             obj = None
             if key == "type":
-                continue
+                for val in value:
+                    self.type = val["@id"]
         
-            elif key == "hasScope":
+            elif key == "hasRank":
 
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
-                    self.scope = obj
+                    self.rank = obj
         
-            elif key == "hasIntegrationTime":
-
-                for val in value:
-                    if "@id" in val:
-                        obj = IntegrationTime.from_data(val["@id"], data)
-                    else:
-                        obj = val["@value"]
-                                    
-                    self.integrationTime = obj
-        
-            elif key == "hasMathematicalRelation":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.mathematicalRelation = obj
-        
-            elif key == "hasBasis":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.basis = obj
-        
-            elif key == "hasVariableDetail":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.variableDetail = obj
-        
-            elif key == "hasSeasonality":
+            elif key == "hasSeasonalityGeneral":
 
                 for val in value:
                     obj = InterpretationSeasonality.from_synonym(re.sub("^.*?#", "", val["@id"]))
                                     
-                    self.seasonality = obj
+                    self.seasonalityGeneral = obj
         
             elif key == "hasNotes":
 
@@ -97,40 +73,12 @@ class Interpretation:
                         obj = val["@value"]                        
                     self.variableGeneral = obj
         
-            elif key == "hasVariable":
-
-                for val in value:
-                    obj = InterpretationVariable.from_synonym(re.sub("^.*?#", "", val["@id"]))
-                                    
-                    self.variable = obj
-        
-            elif key == "hasRank":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.rank = obj
-        
-            elif key == "isLocal":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.local = obj
-        
             elif key == "hasVariableGeneralDirection":
 
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.variableGeneralDirection = obj
-        
-            elif key == "hasSeasonalityGeneral":
-
-                for val in value:
-                    obj = InterpretationSeasonality.from_synonym(re.sub("^.*?#", "", val["@id"]))
-                                    
-                    self.seasonalityGeneral = obj
         
             elif key == "hasSeasonalityOriginal":
 
@@ -139,12 +87,71 @@ class Interpretation:
                                     
                     self.seasonalityOriginal = obj
         
+            elif key == "hasIntegrationTime":
+
+                for val in value:
+                    if "@id" in val:
+                        obj = IntegrationTime.from_data(val["@id"], data)
+                    else:
+                        obj = val["@value"]
+                                    
+                    self.integrationTime = obj
+        
+            elif key == "hasBasis":
+
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.basis = obj
+        
+            elif key == "hasVariable":
+
+                for val in value:
+                    obj = InterpretationVariable.from_synonym(re.sub("^.*?#", "", val["@id"]))
+                                    
+                    self.variable = obj
+        
+            elif key == "hasScope":
+
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.scope = obj
+        
+            elif key == "hasVariableDetail":
+
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.variableDetail = obj
+        
             elif key == "hasInterpretationDirection":
 
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.interpretationDirection = obj
+        
+            elif key == "hasMathematicalRelation":
+
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.mathematicalRelation = obj
+        
+            elif key == "isLocal":
+
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.local = obj
+        
+            elif key == "hasSeasonality":
+
+                for val in value:
+                    obj = InterpretationSeasonality.from_synonym(re.sub("^.*?#", "", val["@id"]))
+                                    
+                    self.seasonality = obj
             else:
                 for val in value:
                     obj = None
@@ -155,6 +162,196 @@ class Interpretation:
                     self.set_non_standard_property(key, obj)
         
         return self
+
+    def to_data(self, data={}):
+        data[self.id] = {}
+        data[self.id]["type"] = [
+            {
+                "@id": self.type,
+                "@type": "uri"
+            }
+        ]
+
+        
+        if self.interpretationDirection:
+            value_obj = self.interpretationDirection
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasInterpretationDirection"] = [obj]
+            
+        
+        if self.notes:
+            value_obj = self.notes
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasNotes"] = [obj]
+            
+        
+        if self.scope:
+            value_obj = self.scope
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasScope"] = [obj]
+            
+        
+        if self.variableGeneralDirection:
+            value_obj = self.variableGeneralDirection
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasVariableGeneralDirection"] = [obj]
+            
+        
+        if self.rank:
+            value_obj = self.rank
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasRank"] = [obj]
+            
+        
+        if self.variable:
+            value_obj = self.variable 
+            obj = {
+                "@id": value_obj.id,
+                "@type": "uri"
+            }
+            data = value_obj.to_data(data)
+            
+            data[self.id]["hasVariable"] = [obj]
+            
+        
+        if self.seasonality:
+            value_obj = self.seasonality 
+            obj = {
+                "@id": value_obj.id,
+                "@type": "uri"
+            }
+            data = value_obj.to_data(data)
+            
+            data[self.id]["hasSeasonality"] = [obj]
+            
+        
+        if self.mathematicalRelation:
+            value_obj = self.mathematicalRelation
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasMathematicalRelation"] = [obj]
+            
+        
+        if self.variableGeneral:
+            value_obj = self.variableGeneral
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasVariableGeneral"] = [obj]
+            
+        
+        if self.variableDetail:
+            value_obj = self.variableDetail
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasVariableDetail"] = [obj]
+            
+        
+        if self.basis:
+            value_obj = self.basis
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasBasis"] = [obj]
+            
+        
+        if self.seasonalityOriginal:
+            value_obj = self.seasonalityOriginal 
+            obj = {
+                "@id": value_obj.id,
+                "@type": "uri"
+            }
+            data = value_obj.to_data(data)
+            
+            data[self.id]["hasSeasonalityOriginal"] = [obj]
+            
+        
+        if self.seasonalityGeneral:
+            value_obj = self.seasonalityGeneral 
+            obj = {
+                "@id": value_obj.id,
+                "@type": "uri"
+            }
+            data = value_obj.to_data(data)
+            
+            data[self.id]["hasSeasonalityGeneral"] = [obj]
+            
+        
+        if self.integrationTime:
+            value_obj = self.integrationTime 
+            obj = {
+                "@id": value_obj.id,
+                "@type": "uri"
+            }
+            data = value_obj.to_data(data)
+            
+            data[self.id]["hasIntegrationTime"] = [obj]
+            
+        
+        if self.local:
+            value_obj = self.local
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["isLocal"] = [obj]
+            
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[self.id][key] = []
+            ptype = None
+            tp = type(value).__name__
+            if tp == "int":
+                ptype = "http://www.w3.org/2001/XMLSchema#integer"
+            elif tp == "float":
+                ptype = "http://www.w3.org/2001/XMLSchema#float"
+            elif tp == "str":
+                if re.match("\d{4}-\d{2}-\d{2}", value):
+                    ptype = "http://www.w3.org/2001/XMLSchema#date"
+                else:
+                    ptype = "http://www.w3.org/2001/XMLSchema#string"
+            elif tp == "bool":
+                ptype = "http://www.w3.org/2001/XMLSchema#boolean"
+
+            data[self.id][key].append({
+                "@value": value,
+                "@type": "literal",
+                "@datatype": ptype
+            })
+        
+        return data
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
@@ -171,65 +368,23 @@ class Interpretation:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getSeasonality(self) -> InterpretationSeasonality:
-        return self.seasonality
-
-    def setSeasonality(self, seasonality:InterpretationSeasonality):
-        self.seasonality = seasonality
-
-    def getBasis(self) -> str:
-        return self.basis
-
-    def setBasis(self, basis:str):
-        self.basis = basis
-
-    def getVariableGeneralDirection(self) -> str:
-        return self.variableGeneralDirection
-
-    def setVariableGeneralDirection(self, variableGeneralDirection:str):
-        self.variableGeneralDirection = variableGeneralDirection
-
-    def getRank(self) -> str:
-        return self.rank
-
-    def setRank(self, rank:str):
-        self.rank = rank
-
     def getVariable(self) -> InterpretationVariable:
         return self.variable
 
     def setVariable(self, variable:InterpretationVariable):
         self.variable = variable
 
-    def getInterpretationDirection(self) -> str:
-        return self.interpretationDirection
-
-    def setInterpretationDirection(self, interpretationDirection:str):
-        self.interpretationDirection = interpretationDirection
-
-    def getSeasonalityGeneral(self) -> InterpretationSeasonality:
-        return self.seasonalityGeneral
-
-    def setSeasonalityGeneral(self, seasonalityGeneral:InterpretationSeasonality):
-        self.seasonalityGeneral = seasonalityGeneral
-
-    def getIntegrationTime(self) -> IntegrationTime:
-        return self.integrationTime
-
-    def setIntegrationTime(self, integrationTime:IntegrationTime):
-        self.integrationTime = integrationTime
-
-    def getVariableGeneral(self) -> str:
-        return self.variableGeneral
-
-    def setVariableGeneral(self, variableGeneral:str):
-        self.variableGeneral = variableGeneral
-
     def getNotes(self) -> str:
         return self.notes
 
     def setNotes(self, notes:str):
         self.notes = notes
+
+    def getBasis(self) -> str:
+        return self.basis
+
+    def setBasis(self, basis:str):
+        self.basis = basis
 
     def getMathematicalRelation(self) -> str:
         return self.mathematicalRelation
@@ -243,11 +398,23 @@ class Interpretation:
     def setVariableDetail(self, variableDetail:str):
         self.variableDetail = variableDetail
 
-    def isLocal(self) -> str:
-        return self.local
+    def getVariableGeneralDirection(self) -> str:
+        return self.variableGeneralDirection
 
-    def setLocal(self, local:str):
-        self.local = local
+    def setVariableGeneralDirection(self, variableGeneralDirection:str):
+        self.variableGeneralDirection = variableGeneralDirection
+
+    def getSeasonality(self) -> InterpretationSeasonality:
+        return self.seasonality
+
+    def setSeasonality(self, seasonality:InterpretationSeasonality):
+        self.seasonality = seasonality
+
+    def getRank(self) -> str:
+        return self.rank
+
+    def setRank(self, rank:str):
+        self.rank = rank
 
     def getScope(self) -> str:
         return self.scope
@@ -255,8 +422,38 @@ class Interpretation:
     def setScope(self, scope:str):
         self.scope = scope
 
+    def getIntegrationTime(self) -> IntegrationTime:
+        return self.integrationTime
+
+    def setIntegrationTime(self, integrationTime:IntegrationTime):
+        self.integrationTime = integrationTime
+
+    def getSeasonalityGeneral(self) -> InterpretationSeasonality:
+        return self.seasonalityGeneral
+
+    def setSeasonalityGeneral(self, seasonalityGeneral:InterpretationSeasonality):
+        self.seasonalityGeneral = seasonalityGeneral
+
     def getSeasonalityOriginal(self) -> InterpretationSeasonality:
         return self.seasonalityOriginal
 
     def setSeasonalityOriginal(self, seasonalityOriginal:InterpretationSeasonality):
         self.seasonalityOriginal = seasonalityOriginal
+
+    def getVariableGeneral(self) -> str:
+        return self.variableGeneral
+
+    def setVariableGeneral(self, variableGeneral:str):
+        self.variableGeneral = variableGeneral
+
+    def getInterpretationDirection(self) -> str:
+        return self.interpretationDirection
+
+    def setInterpretationDirection(self, interpretationDirection:str):
+        self.interpretationDirection = interpretationDirection
+
+    def isLocal(self) -> str:
+        return self.local
+
+    def setLocal(self, local:str):
+        self.local = local

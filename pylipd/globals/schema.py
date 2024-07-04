@@ -185,6 +185,7 @@ SCHEMA = {
         },
         'year': { 
             'name': 'hasYear', 
+            'type': 'integer',
             'alternates': ['pubYear'] 
         },        
         'publisher': { 
@@ -468,8 +469,7 @@ SCHEMA = {
             'alternates': ['qcNotes', 'qCNotes', 'qCnotes', 'qcnotes', 'QCnotes', 'QCNotes']
         },
         'hasValues': {
-            'type': 'string',
-            'class_type': 'list'
+            'type': 'string'
         },
         'foundInTable': {
             'type': 'Individual'
@@ -516,7 +516,7 @@ SCHEMA = {
         '@id': ['{@parent.dataSetName}', '.Location'],
         'coordinates': { 
             'type': 'Geographic_coordinate',
-            'class_type': 'list'
+            'class_type': 'string'
         },
         'coordinatesFor': { 
             'type': 'Individual' 

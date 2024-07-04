@@ -4,6 +4,7 @@
 ##############################
 
 import re
+from pylipd.utils import uniqid
 
 class Compilation:
 
@@ -11,23 +12,22 @@ class Compilation:
         self.name: str = None
         self.version: str = None
         self.misc = {}
+        self.ontns = "http://linked.earth/ontology#"
+        self.ns = "http://linked.earth/lipd"
+        self.type = "http://linked.earth/ontology#Compilation"
+        self.id = self.ns + "/" + uniqid("Compilation")
 
     @staticmethod
     def from_data(id, data) -> 'Compilation':
         self = Compilation()
+        self.id = id
         mydata = data[id]
         for key in mydata:
             value = mydata[key]
             obj = None
             if key == "type":
-                continue
-        
-            elif key == "hasVersion":
-
                 for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.version = obj
+                    self.type = val["@id"]
         
             elif key == "hasName":
 
@@ -35,6 +35,13 @@ class Compilation:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.name = obj
+        
+            elif key == "hasVersion":
+
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.version = obj
             else:
                 for val in value:
                     obj = None
@@ -45,6 +52,61 @@ class Compilation:
                     self.set_non_standard_property(key, obj)
         
         return self
+
+    def to_data(self, data={}):
+        data[self.id] = {}
+        data[self.id]["type"] = [
+            {
+                "@id": self.type,
+                "@type": "uri"
+            }
+        ]
+
+        
+        if self.version:
+            value_obj = self.version
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasVersion"] = [obj]
+            
+        
+        if self.name:
+            value_obj = self.name
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasName"] = [obj]
+            
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[self.id][key] = []
+            ptype = None
+            tp = type(value).__name__
+            if tp == "int":
+                ptype = "http://www.w3.org/2001/XMLSchema#integer"
+            elif tp == "float":
+                ptype = "http://www.w3.org/2001/XMLSchema#float"
+            elif tp == "str":
+                if re.match("\d{4}-\d{2}-\d{2}", value):
+                    ptype = "http://www.w3.org/2001/XMLSchema#date"
+                else:
+                    ptype = "http://www.w3.org/2001/XMLSchema#string"
+            elif tp == "bool":
+                ptype = "http://www.w3.org/2001/XMLSchema#boolean"
+
+            data[self.id][key].append({
+                "@value": value,
+                "@type": "literal",
+                "@datatype": ptype
+            })
+        
+        return data
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
@@ -61,14 +123,14 @@ class Compilation:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getVersion(self) -> str:
-        return self.version
-
-    def setVersion(self, version:str):
-        self.version = version
-
     def getName(self) -> str:
         return self.name
 
     def setName(self, name:str):
         self.name = name
+
+    def getVersion(self) -> str:
+        return self.version
+
+    def setVersion(self, version:str):
+        self.version = version

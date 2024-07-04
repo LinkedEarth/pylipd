@@ -3,7 +3,7 @@
 # Auto-generated. Do not Edit
 ##############################
 
-from pylipd.globals.synonyms import SYNONYMS
+from ..globals.synonyms import SYNONYMS
 
 class InterpretationVariable:
     synonyms = SYNONYMS["INTERPRETATION"]["InterpretationVariable"]
@@ -20,6 +20,18 @@ class InterpretationVariable:
 
     def getId(self):
         return self.id
+    
+    def to_data(self, data={}):
+        data[self.id] ={
+            "label": [
+                {
+                    "@datatype": None,
+                    "@type": "literal",
+                    "@value": self.label
+                }
+            ]
+        }
+        return data
     
     @classmethod
     def from_synonym(cls, synonym):

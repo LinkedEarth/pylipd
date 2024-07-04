@@ -4,39 +4,32 @@
 ##############################
 
 import re
+from pylipd.utils import uniqid
 
 class IndependentVariable:
 
     def __init__(self):
-        self.rank: str = None
         self.relevantQuote: str = None
-        self.interpretationDirection: str = None
+        self.rank: str = None
         self.equation: str = None
+        self.interpretationDirection: str = None
         self.misc = {}
+        self.ontns = "http://linked.earth/ontology#"
+        self.ns = "http://linked.earth/lipd"
+        self.type = "http://linked.earth/ontology#IndependentVariable"
+        self.id = self.ns + "/" + uniqid("IndependentVariable")
 
     @staticmethod
     def from_data(id, data) -> 'IndependentVariable':
         self = IndependentVariable()
+        self.id = id
         mydata = data[id]
         for key in mydata:
             value = mydata[key]
             obj = None
             if key == "type":
-                continue
-        
-            elif key == "equation":
-
                 for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.equation = obj
-        
-            elif key == "interpretationDirection":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.interpretationDirection = obj
+                    self.type = val["@id"]
         
             elif key == "hasRank":
 
@@ -51,6 +44,20 @@ class IndependentVariable:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.relevantQuote = obj
+        
+            elif key == "interpretationDirection":
+
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.interpretationDirection = obj
+        
+            elif key == "equation":
+
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.equation = obj
             else:
                 for val in value:
                     obj = None
@@ -61,6 +68,81 @@ class IndependentVariable:
                     self.set_non_standard_property(key, obj)
         
         return self
+
+    def to_data(self, data={}):
+        data[self.id] = {}
+        data[self.id]["type"] = [
+            {
+                "@id": self.type,
+                "@type": "uri"
+            }
+        ]
+
+        
+        if self.interpretationDirection:
+            value_obj = self.interpretationDirection
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["interpretationDirection"] = [obj]
+            
+        
+        if self.equation:
+            value_obj = self.equation
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["equation"] = [obj]
+            
+        
+        if self.relevantQuote:
+            value_obj = self.relevantQuote
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["relevantQuote"] = [obj]
+            
+        
+        if self.rank:
+            value_obj = self.rank
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasRank"] = [obj]
+            
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[self.id][key] = []
+            ptype = None
+            tp = type(value).__name__
+            if tp == "int":
+                ptype = "http://www.w3.org/2001/XMLSchema#integer"
+            elif tp == "float":
+                ptype = "http://www.w3.org/2001/XMLSchema#float"
+            elif tp == "str":
+                if re.match("\d{4}-\d{2}-\d{2}", value):
+                    ptype = "http://www.w3.org/2001/XMLSchema#date"
+                else:
+                    ptype = "http://www.w3.org/2001/XMLSchema#string"
+            elif tp == "bool":
+                ptype = "http://www.w3.org/2001/XMLSchema#boolean"
+
+            data[self.id][key].append({
+                "@value": value,
+                "@type": "literal",
+                "@datatype": ptype
+            })
+        
+        return data
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
@@ -89,14 +171,14 @@ class IndependentVariable:
     def setRelevantQuote(self, relevantQuote:str):
         self.relevantQuote = relevantQuote
 
-    def getEquation(self) -> str:
-        return self.equation
-
-    def setEquation(self, equation:str):
-        self.equation = equation
-
     def getRank(self) -> str:
         return self.rank
 
     def setRank(self, rank:str):
         self.rank = rank
+
+    def getEquation(self) -> str:
+        return self.equation
+
+    def setEquation(self, equation:str):
+        self.equation = equation
