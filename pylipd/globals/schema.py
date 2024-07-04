@@ -42,6 +42,7 @@ SCHEMA = {
             ],
             'type': 'Individual',
             'synonyms': SYNONYMS['ARCHIVES']['ArchiveType'],
+            'class_range': 'ArchiveType',
             'skip_auto_convert_to_json': True
         },
         'changelog': {
@@ -228,7 +229,6 @@ SCHEMA = {
             'name': 'hasFirstAuthor',
             'alternates': ['firstAuthor'],
             'schema': 'Person',
-            'multiple': True,
             'fromJson': '_parse_persons'
         }
     },
@@ -361,12 +361,14 @@ SCHEMA = {
             ],
             'type': 'Individual',
             'synonyms': SYNONYMS['ARCHIVES']['ArchiveType'],
+            'class_range': 'ArchiveType',
             'skip_auto_convert_to_json': True
         },
         'units': { 
             'name': 'hasUnits',
             'type': 'Individual',
             'synonyms': SYNONYMS['UNITS']['PaleoUnit'],
+            'class_range': 'PaleoUnit',
             'skip_auto_convert_to_json': True
         },
         'missingValue': { 
@@ -440,12 +442,14 @@ SCHEMA = {
             'name': 'hasProxy',
             'type': 'Individual',
             'synonyms': SYNONYMS['PROXIES']['PaleoProxy'],
+            'class_range': 'PaleoProxy',
             'skip_auto_convert_to_json': True
         },
         'proxyGeneral': {
             'name': 'hasProxyGeneral',
             'type': 'Individual',
             'synonyms': SYNONYMS['PROXIES']['PaleoProxyGeneral'],
+            'class_range': 'PaleoProxyGeneral',
             'skip_auto_convert_to_json': True
         },
         'inCompilationBeta': {
@@ -464,7 +468,8 @@ SCHEMA = {
             'alternates': ['qcNotes', 'qCNotes', 'qCnotes', 'qcnotes', 'QCnotes', 'QCNotes']
         },
         'hasValues': {
-            'type': 'string'
+            'type': 'string',
+            'class_type': 'list'
         },
         'foundInTable': {
             'type': 'Individual'
@@ -473,7 +478,10 @@ SCHEMA = {
             'type': 'Individual'
         },
         'hasStandardVariable': {
-            'type': 'EnumeratedIndividual'
+            'type': 'EnumeratedIndividual',
+            'synonyms': SYNONYMS["VARIABLES"]["PaleoVariable"],
+            'class_range': 'PaleoVariable',
+            'skip_auto_convert_to_json': True
         }        
     },
     'PhysicalSample': {
@@ -500,13 +508,15 @@ SCHEMA = {
             'name': 'hasUnits',
             'type': 'Individual',
             'synonyms': SYNONYMS['UNITS']['PaleoUnit'],
+            'class_range': 'PaleoUnit',
             'skip_auto_convert_to_json': True
         }
     },
     'Location': {
         '@id': ['{@parent.dataSetName}', '.Location'],
         'coordinates': { 
-            'type': 'Geographic_coordinate' 
+            'type': 'Geographic_coordinate',
+            'class_type': 'list'
         },
         'coordinatesFor': { 
             'type': 'Individual' 
@@ -538,6 +548,7 @@ SCHEMA = {
             'name': 'hasVariable',
             'type': 'Individual',
             'synonyms': SYNONYMS['INTERPRETATION']['InterpretationVariable'],
+            'class_range': 'InterpretationVariable',
             'skip_auto_convert_to_json': True
         },
         'variableGeneral': { 
@@ -556,18 +567,21 @@ SCHEMA = {
             'name': 'hasSeasonality',
             'type': 'Individual',
             'synonyms': SYNONYMS['INTERPRETATION']['InterpretationSeasonality'],
+            'class_range': 'InterpretationSeasonality',
             'skip_auto_convert_to_json': True
         },
         'seasonalityOriginal': { 
             'name': 'hasSeasonalityOriginal',
             'type': 'Individual',
             'synonyms': SYNONYMS['INTERPRETATION']['InterpretationSeasonality'],
+            'class_range': 'InterpretationSeasonality',
             'skip_auto_convert_to_json': True
         },
         'seasonalityGeneral': { 
             'name': 'hasSeasonalityGeneral',
             'type': 'Individual',
             'synonyms': SYNONYMS['INTERPRETATION']['InterpretationSeasonality'],
+            'class_range': 'InterpretationSeasonality',
             'skip_auto_convert_to_json': True
         },
         'integrationTime': {
@@ -617,7 +631,8 @@ SCHEMA = {
         'units': { 
             'name': 'hasUnits',
             'type': 'Individual',
-            'synonyms': SYNONYMS['UNITS']['PaleoUnit']
+            'synonyms': SYNONYMS['UNITS']['PaleoUnit'],
+            'class_range': 'PaleoUnit'
         },
         'independentVariable': {
             'name': 'hasIndependentVariable',
