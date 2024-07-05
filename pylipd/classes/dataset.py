@@ -216,81 +216,137 @@ class Dataset:
 
         if len(self.chronData):
             data[self.id]["hasChronData"] = []
-        for value_obj in self.chronData: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.chronData:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasChronData"].append(obj)
 
         if len(self.creators):
             data[self.id]["hasCreator"] = []
-        for value_obj in self.creators: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.creators:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasCreator"].append(obj)
 
         if len(self.fundings):
             data[self.id]["hasFunding"] = []
-        for value_obj in self.fundings: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.fundings:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasFunding"].append(obj)
 
         if len(self.investigators):
             data[self.id]["hasInvestigator"] = []
-        for value_obj in self.investigators: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.investigators:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasInvestigator"].append(obj)
 
         if len(self.paleoData):
             data[self.id]["hasPaleoData"] = []
-        for value_obj in self.paleoData: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.paleoData:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasPaleoData"].append(obj)
 
         if len(self.publications):
             data[self.id]["hasPublication"] = []
-        for value_obj in self.publications: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.publications:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasPublication"].append(obj)
 
         if self.archiveType:
-            value_obj = self.archiveType 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.archiveType
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasArchiveType"] = [obj]
                 
 
         if self.changeLog:
-            value_obj = self.changeLog 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.changeLog
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasChangeLog"] = [obj]
                 
 
@@ -315,12 +371,19 @@ class Dataset:
                 
 
         if self.contributor:
-            value_obj = self.contributor 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.contributor
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasContributor"] = [obj]
                 
 
@@ -345,12 +408,19 @@ class Dataset:
                 
 
         if self.location:
-            value_obj = self.location 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.location
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasLocation"] = [obj]
                 
 

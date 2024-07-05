@@ -76,12 +76,19 @@ class DataTable:
 
         if len(self.variables):
             data[self.id]["hasVariable"] = []
-        for value_obj in self.variables: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.variables:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasVariable"].append(obj)
 
         if self.fileName:

@@ -70,22 +70,36 @@ class ChronData:
 
         if len(self.measurementTables):
             data[self.id]["hasMeasurementTable"] = []
-        for value_obj in self.measurementTables: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.measurementTables:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasMeasurementTable"].append(obj)
 
         if len(self.modeledBy):
             data[self.id]["modeledBy"] = []
-        for value_obj in self.modeledBy: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.modeledBy:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["modeledBy"].append(obj)
         for key in self.misc:
             value = self.misc[key]

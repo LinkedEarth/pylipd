@@ -181,12 +181,19 @@ class Publication:
 
         if len(self.authors):
             data[self.id]["hasAuthor"] = []
-        for value_obj in self.authors: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.authors:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasAuthor"].append(obj)
 
         if len(self.dataUrls):
@@ -250,12 +257,19 @@ class Publication:
                 
 
         if self.firstAuthor:
-            value_obj = self.firstAuthor 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.firstAuthor
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasFirstAuthor"] = [obj]
                 
 

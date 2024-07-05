@@ -168,12 +168,19 @@ class Interpretation:
                 
 
         if self.integrationTime:
-            value_obj = self.integrationTime 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.integrationTime
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasIntegrationTime"] = [obj]
                 
 
@@ -238,42 +245,70 @@ class Interpretation:
                 
 
         if self.seasonality:
-            value_obj = self.seasonality 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.seasonality
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasSeasonality"] = [obj]
                 
 
         if self.seasonalityGeneral:
-            value_obj = self.seasonalityGeneral 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.seasonalityGeneral
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasSeasonalityGeneral"] = [obj]
                 
 
         if self.seasonalityOriginal:
-            value_obj = self.seasonalityOriginal 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.seasonalityOriginal
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasSeasonalityOriginal"] = [obj]
                 
 
         if self.variable:
-            value_obj = self.variable 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.variable
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasVariable"] = [obj]
                 
 

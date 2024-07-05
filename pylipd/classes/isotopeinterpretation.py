@@ -70,21 +70,35 @@ class IsotopeInterpretation:
 
         if len(self.independentVariables):
             data[self.id]["hasIndependentVariable"] = []
-        for value_obj in self.independentVariables: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.independentVariables:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasIndependentVariable"].append(obj)
 
         if self.integrationTime:
-            value_obj = self.integrationTime 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+            value_obj = self.integrationTime
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasIntegrationTime"] = [obj]
                 
         for key in self.misc:

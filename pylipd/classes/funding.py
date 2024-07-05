@@ -90,12 +90,19 @@ class Funding:
 
         if len(self.investigators):
             data[self.id]["hasInvestigator"] = []
-        for value_obj in self.investigators: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
+        for value_obj in self.investigators:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
             data[self.id]["hasInvestigator"].append(obj)
 
         if self.fundingAgency:

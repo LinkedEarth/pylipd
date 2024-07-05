@@ -1,3 +1,4 @@
+from rdflib import RDF
 from rdflib.graph import URIRef, Literal
 from rdflib.namespace import XSD
 
@@ -8,7 +9,7 @@ class JSONToRDF:
         self.graph = graph
         self.graphurl = graphurl
 
-    def _load_triple_into_graph(self, subject, propid, value):
+    def _load_triple_into_graph(self, subject, prop, value):
         for val in value:
             valitem = None
             if val["@type"] == "uri":
@@ -16,13 +17,13 @@ class JSONToRDF:
             elif val["@type"] == "literal":
                 dtype = val["@datatype"]
                 if dtype:
-                    valitem = Literal(value, datatype=(XSD[dtype] if dtype in XSD else None))
+                    valitem = Literal(val["@value"], datatype=URIRef(dtype))
                 else:
-                    valitem = Literal(value)
+                    valitem = Literal(val["@value"])
             if valitem:
                 self.graph.add((
                     URIRef(subject),
-                    URIRef(propid),
+                    prop,
                     valitem,
                     URIRef(self.graphurl)
                 ))
@@ -31,7 +32,7 @@ class JSONToRDF:
         for ctx in self.graph.contexts():
             id = str(ctx.identifier)
             if id == self.graphurl:
-                self.graph.remove((None, None, None, id))    
+                self.graph.remove((None, None, None, URIRef(self.graphurl)))    
 
     def load_data_in_graph(self, data):        
         # Clear the subgraph
@@ -41,4 +42,7 @@ class JSONToRDF:
         for subject in data:
             for propid in data[subject]:
                 value = data[subject][propid]
-                self._load_triple_into_graph(subject, ONTONS + propid, value)
+                prop = URIRef(ONTONS + propid)
+                if propid == "type":
+                    prop = RDF.type
+                self._load_triple_into_graph(subject, prop, value)
