@@ -183,10 +183,7 @@ class Resolution:
 
         if self.units:
             value_obj = self.units
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["units"] = obj
 
         for key in self.misc:
@@ -194,6 +191,38 @@ class Resolution:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'Resolution':
+        self = Resolution()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "hasMaxValue":
+                    value = pvalue
+                    obj = value
+                    self.maxValue = obj
+            elif key == "hasMeanValue":
+                    value = pvalue
+                    obj = value
+                    self.meanValue = obj
+            elif key == "hasMedianValue":
+                    value = pvalue
+                    obj = value
+                    self.medianValue = obj
+            elif key == "hasMinValue":
+                    value = pvalue
+                    obj = value
+                    self.minValue = obj
+            elif key == "units":
+                    value = pvalue
+                    obj = PaleoUnit.from_synonym(re.sub("^.*?#", "", value))
+                    self.units = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

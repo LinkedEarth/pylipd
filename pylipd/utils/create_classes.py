@@ -1,5 +1,7 @@
 from pylipd.globals.schema import SCHEMA, SYNONYMS
 from pylipd.globals.urls import ONTONS, NSURL
+from pylipd.globals.blacklist import REVERSE_BLACKLIST
+
 import re
 import os
 
@@ -7,7 +9,7 @@ SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
 CLASSDIR = os.path.realpath(f"{SCRIPTDIR}/../classes")
 if not os.path.exists(CLASSDIR):
     os.makedirs(CLASSDIR)
-
+TEMPLATEDIR = f"{CLASSDIR}/templates"
 
 def get_fromdata_item(ptype, range, is_enum):
     fromdataitem = f"""
@@ -58,8 +60,34 @@ def get_todata_item(type, range):
             data = value_obj.to_data(data)"""
     return todataitem
 
+def get_tojson_item(type):
+    todataitem = ""
+    if type == "literal":
+        todataitem += f"""
+            obj = value_obj"""
+    elif type == "object":
+        todataitem += f"""
+            obj = value_obj.to_json()"""
+    return todataitem
 
-def get_python_snippet_for_multi_value_property(propid, pname, ptype, ont_range, python_range, getter, setter, adder, is_enum):
+def get_fromjson_item(ptype, range, is_enum):
+    fromjsonitem = ""
+    if ptype == "object" and range is not None:
+        if is_enum:
+            fromjsonitem += f"""
+                    obj = {range}.from_synonym(re.sub("^.*?#", "", value))"""
+        else:
+            fromjsonitem += f"""
+                    obj = {range}.from_json(value)"""
+    elif range:
+        fromjsonitem += f"""
+                    obj = value"""
+    else:
+        fromjsonitem += f"""
+                    obj = value"""
+    return fromjsonitem
+
+def get_python_snippet_for_multi_value_property(pid, propid, pname, ptype, ont_range, python_range, getter, setter, adder, is_enum):
     # Create the python snippet for initialzing property variables
     initvar = f"self.{pname}: list[{python_range}] = []"
 
@@ -78,6 +106,23 @@ def get_python_snippet_for_multi_value_property(propid, pname, ptype, ont_range,
             elif key == "{propid}":{fromdataitem}
                     self.{pname}.append(obj)"""
 
+    # Create the python function snippet for this property to convert the class to json (tojson)
+    if pid not in REVERSE_BLACKLIST:
+        tojsonitem = get_tojson_item(ptype)
+        tojson = f"""
+
+        if len(self.{pname}):
+            data["{pid}"] = []
+        for value_obj in self.{pname}:{tojsonitem}
+            data["{pid}"].append(obj)"""
+            
+    # Create the python function snippet for this property to convert from json dictionary to a class (fromjson)
+    fromjsonitem = get_fromjson_item(ptype, python_range, is_enum)
+    fromjson = f"""
+            elif key == "{pid}":
+                for value in pvalue:{fromjsonitem}
+                    self.{pname}.append(obj)"""
+    
     # Create the python snippet for getter/setter/adders
     fns = f"""
     def {getter}(self) -> list[{python_range}]:
@@ -89,10 +134,10 @@ def get_python_snippet_for_multi_value_property(propid, pname, ptype, ont_range,
     def {adder}(self, {pname}:{python_range}):
         self.{pname}.append({pname})
         """
-    return (initvar, todata, fromdata, fns)
+    return (initvar, todata, fromdata, tojson, fromjson, fns)
 
 
-def get_python_snippet_for_property(propid, pname, ptype, ont_range, python_range, getter, setter, is_enum):
+def get_python_snippet_for_property(pid, propid, pname, ptype, ont_range, python_range, getter, setter, is_enum):
     # Create the python snippet for initialzing property variables
     initvar = f"self.{pname}: {python_range} = None"
 
@@ -110,6 +155,23 @@ def get_python_snippet_for_property(propid, pname, ptype, ont_range, python_rang
             elif key == "{propid}":{fromdataitem}                        
                     self.{pname} = obj"""
 
+    # Create the python function snippet for this property to convert the class to json (tojson)
+    tojson = ""
+    if pid not in REVERSE_BLACKLIST:
+        tojsonitem = get_tojson_item(ptype)
+        tojson += f"""
+
+        if self.{pname}:
+            value_obj = self.{pname}{tojsonitem}
+            data["{pid}"] = obj"""
+
+    # Create the python function snippet for this property to convert from json dictionary to a class (fromjson)
+    fromjsonitem = get_fromjson_item(ptype, python_range, is_enum)
+    fromjson = f"""
+            elif key == "{pid}":
+                    value = pvalue{fromjsonitem}
+                    self.{pname} = obj"""
+    
     # Create the python snippet for getter/setter/adders
     fns = f"""
     def {getter}(self) -> {python_range}:
@@ -118,7 +180,7 @@ def get_python_snippet_for_property(propid, pname, ptype, ont_range, python_rang
     def {setter}(self, {pname}:{python_range}):
         self.{pname} = {pname}
     """
-    return (initvar, todata, fromdata, fns)
+    return (initvar, todata, fromdata, tojson, fromjson, fns)
 
 
 def generate_enum_classes():
@@ -164,7 +226,11 @@ def generate_enum_classes():
             ]
         }}
         return data
-    
+
+    def to_json(self):
+        data = self.label
+        return data
+
     @classmethod
     def from_synonym(cls, synonym):
         if synonym.lower() in {clsid}.synonyms:
@@ -182,11 +248,41 @@ def generate_enum_classes():
                     done[synid] = True
                     outf.write(f"""
     {synid} = {clsid}("{synobj['id']}", "{synobj['label']}")""")
-                    
 
-def generate_class_file(clsid, import_snippets, initvar_snippets, todata_snippets, fromdata_snippets, fn_snippets):    
+def fetch_extra_template_functions(clsid):
+    imports = []
+    fns = []
+
+    curfn = ""
+    fn_ongoing = False
+    tplfilename = f"{TEMPLATEDIR}/{clsid.lower()}.py"
+    if os.path.exists(tplfilename):
+        with open(tplfilename, "r") as inf:
+            for line in inf.readlines():
+                #line = line.strip()
+                if re.match("^import ", line, re.I) or re.match("^from .+ import ", line, re.I):
+                    imports.append(line)
+                if re.match("^#.*START TEMPLATE FUNCTION", line, re.I):
+                    fn_ongoing = True
+                elif re.match("^#.*END TEMPLATE FUNCTION", line, re.I):
+                    fn_ongoing = False
+                    if curfn:
+                        fns.append("\n" + curfn)
+                    curfn = ""
+                elif fn_ongoing:
+                    curfn += "    " + line                
+    return (imports, fns)
+
+
+def generate_class_file(clsid, import_snippets, initvar_snippets, 
+                        todata_snippets, fromdata_snippets, 
+                        tojson_snippets, fromjson_snippets, 
+                        fn_snippets):    
+
+    (ximports, xfn_snippets) = fetch_extra_template_functions(clsid)
+    fn_snippets = fn_snippets + xfn_snippets
+
     filename = f"{CLASSDIR}/{clsid.lower()}.py"
-    
     with open(filename, "w") as outf:
         # Write the header
         outf.write("""
@@ -197,13 +293,17 @@ def generate_class_file(clsid, import_snippets, initvar_snippets, todata_snippet
 """)
         # Write the imports
         outf.write(f"import re\n")
+        for im in ximports:
+            outf.write(im)
         outf.write("from pylipd.utils import uniqid\n")
         for im in import_snippets:
             outf.write(f"from pylipd.classes.{im.lower()} import {im}\n")
         outf.write("\n")
 
+
         # Write the class header
         outf.write(f"class {clsid}:\n")
+
 
         # Write the init function
         outf.write(f"""
@@ -218,6 +318,7 @@ def generate_class_file(clsid, import_snippets, initvar_snippets, todata_snippet
         self.type = "{ONTONS}{clsid}"
         self.id = self.ns + "/" + uniqid("{clsid}.")""")
         outf.write("\n")
+
 
         # Write the from_data function
         outf.write(f"""
@@ -235,7 +336,6 @@ def generate_class_file(clsid, import_snippets, initvar_snippets, todata_snippet
         for snippet in fromdata_snippets:
             outf.write(f"""
         {snippet}""")
-            
         outf.write(f"""
             else:
                 for val in value:
@@ -248,7 +348,8 @@ def generate_class_file(clsid, import_snippets, initvar_snippets, todata_snippet
             
         return self""")
         outf.write("\n") 
-        
+
+
         # Write the to_data function
         outf.write(f"""
     def to_data(self, data={{}}):
@@ -259,10 +360,8 @@ def generate_class_file(clsid, import_snippets, initvar_snippets, todata_snippet
                 "@type": "uri"
             }}
         ]""")
-
         for snippet in todata_snippets:
             outf.write(f"""{snippet}""")
-
         outf.write(f"""
         for key in self.misc:
             value = self.misc[key]
@@ -288,8 +387,45 @@ def generate_class_file(clsid, import_snippets, initvar_snippets, todata_snippet
             }})
         
         return data""")
-
         outf.write("\n") 
+
+
+        # Write the to_json function
+        outf.write(f"""
+    def to_json(self):
+        data = {{
+            "@id": self.id
+        }}""")
+        for snippet in tojson_snippets:
+            outf.write(f"""{snippet}""") 
+        outf.write("\n") 
+        outf.write(f"""
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data""")
+        outf.write("\n")
+
+
+        # Write the from_json function
+        outf.write(f"""
+    @staticmethod
+    def from_json(data) -> '{clsid}':
+        self = {clsid}()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue""")
+        for snippet in fromjson_snippets:
+            outf.write(f"""{snippet}""") 
+        outf
+        outf.write(f"""
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self""")
+        outf.write("\n")        
 
         # Write the functions to handle non standard properties
         outf.write(f"""
@@ -323,6 +459,8 @@ def generate_lipd_classes():
         initvar_snippets = set()
         fromdata_snippets = set()
         todata_snippets = set()
+        tojson_snippets = set()
+        fromjson_snippets = set()
         fn_snippets = set()
 
         # Check all properties
@@ -395,11 +533,11 @@ def generate_lipd_classes():
 
             # Get python snippets for initialization function, todata function, fromdata from, and the setter/getter functions
             if multiple:
-                (initvar, todata, fromdata, fns) = get_python_snippet_for_multi_value_property(propid, mpname, ptype, 
+                (initvar, todata, fromdata, tojson, fromjson, fns) = get_python_snippet_for_multi_value_property(pid, propid, mpname, ptype, 
                                                                                                ont_range, python_range, 
                                                                                                getter, setter, adder, is_enum)  
             else:
-                (initvar, todata, fromdata, fns) = get_python_snippet_for_property(propid, mpname, ptype, 
+                (initvar, todata, fromdata, tojson, fromjson, fns) = get_python_snippet_for_property(pid, propid, mpname, ptype, 
                                                                                    ont_range, python_range, 
                                                                                    getter, setter, is_enum)
             
@@ -410,12 +548,15 @@ def generate_lipd_classes():
             initvar_snippets.add(initvar)
             todata_snippets.add(todata)
             fromdata_snippets.add(fromdata)
+            tojson_snippets.add(tojson)
+            fromjson_snippets.add(fromjson)
             fn_snippets.add(fns)
         
         # Write outputs
         generate_class_file(clsid, sorted(import_snippets), sorted(initvar_snippets), 
-                            sorted(todata_snippets), sorted(fromdata_snippets), sorted(fn_snippets))
-
+                            sorted(todata_snippets), sorted(fromdata_snippets), 
+                            sorted(tojson_snippets), sorted(fromjson_snippets), 
+                            sorted(fn_snippets))
 
 if __name__ == "__main__":
     generate_enum_classes()

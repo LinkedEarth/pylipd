@@ -103,6 +103,22 @@ class Person:
                    
         return data
 
+    @staticmethod
+    def from_json(data) -> 'Person':
+        self = Person()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "name":
+                    value = pvalue
+                    obj = value
+                    self.name = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

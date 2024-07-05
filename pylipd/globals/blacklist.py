@@ -12,8 +12,8 @@ BLACKLIST = {
 }
 
 REVERSE_BLACKLIST = {
-    'inferredFrom' : 1
+    'inferredFrom' : 1,
+    'foundInTable' : 1,
+    'foundInDataset' : 1
     #'takenAtDepth' : 1
-    #'foundInTable' : 1,
-    #'foundInDataset' : 1,
 }

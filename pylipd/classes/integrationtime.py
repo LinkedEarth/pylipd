@@ -134,10 +134,7 @@ class IntegrationTime:
         if len(self.independentVariables):
             data["independentVariable"] = []
         for value_obj in self.independentVariables:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["independentVariable"].append(obj)
 
         if self.relevantQuote:
@@ -147,10 +144,7 @@ class IntegrationTime:
 
         if self.units:
             value_obj = self.units
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["units"] = obj
 
         for key in self.misc:
@@ -158,6 +152,30 @@ class IntegrationTime:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'IntegrationTime':
+        self = IntegrationTime()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "basis":
+                    value = pvalue
+                    obj = value
+                    self.relevantQuote = obj
+            elif key == "independentVariable":
+                for value in pvalue:
+                    obj = IndependentVariable.from_json(value)
+                    self.independentVariables.append(obj)
+            elif key == "units":
+                    value = pvalue
+                    obj = PaleoUnit.from_synonym(re.sub("^.*?#", "", value))
+                    self.units = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

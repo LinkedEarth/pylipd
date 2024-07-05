@@ -156,10 +156,7 @@ class Funding:
         if len(self.investigators):
             data["investigator"] = []
         for value_obj in self.investigators:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["investigator"].append(obj)
 
         if self.fundingAgency:
@@ -177,6 +174,34 @@ class Funding:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'Funding':
+        self = Funding()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "agency":
+                    value = pvalue
+                    obj = value
+                    self.fundingAgency = obj
+            elif key == "country":
+                    value = pvalue
+                    obj = value
+                    self.fundingCountry = obj
+            elif key == "grant":
+                for value in pvalue:
+                    obj = value
+                    self.grants.append(obj)
+            elif key == "investigator":
+                for value in pvalue:
+                    obj = Person.from_json(value)
+                    self.investigators.append(obj)
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

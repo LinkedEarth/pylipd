@@ -12,14 +12,14 @@ import json
 import tempfile
 import zipfile
 
-from rdflib.graph import ConjunctiveGraph, URIRef
+from rdflib.graph import URIRef
 
 from ..globals.urls import NSURL
 from ..globals.blacklist import REVERSE_BLACKLIST
 from ..globals.schema import SCHEMA
 from ..globals.synonyms import RSYNONYMS
 
-from .utils import ucfirst, lcfirst, unCamelCase, unzip_string
+from .utils import ucfirst, lcfirst, unzip_string
 
 class RDFToLiPD:
     """

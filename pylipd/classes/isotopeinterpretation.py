@@ -120,18 +120,12 @@ class IsotopeInterpretation:
         if len(self.independentVariables):
             data["independentVariable"] = []
         for value_obj in self.independentVariables:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["independentVariable"].append(obj)
 
         if self.integrationTime:
             value_obj = self.integrationTime
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["integrationTime"] = obj
 
         for key in self.misc:
@@ -139,6 +133,26 @@ class IsotopeInterpretation:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'IsotopeInterpretation':
+        self = IsotopeInterpretation()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "independentVariable":
+                for value in pvalue:
+                    obj = IndependentVariable.from_json(value)
+                    self.independentVariables.append(obj)
+            elif key == "integrationTime":
+                    value = pvalue
+                    obj = IntegrationTime.from_json(value)
+                    self.integrationTime = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

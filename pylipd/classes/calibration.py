@@ -287,6 +287,74 @@ class Calibration:
                    
         return data
 
+    @staticmethod
+    def from_json(data) -> 'Calibration':
+        self = Calibration()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "datasetRange":
+                    value = pvalue
+                    obj = value
+                    self.datasetRange = obj
+            elif key == "doi":
+                    value = pvalue
+                    obj = value
+                    self.dOI = obj
+            elif key == "equation":
+                    value = pvalue
+                    obj = value
+                    self.equation = obj
+            elif key == "equationIntercept":
+                    value = pvalue
+                    obj = value
+                    self.datasetRange = obj
+            elif key == "equationR2":
+                    value = pvalue
+                    obj = value
+                    self.datasetRange = obj
+            elif key == "equationSlope":
+                    value = pvalue
+                    obj = value
+                    self.datasetRange = obj
+            elif key == "equationSlopeUncertainty":
+                    value = pvalue
+                    obj = value
+                    self.datasetRange = obj
+            elif key == "hasSeasonality":
+                    value = pvalue
+                    obj = value
+                    self.seasonality = obj
+            elif key == "method":
+                    value = pvalue
+                    obj = value
+                    self.datasetRange = obj
+            elif key == "methodDetail":
+                    value = pvalue
+                    obj = value
+                    self.datasetRange = obj
+            elif key == "notes":
+                    value = pvalue
+                    obj = value
+                    self.notes = obj
+            elif key == "proxyDataset":
+                    value = pvalue
+                    obj = value
+                    self.proxyDataset = obj
+            elif key == "targetDataset":
+                    value = pvalue
+                    obj = value
+                    self.targetDataset = obj
+            elif key == "uncertainty":
+                    value = pvalue
+                    obj = value
+                    self.uncertainty = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

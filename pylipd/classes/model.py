@@ -156,28 +156,19 @@ class Model:
         if len(self.distributionTables):
             data["distributionTable"] = []
         for value_obj in self.distributionTables:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["distributionTable"].append(obj)
 
         if len(self.ensembleTables):
             data["ensembleTable"] = []
         for value_obj in self.ensembleTables:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["ensembleTable"].append(obj)
 
         if len(self.summaryTables):
             data["summaryTable"] = []
         for value_obj in self.summaryTables:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["summaryTable"].append(obj)
 
         if self.code:
@@ -190,6 +181,34 @@ class Model:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'Model':
+        self = Model()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "distributionTable":
+                for value in pvalue:
+                    obj = DataTable.from_json(value)
+                    self.distributionTables.append(obj)
+            elif key == "ensembleTable":
+                for value in pvalue:
+                    obj = DataTable.from_json(value)
+                    self.ensembleTables.append(obj)
+            elif key == "method":
+                    value = pvalue
+                    obj = value
+                    self.code = obj
+            elif key == "summaryTable":
+                for value in pvalue:
+                    obj = DataTable.from_json(value)
+                    self.summaryTables.append(obj)
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

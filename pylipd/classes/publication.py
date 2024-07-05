@@ -391,10 +391,7 @@ class Publication:
         if len(self.authors):
             data["author"] = []
         for value_obj in self.authors:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["author"].append(obj)
 
         if len(self.dataUrls):
@@ -431,10 +428,7 @@ class Publication:
 
         if self.firstAuthor:
             value_obj = self.firstAuthor
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["firstauthor"] = obj
 
         if self.institution:
@@ -492,6 +486,90 @@ class Publication:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'Publication':
+        self = Publication()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "abstract":
+                    value = pvalue
+                    obj = value
+                    self.abstract = obj
+            elif key == "author":
+                for value in pvalue:
+                    obj = Person.from_json(value)
+                    self.authors.append(obj)
+            elif key == "citation":
+                    value = pvalue
+                    obj = value
+                    self.citation = obj
+            elif key == "citeKey":
+                    value = pvalue
+                    obj = value
+                    self.citeKey = obj
+            elif key == "dataUrl":
+                for value in pvalue:
+                    obj = value
+                    self.dataUrls.append(obj)
+            elif key == "doi":
+                    value = pvalue
+                    obj = value
+                    self.dOI = obj
+            elif key == "firstauthor":
+                    value = pvalue
+                    obj = Person.from_json(value)
+                    self.firstAuthor = obj
+            elif key == "institution":
+                    value = pvalue
+                    obj = value
+                    self.institution = obj
+            elif key == "issue":
+                    value = pvalue
+                    obj = value
+                    self.issue = obj
+            elif key == "journal":
+                    value = pvalue
+                    obj = value
+                    self.journal = obj
+            elif key == "pages":
+                    value = pvalue
+                    obj = value
+                    self.pages = obj
+            elif key == "publisher":
+                    value = pvalue
+                    obj = value
+                    self.publisher = obj
+            elif key == "report":
+                    value = pvalue
+                    obj = value
+                    self.report = obj
+            elif key == "title":
+                    value = pvalue
+                    obj = value
+                    self.title = obj
+            elif key == "type":
+                    value = pvalue
+                    obj = value
+                    self.publicationType = obj
+            elif key == "url":
+                for value in pvalue:
+                    obj = value
+                    self.urls.append(obj)
+            elif key == "volume":
+                    value = pvalue
+                    obj = value
+                    self.volume = obj
+            elif key == "year":
+                    value = pvalue
+                    obj = value
+                    self.year = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

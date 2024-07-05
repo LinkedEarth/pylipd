@@ -169,6 +169,34 @@ class IndependentVariable:
                    
         return data
 
+    @staticmethod
+    def from_json(data) -> 'IndependentVariable':
+        self = IndependentVariable()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "basis":
+                    value = pvalue
+                    obj = value
+                    self.relevantQuote = obj
+            elif key == "direction":
+                    value = pvalue
+                    obj = value
+                    self.interpretationDirection = obj
+            elif key == "mathematicalRelation":
+                    value = pvalue
+                    obj = value
+                    self.equation = obj
+            elif key == "rank":
+                    value = pvalue
+                    obj = value
+                    self.rank = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

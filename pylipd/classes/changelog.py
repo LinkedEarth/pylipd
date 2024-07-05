@@ -123,6 +123,26 @@ class ChangeLog:
                    
         return data
 
+    @staticmethod
+    def from_json(data) -> 'ChangeLog':
+        self = ChangeLog()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "changes":
+                    value = pvalue
+                    obj = value
+                    self.changes = obj
+            elif key == "notes":
+                    value = pvalue
+                    obj = value
+                    self.notes = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

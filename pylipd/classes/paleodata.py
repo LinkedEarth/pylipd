@@ -137,19 +137,13 @@ class PaleoData:
         if len(self.measurementTables):
             data["measurementTable"] = []
         for value_obj in self.measurementTables:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["measurementTable"].append(obj)
 
         if len(self.modeledBy):
             data["model"] = []
         for value_obj in self.modeledBy:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["model"].append(obj)
 
         if self.name:
@@ -162,6 +156,30 @@ class PaleoData:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'PaleoData':
+        self = PaleoData()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "measurementTable":
+                for value in pvalue:
+                    obj = DataTable.from_json(value)
+                    self.measurementTables.append(obj)
+            elif key == "model":
+                for value in pvalue:
+                    obj = Model.from_json(value)
+                    self.modeledBy.append(obj)
+            elif key == "paleoDataName":
+                    value = pvalue
+                    obj = value
+                    self.name = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

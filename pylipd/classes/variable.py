@@ -588,27 +588,18 @@ class Variable:
         if len(self.calibratedVias):
             data["calibration"] = []
         for value_obj in self.calibratedVias:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["calibration"].append(obj)
 
         if len(self.interpretations):
             data["interpretation"] = []
         for value_obj in self.interpretations:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["interpretation"].append(obj)
 
         if self.archiveType:
             value_obj = self.archiveType
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["archiveType"] = obj
 
         if self.columnNumber:
@@ -630,16 +621,6 @@ class Variable:
             value_obj = self.description
             obj = value_obj
             data["description"] = obj
-
-        if self.foundInDataset:
-            value_obj = self.foundInDataset
-            obj = value_obj
-            data["foundInDataset"] = obj
-
-        if self.foundInTable:
-            value_obj = self.foundInTable
-            obj = value_obj
-            data["foundInTable"] = obj
 
         if self.instrument:
             value_obj = self.instrument
@@ -683,10 +664,7 @@ class Variable:
 
         if self.partOfCompilation:
             value_obj = self.partOfCompilation
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["inCompilationBeta"] = obj
 
         if self.physicalSample:
@@ -701,50 +679,32 @@ class Variable:
 
         if self.proxy:
             value_obj = self.proxy
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["proxy"] = obj
 
         if self.proxyGeneral:
             value_obj = self.proxyGeneral
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["proxyGeneral"] = obj
 
         if self.resolution:
             value_obj = self.resolution
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["resolution"] = obj
 
         if self.standardVariable:
             value_obj = self.standardVariable
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["hasStandardVariable"] = obj
 
         if self.uncertainty:
             value_obj = self.uncertainty
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["uncertainty"] = obj
 
         if self.units:
             value_obj = self.units
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["units"] = obj
 
         if self.values:
@@ -767,6 +727,134 @@ class Variable:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'Variable':
+        self = Variable()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "TSid":
+                    value = pvalue
+                    obj = value
+                    self.variableId = obj
+            elif key == "archiveType":
+                    value = pvalue
+                    obj = ArchiveType.from_synonym(re.sub("^.*?#", "", value))
+                    self.archiveType = obj
+            elif key == "calibration":
+                for value in pvalue:
+                    obj = Calibration.from_json(value)
+                    self.calibratedVias.append(obj)
+            elif key == "compilation_nest":
+                    value = pvalue
+                    obj = value
+                    self.compilationNest = obj
+            elif key == "description":
+                    value = pvalue
+                    obj = value
+                    self.description = obj
+            elif key == "foundInDataset":
+                    value = pvalue
+                    obj = value
+                    self.foundInDataset = obj
+            elif key == "foundInTable":
+                    value = pvalue
+                    obj = value
+                    self.foundInTable = obj
+            elif key == "hasMaxValue":
+                    value = pvalue
+                    obj = value
+                    self.maxValue = obj
+            elif key == "hasMeanValue":
+                    value = pvalue
+                    obj = value
+                    self.meanValue = obj
+            elif key == "hasMedianValue":
+                    value = pvalue
+                    obj = value
+                    self.medianValue = obj
+            elif key == "hasMinValue":
+                    value = pvalue
+                    obj = value
+                    self.minValue = obj
+            elif key == "hasStandardVariable":
+                    value = pvalue
+                    obj = PaleoVariable.from_synonym(re.sub("^.*?#", "", value))
+                    self.standardVariable = obj
+            elif key == "hasValues":
+                    value = pvalue
+                    obj = value
+                    self.values = obj
+            elif key == "inCompilationBeta":
+                    value = pvalue
+                    obj = Compilation.from_json(value)
+                    self.partOfCompilation = obj
+            elif key == "interpretation":
+                for value in pvalue:
+                    obj = Interpretation.from_json(value)
+                    self.interpretations.append(obj)
+            elif key == "isComposite":
+                    value = pvalue
+                    obj = value
+                    self.composite = obj
+            elif key == "isPrimary":
+                    value = pvalue
+                    obj = value
+                    self.primary = obj
+            elif key == "measurementInstrument":
+                    value = pvalue
+                    obj = value
+                    self.instrument = obj
+            elif key == "missingValue":
+                    value = pvalue
+                    obj = value
+                    self.missingValue = obj
+            elif key == "notes":
+                    value = pvalue
+                    obj = value
+                    self.notes = obj
+            elif key == "number":
+                    value = pvalue
+                    obj = value
+                    self.columnNumber = obj
+            elif key == "physicalSample":
+                    value = pvalue
+                    obj = value
+                    self.physicalSample = obj
+            elif key == "proxy":
+                    value = pvalue
+                    obj = PaleoProxy.from_synonym(re.sub("^.*?#", "", value))
+                    self.proxy = obj
+            elif key == "proxyGeneral":
+                    value = pvalue
+                    obj = PaleoProxyGeneral.from_synonym(re.sub("^.*?#", "", value))
+                    self.proxyGeneral = obj
+            elif key == "resolution":
+                    value = pvalue
+                    obj = Resolution.from_json(value)
+                    self.resolution = obj
+            elif key == "uncertainty":
+                    value = pvalue
+                    obj = Uncertainty.from_json(value)
+                    self.uncertainty = obj
+            elif key == "units":
+                    value = pvalue
+                    obj = PaleoUnit.from_synonym(re.sub("^.*?#", "", value))
+                    self.units = obj
+            elif key == "variableName":
+                    value = pvalue
+                    obj = value
+                    self.name = obj
+            elif key == "variableType":
+                    value = pvalue
+                    obj = value
+                    self.variableType = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

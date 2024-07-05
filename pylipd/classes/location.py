@@ -387,6 +387,74 @@ class Location:
                    
         return data
 
+    @staticmethod
+    def from_json(data) -> 'Location':
+        self = Location()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "continent":
+                    value = pvalue
+                    obj = value
+                    self.continent = obj
+            elif key == "coordinates":
+                    value = pvalue
+                    obj = value
+                    self.coordinates = obj
+            elif key == "coordinatesFor":
+                    value = pvalue
+                    obj = value
+                    self.coordinatesFor = obj
+            elif key == "country":
+                    value = pvalue
+                    obj = value
+                    self.country = obj
+            elif key == "countryOcean":
+                    value = pvalue
+                    obj = value
+                    self.countryOcean = obj
+            elif key == "description":
+                    value = pvalue
+                    obj = value
+                    self.description = obj
+            elif key == "elevation":
+                    value = pvalue
+                    obj = value
+                    self.elevation = obj
+            elif key == "geometryType":
+                    value = pvalue
+                    obj = value
+                    self.geometryType = obj
+            elif key == "latitude":
+                    value = pvalue
+                    obj = value
+                    self.latitude = obj
+            elif key == "locationName":
+                    value = pvalue
+                    obj = value
+                    self.locationName = obj
+            elif key == "longitude":
+                    value = pvalue
+                    obj = value
+                    self.longitude = obj
+            elif key == "notes":
+                    value = pvalue
+                    obj = value
+                    self.notes = obj
+            elif key == "ocean":
+                    value = pvalue
+                    obj = value
+                    self.ocean = obj
+            elif key == "siteName":
+                    value = pvalue
+                    obj = value
+                    self.siteName = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

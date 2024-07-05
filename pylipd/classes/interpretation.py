@@ -343,10 +343,7 @@ class Interpretation:
 
         if self.integrationTime:
             value_obj = self.integrationTime
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["integrationTime"] = obj
 
         if self.interpretationDirection:
@@ -381,34 +378,22 @@ class Interpretation:
 
         if self.seasonality:
             value_obj = self.seasonality
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["seasonality"] = obj
 
         if self.seasonalityGeneral:
             value_obj = self.seasonalityGeneral
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["seasonalityGeneral"] = obj
 
         if self.seasonalityOriginal:
             value_obj = self.seasonalityOriginal
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["seasonalityOriginal"] = obj
 
         if self.variable:
             value_obj = self.variable
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["variable"] = obj
 
         if self.variableDetail:
@@ -431,6 +416,78 @@ class Interpretation:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'Interpretation':
+        self = Interpretation()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "basis":
+                    value = pvalue
+                    obj = value
+                    self.basis = obj
+            elif key == "direction":
+                    value = pvalue
+                    obj = value
+                    self.interpretationDirection = obj
+            elif key == "integrationTime":
+                    value = pvalue
+                    obj = IntegrationTime.from_json(value)
+                    self.integrationTime = obj
+            elif key == "local":
+                    value = pvalue
+                    obj = value
+                    self.local = obj
+            elif key == "mathematicalRelation":
+                    value = pvalue
+                    obj = value
+                    self.mathematicalRelation = obj
+            elif key == "notes":
+                    value = pvalue
+                    obj = value
+                    self.notes = obj
+            elif key == "rank":
+                    value = pvalue
+                    obj = value
+                    self.rank = obj
+            elif key == "scope":
+                    value = pvalue
+                    obj = value
+                    self.scope = obj
+            elif key == "seasonality":
+                    value = pvalue
+                    obj = InterpretationSeasonality.from_synonym(re.sub("^.*?#", "", value))
+                    self.seasonality = obj
+            elif key == "seasonalityGeneral":
+                    value = pvalue
+                    obj = InterpretationSeasonality.from_synonym(re.sub("^.*?#", "", value))
+                    self.seasonalityGeneral = obj
+            elif key == "seasonalityOriginal":
+                    value = pvalue
+                    obj = InterpretationSeasonality.from_synonym(re.sub("^.*?#", "", value))
+                    self.seasonalityOriginal = obj
+            elif key == "variable":
+                    value = pvalue
+                    obj = InterpretationVariable.from_synonym(re.sub("^.*?#", "", value))
+                    self.variable = obj
+            elif key == "variableDetail":
+                    value = pvalue
+                    obj = value
+                    self.variableDetail = obj
+            elif key == "variableGeneral":
+                    value = pvalue
+                    obj = value
+                    self.variableGeneral = obj
+            elif key == "variableGeneralDirection":
+                    value = pvalue
+                    obj = value
+                    self.variableGeneralDirection = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:

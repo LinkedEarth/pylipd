@@ -135,10 +135,7 @@ class DataTable:
         if len(self.variables):
             data["columns"] = []
         for value_obj in self.variables:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["columns"].append(obj)
 
         if self.fileName:
@@ -156,6 +153,30 @@ class DataTable:
             data[key] = value
                    
         return data
+
+    @staticmethod
+    def from_json(data) -> 'DataTable':
+        self = DataTable()
+        for key in data:
+            pvalue = data[key]
+            if key == "@id":
+                self.id = pvalue
+            elif key == "columns":
+                for value in pvalue:
+                    obj = Variable.from_json(value)
+                    self.variables.append(obj)
+            elif key == "filename":
+                    value = pvalue
+                    obj = value
+                    self.fileName = obj
+            elif key == "missingValue":
+                    value = pvalue
+                    obj = value
+                    self.missingValue = obj
+            else:
+                self.set_non_standard_property(key, pvalue)
+                   
+        return self
 
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
