@@ -15,7 +15,7 @@ class Compilation:
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#Compilation"
-        self.id = self.ns + "/" + uniqid("Compilation")
+        self.id = self.ns + "/" + uniqid("Compilation.")
 
     @staticmethod
     def from_data(id, data) -> 'Compilation':
@@ -30,14 +30,12 @@ class Compilation:
                     self.type = val["@id"]
         
             elif key == "hasName":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.name = obj
         
             elif key == "hasVersion":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
@@ -46,11 +44,11 @@ class Compilation:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -62,17 +60,6 @@ class Compilation:
             }
         ]
 
-        
-        if self.version:
-            value_obj = self.version
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-            }
-            data[self.id]["hasVersion"] = [obj]
-            
-        
         if self.name:
             value_obj = self.name
             obj = {
@@ -81,8 +68,17 @@ class Compilation:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasName"] = [obj]
-            
+                
 
+        if self.version:
+            value_obj = self.version
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasVersion"] = [obj]
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -90,7 +86,7 @@ class Compilation:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -114,7 +110,7 @@ class Compilation:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -128,9 +124,10 @@ class Compilation:
 
     def setName(self, name:str):
         self.name = name
-
+    
     def getVersion(self) -> str:
         return self.version
 
     def setVersion(self, version:str):
         self.version = version
+    

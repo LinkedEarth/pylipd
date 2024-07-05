@@ -2,8 +2,7 @@
 ##############################
 # Auto-generated. Do not Edit
 ##############################
-
-from ..globals.synonyms import SYNONYMS
+from pylipd.globals.synonyms import SYNONYMS
 
 class ArchiveType:
     synonyms = SYNONYMS["ARCHIVES"]["ArchiveType"]
@@ -39,7 +38,7 @@ class ArchiveType:
             synobj = ArchiveType.synonyms[synonym.lower()]
             return ArchiveType(synobj['id'], synobj['label'])
         return None
-    
+        
 class ArchiveTypeConstants:
     Borehole = ArchiveType("http://linked.earth/ontology/archive#Borehole", "Borehole")
     Coral = ArchiveType("http://linked.earth/ontology/archive#Coral", "Coral")

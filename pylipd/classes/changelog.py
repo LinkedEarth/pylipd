@@ -9,13 +9,13 @@ from pylipd.utils import uniqid
 class ChangeLog:
 
     def __init__(self):
-        self.notes: str = None
         self.changes: None = None
+        self.notes: str = None
         self.misc = {}
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#ChangeLog"
-        self.id = self.ns + "/" + uniqid("ChangeLog")
+        self.id = self.ns + "/" + uniqid("ChangeLog.")
 
     @staticmethod
     def from_data(id, data) -> 'ChangeLog':
@@ -30,13 +30,11 @@ class ChangeLog:
                     self.type = val["@id"]
         
             elif key == "hasChanges":
-
                 for val in value:
                     obj = val["@id"]                        
                     self.changes = obj
         
             elif key == "hasNotes":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
@@ -45,11 +43,11 @@ class ChangeLog:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -61,7 +59,15 @@ class ChangeLog:
             }
         ]
 
-        
+        if self.changes:
+            value_obj = self.changes
+            obj = {
+                "@id": value_obj,
+                "@type": "uri"
+            }
+            data[self.id]["hasChanges"] = [obj]
+                
+
         if self.notes:
             value_obj = self.notes
             obj = {
@@ -70,17 +76,7 @@ class ChangeLog:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasNotes"] = [obj]
-            
-        
-        if self.changes:
-            value_obj = self.changes
-            obj = {
-                "@id": value_obj,
-                "@type": "uri"
-            }
-            data[self.id]["hasChanges"] = [obj]
-            
-
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -88,7 +84,7 @@ class ChangeLog:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -112,7 +108,7 @@ class ChangeLog:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -121,14 +117,15 @@ class ChangeLog:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getNotes(self) -> str:
-        return self.notes
-
-    def setNotes(self, notes:str):
-        self.notes = notes
-
     def getChanges(self) -> None:
         return self.changes
 
     def setChanges(self, changes:None):
         self.changes = changes
+    
+    def getNotes(self) -> str:
+        return self.notes
+
+    def setNotes(self, notes:str):
+        self.notes = notes
+    

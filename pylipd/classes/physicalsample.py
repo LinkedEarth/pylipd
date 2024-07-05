@@ -10,13 +10,13 @@ class PhysicalSample:
 
     def __init__(self):
         self.housedAt: str = None
-        self.name: str = None
         self.iGSN: str = None
+        self.name: str = None
         self.misc = {}
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#PhysicalSample"
-        self.id = self.ns + "/" + uniqid("PhysicalSample")
+        self.id = self.ns + "/" + uniqid("PhysicalSample.")
 
     @staticmethod
     def from_data(id, data) -> 'PhysicalSample':
@@ -30,35 +30,32 @@ class PhysicalSample:
                 for val in value:
                     self.type = val["@id"]
         
-            elif key == "name":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.name = obj
-        
             elif key == "hasIGSN":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.iGSN = obj
         
             elif key == "housedAt":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.housedAt = obj
+        
+            elif key == "name":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.name = obj
             else:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -70,27 +67,6 @@ class PhysicalSample:
             }
         ]
 
-        
-        if self.name:
-            value_obj = self.name
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-            }
-            data[self.id]["name"] = [obj]
-            
-        
-        if self.iGSN:
-            value_obj = self.iGSN
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-            }
-            data[self.id]["hasIGSN"] = [obj]
-            
-        
         if self.housedAt:
             value_obj = self.housedAt
             obj = {
@@ -99,8 +75,27 @@ class PhysicalSample:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["housedAt"] = [obj]
-            
+                
 
+        if self.iGSN:
+            value_obj = self.iGSN
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasIGSN"] = [obj]
+                
+
+        if self.name:
+            value_obj = self.name
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["name"] = [obj]
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -108,7 +103,7 @@ class PhysicalSample:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -132,7 +127,7 @@ class PhysicalSample:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -141,20 +136,21 @@ class PhysicalSample:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getIGSN(self) -> str:
-        return self.iGSN
-
-    def setIGSN(self, iGSN:str):
-        self.iGSN = iGSN
-
-    def getName(self) -> str:
-        return self.name
-
-    def setName(self, name:str):
-        self.name = name
-
     def getHousedAt(self) -> str:
         return self.housedAt
 
     def setHousedAt(self, housedAt:str):
         self.housedAt = housedAt
+    
+    def getIGSN(self) -> str:
+        return self.iGSN
+
+    def setIGSN(self, iGSN:str):
+        self.iGSN = iGSN
+    
+    def getName(self) -> str:
+        return self.name
+
+    def setName(self, name:str):
+        self.name = name
+    

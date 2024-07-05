@@ -2,8 +2,7 @@
 ##############################
 # Auto-generated. Do not Edit
 ##############################
-
-from ..globals.synonyms import SYNONYMS
+from pylipd.globals.synonyms import SYNONYMS
 
 class PaleoUnit:
     synonyms = SYNONYMS["UNITS"]["PaleoUnit"]
@@ -39,7 +38,7 @@ class PaleoUnit:
             synobj = PaleoUnit.synonyms[synonym.lower()]
             return PaleoUnit(synobj['id'], synobj['label'])
         return None
-    
+        
 class PaleoUnitConstants:
     atomic_ratio = PaleoUnit("http://linked.earth/ontology/units#atomic_ratio", "atomic ratio")
     cgs = PaleoUnit("http://linked.earth/ontology/units#cgs", "cgs")

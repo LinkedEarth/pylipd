@@ -2,8 +2,7 @@
 ##############################
 # Auto-generated. Do not Edit
 ##############################
-
-from ..globals.synonyms import SYNONYMS
+from pylipd.globals.synonyms import SYNONYMS
 
 class PaleoVariable:
     synonyms = SYNONYMS["VARIABLES"]["PaleoVariable"]
@@ -39,7 +38,7 @@ class PaleoVariable:
             synobj = PaleoVariable.synonyms[synonym.lower()]
             return PaleoVariable(synobj['id'], synobj['label'])
         return None
-    
+        
 class PaleoVariableConstants:
     ACL = PaleoVariable("http://linked.earth/ontology/variables#ACL", "ACL")
     AET_PET = PaleoVariable("http://linked.earth/ontology/variables#AET_PET", "AET/PET")

@@ -9,15 +9,15 @@ from pylipd.utils import uniqid
 class IndependentVariable:
 
     def __init__(self):
-        self.relevantQuote: str = None
-        self.rank: str = None
         self.equation: str = None
         self.interpretationDirection: str = None
+        self.rank: str = None
+        self.relevantQuote: str = None
         self.misc = {}
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#IndependentVariable"
-        self.id = self.ns + "/" + uniqid("IndependentVariable")
+        self.id = self.ns + "/" + uniqid("IndependentVariable.")
 
     @staticmethod
     def from_data(id, data) -> 'IndependentVariable':
@@ -31,42 +31,38 @@ class IndependentVariable:
                 for val in value:
                     self.type = val["@id"]
         
+            elif key == "equation":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.equation = obj
+        
             elif key == "hasRank":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.rank = obj
         
-            elif key == "relevantQuote":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.relevantQuote = obj
-        
             elif key == "interpretationDirection":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.interpretationDirection = obj
         
-            elif key == "equation":
-
+            elif key == "relevantQuote":
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
-                    self.equation = obj
+                    self.relevantQuote = obj
             else:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -78,17 +74,6 @@ class IndependentVariable:
             }
         ]
 
-        
-        if self.interpretationDirection:
-            value_obj = self.interpretationDirection
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-            }
-            data[self.id]["interpretationDirection"] = [obj]
-            
-        
         if self.equation:
             value_obj = self.equation
             obj = {
@@ -97,18 +82,18 @@ class IndependentVariable:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["equation"] = [obj]
-            
-        
-        if self.relevantQuote:
-            value_obj = self.relevantQuote
+                
+
+        if self.interpretationDirection:
+            value_obj = self.interpretationDirection
             obj = {
                 "@value": value_obj,
                 "@type": "literal",
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
-            data[self.id]["relevantQuote"] = [obj]
-            
-        
+            data[self.id]["interpretationDirection"] = [obj]
+                
+
         if self.rank:
             value_obj = self.rank
             obj = {
@@ -117,8 +102,17 @@ class IndependentVariable:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasRank"] = [obj]
-            
+                
 
+        if self.relevantQuote:
+            value_obj = self.relevantQuote
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["relevantQuote"] = [obj]
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -126,7 +120,7 @@ class IndependentVariable:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -150,7 +144,7 @@ class IndependentVariable:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -159,26 +153,27 @@ class IndependentVariable:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getInterpretationDirection(self) -> str:
-        return self.interpretationDirection
-
-    def setInterpretationDirection(self, interpretationDirection:str):
-        self.interpretationDirection = interpretationDirection
-
-    def getRelevantQuote(self) -> str:
-        return self.relevantQuote
-
-    def setRelevantQuote(self, relevantQuote:str):
-        self.relevantQuote = relevantQuote
-
-    def getRank(self) -> str:
-        return self.rank
-
-    def setRank(self, rank:str):
-        self.rank = rank
-
     def getEquation(self) -> str:
         return self.equation
 
     def setEquation(self, equation:str):
         self.equation = equation
+    
+    def getInterpretationDirection(self) -> str:
+        return self.interpretationDirection
+
+    def setInterpretationDirection(self, interpretationDirection:str):
+        self.interpretationDirection = interpretationDirection
+    
+    def getRank(self) -> str:
+        return self.rank
+
+    def setRank(self, rank:str):
+        self.rank = rank
+    
+    def getRelevantQuote(self) -> str:
+        return self.relevantQuote
+
+    def setRelevantQuote(self, relevantQuote:str):
+        self.relevantQuote = relevantQuote
+    

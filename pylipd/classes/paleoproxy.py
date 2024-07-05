@@ -2,8 +2,7 @@
 ##############################
 # Auto-generated. Do not Edit
 ##############################
-
-from ..globals.synonyms import SYNONYMS
+from pylipd.globals.synonyms import SYNONYMS
 
 class PaleoProxy:
     synonyms = SYNONYMS["PROXIES"]["PaleoProxy"]
@@ -39,7 +38,7 @@ class PaleoProxy:
             synobj = PaleoProxy.synonyms[synonym.lower()]
             return PaleoProxy(synobj['id'], synobj['label'])
         return None
-    
+        
 class PaleoProxyConstants:
     accumulation_rate = PaleoProxy("http://linked.earth/ontology/proxy#accumulation_rate", "accumulation rate")
     ACL = PaleoProxy("http://linked.earth/ontology/proxy#ACL", "ACL")

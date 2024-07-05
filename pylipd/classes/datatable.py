@@ -17,7 +17,7 @@ class DataTable:
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#DataTable"
-        self.id = self.ns + "/" + uniqid("DataTable")
+        self.id = self.ns + "/" + uniqid("DataTable.")
 
     @staticmethod
     def from_data(id, data) -> 'DataTable':
@@ -32,14 +32,18 @@ class DataTable:
                     self.type = val["@id"]
         
             elif key == "hasFileName":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.fileName = obj
         
+            elif key == "hasMissingValue":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.missingValue = obj
+        
             elif key == "hasVariable":
-
                 for val in value:
                     if "@id" in val:
                         obj = Variable.from_data(val["@id"], data)
@@ -47,22 +51,15 @@ class DataTable:
                         obj = val["@value"]
             
                     self.variables.append(obj)
-        
-            elif key == "hasMissingValue":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.missingValue = obj
             else:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -74,27 +71,6 @@ class DataTable:
             }
         ]
 
-        
-        if self.fileName:
-            value_obj = self.fileName
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-            }
-            data[self.id]["hasFileName"] = [obj]
-            
-        
-        if self.missingValue:
-            value_obj = self.missingValue
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-            }
-            data[self.id]["hasMissingValue"] = [obj]
-            
-        
         if len(self.variables):
             data[self.id]["hasVariable"] = []
         for value_obj in self.variables: 
@@ -103,9 +79,27 @@ class DataTable:
                 "@type": "uri"
             }
             data = value_obj.to_data(data)
-            
             data[self.id]["hasVariable"].append(obj)
 
+        if self.fileName:
+            value_obj = self.fileName
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasFileName"] = [obj]
+                
+
+        if self.missingValue:
+            value_obj = self.missingValue
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasMissingValue"] = [obj]
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -113,7 +107,7 @@ class DataTable:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -137,7 +131,7 @@ class DataTable:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -146,24 +140,24 @@ class DataTable:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getMissingValue(self) -> str:
-        return self.missingValue
-
-    def setMissingValue(self, missingValue:str):
-        self.missingValue = missingValue
-
     def getFileName(self) -> str:
         return self.fileName
 
     def setFileName(self, fileName:str):
         self.fileName = fileName
+    
+    def getMissingValue(self) -> str:
+        return self.missingValue
 
+    def setMissingValue(self, missingValue:str):
+        self.missingValue = missingValue
+    
     def getVariables(self) -> list[Variable]:
         return self.variables
 
     def setVariables(self, variables:list[Variable]):
         self.variables = variables
 
-    def addVariable(self, variable:Variable):
-        self.variables.append(variable)
+    def addVariable(self, variables:Variable):
+        self.variables.append(variables)
         

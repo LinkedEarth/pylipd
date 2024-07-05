@@ -2,8 +2,7 @@
 ##############################
 # Auto-generated. Do not Edit
 ##############################
-
-from ..globals.synonyms import SYNONYMS
+from pylipd.globals.synonyms import SYNONYMS
 
 class PaleoProxyGeneral:
     synonyms = SYNONYMS["PROXIES"]["PaleoProxyGeneral"]
@@ -39,7 +38,7 @@ class PaleoProxyGeneral:
             synobj = PaleoProxyGeneral.synonyms[synonym.lower()]
             return PaleoProxyGeneral(synobj['id'], synobj['label'])
         return None
-    
+        
 class PaleoProxyGeneralConstants:
     biogenic = PaleoProxyGeneral("http://linked.earth/ontology/proxy#biogenic", "biogenic")
     cryophysical = PaleoProxyGeneral("http://linked.earth/ontology/proxy#cryophysical", "cryophysical")

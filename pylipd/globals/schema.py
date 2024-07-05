@@ -712,10 +712,6 @@ SCHEMA = {
         'uncertainty': { 
             'name': 'hasUncertainty',
             'alternates': ['uncertainty', 'calibrationUncertainty', 'temperature12kUncertainty', 'transferFunctionUncertainty'],
-        },     
-        'hasUncertainty': {
-            'type': 'Individual',
-            'schema': 'Uncertainty'
         }
     },
     'Person': { 

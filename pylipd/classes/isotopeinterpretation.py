@@ -5,19 +5,19 @@
 
 import re
 from pylipd.utils import uniqid
-from pylipd.classes.integrationtime import IntegrationTime
 from pylipd.classes.independentvariable import IndependentVariable
+from pylipd.classes.integrationtime import IntegrationTime
 
 class IsotopeInterpretation:
 
     def __init__(self):
-        self.integrationTime: IntegrationTime = None
         self.independentVariables: list[IndependentVariable] = []
+        self.integrationTime: IntegrationTime = None
         self.misc = {}
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#IsotopeInterpretation"
-        self.id = self.ns + "/" + uniqid("IsotopeInterpretation")
+        self.id = self.ns + "/" + uniqid("IsotopeInterpretation.")
 
     @staticmethod
     def from_data(id, data) -> 'IsotopeInterpretation':
@@ -31,18 +31,7 @@ class IsotopeInterpretation:
                 for val in value:
                     self.type = val["@id"]
         
-            elif key == "hasIntegrationTime":
-
-                for val in value:
-                    if "@id" in val:
-                        obj = IntegrationTime.from_data(val["@id"], data)
-                    else:
-                        obj = val["@value"]
-                                    
-                    self.integrationTime = obj
-        
             elif key == "hasIndependentVariable":
-
                 for val in value:
                     if "@id" in val:
                         obj = IndependentVariable.from_data(val["@id"], data)
@@ -50,15 +39,24 @@ class IsotopeInterpretation:
                         obj = val["@value"]
             
                     self.independentVariables.append(obj)
+        
+            elif key == "hasIntegrationTime":
+                for val in value:
+                    if "@id" in val:
+                        obj = IntegrationTime.from_data(val["@id"], data)
+                    else:
+                        obj = val["@value"]
+                                    
+                    self.integrationTime = obj
             else:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -70,18 +68,6 @@ class IsotopeInterpretation:
             }
         ]
 
-        
-        if self.integrationTime:
-            value_obj = self.integrationTime 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
-            
-            data[self.id]["hasIntegrationTime"] = [obj]
-            
-        
         if len(self.independentVariables):
             data[self.id]["hasIndependentVariable"] = []
         for value_obj in self.independentVariables: 
@@ -90,9 +76,17 @@ class IsotopeInterpretation:
                 "@type": "uri"
             }
             data = value_obj.to_data(data)
-            
             data[self.id]["hasIndependentVariable"].append(obj)
 
+        if self.integrationTime:
+            value_obj = self.integrationTime 
+            obj = {
+                "@id": value_obj.id,
+                "@type": "uri"
+            }
+            data = value_obj.to_data(data)
+            data[self.id]["hasIntegrationTime"] = [obj]
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -100,7 +94,7 @@ class IsotopeInterpretation:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -124,7 +118,7 @@ class IsotopeInterpretation:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -139,11 +133,12 @@ class IsotopeInterpretation:
     def setIndependentVariables(self, independentVariables:list[IndependentVariable]):
         self.independentVariables = independentVariables
 
-    def addIndependentVariable(self, independentVariable:IndependentVariable):
-        self.independentVariables.append(independentVariable)
+    def addIndependentVariable(self, independentVariables:IndependentVariable):
+        self.independentVariables.append(independentVariables)
         
     def getIntegrationTime(self) -> IntegrationTime:
         return self.integrationTime
 
     def setIntegrationTime(self, integrationTime:IntegrationTime):
         self.integrationTime = integrationTime
+    

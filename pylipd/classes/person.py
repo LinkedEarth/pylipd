@@ -14,7 +14,7 @@ class Person:
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#Person"
-        self.id = self.ns + "/" + uniqid("Person")
+        self.id = self.ns + "/" + uniqid("Person.")
 
     @staticmethod
     def from_data(id, data) -> 'Person':
@@ -29,7 +29,6 @@ class Person:
                     self.type = val["@id"]
         
             elif key == "hasName":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
@@ -38,11 +37,11 @@ class Person:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -54,7 +53,6 @@ class Person:
             }
         ]
 
-        
         if self.name:
             value_obj = self.name
             obj = {
@@ -63,8 +61,7 @@ class Person:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasName"] = [obj]
-            
-
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -72,7 +69,7 @@ class Person:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -96,7 +93,7 @@ class Person:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -110,3 +107,4 @@ class Person:
 
     def setName(self, name:str):
         self.name = name
+    

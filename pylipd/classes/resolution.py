@@ -10,16 +10,16 @@ from pylipd.classes.paleounit import PaleoUnit
 class Resolution:
 
     def __init__(self):
-        self.minValue: float = None
         self.maxValue: float = None
-        self.units: PaleoUnit = None
         self.meanValue: float = None
         self.medianValue: float = None
+        self.minValue: float = None
+        self.units: PaleoUnit = None
         self.misc = {}
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#Resolution"
-        self.id = self.ns + "/" + uniqid("Resolution")
+        self.id = self.ns + "/" + uniqid("Resolution.")
 
     @staticmethod
     def from_data(id, data) -> 'Resolution':
@@ -34,48 +34,43 @@ class Resolution:
                     self.type = val["@id"]
         
             elif key == "hasMaxValue":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.maxValue = obj
         
-            elif key == "hasMinValue":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.minValue = obj
-        
-            elif key == "hasUnits":
-
-                for val in value:
-                    obj = PaleoUnit.from_synonym(re.sub("^.*?#", "", val["@id"]))
-                                    
-                    self.units = obj
-        
             elif key == "hasMeanValue":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.meanValue = obj
         
             elif key == "hasMedianValue":
-
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.medianValue = obj
+        
+            elif key == "hasMinValue":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.minValue = obj
+        
+            elif key == "hasUnits":
+                for val in value:
+                    obj = PaleoUnit.from_synonym(re.sub("^.*?#", "", val["@id"]))
+                                    
+                    self.units = obj
             else:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -87,7 +82,6 @@ class Resolution:
             }
         ]
 
-        
         if self.maxValue:
             value_obj = self.maxValue
             obj = {
@@ -96,8 +90,8 @@ class Resolution:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#float"
             }
             data[self.id]["hasMaxValue"] = [obj]
-            
-        
+                
+
         if self.meanValue:
             value_obj = self.meanValue
             obj = {
@@ -106,18 +100,8 @@ class Resolution:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#float"
             }
             data[self.id]["hasMeanValue"] = [obj]
-            
-        
-        if self.minValue:
-            value_obj = self.minValue
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#float"
-            }
-            data[self.id]["hasMinValue"] = [obj]
-            
-        
+                
+
         if self.medianValue:
             value_obj = self.medianValue
             obj = {
@@ -126,8 +110,18 @@ class Resolution:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#float"
             }
             data[self.id]["hasMedianValue"] = [obj]
-            
-        
+                
+
+        if self.minValue:
+            value_obj = self.minValue
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#float"
+            }
+            data[self.id]["hasMinValue"] = [obj]
+                
+
         if self.units:
             value_obj = self.units 
             obj = {
@@ -135,10 +129,8 @@ class Resolution:
                 "@type": "uri"
             }
             data = value_obj.to_data(data)
-            
             data[self.id]["hasUnits"] = [obj]
-            
-
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -146,7 +138,7 @@ class Resolution:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -170,7 +162,7 @@ class Resolution:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -179,32 +171,33 @@ class Resolution:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getMinValue(self) -> float:
-        return self.minValue
-
-    def setMinValue(self, minValue:float):
-        self.minValue = minValue
-
-    def getMeanValue(self) -> float:
-        return self.meanValue
-
-    def setMeanValue(self, meanValue:float):
-        self.meanValue = meanValue
-
-    def getUnits(self) -> PaleoUnit:
-        return self.units
-
-    def setUnits(self, units:PaleoUnit):
-        self.units = units
-
     def getMaxValue(self) -> float:
         return self.maxValue
 
     def setMaxValue(self, maxValue:float):
         self.maxValue = maxValue
+    
+    def getMeanValue(self) -> float:
+        return self.meanValue
 
+    def setMeanValue(self, meanValue:float):
+        self.meanValue = meanValue
+    
     def getMedianValue(self) -> float:
         return self.medianValue
 
     def setMedianValue(self, medianValue:float):
         self.medianValue = medianValue
+    
+    def getMinValue(self) -> float:
+        return self.minValue
+
+    def setMinValue(self, minValue:float):
+        self.minValue = minValue
+    
+    def getUnits(self) -> PaleoUnit:
+        return self.units
+
+    def setUnits(self, units:PaleoUnit):
+        self.units = units
+    

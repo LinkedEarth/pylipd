@@ -11,14 +11,14 @@ from pylipd.classes.model import Model
 class PaleoData:
 
     def __init__(self):
+        self.measurementTables: list[DataTable] = []
         self.modeledBy: list[Model] = []
         self.name: str = None
-        self.measurementTables: list[DataTable] = []
         self.misc = {}
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#PaleoData"
-        self.id = self.ns + "/" + uniqid("PaleoData")
+        self.id = self.ns + "/" + uniqid("PaleoData.")
 
     @staticmethod
     def from_data(id, data) -> 'PaleoData':
@@ -32,15 +32,7 @@ class PaleoData:
                 for val in value:
                     self.type = val["@id"]
         
-            elif key == "hasName":
-
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.name = obj
-        
             elif key == "hasMeasurementTable":
-
                 for val in value:
                     if "@id" in val:
                         obj = DataTable.from_data(val["@id"], data)
@@ -49,8 +41,13 @@ class PaleoData:
             
                     self.measurementTables.append(obj)
         
+            elif key == "hasName":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.name = obj
+        
             elif key == "modeledBy":
-
                 for val in value:
                     if "@id" in val:
                         obj = Model.from_data(val["@id"], data)
@@ -62,11 +59,11 @@ class PaleoData:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -78,18 +75,6 @@ class PaleoData:
             }
         ]
 
-        
-        if len(self.modeledBy):
-            data[self.id]["modeledBy"] = []
-        for value_obj in self.modeledBy: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
-            
-            data[self.id]["modeledBy"].append(obj)
-        
         if len(self.measurementTables):
             data[self.id]["hasMeasurementTable"] = []
         for value_obj in self.measurementTables: 
@@ -98,9 +83,18 @@ class PaleoData:
                 "@type": "uri"
             }
             data = value_obj.to_data(data)
-            
             data[self.id]["hasMeasurementTable"].append(obj)
-        
+
+        if len(self.modeledBy):
+            data[self.id]["modeledBy"] = []
+        for value_obj in self.modeledBy: 
+            obj = {
+                "@id": value_obj.id,
+                "@type": "uri"
+            }
+            data = value_obj.to_data(data)
+            data[self.id]["modeledBy"].append(obj)
+
         if self.name:
             value_obj = self.name
             obj = {
@@ -109,8 +103,7 @@ class PaleoData:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasName"] = [obj]
-            
-
+                
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -118,7 +111,7 @@ class PaleoData:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -142,7 +135,7 @@ class PaleoData:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -151,12 +144,15 @@ class PaleoData:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getName(self) -> str:
-        return self.name
+    def getMeasurementTables(self) -> list[DataTable]:
+        return self.measurementTables
 
-    def setName(self, name:str):
-        self.name = name
+    def setMeasurementTables(self, measurementTables:list[DataTable]):
+        self.measurementTables = measurementTables
 
+    def addMeasurementTable(self, measurementTables:DataTable):
+        self.measurementTables.append(measurementTables)
+        
     def getModeledBy(self) -> list[Model]:
         return self.modeledBy
 
@@ -166,12 +162,9 @@ class PaleoData:
     def addModeledBy(self, modeledBy:Model):
         self.modeledBy.append(modeledBy)
         
-    def getMeasurementTables(self) -> list[DataTable]:
-        return self.measurementTables
+    def getName(self) -> str:
+        return self.name
 
-    def setMeasurementTables(self, measurementTables:list[DataTable]):
-        self.measurementTables = measurementTables
-
-    def addMeasurementTable(self, measurementTable:DataTable):
-        self.measurementTables.append(measurementTable)
-        
+    def setName(self, name:str):
+        self.name = name
+    

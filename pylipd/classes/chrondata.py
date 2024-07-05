@@ -11,13 +11,13 @@ from pylipd.classes.model import Model
 class ChronData:
 
     def __init__(self):
-        self.modeledBy: list[Model] = []
         self.measurementTables: list[DataTable] = []
+        self.modeledBy: list[Model] = []
         self.misc = {}
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
         self.type = "http://linked.earth/ontology#ChronData"
-        self.id = self.ns + "/" + uniqid("ChronData")
+        self.id = self.ns + "/" + uniqid("ChronData.")
 
     @staticmethod
     def from_data(id, data) -> 'ChronData':
@@ -32,7 +32,6 @@ class ChronData:
                     self.type = val["@id"]
         
             elif key == "hasMeasurementTable":
-
                 for val in value:
                     if "@id" in val:
                         obj = DataTable.from_data(val["@id"], data)
@@ -42,7 +41,6 @@ class ChronData:
                     self.measurementTables.append(obj)
         
             elif key == "modeledBy":
-
                 for val in value:
                     if "@id" in val:
                         obj = Model.from_data(val["@id"], data)
@@ -54,11 +52,11 @@ class ChronData:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self
 
     def to_data(self, data={}):
@@ -70,18 +68,6 @@ class ChronData:
             }
         ]
 
-        
-        if len(self.modeledBy):
-            data[self.id]["modeledBy"] = []
-        for value_obj in self.modeledBy: 
-            obj = {
-                "@id": value_obj.id,
-                "@type": "uri"
-            }
-            data = value_obj.to_data(data)
-            
-            data[self.id]["modeledBy"].append(obj)
-        
         if len(self.measurementTables):
             data[self.id]["hasMeasurementTable"] = []
         for value_obj in self.measurementTables: 
@@ -90,9 +76,17 @@ class ChronData:
                 "@type": "uri"
             }
             data = value_obj.to_data(data)
-            
             data[self.id]["hasMeasurementTable"].append(obj)
 
+        if len(self.modeledBy):
+            data[self.id]["modeledBy"] = []
+        for value_obj in self.modeledBy: 
+            obj = {
+                "@id": value_obj.id,
+                "@type": "uri"
+            }
+            data = value_obj.to_data(data)
+            data[self.id]["modeledBy"].append(obj)
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -100,7 +94,7 @@ class ChronData:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{4}-\d{2}-\d{2}", value):
@@ -124,7 +118,7 @@ class ChronData:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -132,6 +126,15 @@ class ChronData:
         if key not in self.misc:
             self.misc[key] = []
         self.misc[key].append(value)
+        
+    def getMeasurementTables(self) -> list[DataTable]:
+        return self.measurementTables
+
+    def setMeasurementTables(self, measurementTables:list[DataTable]):
+        self.measurementTables = measurementTables
+
+    def addMeasurementTable(self, measurementTables:DataTable):
+        self.measurementTables.append(measurementTables)
         
     def getModeledBy(self) -> list[Model]:
         return self.modeledBy
@@ -141,13 +144,4 @@ class ChronData:
 
     def addModeledBy(self, modeledBy:Model):
         self.modeledBy.append(modeledBy)
-        
-    def getMeasurementTables(self) -> list[DataTable]:
-        return self.measurementTables
-
-    def setMeasurementTables(self, measurementTables:list[DataTable]):
-        self.measurementTables = measurementTables
-
-    def addMeasurementTable(self, measurementTable:DataTable):
-        self.measurementTables.append(measurementTable)
         

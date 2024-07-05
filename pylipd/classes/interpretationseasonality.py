@@ -2,8 +2,7 @@
 ##############################
 # Auto-generated. Do not Edit
 ##############################
-
-from ..globals.synonyms import SYNONYMS
+from pylipd.globals.synonyms import SYNONYMS
 
 class InterpretationSeasonality:
     synonyms = SYNONYMS["INTERPRETATION"]["InterpretationSeasonality"]
@@ -39,7 +38,7 @@ class InterpretationSeasonality:
             synobj = InterpretationSeasonality.synonyms[synonym.lower()]
             return InterpretationSeasonality(synobj['id'], synobj['label'])
         return None
-    
+        
 class InterpretationSeasonalityConstants:
     Annual = InterpretationSeasonality("http://linked.earth/ontology/interpretation#Annual", "Annual")
     Winter = InterpretationSeasonality("http://linked.earth/ontology/interpretation#Winter", "Winter")

@@ -20,6 +20,7 @@ try:
 except:
     pass
 
+from pylipd.utils.json_to_rdf import JSONToRDF
 from pylipd.utils.rdf_to_json import RDFToJSON
 
 from .globals.queries import QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE, QUERY_DATASET_PROPERTIES, QUERY_VARIABLE_PROPERTIES, QUERY_MODEL_PROPERTIES, QUERY_LOCATION
@@ -1186,3 +1187,37 @@ class LiPD(RDFGraph):
             ds = Dataset.from_data(dsuri, data)
             datasets.append(ds)
         return datasets
+    
+
+    def load_datasets(self, datasets: 'list[Dataset]'):
+        '''
+        Loads instances of Dataset class into the LiPD graph
+
+        Parameters
+        ----------
+        list of pylipd.classes.Dataset
+            A list of Dataset objects
+
+        Examples
+        --------
+        
+        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Pages2k sample datasets using this method.
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+
+            lipd = load_dir('Pages2k')
+            dses = lipd.get_datasets()
+
+            # Modify the datasets if needed, then write them to the same, or another LiPD object
+
+            lipd2 = LiPD()
+            lipd2.load_datasets(dses)
+        
+        '''
+        for ds in datasets:
+            dsuri = ds.id
+            j2r = JSONToRDF(self.graph, dsuri)
+            j2r.load_data_in_graph(ds.to_data())
+

@@ -2,8 +2,7 @@
 ##############################
 # Auto-generated. Do not Edit
 ##############################
-
-from ..globals.synonyms import SYNONYMS
+from pylipd.globals.synonyms import SYNONYMS
 
 class InterpretationVariable:
     synonyms = SYNONYMS["INTERPRETATION"]["InterpretationVariable"]
@@ -39,7 +38,7 @@ class InterpretationVariable:
             synobj = InterpretationVariable.synonyms[synonym.lower()]
             return InterpretationVariable(synobj['id'], synobj['label'])
         return None
-    
+        
 class InterpretationVariableConstants:
     C3C4Ratio = InterpretationVariable("http://linked.earth/ontology/interpretation#C3C4Ratio", "C3C4Ratio")
     circulationIndex = InterpretationVariable("http://linked.earth/ontology/interpretation#circulationIndex", "circulationIndex")

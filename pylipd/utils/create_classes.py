@@ -5,16 +5,15 @@ import os
 
 SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
 CLASSDIR = os.path.realpath(f"{SCRIPTDIR}/../classes")
-# CLASSDIR = "classes"
-
 if not os.path.exists(CLASSDIR):
     os.makedirs(CLASSDIR)
 
-def get_fromdata_item(type, range):
+
+def get_fromdata_item(ptype, range, is_enum):
     fromdataitem = f"""
                 for val in value:"""
-    if type == "object" and range is not None:
-        if "synonyms" in prop:
+    if ptype == "object" and range is not None:
+        if is_enum:
             fromdataitem += f"""
                     obj = {range}.from_synonym(re.sub("^.*?#", "", val["@id"]))
             """
@@ -33,6 +32,7 @@ def get_fromdata_item(type, range):
         fromdataitem += f"""
                     obj = val["@id"]"""
     return fromdataitem
+
 
 def get_todata_item(type, range):
     todataitem = ""
@@ -55,28 +55,89 @@ def get_todata_item(type, range):
                 "@id": value_obj.id,
                 "@type": "uri"
             }}
-            data = value_obj.to_data(data)
-            """
+            data = value_obj.to_data(data)"""
     return todataitem
 
 
-for sectionid in SYNONYMS:
-    for clsid in SYNONYMS[sectionid]:
-        done = {}
-        synonyms = SYNONYMS[sectionid][clsid]
+def get_python_snippet_for_multi_value_property(propid, pname, ptype, ont_range, python_range, getter, setter, adder, is_enum):
+    # Create the python snippet for initialzing property variables
+    initvar = f"self.{pname}: list[{python_range}] = []"
 
-        fileid = clsid.lower()
-        with open(f"{CLASSDIR}/{fileid}.py", "w") as outf:
-            outf.write("""
+    # Create the python function snippet for this property to convert the class to a dictionary (todata)
+    todataitem = get_todata_item(ptype, ont_range)
+    todata = f"""
+
+        if len(self.{pname}):
+            data[self.id]["{propid}"] = []
+        for value_obj in self.{pname}:{todataitem}
+            data[self.id]["{propid}"].append(obj)"""
+
+    # Create the python function snippet for this property to convert from data dictionary to a class (fromdata)
+    fromdataitem = get_fromdata_item(ptype, python_range, is_enum)
+    fromdata = f"""
+            elif key == "{propid}":{fromdataitem}
+                    self.{pname}.append(obj)"""
+
+    # Create the python snippet for getter/setter/adders
+    fns = f"""
+    def {getter}(self) -> list[{python_range}]:
+        return self.{pname}
+
+    def {setter}(self, {pname}:list[{python_range}]):
+        self.{pname} = {pname}
+
+    def {adder}(self, {pname}:{python_range}):
+        self.{pname}.append({pname})
+        """
+    return (initvar, todata, fromdata, fns)
+
+
+def get_python_snippet_for_property(propid, pname, ptype, ont_range, python_range, getter, setter, is_enum):
+    # Create the python snippet for initialzing property variables
+    initvar = f"self.{pname}: {python_range} = None"
+
+    # Create the python function snippet for this property to convert the class to a dictionary (todata)
+    todataitem = get_todata_item(ptype, ont_range)
+    todata = f"""
+
+        if self.{pname}:
+            value_obj = self.{pname}{todataitem}
+            data[self.id]["{propid}"] = [obj]
+                """
+    # Create the python function snippet for this property to convert from data dictionary to a class (fromdata)
+    fromdataitem = get_fromdata_item(ptype, python_range, is_enum)
+    fromdata = f"""
+            elif key == "{propid}":{fromdataitem}                        
+                    self.{pname} = obj"""
+
+    # Create the python snippet for getter/setter/adders
+    fns = f"""
+    def {getter}(self) -> {python_range}:
+        return self.{pname}
+
+    def {setter}(self, {pname}:{python_range}):
+        self.{pname} = {pname}
+    """
+    return (initvar, todata, fromdata, fns)
+
+
+def generate_enum_classes():
+    for sectionid in SYNONYMS:
+        for clsid in SYNONYMS[sectionid]:
+            done = {}
+            synonyms = SYNONYMS[sectionid][clsid]
+
+            fileid = clsid.lower()
+            with open(f"{CLASSDIR}/{fileid}.py", "w") as outf:
+                outf.write("""
 ##############################
 # Auto-generated. Do not Edit
 ##############################
-
 """)
-            outf.write("from pylipd.globals.synonyms import SYNONYMS\n\n")
+                outf.write("from pylipd.globals.synonyms import SYNONYMS\n\n")
 
-            outf.write(f"class {clsid}:")
-            outf.write(f"""
+                outf.write(f"class {clsid}:")
+                outf.write(f"""
     synonyms = SYNONYMS["{sectionid}"]["{clsid}"]
 
     def __init__(self, id, label):
@@ -110,179 +171,55 @@ for sectionid in SYNONYMS:
             synobj = {clsid}.synonyms[synonym.lower()]
             return {clsid}(synobj['id'], synobj['label'])
         return None
-    
+        
 """)
-            outf.write(f"class {clsid}Constants:")
-            for synonym in synonyms:
-                synobj = synonyms[synonym]
-                synid = re.sub("[^a-zA-Z0-9]", "_", re.sub(".*?#", "", synobj["id"]))
-                if synid in done:
-                    continue
-                done[synid] = True
-                outf.write(f"""
+                outf.write(f"class {clsid}Constants:")
+                for synonym in synonyms:
+                    synobj = synonyms[synonym]
+                    synid = re.sub("[^a-zA-Z0-9]", "_", re.sub(".*?#", "", synobj["id"]))
+                    if synid in done:
+                        continue
+                    done[synid] = True
+                    outf.write(f"""
     {synid} = {clsid}("{synobj['id']}", "{synobj['label']}")""")
+                    
 
-for clsid in SCHEMA:
-    props = SCHEMA[clsid]    
-
-    imports = set()
-    initvars = set()
-    fromdata = set()
-    todata = set()
-    fns = set()
-
-    iffed = False
-    for pid in props:
-        if pid[0] == "@":
-            continue
-        prop = props[pid]
-        
-        propid = pid
-        if "name" in prop:
-            propid = prop["name"]
-
-        pname = propid
-        if re.match("^has", propid):
-            pname = re.sub("^has", "", propid)
-        elif re.match("^is", propid):
-            pname = re.sub("^is", "", propid)
-        
-        # Fix if property name is "type". Gets mixed up
-        if pname.lower() == "type":
-            pname = f"{clsid}Type"
-
-        pname = pname[0].lower() + pname[1:]
-
-        multiple = prop.get("multiple", False)
-        mpname = pname
-        if multiple and not re.match(".*(data|by)$", pname, re.I):
-            mpname += "s"
-
-        adder = None
-        suffix = pname[0].upper() + pname[1:]
-        setter = "set" + suffix
-        if re.match("^is", propid):
-            getter = "is" + suffix
-        else:
-            getter = "get" + suffix
-        if multiple:
-            adder = "add" + suffix
-            if not re.match(".*(data|by)$", pname, re.I):
-                setter += "s"
-                getter += "s"
-        
-        range = "string"        
-        type = "literal"
-        if "class_type" in prop:
-            range = prop["class_type"]
-        elif "type" in prop:
-            range = prop["type"]
-            if range == "Individual":
-                range = None
-        if "class_range" in prop:
-            type = "object"
-            range = prop["class_range"]
-        elif "schema" in prop:
-            type = "object"
-            range = prop["schema"]
-        
-        todataitem = get_todata_item(type, range)
-
-        # Rewriting ranges to python types
-        if range == "integer":
-            range = "int"
-        elif range == "string":
-            range = "str"
-        elif range == "boolean":
-            range = "bool"
-
-        if type == "object":
-            imports.add(range)
-
-        fromdataitem = get_fromdata_item(type, range)
-
-        if multiple:
-            initvars.add(f"self.{mpname}: list[{range}] = []")
-            mptodataitem = f"""
-        if len(self.{mpname}):
-            data[self.id]["{propid}"] = []
-        for value_obj in self.{mpname}:{todataitem}
-            data[self.id]["{propid}"].append(obj)"""
-            todata.add(mptodataitem)
-
-            mpfromdataitem = f"""
-            elif key == "{propid}":
-{fromdataitem}
-                    self.{mpname}.append(obj)"""
-            fromdata.add(mpfromdataitem)
-
-            fns.add(f"""
-    def {getter}(self) -> list[{range}]:
-        return self.{mpname}
-
-    def {setter}(self, {mpname}:list[{range}]):
-        self.{mpname} = {mpname}
-
-    def {adder}(self, {pname}:{range}):
-        self.{mpname}.append({pname})
-        """)
-            
-        else:
-            initvars.add(f"self.{pname}: {range} = None") 
-            sfromdataitem = f"""
-            elif key == "{propid}":
-{fromdataitem}                        
-                    self.{pname} = obj"""
-            fromdata.add(sfromdataitem)
-
-            stodataitem = f"""
-        if self.{pname}:
-            value_obj = self.{pname}{todataitem}
-            data[self.id]["{propid}"] = [obj]
-            """
-            todata.add(stodataitem)
-
-            fns.add(f"""
-    def {getter}(self) -> {range}:
-        return self.{pname}
-
-    def {setter}(self, {pname}:{range}):
-        self.{pname} = {pname}
-""")         
-    fileid = clsid.lower()
-    with open(f"{CLASSDIR}/{fileid}.py", "w") as outf:
+def generate_class_file(clsid, import_snippets, initvar_snippets, todata_snippets, fromdata_snippets, fn_snippets):    
+    filename = f"{CLASSDIR}/{clsid.lower()}.py"
+    
+    with open(filename, "w") as outf:
+        # Write the header
         outf.write("""
 ##############################
 # Auto-generated. Do not Edit
 ##############################
 
 """)
+        # Write the imports
         outf.write(f"import re\n")
         outf.write("from pylipd.utils import uniqid\n")
-
-        for im in imports:
+        for im in import_snippets:
             outf.write(f"from pylipd.classes.{im.lower()} import {im}\n")
         outf.write("\n")
+
+        # Write the class header
         outf.write(f"class {clsid}:\n")
+
+        # Write the init function
         outf.write(f"""
     def __init__(self):""")
-        for initvar in initvars:
+        for snippet in initvar_snippets:
             outf.write(f"""
-        {initvar}""")
-
-        # namespace is hardcoded (from class generation)
-        # type is hardcoded (from class generation) : ontns + class
-        # id is generated initially (ns + class + "." + uuid)
-        # id can be overridden in from_data
-
+        {snippet}""")
         outf.write(f"""
         self.misc = {{}}
         self.ontns = "{ONTONS}"
         self.ns = "{NSURL}"
         self.type = "{ONTONS}{clsid}"
-        self.id = self.ns + "/" + uniqid("{clsid}")""")
-
+        self.id = self.ns + "/" + uniqid("{clsid}.")""")
         outf.write("\n")
+
+        # Write the from_data function
         outf.write(f"""
     @staticmethod
     def from_data(id, data) -> '{clsid}':
@@ -295,22 +232,24 @@ for clsid in SCHEMA:
             if key == "type":
                 for val in value:
                     self.type = val["@id"]""")
-        for initvar in fromdata:
+        for snippet in fromdata_snippets:
             outf.write(f"""
-        {initvar}""")
+        {snippet}""")
+            
         outf.write(f"""
             else:
                 for val in value:
                     obj = None
                     if "@id" in val:
-                        obj = mydata[val["@id"]]
+                        obj = data[val["@id"]]
                     elif "@value" in val:
                         obj = val["@value"]
                     self.set_non_standard_property(key, obj)
-        
+            
         return self""")
         outf.write("\n") 
         
+        # Write the to_data function
         outf.write(f"""
     def to_data(self, data={{}}):
         data[self.id] = {{}}
@@ -319,14 +258,12 @@ for clsid in SCHEMA:
                 "@id": self.type,
                 "@type": "uri"
             }}
-        ]
-""")
+        ]""")
 
-        for tovar in todata:
-            outf.write(f"""
-        {tovar}""")        
+        for snippet in todata_snippets:
+            outf.write(f"""{snippet}""")
+
         outf.write(f"""
-
         for key in self.misc:
             value = self.misc[key]
             data[self.id][key] = []
@@ -334,7 +271,7 @@ for clsid in SCHEMA:
             tp = type(value).__name__
             if tp == "int":
                 ptype = "http://www.w3.org/2001/XMLSchema#integer"
-            elif tp == "float":
+            elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
                 if re.match("\d{{4}}-\d{{2}}-\d{{2}}", value):
@@ -353,6 +290,8 @@ for clsid in SCHEMA:
         return data""")
 
         outf.write("\n") 
+
+        # Write the functions to handle non standard properties
         outf.write(f"""
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
@@ -360,7 +299,7 @@ for clsid in SCHEMA:
     
     def get_non_standard_property(self, key):
         return self.misc[key]
-                   
+                
     def get_all_non_standard_properties(self):
         return self.misc
 
@@ -368,6 +307,116 @@ for clsid in SCHEMA:
         if key not in self.misc:
             self.misc[key] = []
         self.misc[key].append(value)
-        """)          
-        for fn in fns:
+        """)   
+
+        # Write the getter/setter functions       
+        for fn in fn_snippets:
             outf.write(fn)
+
+
+def generate_lipd_classes():
+    # Check all classes in Schema
+    for clsid in SCHEMA:
+        props = SCHEMA[clsid]    
+
+        import_snippets = set()
+        initvar_snippets = set()
+        fromdata_snippets = set()
+        todata_snippets = set()
+        fn_snippets = set()
+
+        # Check all properties
+        for pid in props:
+            if pid[0] == "@":
+                continue
+            prop = props[pid]
+            
+            propid = pid
+            if "name" in prop:
+                propid = prop["name"]
+
+            # Create the python property name (pname) from ontology property id (propid)
+            pname = propid
+            if re.match("^has", propid):
+                pname = re.sub("^has", "", propid)
+            elif re.match("^is", propid):
+                pname = re.sub("^is", "", propid)
+            # Fix if property name is "type". Gets mixed up
+            if pname.lower() == "type":
+                pname = f"{clsid}Type"
+            pname = pname[0].lower() + pname[1:]
+
+            # Check if the property is supposed to have multiple values. Rename accordingly
+            multiple = prop.get("multiple", False)
+            mpname = pname
+            if multiple and not re.match(".*(data|by)$", pname, re.I):
+                mpname += "s"
+
+            is_enum = ("synonyms" in prop)
+
+            # Create getter/setter/adder function names
+            adder = None
+            suffix = pname[0].upper() + pname[1:]
+            setter = "set" + suffix
+            if re.match("^is", propid):
+                getter = "is" + suffix
+            else:
+                getter = "get" + suffix
+            if multiple:
+                adder = "add" + suffix
+                if not re.match(".*(data|by)$", pname, re.I):
+                    setter += "s"
+                    getter += "s"
+            
+            # Get the range of the property
+            ont_range = "string"
+            ptype = "literal"
+            if "class_type" in prop:
+                ont_range = prop["class_type"]
+            elif "type" in prop:
+                ont_range = prop["type"]
+                if ont_range == "Individual":
+                    ont_range = None
+            if "class_range" in prop:
+                ptype = "object"
+                ont_range = prop["class_range"]
+            elif "schema" in prop:
+                ptype = "object"
+                ont_range = prop["schema"]
+
+            python_range = ont_range
+            # Rewrite the property range to python types
+            if ont_range == "integer":
+                python_range = "int"
+            elif ont_range == "string":
+                python_range = "str"
+            elif ont_range == "boolean":
+                python_range = "bool"
+
+            # Get python snippets for initialization function, todata function, fromdata from, and the setter/getter functions
+            if multiple:
+                (initvar, todata, fromdata, fns) = get_python_snippet_for_multi_value_property(propid, mpname, ptype, 
+                                                                                               ont_range, python_range, 
+                                                                                               getter, setter, adder, is_enum)  
+            else:
+                (initvar, todata, fromdata, fns) = get_python_snippet_for_property(propid, mpname, ptype, 
+                                                                                   ont_range, python_range, 
+                                                                                   getter, setter, is_enum)
+            
+            # Collect all snippets
+            # Import the range class (in case the range is a class)
+            if ptype == "object":
+                import_snippets.add(python_range)
+            initvar_snippets.add(initvar)
+            todata_snippets.add(todata)
+            fromdata_snippets.add(fromdata)
+            fn_snippets.add(fns)
+        
+        # Write outputs
+        generate_class_file(clsid, sorted(import_snippets), sorted(initvar_snippets), 
+                            sorted(todata_snippets), sorted(fromdata_snippets), sorted(fn_snippets))
+
+
+if __name__ == "__main__":
+    generate_enum_classes()
+    generate_lipd_classes()
