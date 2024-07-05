@@ -52,12 +52,19 @@ def get_todata_item(type, range):
                 "@type": "uri"
             }}"""
     elif type == "object":
-        todataitem += f""" 
-            obj = {{
-                "@id": value_obj.id,
-                "@type": "uri"
-            }}
-            data = value_obj.to_data(data)"""
+        todataitem += f"""
+            if type(value_obj) is str:
+                obj = {{
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }}
+            else:
+                obj = {{
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }}
+                data = value_obj.to_data(data)"""
     return todataitem
 
 def get_tojson_item(type):
