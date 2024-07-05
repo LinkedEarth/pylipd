@@ -428,6 +428,148 @@ class Dataset:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if len(self.chronData):
+            data["chronData"] = []
+        for value_obj in self.chronData:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["chronData"].append(obj)
+
+        if len(self.creators):
+            data["creator"] = []
+        for value_obj in self.creators:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["creator"].append(obj)
+
+        if len(self.fundings):
+            data["funding"] = []
+        for value_obj in self.fundings:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["funding"].append(obj)
+
+        if len(self.investigators):
+            data["investigator"] = []
+        for value_obj in self.investigators:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["investigator"].append(obj)
+
+        if len(self.paleoData):
+            data["paleoData"] = []
+        for value_obj in self.paleoData:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["paleoData"].append(obj)
+
+        if len(self.publications):
+            data["pub"] = []
+        for value_obj in self.publications:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["pub"].append(obj)
+
+        if self.archiveType:
+            value_obj = self.archiveType
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["archiveType"] = obj
+
+        if self.changeLog:
+            value_obj = self.changeLog
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["changelog"] = obj
+
+        if self.collectionName:
+            value_obj = self.collectionName
+            obj = value_obj
+            data["collectionName"] = obj
+
+        if self.collectionYear:
+            value_obj = self.collectionYear
+            obj = value_obj
+            data["collectionYear"] = obj
+
+        if self.contributor:
+            value_obj = self.contributor
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["dataContributor"] = obj
+
+        if self.dataSource:
+            value_obj = self.dataSource
+            obj = value_obj
+            data["dataSource"] = obj
+
+        if self.datasetId:
+            value_obj = self.datasetId
+            obj = value_obj
+            data["datasetId"] = obj
+
+        if self.location:
+            value_obj = self.location
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["geo"] = obj
+
+        if self.name:
+            value_obj = self.name
+            obj = value_obj
+            data["dataSetName"] = obj
+
+        if self.notes:
+            value_obj = self.notes
+            obj = value_obj
+            data["notes"] = obj
+
+        if self.originalDataUrl:
+            value_obj = self.originalDataUrl
+            obj = value_obj
+            data["originalDataURL"] = obj
+
+        if self.spreadsheetLink:
+            value_obj = self.spreadsheetLink
+            obj = value_obj
+            data["googleSpreadSheetKey"] = obj
+
+        if self.version:
+            value_obj = self.version
+            obj = value_obj
+            data["dataSetVersion"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

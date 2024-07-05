@@ -31,7 +31,11 @@ class PaleoVariable:
             ]
         }
         return data
-    
+
+    def to_json(self):
+        data = self.label
+        return data
+
     @classmethod
     def from_synonym(cls, synonym):
         if synonym.lower() in PaleoVariable.synonyms:

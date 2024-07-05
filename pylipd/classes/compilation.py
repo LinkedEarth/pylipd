@@ -104,6 +104,27 @@ class Compilation:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if self.name:
+            value_obj = self.name
+            obj = value_obj
+            data["compilationName"] = obj
+
+        if self.version:
+            value_obj = self.version
+            obj = value_obj
+            data["compilationVersion"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

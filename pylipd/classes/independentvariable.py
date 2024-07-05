@@ -138,6 +138,37 @@ class IndependentVariable:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if self.equation:
+            value_obj = self.equation
+            obj = value_obj
+            data["mathematicalRelation"] = obj
+
+        if self.interpretationDirection:
+            value_obj = self.interpretationDirection
+            obj = value_obj
+            data["direction"] = obj
+
+        if self.rank:
+            value_obj = self.rank
+            obj = value_obj
+            data["rank"] = obj
+
+        if self.relevantQuote:
+            value_obj = self.relevantQuote
+            obj = value_obj
+            data["basis"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

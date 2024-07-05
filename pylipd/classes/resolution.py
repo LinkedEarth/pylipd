@@ -156,6 +156,45 @@ class Resolution:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if self.maxValue:
+            value_obj = self.maxValue
+            obj = value_obj
+            data["hasMaxValue"] = obj
+
+        if self.meanValue:
+            value_obj = self.meanValue
+            obj = value_obj
+            data["hasMeanValue"] = obj
+
+        if self.medianValue:
+            value_obj = self.medianValue
+            obj = value_obj
+            data["hasMedianValue"] = obj
+
+        if self.minValue:
+            value_obj = self.minValue
+            obj = value_obj
+            data["hasMinValue"] = obj
+
+        if self.units:
+            value_obj = self.units
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["units"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

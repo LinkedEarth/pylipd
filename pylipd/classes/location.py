@@ -306,6 +306,87 @@ class Location:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if self.continent:
+            value_obj = self.continent
+            obj = value_obj
+            data["continent"] = obj
+
+        if self.coordinates:
+            value_obj = self.coordinates
+            obj = value_obj
+            data["coordinates"] = obj
+
+        if self.coordinatesFor:
+            value_obj = self.coordinatesFor
+            obj = value_obj
+            data["coordinatesFor"] = obj
+
+        if self.country:
+            value_obj = self.country
+            obj = value_obj
+            data["country"] = obj
+
+        if self.countryOcean:
+            value_obj = self.countryOcean
+            obj = value_obj
+            data["countryOcean"] = obj
+
+        if self.description:
+            value_obj = self.description
+            obj = value_obj
+            data["description"] = obj
+
+        if self.elevation:
+            value_obj = self.elevation
+            obj = value_obj
+            data["elevation"] = obj
+
+        if self.geometryType:
+            value_obj = self.geometryType
+            obj = value_obj
+            data["geometryType"] = obj
+
+        if self.latitude:
+            value_obj = self.latitude
+            obj = value_obj
+            data["latitude"] = obj
+
+        if self.locationName:
+            value_obj = self.locationName
+            obj = value_obj
+            data["locationName"] = obj
+
+        if self.longitude:
+            value_obj = self.longitude
+            obj = value_obj
+            data["longitude"] = obj
+
+        if self.notes:
+            value_obj = self.notes
+            obj = value_obj
+            data["notes"] = obj
+
+        if self.ocean:
+            value_obj = self.ocean
+            obj = value_obj
+            data["ocean"] = obj
+
+        if self.siteName:
+            value_obj = self.siteName
+            obj = value_obj
+            data["siteName"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

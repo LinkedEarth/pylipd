@@ -102,6 +102,27 @@ class ChangeLog:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if self.changes:
+            value_obj = self.changes
+            obj = value_obj
+            data["changes"] = obj
+
+        if self.notes:
+            value_obj = self.notes
+            obj = value_obj
+            data["notes"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

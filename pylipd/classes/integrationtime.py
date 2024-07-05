@@ -126,6 +126,39 @@ class IntegrationTime:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if len(self.independentVariables):
+            data["independentVariable"] = []
+        for value_obj in self.independentVariables:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["independentVariable"].append(obj)
+
+        if self.relevantQuote:
+            value_obj = self.relevantQuote
+            obj = value_obj
+            data["basis"] = obj
+
+        if self.units:
+            value_obj = self.units
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["units"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

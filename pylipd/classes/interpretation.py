@@ -331,6 +331,107 @@ class Interpretation:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if self.basis:
+            value_obj = self.basis
+            obj = value_obj
+            data["basis"] = obj
+
+        if self.integrationTime:
+            value_obj = self.integrationTime
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["integrationTime"] = obj
+
+        if self.interpretationDirection:
+            value_obj = self.interpretationDirection
+            obj = value_obj
+            data["direction"] = obj
+
+        if self.local:
+            value_obj = self.local
+            obj = value_obj
+            data["local"] = obj
+
+        if self.mathematicalRelation:
+            value_obj = self.mathematicalRelation
+            obj = value_obj
+            data["mathematicalRelation"] = obj
+
+        if self.notes:
+            value_obj = self.notes
+            obj = value_obj
+            data["notes"] = obj
+
+        if self.rank:
+            value_obj = self.rank
+            obj = value_obj
+            data["rank"] = obj
+
+        if self.scope:
+            value_obj = self.scope
+            obj = value_obj
+            data["scope"] = obj
+
+        if self.seasonality:
+            value_obj = self.seasonality
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["seasonality"] = obj
+
+        if self.seasonalityGeneral:
+            value_obj = self.seasonalityGeneral
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["seasonalityGeneral"] = obj
+
+        if self.seasonalityOriginal:
+            value_obj = self.seasonalityOriginal
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["seasonalityOriginal"] = obj
+
+        if self.variable:
+            value_obj = self.variable
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["variable"] = obj
+
+        if self.variableDetail:
+            value_obj = self.variableDetail
+            obj = value_obj
+            data["variableDetail"] = obj
+
+        if self.variableGeneral:
+            value_obj = self.variableGeneral
+            obj = value_obj
+            data["variableGeneral"] = obj
+
+        if self.variableGeneralDirection:
+            value_obj = self.variableGeneralDirection
+            obj = value_obj
+            data["variableGeneralDirection"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

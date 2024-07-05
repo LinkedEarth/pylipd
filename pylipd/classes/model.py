@@ -148,6 +148,49 @@ class Model:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if len(self.distributionTables):
+            data["distributionTable"] = []
+        for value_obj in self.distributionTables:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["distributionTable"].append(obj)
+
+        if len(self.ensembleTables):
+            data["ensembleTable"] = []
+        for value_obj in self.ensembleTables:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["ensembleTable"].append(obj)
+
+        if len(self.summaryTables):
+            data["summaryTable"] = []
+        for value_obj in self.summaryTables:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["summaryTable"].append(obj)
+
+        if self.code:
+            value_obj = self.code
+            obj = value_obj
+            data["method"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

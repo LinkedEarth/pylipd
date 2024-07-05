@@ -383,6 +383,116 @@ class Publication:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if len(self.authors):
+            data["author"] = []
+        for value_obj in self.authors:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["author"].append(obj)
+
+        if len(self.dataUrls):
+            data["dataUrl"] = []
+        for value_obj in self.dataUrls:
+            obj = value_obj
+            data["dataUrl"].append(obj)
+
+        if len(self.urls):
+            data["url"] = []
+        for value_obj in self.urls:
+            obj = value_obj
+            data["url"].append(obj)
+
+        if self.abstract:
+            value_obj = self.abstract
+            obj = value_obj
+            data["abstract"] = obj
+
+        if self.citation:
+            value_obj = self.citation
+            obj = value_obj
+            data["citation"] = obj
+
+        if self.citeKey:
+            value_obj = self.citeKey
+            obj = value_obj
+            data["citeKey"] = obj
+
+        if self.dOI:
+            value_obj = self.dOI
+            obj = value_obj
+            data["doi"] = obj
+
+        if self.firstAuthor:
+            value_obj = self.firstAuthor
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["firstauthor"] = obj
+
+        if self.institution:
+            value_obj = self.institution
+            obj = value_obj
+            data["institution"] = obj
+
+        if self.issue:
+            value_obj = self.issue
+            obj = value_obj
+            data["issue"] = obj
+
+        if self.journal:
+            value_obj = self.journal
+            obj = value_obj
+            data["journal"] = obj
+
+        if self.pages:
+            value_obj = self.pages
+            obj = value_obj
+            data["pages"] = obj
+
+        if self.publicationType:
+            value_obj = self.publicationType
+            obj = value_obj
+            data["type"] = obj
+
+        if self.publisher:
+            value_obj = self.publisher
+            obj = value_obj
+            data["publisher"] = obj
+
+        if self.report:
+            value_obj = self.report
+            obj = value_obj
+            data["report"] = obj
+
+        if self.title:
+            value_obj = self.title
+            obj = value_obj
+            data["title"] = obj
+
+        if self.volume:
+            value_obj = self.volume
+            obj = value_obj
+            data["volume"] = obj
+
+        if self.year:
+            value_obj = self.year
+            obj = value_obj
+            data["year"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

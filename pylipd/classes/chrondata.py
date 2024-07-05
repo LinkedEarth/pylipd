@@ -112,6 +112,35 @@ class ChronData:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if len(self.measurementTables):
+            data["measurementTable"] = []
+        for value_obj in self.measurementTables:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["measurementTable"].append(obj)
+
+        if len(self.modeledBy):
+            data["model"] = []
+        for value_obj in self.modeledBy:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["model"].append(obj)
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

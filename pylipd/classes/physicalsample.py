@@ -121,6 +121,32 @@ class PhysicalSample:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if self.housedAt:
+            value_obj = self.housedAt
+            obj = value_obj
+            data["housedat"] = obj
+
+        if self.iGSN:
+            value_obj = self.iGSN
+            obj = value_obj
+            data["hasidentifier"] = obj
+
+        if self.name:
+            value_obj = self.name
+            obj = value_obj
+            data["hasname"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

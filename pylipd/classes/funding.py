@@ -142,6 +142,42 @@ class Funding:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if len(self.grants):
+            data["grant"] = []
+        for value_obj in self.grants:
+            obj = value_obj
+            data["grant"].append(obj)
+
+        if len(self.investigators):
+            data["investigator"] = []
+        for value_obj in self.investigators:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["investigator"].append(obj)
+
+        if self.fundingAgency:
+            value_obj = self.fundingAgency
+            obj = value_obj
+            data["agency"] = obj
+
+        if self.fundingCountry:
+            value_obj = self.fundingCountry
+            obj = value_obj
+            data["country"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

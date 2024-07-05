@@ -580,6 +580,194 @@ class Variable:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if len(self.calibratedVias):
+            data["calibration"] = []
+        for value_obj in self.calibratedVias:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["calibration"].append(obj)
+
+        if len(self.interpretations):
+            data["interpretation"] = []
+        for value_obj in self.interpretations:
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["interpretation"].append(obj)
+
+        if self.archiveType:
+            value_obj = self.archiveType
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["archiveType"] = obj
+
+        if self.columnNumber:
+            value_obj = self.columnNumber
+            obj = value_obj
+            data["number"] = obj
+
+        if self.compilationNest:
+            value_obj = self.compilationNest
+            obj = value_obj
+            data["compilation_nest"] = obj
+
+        if self.composite:
+            value_obj = self.composite
+            obj = value_obj
+            data["isComposite"] = obj
+
+        if self.description:
+            value_obj = self.description
+            obj = value_obj
+            data["description"] = obj
+
+        if self.foundInDataset:
+            value_obj = self.foundInDataset
+            obj = value_obj
+            data["foundInDataset"] = obj
+
+        if self.foundInTable:
+            value_obj = self.foundInTable
+            obj = value_obj
+            data["foundInTable"] = obj
+
+        if self.instrument:
+            value_obj = self.instrument
+            obj = value_obj
+            data["measurementInstrument"] = obj
+
+        if self.maxValue:
+            value_obj = self.maxValue
+            obj = value_obj
+            data["hasMaxValue"] = obj
+
+        if self.meanValue:
+            value_obj = self.meanValue
+            obj = value_obj
+            data["hasMeanValue"] = obj
+
+        if self.medianValue:
+            value_obj = self.medianValue
+            obj = value_obj
+            data["hasMedianValue"] = obj
+
+        if self.minValue:
+            value_obj = self.minValue
+            obj = value_obj
+            data["hasMinValue"] = obj
+
+        if self.missingValue:
+            value_obj = self.missingValue
+            obj = value_obj
+            data["missingValue"] = obj
+
+        if self.name:
+            value_obj = self.name
+            obj = value_obj
+            data["variableName"] = obj
+
+        if self.notes:
+            value_obj = self.notes
+            obj = value_obj
+            data["notes"] = obj
+
+        if self.partOfCompilation:
+            value_obj = self.partOfCompilation
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["inCompilationBeta"] = obj
+
+        if self.physicalSample:
+            value_obj = self.physicalSample
+            obj = value_obj
+            data["physicalSample"] = obj
+
+        if self.primary:
+            value_obj = self.primary
+            obj = value_obj
+            data["isPrimary"] = obj
+
+        if self.proxy:
+            value_obj = self.proxy
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["proxy"] = obj
+
+        if self.proxyGeneral:
+            value_obj = self.proxyGeneral
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["proxyGeneral"] = obj
+
+        if self.resolution:
+            value_obj = self.resolution
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["resolution"] = obj
+
+        if self.standardVariable:
+            value_obj = self.standardVariable
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["hasStandardVariable"] = obj
+
+        if self.uncertainty:
+            value_obj = self.uncertainty
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["uncertainty"] = obj
+
+        if self.units:
+            value_obj = self.units
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
+            data["units"] = obj
+
+        if self.values:
+            value_obj = self.values
+            obj = value_obj
+            data["hasValues"] = obj
+
+        if self.variableId:
+            value_obj = self.variableId
+            obj = value_obj
+            data["TSid"] = obj
+
+        if self.variableType:
+            value_obj = self.variableType
+            obj = value_obj
+            data["variableType"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value

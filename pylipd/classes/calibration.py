@@ -206,6 +206,87 @@ class Calibration:
         
         return data
 
+    def to_json(self):
+        data = {
+            "@id": self.id
+        }
+
+        if self.dOI:
+            value_obj = self.dOI
+            obj = value_obj
+            data["doi"] = obj
+
+        if self.datasetRange:
+            value_obj = self.datasetRange
+            obj = value_obj
+            data["datasetRange"] = obj
+
+        if self.datasetRange:
+            value_obj = self.datasetRange
+            obj = value_obj
+            data["equationIntercept"] = obj
+
+        if self.datasetRange:
+            value_obj = self.datasetRange
+            obj = value_obj
+            data["equationR2"] = obj
+
+        if self.datasetRange:
+            value_obj = self.datasetRange
+            obj = value_obj
+            data["equationSlope"] = obj
+
+        if self.datasetRange:
+            value_obj = self.datasetRange
+            obj = value_obj
+            data["equationSlopeUncertainty"] = obj
+
+        if self.datasetRange:
+            value_obj = self.datasetRange
+            obj = value_obj
+            data["method"] = obj
+
+        if self.datasetRange:
+            value_obj = self.datasetRange
+            obj = value_obj
+            data["methodDetail"] = obj
+
+        if self.equation:
+            value_obj = self.equation
+            obj = value_obj
+            data["equation"] = obj
+
+        if self.notes:
+            value_obj = self.notes
+            obj = value_obj
+            data["notes"] = obj
+
+        if self.proxyDataset:
+            value_obj = self.proxyDataset
+            obj = value_obj
+            data["proxyDataset"] = obj
+
+        if self.seasonality:
+            value_obj = self.seasonality
+            obj = value_obj
+            data["hasSeasonality"] = obj
+
+        if self.targetDataset:
+            value_obj = self.targetDataset
+            obj = value_obj
+            data["targetDataset"] = obj
+
+        if self.uncertainty:
+            value_obj = self.uncertainty
+            obj = value_obj
+            data["uncertainty"] = obj
+
+        for key in self.misc:
+            value = self.misc[key]
+            data[key] = value
+                   
+        return data
+
     def set_non_standard_property(self, key, value):
         if key not in self.misc:
             self.misc[key] = value
