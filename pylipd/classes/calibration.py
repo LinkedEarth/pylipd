@@ -12,6 +12,12 @@ class Calibration:
         self.dOI: str = None
         self.datasetRange: str = None
         self.equation: str = None
+        self.equationIntercept: str = None
+        self.equationR2: str = None
+        self.equationSlope: str = None
+        self.equationSlopeUncertainty: str = None
+        self.method: str = None
+        self.methodDetail: str = None
         self.notes: str = None
         self.proxyDataset: str = None
         self.seasonality: str = None
@@ -52,6 +58,42 @@ class Calibration:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.equation = obj
+        
+            elif key == "hasEquationIntercept":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.equationIntercept = obj
+        
+            elif key == "hasEquationR2":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.equationR2 = obj
+        
+            elif key == "hasEquationSlope":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.equationSlope = obj
+        
+            elif key == "hasEquationSlopeUncertainty":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.equationSlopeUncertainty = obj
+        
+            elif key == "hasMethod":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.method = obj
+        
+            elif key == "hasMethodDetail":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.methodDetail = obj
         
             elif key == "hasNotes":
                 for val in value:
@@ -130,6 +172,66 @@ class Calibration:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasEquation"] = [obj]
+                
+
+        if self.equationIntercept:
+            value_obj = self.equationIntercept
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasEquationIntercept"] = [obj]
+                
+
+        if self.equationR2:
+            value_obj = self.equationR2
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasEquationR2"] = [obj]
+                
+
+        if self.equationSlope:
+            value_obj = self.equationSlope
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasEquationSlope"] = [obj]
+                
+
+        if self.equationSlopeUncertainty:
+            value_obj = self.equationSlopeUncertainty
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasEquationSlopeUncertainty"] = [obj]
+                
+
+        if self.method:
+            value_obj = self.method
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasMethod"] = [obj]
+                
+
+        if self.methodDetail:
+            value_obj = self.methodDetail
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasMethodDetail"] = [obj]
                 
 
         if self.notes:
@@ -221,40 +323,40 @@ class Calibration:
             obj = value_obj
             data["datasetRange"] = obj
 
-        if self.datasetRange:
-            value_obj = self.datasetRange
-            obj = value_obj
-            data["equationIntercept"] = obj
-
-        if self.datasetRange:
-            value_obj = self.datasetRange
-            obj = value_obj
-            data["equationR2"] = obj
-
-        if self.datasetRange:
-            value_obj = self.datasetRange
-            obj = value_obj
-            data["equationSlope"] = obj
-
-        if self.datasetRange:
-            value_obj = self.datasetRange
-            obj = value_obj
-            data["equationSlopeUncertainty"] = obj
-
-        if self.datasetRange:
-            value_obj = self.datasetRange
-            obj = value_obj
-            data["method"] = obj
-
-        if self.datasetRange:
-            value_obj = self.datasetRange
-            obj = value_obj
-            data["methodDetail"] = obj
-
         if self.equation:
             value_obj = self.equation
             obj = value_obj
             data["equation"] = obj
+
+        if self.equationIntercept:
+            value_obj = self.equationIntercept
+            obj = value_obj
+            data["equationIntercept"] = obj
+
+        if self.equationR2:
+            value_obj = self.equationR2
+            obj = value_obj
+            data["equationR2"] = obj
+
+        if self.equationSlope:
+            value_obj = self.equationSlope
+            obj = value_obj
+            data["equationSlope"] = obj
+
+        if self.equationSlopeUncertainty:
+            value_obj = self.equationSlopeUncertainty
+            obj = value_obj
+            data["equationSlopeUncertainty"] = obj
+
+        if self.method:
+            value_obj = self.method
+            obj = value_obj
+            data["method"] = obj
+
+        if self.methodDetail:
+            value_obj = self.methodDetail
+            obj = value_obj
+            data["methodDetail"] = obj
 
         if self.notes:
             value_obj = self.notes
@@ -309,19 +411,19 @@ class Calibration:
             elif key == "equationIntercept":
                     value = pvalue
                     obj = value
-                    self.datasetRange = obj
+                    self.equationIntercept = obj
             elif key == "equationR2":
                     value = pvalue
                     obj = value
-                    self.datasetRange = obj
+                    self.equationR2 = obj
             elif key == "equationSlope":
                     value = pvalue
                     obj = value
-                    self.datasetRange = obj
+                    self.equationSlope = obj
             elif key == "equationSlopeUncertainty":
                     value = pvalue
                     obj = value
-                    self.datasetRange = obj
+                    self.equationSlopeUncertainty = obj
             elif key == "hasSeasonality":
                     value = pvalue
                     obj = value
@@ -329,11 +431,11 @@ class Calibration:
             elif key == "method":
                     value = pvalue
                     obj = value
-                    self.datasetRange = obj
+                    self.method = obj
             elif key == "methodDetail":
                     value = pvalue
                     obj = value
-                    self.datasetRange = obj
+                    self.methodDetail = obj
             elif key == "notes":
                     value = pvalue
                     obj = value
@@ -387,6 +489,42 @@ class Calibration:
 
     def setEquation(self, equation:str):
         self.equation = equation
+    
+    def getEquationIntercept(self) -> str:
+        return self.equationIntercept
+
+    def setEquationIntercept(self, equationIntercept:str):
+        self.equationIntercept = equationIntercept
+    
+    def getEquationR2(self) -> str:
+        return self.equationR2
+
+    def setEquationR2(self, equationR2:str):
+        self.equationR2 = equationR2
+    
+    def getEquationSlope(self) -> str:
+        return self.equationSlope
+
+    def setEquationSlope(self, equationSlope:str):
+        self.equationSlope = equationSlope
+    
+    def getEquationSlopeUncertainty(self) -> str:
+        return self.equationSlopeUncertainty
+
+    def setEquationSlopeUncertainty(self, equationSlopeUncertainty:str):
+        self.equationSlopeUncertainty = equationSlopeUncertainty
+    
+    def getMethod(self) -> str:
+        return self.method
+
+    def setMethod(self, method:str):
+        self.method = method
+    
+    def getMethodDetail(self) -> str:
+        return self.methodDetail
+
+    def setMethodDetail(self, methodDetail:str):
+        self.methodDetail = methodDetail
     
     def getNotes(self) -> str:
         return self.notes

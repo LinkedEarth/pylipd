@@ -151,13 +151,19 @@ class PaleoData:
         if len(self.measurementTables):
             data["measurementTable"] = []
         for value_obj in self.measurementTables:
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["measurementTable"].append(obj)
 
         if len(self.modeledBy):
             data["model"] = []
         for value_obj in self.modeledBy:
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["model"].append(obj)
 
         if self.name:
@@ -180,11 +186,17 @@ class PaleoData:
                 self.id = pvalue
             elif key == "measurementTable":
                 for value in pvalue:
-                    obj = DataTable.from_json(value)
+                    if type(value) is dict:
+                        obj = DataTable.from_json(value)
+                    else:
+                        obj = value
                     self.measurementTables.append(obj)
             elif key == "model":
                 for value in pvalue:
-                    obj = Model.from_json(value)
+                    if type(value) is dict:
+                        obj = Model.from_json(value)
+                    else:
+                        obj = value
                     self.modeledBy.append(obj)
             elif key == "paleoDataName":
                     value = pvalue

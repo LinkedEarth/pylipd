@@ -5,7 +5,6 @@
 
 import re
 from pylipd.utils import uniqid
-from pylipd.classes.integrationtime import IntegrationTime
 from pylipd.classes.interpretationseasonality import InterpretationSeasonality
 from pylipd.classes.interpretationvariable import InterpretationVariable
 
@@ -13,8 +12,7 @@ class Interpretation:
 
     def __init__(self):
         self.basis: str = None
-        self.integrationTime: IntegrationTime = None
-        self.interpretationDirection: str = None
+        self.direction: str = None
         self.local: str = None
         self.mathematicalRelation: str = None
         self.notes: str = None
@@ -51,20 +49,11 @@ class Interpretation:
                         obj = val["@value"]                        
                     self.basis = obj
         
-            elif key == "hasIntegrationTime":
-                for val in value:
-                    if "@id" in val:
-                        obj = IntegrationTime.from_data(val["@id"], data)
-                    else:
-                        obj = val["@value"]
-                                    
-                    self.integrationTime = obj
-        
-            elif key == "hasInterpretationDirection":
+            elif key == "hasDirection":
                 for val in value:
                     if "@value" in val:
                         obj = val["@value"]                        
-                    self.interpretationDirection = obj
+                    self.direction = obj
         
             elif key == "hasMathematicalRelation":
                 for val in value:
@@ -167,31 +156,14 @@ class Interpretation:
             data[self.id]["hasBasis"] = [obj]
                 
 
-        if self.integrationTime:
-            value_obj = self.integrationTime
-            if type(value_obj) is str:
-                obj = {
-                    "@value": value_obj,
-                    "@type": "literal",
-                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-                }
-            else:
-                obj = {
-                    "@id": value_obj.id,
-                    "@type": "uri"
-                }
-                data = value_obj.to_data(data)
-            data[self.id]["hasIntegrationTime"] = [obj]
-                
-
-        if self.interpretationDirection:
-            value_obj = self.interpretationDirection
+        if self.direction:
+            value_obj = self.direction
             obj = {
                 "@value": value_obj,
                 "@type": "literal",
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
-            data[self.id]["hasInterpretationDirection"] = [obj]
+            data[self.id]["hasDirection"] = [obj]
                 
 
         if self.local:
@@ -376,20 +348,15 @@ class Interpretation:
             obj = value_obj
             data["basis"] = obj
 
-        if self.integrationTime:
-            value_obj = self.integrationTime
-            obj = value_obj.to_json()
-            data["integrationTime"] = obj
-
-        if self.interpretationDirection:
-            value_obj = self.interpretationDirection
+        if self.direction:
+            value_obj = self.direction
             obj = value_obj
             data["direction"] = obj
 
         if self.local:
             value_obj = self.local
             obj = value_obj
-            data["local"] = obj
+            data["isLocal"] = obj
 
         if self.mathematicalRelation:
             value_obj = self.mathematicalRelation
@@ -413,22 +380,34 @@ class Interpretation:
 
         if self.seasonality:
             value_obj = self.seasonality
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["seasonality"] = obj
 
         if self.seasonalityGeneral:
             value_obj = self.seasonalityGeneral
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["seasonalityGeneral"] = obj
 
         if self.seasonalityOriginal:
             value_obj = self.seasonalityOriginal
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["seasonalityOriginal"] = obj
 
         if self.variable:
             value_obj = self.variable
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["variable"] = obj
 
         if self.variableDetail:
@@ -466,12 +445,8 @@ class Interpretation:
             elif key == "direction":
                     value = pvalue
                     obj = value
-                    self.interpretationDirection = obj
-            elif key == "integrationTime":
-                    value = pvalue
-                    obj = IntegrationTime.from_json(value)
-                    self.integrationTime = obj
-            elif key == "local":
+                    self.direction = obj
+            elif key == "isLocal":
                     value = pvalue
                     obj = value
                     self.local = obj
@@ -545,17 +520,11 @@ class Interpretation:
     def setBasis(self, basis:str):
         self.basis = basis
     
-    def getIntegrationTime(self) -> IntegrationTime:
-        return self.integrationTime
+    def getDirection(self) -> str:
+        return self.direction
 
-    def setIntegrationTime(self, integrationTime:IntegrationTime):
-        self.integrationTime = integrationTime
-    
-    def getInterpretationDirection(self) -> str:
-        return self.interpretationDirection
-
-    def setInterpretationDirection(self, interpretationDirection:str):
-        self.interpretationDirection = interpretationDirection
+    def setDirection(self, direction:str):
+        self.direction = direction
     
     def getMathematicalRelation(self) -> str:
         return self.mathematicalRelation

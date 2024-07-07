@@ -143,7 +143,10 @@ class DataTable:
         if len(self.variables):
             data["columns"] = []
         for value_obj in self.variables:
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["columns"].append(obj)
 
         if self.fileName:
@@ -171,7 +174,10 @@ class DataTable:
                 self.id = pvalue
             elif key == "columns":
                 for value in pvalue:
-                    obj = Variable.from_json(value)
+                    if type(value) is dict:
+                        obj = Variable.from_json(value)
+                    else:
+                        obj = value
                     self.variables.append(obj)
             elif key == "filename":
                     value = pvalue

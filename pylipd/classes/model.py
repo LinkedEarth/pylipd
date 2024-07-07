@@ -177,19 +177,28 @@ class Model:
         if len(self.distributionTables):
             data["distributionTable"] = []
         for value_obj in self.distributionTables:
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["distributionTable"].append(obj)
 
         if len(self.ensembleTables):
             data["ensembleTable"] = []
         for value_obj in self.ensembleTables:
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["ensembleTable"].append(obj)
 
         if len(self.summaryTables):
             data["summaryTable"] = []
         for value_obj in self.summaryTables:
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["summaryTable"].append(obj)
 
         if self.code:
@@ -212,11 +221,17 @@ class Model:
                 self.id = pvalue
             elif key == "distributionTable":
                 for value in pvalue:
-                    obj = DataTable.from_json(value)
+                    if type(value) is dict:
+                        obj = DataTable.from_json(value)
+                    else:
+                        obj = value
                     self.distributionTables.append(obj)
             elif key == "ensembleTable":
                 for value in pvalue:
-                    obj = DataTable.from_json(value)
+                    if type(value) is dict:
+                        obj = DataTable.from_json(value)
+                    else:
+                        obj = value
                     self.ensembleTables.append(obj)
             elif key == "method":
                     value = pvalue
@@ -224,7 +239,10 @@ class Model:
                     self.code = obj
             elif key == "summaryTable":
                 for value in pvalue:
-                    obj = DataTable.from_json(value)
+                    if type(value) is dict:
+                        obj = DataTable.from_json(value)
+                    else:
+                        obj = value
                     self.summaryTables.append(obj)
             else:
                 self.set_non_standard_property(key, pvalue)

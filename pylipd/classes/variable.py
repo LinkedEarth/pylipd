@@ -658,18 +658,27 @@ class Variable:
         if len(self.calibratedVias):
             data["calibration"] = []
         for value_obj in self.calibratedVias:
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["calibration"].append(obj)
 
         if len(self.interpretations):
             data["interpretation"] = []
         for value_obj in self.interpretations:
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["interpretation"].append(obj)
 
         if self.archiveType:
             value_obj = self.archiveType
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["archiveType"] = obj
 
         if self.columnNumber:
@@ -734,7 +743,10 @@ class Variable:
 
         if self.partOfCompilation:
             value_obj = self.partOfCompilation
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["inCompilationBeta"] = obj
 
         if self.physicalSample:
@@ -749,32 +761,50 @@ class Variable:
 
         if self.proxy:
             value_obj = self.proxy
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["proxy"] = obj
 
         if self.proxyGeneral:
             value_obj = self.proxyGeneral
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["proxyGeneral"] = obj
 
         if self.resolution:
             value_obj = self.resolution
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["resolution"] = obj
 
         if self.standardVariable:
             value_obj = self.standardVariable
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["hasStandardVariable"] = obj
 
         if self.uncertainty:
             value_obj = self.uncertainty
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["uncertainty"] = obj
 
         if self.units:
             value_obj = self.units
-            obj = value_obj.to_json()
+            if hasattr(value_obj, "to_json"):
+                obj = value_obj.to_json()
+            else:
+                obj = value_obj
             data["units"] = obj
 
         if self.values:
@@ -815,7 +845,10 @@ class Variable:
                     self.archiveType = obj
             elif key == "calibration":
                 for value in pvalue:
-                    obj = Calibration.from_json(value)
+                    if type(value) is dict:
+                        obj = Calibration.from_json(value)
+                    else:
+                        obj = value
                     self.calibratedVias.append(obj)
             elif key == "compilation_nest":
                     value = pvalue
@@ -859,11 +892,17 @@ class Variable:
                     self.values = obj
             elif key == "inCompilationBeta":
                     value = pvalue
-                    obj = Compilation.from_json(value)
+                    if type(value) is dict:
+                        obj = Compilation.from_json(value)
+                    else:
+                        obj = value
                     self.partOfCompilation = obj
             elif key == "interpretation":
                 for value in pvalue:
-                    obj = Interpretation.from_json(value)
+                    if type(value) is dict:
+                        obj = Interpretation.from_json(value)
+                    else:
+                        obj = value
                     self.interpretations.append(obj)
             elif key == "isComposite":
                     value = pvalue
@@ -903,11 +942,17 @@ class Variable:
                     self.proxyGeneral = obj
             elif key == "resolution":
                     value = pvalue
-                    obj = Resolution.from_json(value)
+                    if type(value) is dict:
+                        obj = Resolution.from_json(value)
+                    else:
+                        obj = value
                     self.resolution = obj
             elif key == "uncertainty":
                     value = pvalue
-                    obj = Uncertainty.from_json(value)
+                    if type(value) is dict:
+                        obj = Uncertainty.from_json(value)
+                    else:
+                        obj = value
                     self.uncertainty = obj
             elif key == "units":
                     value = pvalue

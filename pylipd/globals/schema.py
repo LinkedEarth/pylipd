@@ -584,80 +584,18 @@ SCHEMA = {
             'class_range': 'InterpretationSeasonality',
             'skip_auto_convert_to_json': True
         },
-        'integrationTime': {
-            'name': 'hasIntegrationTime',
-            'type': 'Individual',
-            'schema': 'IntegrationTime'
-        },
         'notes': { 'name': 'hasNotes' },
         'rank': { 'name': 'hasRank' }, # TODO: Auto-create if it doesnt exist
         'basis': { 'name': 'hasBasis' },
         'scope': { 'name': 'hasScope' },
         'mathematicalRelation': { 'name': 'hasMathematicalRelation' },
         'direction': { 
-            'name': 'hasInterpretationDirection', 
+            'name': 'hasDirection', 
             'alternates': ['interpDirection']
         },
-        'local': { 
+        'isLocal': { 
             'name': 'isLocal', 
             'alternates': ['local']
-        }
-    },
-    'IsotopeInterpretation': {
-        '@id': {
-            '{@parent.@id}',
-            '.IsotopeInterpretation',
-            '{@index}'
-        },
-        '@fromJson': ['_wrap_integration_time'],
-        '@toJson': ['_unwrap_integration_time'],
-        'integrationTime': {
-            'name': 'hasIntegrationTime',
-            'type': 'Individual',
-            'schema': 'IntegrationTime'
-        },
-        'independentVariable': {
-            'name': 'hasIndependentVariable',
-            'schema': 'IndependentVariable',
-            'multiple': True
-        }
-    },
-    'IntegrationTime': {
-        '@fromJson': ['_wrap_uncertainty'],
-        '@toJson': ['_unwrap_uncertainty'],
-        'basis': { 
-            'name': 'relevantQuote' 
-        },
-        'units': { 
-            'name': 'hasUnits',
-            'type': 'Individual',
-            'synonyms': SYNONYMS['UNITS']['PaleoUnit'],
-            'class_range': 'PaleoUnit'
-        },
-        'independentVariable': {
-            'name': 'hasIndependentVariable',
-            'schema': 'IndependentVariable',
-            'multiple': True
-        }
-    },
-    'IndependentVariable': {
-        '@id': {
-            '{@parent.@id}',
-            '.',
-            '{name}'
-        },
-        'basis': { 
-            'name': 'relevantQuote' 
-        },
-        'direction': {
-            'name': 'interpretationDirection',
-            'alternates': ['dir', 'interpDir', 'interpDirection']
-        },
-        'mathematicalRelation': { 
-            'name': 'equation' 
-        },
-        'rank': { 
-            'name': 'hasRank' 
         }
     },
     'Calibration': {
@@ -676,22 +614,22 @@ SCHEMA = {
             'alternates': ['calibrationEquation']
         },
         'equationIntercept': {
-            'name': 'hasDatasetRange'
+            'name': 'hasEquationIntercept'
         },
         'equationR2': {
-            'name': 'hasDatasetRange'
+            'name': 'hasEquationR2'
         },
         'equationSlope': {
-            'name': 'hasDatasetRange'
+            'name': 'hasEquationSlope'
         },
         'equationSlopeUncertainty': {
-            'name': 'hasDatasetRange'
+            'name': 'hasEquationSlopeUncertainty'
         },
         'method': {
-            'name': 'hasDatasetRange'
+            'name': 'hasMethod'
         },
         'methodDetail': {
-            'name': 'hasDatasetRange'
+            'name': 'hasMethodDetail'
         },
         'proxyDataset': {
             'name': 'hasProxyDataset',
