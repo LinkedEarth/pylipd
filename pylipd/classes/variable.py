@@ -14,7 +14,6 @@ from pylipd.classes.paleoproxygeneral import PaleoProxyGeneral
 from pylipd.classes.paleounit import PaleoUnit
 from pylipd.classes.paleovariable import PaleoVariable
 from pylipd.classes.resolution import Resolution
-from pylipd.classes.uncertainty import Uncertainty
 
 class Variable:
 
@@ -43,7 +42,9 @@ class Variable:
         self.proxyGeneral: PaleoProxyGeneral = None
         self.resolution: Resolution = None
         self.standardVariable: PaleoVariable = None
-        self.uncertainty: Uncertainty = None
+        self.uncertainty: str = None
+        self.uncertaintyAnalytical: str = None
+        self.uncertaintyReproducibility: str = None
         self.units: PaleoUnit = None
         self.values: str = None
         self.variableId: str = None
@@ -200,12 +201,21 @@ class Variable:
         
             elif key == "hasUncertainty":
                 for val in value:
-                    if "@id" in val:
-                        obj = Uncertainty.from_data(val["@id"], data)
-                    else:
-                        obj = val["@value"]
-                                    
+                    if "@value" in val:
+                        obj = val["@value"]                        
                     self.uncertainty = obj
+        
+            elif key == "hasUncertaintyAnalytical":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.uncertaintyAnalytical = obj
+        
+            elif key == "hasUncertaintyReproducibility":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.uncertaintyReproducibility = obj
         
             elif key == "hasUnits":
                 for val in value:
@@ -564,19 +574,32 @@ class Variable:
 
         if self.uncertainty:
             value_obj = self.uncertainty
-            if type(value_obj) is str:
-                obj = {
-                    "@value": value_obj,
-                    "@type": "literal",
-                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-                }
-            else:
-                obj = {
-                    "@id": value_obj.id,
-                    "@type": "uri"
-                }
-                data = value_obj.to_data(data)
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
             data[self.id]["hasUncertainty"] = [obj]
+                
+
+        if self.uncertaintyAnalytical:
+            value_obj = self.uncertaintyAnalytical
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasUncertaintyAnalytical"] = [obj]
+                
+
+        if self.uncertaintyReproducibility:
+            value_obj = self.uncertaintyReproducibility
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasUncertaintyReproducibility"] = [obj]
                 
 
         if self.units:
@@ -793,11 +816,18 @@ class Variable:
 
         if self.uncertainty:
             value_obj = self.uncertainty
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj
             data["uncertainty"] = obj
+
+        if self.uncertaintyAnalytical:
+            value_obj = self.uncertaintyAnalytical
+            obj = value_obj
+            data["uncertaintyAnalytical"] = obj
+
+        if self.uncertaintyReproducibility:
+            value_obj = self.uncertaintyReproducibility
+            obj = value_obj
+            data["uncertaintyReproducibility"] = obj
 
         if self.units:
             value_obj = self.units
@@ -949,11 +979,16 @@ class Variable:
                     self.resolution = obj
             elif key == "uncertainty":
                     value = pvalue
-                    if type(value) is dict:
-                        obj = Uncertainty.from_json(value)
-                    else:
-                        obj = value
+                    obj = value
                     self.uncertainty = obj
+            elif key == "uncertaintyAnalytical":
+                    value = pvalue
+                    obj = value
+                    self.uncertaintyAnalytical = obj
+            elif key == "uncertaintyReproducibility":
+                    value = pvalue
+                    obj = value
+                    self.uncertaintyReproducibility = obj
             elif key == "units":
                     value = pvalue
                     obj = PaleoUnit.from_synonym(re.sub("^.*?#", "", value))
@@ -1124,11 +1159,23 @@ class Variable:
     def setStandardVariable(self, standardVariable:PaleoVariable):
         self.standardVariable = standardVariable
     
-    def getUncertainty(self) -> Uncertainty:
+    def getUncertainty(self) -> str:
         return self.uncertainty
 
-    def setUncertainty(self, uncertainty:Uncertainty):
+    def setUncertainty(self, uncertainty:str):
         self.uncertainty = uncertainty
+    
+    def getUncertaintyAnalytical(self) -> str:
+        return self.uncertaintyAnalytical
+
+    def setUncertaintyAnalytical(self, uncertaintyAnalytical:str):
+        self.uncertaintyAnalytical = uncertaintyAnalytical
+    
+    def getUncertaintyReproducibility(self) -> str:
+        return self.uncertaintyReproducibility
+
+    def setUncertaintyReproducibility(self, uncertaintyReproducibility:str):
+        self.uncertaintyReproducibility = uncertaintyReproducibility
     
     def getUnits(self) -> PaleoUnit:
         return self.units

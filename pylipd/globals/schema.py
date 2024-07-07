@@ -435,9 +435,13 @@ SCHEMA = {
             'type': 'Individual',
         },
         'uncertainty': { 
-            'name': 'hasUncertainty',
-            'schema': 'Uncertainty', 
-            'type': 'Individual'
+            'name': 'hasUncertainty'         
+        },
+        'uncertaintyAnalytical': { 
+            'name': 'hasUncertaintyAnalytical'
+        },
+        'uncertaintyReproducibility': { 
+            'name': 'hasUncertaintyReproducibility'
         },
         'proxy': {
             'name': 'hasProxy',
@@ -656,16 +660,6 @@ SCHEMA = {
         '@id': ['{name}'],
         'name': {
             'name': 'hasName'
-        }
-    },
-    'Uncertainty': {
-        '@id': {
-            '{@parent.@id}',
-            '.Uncertainty',
-            '{@index}'
-        },
-        'uncertaintyType': { 
-            'name': 'hasUncertaintyType'
         }
     }
 }
