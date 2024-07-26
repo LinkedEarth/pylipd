@@ -1,5 +1,5 @@
 from importlib.metadata import version
-__version__ = version('pyleoclim')
+__version__ = version('pylipd')
 
 
 from .utils import *
