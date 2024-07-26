@@ -546,6 +546,7 @@ SCHEMA = {
             '.Interpretation',
             '{@index}'
         ],
+        '@fromJson': ['_add_interpretation_rank'],
         '@toJson_pre': [
             '_set_units_label',
             '_set_seasonality_labels',
