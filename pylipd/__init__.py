@@ -1,3 +1,5 @@
-__version__ = "1.3.5"
+from importlib.metadata import version
+__version__ = version('pyleoclim')
+
 
 from .utils import *
