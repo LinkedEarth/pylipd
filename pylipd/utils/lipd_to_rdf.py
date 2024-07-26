@@ -373,7 +373,6 @@ class LipdToRDF:
         if "rank" not in obj or type(obj["rank"]) != int:
             rank = obj["@index"] - 1
             obj["rank"] = rank
-        print(obj["@id"], obj["rank"])
         return [obj, objhash, []]
     
     def _wrap_uncertainty(self, obj, objhash) :

@@ -507,6 +507,8 @@ class RDFToLiPD:
                 id = ds["hasArchiveType"]["@id"]
                 if id in RSYNONYMS:
                     ds["archiveType"] = RSYNONYMS[id]
+                else:
+                    ds["archiveType"] = ds["hasArchiveType"]["label"]
             del ds["hasArchiveType"]
         return ds
 
@@ -517,6 +519,8 @@ class RDFToLiPD:
                 id = var["hasStandardVariable"]["@id"]
                 if id in RSYNONYMS:
                     var["variableName"] = RSYNONYMS[id]
+                else:
+                    var["variableName"] = var["hasStandardVariable"]["label"]
             del var["hasStandardVariable"]
         return var
     
@@ -527,6 +531,8 @@ class RDFToLiPD:
                 id = var["hasUnits"]["@id"]
                 if id in RSYNONYMS:
                     var["units"] = RSYNONYMS[id]
+                else:
+                    var["units"] = var["hasUnits"]["label"]
             del var["hasUnits"]
         return var
     
@@ -537,6 +543,8 @@ class RDFToLiPD:
                 id = var["hasProxy"]["@id"]
                 if id in RSYNONYMS:
                     var["proxy"] = RSYNONYMS[id]
+                else:
+                    var["proxy"] = var["hasProxy"]["label"]
             del var["hasProxy"]
         return var
     
@@ -547,6 +555,8 @@ class RDFToLiPD:
                 id = var["hasProxyGeneral"]["@id"]
                 if id in RSYNONYMS:
                     var["proxyGeneral"] = RSYNONYMS[id]
+                else:
+                    var["proxyGeneral"] = var["hasProxyGeneral"]["label"]
             del var["hasProxyGeneral"]
         return var
     
@@ -564,6 +574,8 @@ class RDFToLiPD:
                     nid = convs[pid]
                     if id in RSYNONYMS:
                         interp[nid] = RSYNONYMS[id]
+                    else:
+                        interp[nid] = interp[pid]["label"]
                 del interp[pid]
         return interp
 
