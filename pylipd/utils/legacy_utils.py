@@ -46,6 +46,7 @@ class LiPD_Legacy:
             _pc = "chronData"
         _root["mode"] = _pc
         _root["time_id"] = time
+        _root["archiveType"] = d["archiveType"]
         try:
             # Build the root level data.
             # This will serve as the template for which column data will be added onto later.
