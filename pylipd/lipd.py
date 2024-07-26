@@ -393,7 +393,7 @@ class LiPD(RDFGraph):
         
         return bibs, df       
 
-    def get_timeseries(self, dsnames, to_dataframe=False):
+    def get_timeseries(self, dsnames, to_dataframe=False, mode="paleo", time="age"):
         '''Get Legacy LiPD like Time Series Object (tso)
 
         Parameters
@@ -434,7 +434,7 @@ class LiPD(RDFGraph):
         if type(dsnames)==str:
             dsnames=[dsnames]
         
-        ts = self._get_timeseries(dsnames)
+        ts = self._get_timeseries(dsnames, mode=mode, time=time)
         if to_dataframe == False:
             return ts
         elif to_dataframe == True:
@@ -448,14 +448,14 @@ class LiPD(RDFGraph):
             
             return ts, df
 
-    def _get_timeseries(self, dsnames):
+    def _get_timeseries(self, dsnames, mode="paleo", time="age"):
         timeseries = {}
         for dsname in dsnames:
             converter = RDFToLiPD(self.graph)
             d = converter.convert_to_json(dsname)
             print("Extracting timeseries from dataset: " + dsname + " ...")
             if len(d.items()):
-                tss = LiPD_Legacy().extract(d)
+                tss = LiPD_Legacy().extract(d, mode=mode, time=time)
                 timeseries[dsname] = tss
         return timeseries
     
