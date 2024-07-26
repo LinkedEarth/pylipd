@@ -24,6 +24,8 @@ import pytest
 from pylipd.lipd import LiPD
 import urllib as urllib
 
+
+
 class TestLiPDLoad():
     
     def test_load_t0(self, odp846):
@@ -181,7 +183,10 @@ class TestRdf():
     
     def test_convert_to_rdf_t0(self):
         lipd = LiPD()
-        lipd.convert_lipd_dir_to_rdf("./examples/data/Pages2k", "all-lipd.nq")
+        try:
+            lipd.convert_lipd_dir_to_rdf("../data/Pages2k", "all-lipd.nq")
+        except:
+            lipd.convert_lipd_dir_to_rdf("./examples/data/Pages2k", "all-lipd.nq")
 
         
                 

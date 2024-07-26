@@ -43,7 +43,12 @@ class TestGetAll():
         D=pages2k
         S = D.to_lipd_series()
         names = S.get_timeseries_essentials()
-
+    
+    def test_proxy_t0(self, pages2k):
+        D=pages2k
+        S = D.to_lipd_series()
+        names = S.get_all_proxy()
+        
 class TestFiler():
     
     def test_name_t0(self,pages2k):
@@ -52,5 +57,13 @@ class TestFiler():
         Sfiltered = S.filter_by_name('temperature')
         df=Sfiltered.get_timeseries_essentials()
         assert len(df.index)==11
+    
+    def test_proxy_t0(self,pages2k):
+        D=pages2k
+        S = D.to_lipd_series()
+        Sfiltered = S.filter_by_proxy('ring width')
+        v = Sfiltered.get_all_proxy()
+        assert len(v)==1
+        
 
         

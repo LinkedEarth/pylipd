@@ -134,6 +134,19 @@ QUERY_DISTINCT_VARIABLE="""
 
 """
 
+QUERY_DISTINCT_PROXY = """
+    PREFIX le: <http://linked.earth/ontology#>
+    
+    SELECT distinct ?proxy 
+    WHERE {
+        OPTIONAL{?uri le:hasProxy ?proxyObj .
+                 ?proxyObj rdfs:label ?proxy .}
+        ?uri le:hasVariableId ?TSID
+    }
+    
+
+"""
+
 QUERY_VARIABLE = """
     PREFIX le: <http://linked.earth/ontology#>
 
@@ -251,6 +264,18 @@ QUERY_FILTER_VARIABLE_NAME = """
         ?uri le:hasVariableId ?id .
         ?uri le:hasName ?name .
         FILTER regex(?name, "[name].*", "i") .
+        ?uri le:foundInDataset ?dsuri .
+        ?uri le:foundInDatasetName ?dataSetName .
+        ?uri le:foundInTable ?tableuri .
+    }
+"""
+
+QUERY_FILTER_VARIABLE_PROXY = """
+    SELECT ?uri ?dsuri ?dsname ?tableuri ?id ?proxy WHERE {
+        ?uri le:hasVariableId ?id .
+        ?uri le:hasProxy ?proxyObj .
+        ?proxyObj rdfs:label ?proxy .
+        FILTER regex(?proxy, "[proxy].*", "i") .
         ?uri le:foundInDataset ?dsuri .
         ?uri le:foundInDatasetName ?dataSetName .
         ?uri le:foundInTable ?tableuri .
