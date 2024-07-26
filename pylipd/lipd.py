@@ -459,7 +459,7 @@ class LiPD(RDFGraph):
                 timeseries[dsname] = tss
         return timeseries
     
-    def get_timeseries_essentials(self, dsnames, mode='paleo'):
+    def get_timeseries_essentials(self, dsnames=None, mode='paleo'):
         ''' Returns specific properties for timeseries: 'dataSetName', 'archiveType', 'geo_meanLat', 'geo_meanLon',
                'geo_meanElev', 'paleoData_variableName', 'paleoData_values',
                'paleoData_units', 'paleoData_proxy' (paleo only), 'paleoData_proxyGeneral' (paleo only),

@@ -132,7 +132,7 @@ class TestGet():
     
     def test_get_timeseries_essentials_t1(self, odp846):
         D = odp846
-        df = D.get_timeseries_essentials(dsname=D.get_all_dataset_names()[0])
+        df = D.get_timeseries_essentials(dsnames=D.get_all_dataset_names())
     
     @pytest.mark.parametrize('ensname',['year','age'])
     def test_ens_t1(self,odp846, ensname):
