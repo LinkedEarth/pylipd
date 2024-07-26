@@ -165,8 +165,8 @@ SCHEMA = {
             '{identifier.0.id|@parent.dataSetName}',
             '{index}'
         ],
-        '@fromJson': ['_set_identifier_properties'],
-        '@toJson': ['_create_publication_identifier'],
+        # '@fromJson': ['_set_identifier_properties'],
+        # '@toJson': ['_create_publication_identifier'],
         'title': { 
             'name': 'hasTitle' 
         },
@@ -223,7 +223,8 @@ SCHEMA = {
         },
         'doi': {
             'name': 'hasDOI',
-            'type': 'string'
+            'type': 'string',
+            'alternates': ['DOI']
         },
         'author': {
             'name': 'hasAuthor',
