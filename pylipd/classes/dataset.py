@@ -22,6 +22,7 @@ class Dataset:
         self.chronData: list[ChronData] = []
         self.collectionName: str = None
         self.collectionYear: str = None
+        self.compilationNest: str = None
         self.contributor: Person = None
         self.creators: list[Person] = []
         self.dataSource: str = None
@@ -89,6 +90,12 @@ class Dataset:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.collectionYear = obj
+        
+            elif key == "hasCompilationNest":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.compilationNest = obj
         
             elif key == "hasContributor":
                 for val in value:
@@ -370,6 +377,16 @@ class Dataset:
             data[self.id]["hasCollectionYear"] = [obj]
                 
 
+        if self.compilationNest:
+            value_obj = self.compilationNest
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasCompilationNest"] = [obj]
+                
+
         if self.contributor:
             value_obj = self.contributor
             if type(value_obj) is str:
@@ -583,6 +600,11 @@ class Dataset:
             obj = value_obj
             data["collectionYear"] = obj
 
+        if self.compilationNest:
+            value_obj = self.compilationNest
+            obj = value_obj
+            data["compilation_nest"] = obj
+
         if self.contributor:
             value_obj = self.contributor
             if hasattr(value_obj, "to_json"):
@@ -673,6 +695,10 @@ class Dataset:
                     value = pvalue
                     obj = value
                     self.collectionYear = obj
+            elif key == "compilation_nest":
+                    value = pvalue
+                    obj = value
+                    self.compilationNest = obj
             elif key == "creator":
                 for value in pvalue:
                     if type(value) is dict:
@@ -802,6 +828,12 @@ class Dataset:
 
     def setCollectionYear(self, collectionYear:str):
         self.collectionYear = collectionYear
+    
+    def getCompilationNest(self) -> str:
+        return self.compilationNest
+
+    def setCompilationNest(self, compilationNest:str):
+        self.compilationNest = compilationNest
     
     def getContributor(self) -> Person:
         return self.contributor

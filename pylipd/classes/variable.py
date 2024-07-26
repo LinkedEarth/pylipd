@@ -21,7 +21,6 @@ class Variable:
         self.archiveType: ArchiveType = None
         self.calibratedVias: list[Calibration] = []
         self.columnNumber: int = None
-        self.compilationNest: str = None
         self.composite: bool = None
         self.description: str = None
         self.foundInDataset: None = None
@@ -97,12 +96,6 @@ class Variable:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.columnNumber = obj
-        
-            elif key == "hasCompilationNest":
-                for val in value:
-                    if "@value" in val:
-                        obj = val["@value"]                        
-                    self.compilationNest = obj
         
             elif key == "hasDescription":
                 for val in value:
@@ -339,16 +332,6 @@ class Variable:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#integer"
             }
             data[self.id]["hasColumnNumber"] = [obj]
-                
-
-        if self.compilationNest:
-            value_obj = self.compilationNest
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-            }
-            data[self.id]["hasCompilationNest"] = [obj]
                 
 
         if self.composite:
@@ -709,11 +692,6 @@ class Variable:
             obj = value_obj
             data["number"] = obj
 
-        if self.compilationNest:
-            value_obj = self.compilationNest
-            obj = value_obj
-            data["compilation_nest"] = obj
-
         if self.composite:
             value_obj = self.composite
             obj = value_obj
@@ -880,10 +858,6 @@ class Variable:
                     else:
                         obj = value
                     self.calibratedVias.append(obj)
-            elif key == "compilation_nest":
-                    value = pvalue
-                    obj = value
-                    self.compilationNest = obj
             elif key == "description":
                     value = pvalue
                     obj = value
@@ -1041,12 +1015,6 @@ class Variable:
 
     def setColumnNumber(self, columnNumber:int):
         self.columnNumber = columnNumber
-    
-    def getCompilationNest(self) -> str:
-        return self.compilationNest
-
-    def setCompilationNest(self, compilationNest:str):
-        self.compilationNest = compilationNest
     
     def getDescription(self) -> str:
         return self.description

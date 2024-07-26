@@ -459,7 +459,7 @@ class LiPD(RDFGraph):
                 timeseries[dsname] = tss
         return timeseries
     
-    def get_timeseries_essentials(self, dsname = None, mode='paleo'):
+    def get_timeseries_essentials(self, dsnames, mode='paleo'):
         ''' Returns specific properties for timeseries: 'dataSetName', 'archiveType', 'geo_meanLat', 'geo_meanLon',
                'geo_meanElev', 'paleoData_variableName', 'paleoData_values',
                'paleoData_units', 'paleoData_proxy' (paleo only), 'paleoData_proxyGeneral' (paleo only),
@@ -469,8 +469,8 @@ class LiPD(RDFGraph):
 
         Parameters
         ----------
-        dsname : str, optional
-            The name of the dataset for which to return the timeseries information. The default is None.
+        dsnames : list
+            array of dataset id or name strings        
         mode : paleo, chron
             Whether to retrun the information stored in the PaleoMeasurementTable or the ChronMeasurementTable. The default is 'paleo'.
 
@@ -505,28 +505,36 @@ class LiPD(RDFGraph):
     
         '''
         
-        if dsname is None:
-            dsname= ''
+        if dsnames is None:
+            dsnames= ''
+        if type(dsnames)==str:
+            dsnames=[dsnames]            
         
-        if mode == 'paleo':
-            query = QUERY_TIMESERIES_ESSENTIALS_PALEO
-            query = query.replace("[dsname]", dsname)
-        elif mode == 'chron':
-            query = QUERY_TIMESERIES_ESSENTIALS_CHRON
-            query = query.replace("[dsname]", dsname)
-        else:
-            raise ValueError("The mode should be either 'paleo' or 'chron'")
-    
-        qres, qres_df = self.query(query)
+        qres_df = None
+        for dsname in dsnames:
+            if mode == 'paleo':
+                query = QUERY_TIMESERIES_ESSENTIALS_PALEO
+                query = query.replace("[dsname]", dsname)
+            elif mode == 'chron':
+                query = QUERY_TIMESERIES_ESSENTIALS_CHRON
+                query = query.replace("[dsname]", dsname)
+            else:
+                raise ValueError("The mode should be either 'paleo' or 'chron'")
         
-        try:
-            qres_df['paleoData_values']=qres_df['paleoData_values'].apply(lambda row : np.array(json.loads(row)))
-        except:
-            qres_df['chronData_values']=qres_df['chronData_values'].apply(lambda row : np.array(json.loads(row)))
-        
-        
-        qres_df['time_values']=qres_df['time_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
-        qres_df['depth_values']=qres_df['depth_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
+            qres, qtmp_df = self.query(query)
+            
+            try:
+                qtmp_df['paleoData_values']=qtmp_df['paleoData_values'].apply(lambda row : np.array(json.loads(row)))
+            except:
+                qtmp_df['chronData_values']=qtmp_df['chronData_values'].apply(lambda row : np.array(json.loads(row)))
+            
+            
+            qtmp_df['time_values']=qtmp_df['time_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
+            qtmp_df['depth_values']=qtmp_df['depth_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
+            if qres_df is None:
+                qres_df = qtmp_df
+            else:
+                qres_df = pd.concat([qres_df, qtmp_df], ignore_index=True)
         
         
         return qres_df

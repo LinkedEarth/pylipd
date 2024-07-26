@@ -105,6 +105,12 @@ SCHEMA = {
         },
         'dataSetVersion': { 
             'name': 'hasVersion' 
+        },
+        'compilation_nest': {
+            'name': 'hasCompilationNest',
+            'alternates': ['pages2kRegion', 'paleoDIVERSiteId', 'sisalSiteId', 'LegacyClimateDatasetId', 
+                           'LegacyClimateSiteId', 'ch2kCoreCode', 'coralHydro2kGroup', 'iso2kCertification', 
+                           'iso2kUI', 'ocean2kID', 'pages2kId', 'pages2kID', 'QCCertification', 'SISALEntityID' ]
         }
     },
     'Compilation': {
@@ -462,12 +468,6 @@ SCHEMA = {
             'schema': 'Compilation',
             'category': 'Compilation'
         },
-        'compilation_nest': {
-            'name': 'hasCompilationNest',
-            'alternates': ['pages2kRegion', 'paleoDIVERSiteId', 'sisalSiteId', 'LegacyClimateDatasetId', 
-                           'LegacyClimateSiteId', 'ch2kCoreCode', 'coralHydro2kGroup', 'iso2kCertification', 
-                           'iso2kUI', 'ocean2kID', 'pages2kId', 'pages2kID', 'QCCertification', 'SISALEntityID' ]
-        },
         'notes': {
             'name': 'hasNotes',
             'alternates': ['qcNotes', 'qCNotes', 'qCnotes', 'qcnotes', 'QCnotes', 'QCNotes']
@@ -525,6 +525,7 @@ SCHEMA = {
         'coordinatesFor': { 
             'type': 'Individual' 
         },
+        'type': { 'name': 'hasType' },
         'continent': { 'name': 'hasContinent' },
         'country': { 'name': 'hasCountry' },
         'countryOcean': { 'name': 'hasCountryOcean' },
