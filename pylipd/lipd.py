@@ -15,10 +15,7 @@ import io
 import numpy as np
 import json
 
-try:
-    from pylipd.classes.dataset import Dataset
-except:
-    pass
+from pylipd.classes.dataset import Dataset
 
 from pylipd.utils.json_to_rdf import JSONToRDF
 from pylipd.utils.rdf_to_json import RDFToJSON
