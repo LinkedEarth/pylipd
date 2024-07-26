@@ -105,6 +105,12 @@ SCHEMA = {
         },
         'dataSetVersion': { 
             'name': 'hasVersion' 
+        },
+        'compilation_nest': {
+            'name': 'hasCompilationNest',
+            'alternates': ['pages2kRegion', 'paleoDIVERSiteId', 'sisalSiteId', 'LegacyClimateDatasetId', 
+                           'LegacyClimateSiteId', 'ch2kCoreCode', 'coralHydro2kGroup', 'iso2kCertification', 
+                           'iso2kUI', 'ocean2kID', 'pages2kId', 'pages2kID', 'QCCertification', 'SISALEntityID' ]
         }
     },
     'Compilation': {
@@ -159,8 +165,8 @@ SCHEMA = {
             '{identifier.0.id|@parent.dataSetName}',
             '{index}'
         ],
-        '@fromJson': ['_set_identifier_properties'],
-        '@toJson': ['_create_publication_identifier'],
+        # '@fromJson': ['_set_identifier_properties'],
+        # '@toJson': ['_create_publication_identifier'],
         'title': { 
             'name': 'hasTitle' 
         },
@@ -217,7 +223,8 @@ SCHEMA = {
         },
         'doi': {
             'name': 'hasDOI',
-            'type': 'string'
+            'type': 'string',
+            'alternates': ['DOI']
         },
         'author': {
             'name': 'hasAuthor',
@@ -462,12 +469,6 @@ SCHEMA = {
             'schema': 'Compilation',
             'category': 'Compilation'
         },
-        'compilation_nest': {
-            'name': 'hasCompilationNest',
-            'alternates': ['pages2kRegion', 'paleoDIVERSiteId', 'sisalSiteId', 'LegacyClimateDatasetId', 
-                           'LegacyClimateSiteId', 'ch2kCoreCode', 'coralHydro2kGroup', 'iso2kCertification', 
-                           'iso2kUI', 'ocean2kID', 'pages2kId', 'pages2kID', 'QCCertification', 'SISALEntityID' ]
-        },
         'notes': {
             'name': 'hasNotes',
             'alternates': ['qcNotes', 'qCNotes', 'qCnotes', 'qcnotes', 'QCnotes', 'QCNotes']
@@ -525,6 +526,7 @@ SCHEMA = {
         'coordinatesFor': { 
             'type': 'Individual' 
         },
+        'type': { 'name': 'hasType' },
         'continent': { 'name': 'hasContinent' },
         'country': { 'name': 'hasCountry' },
         'countryOcean': { 'name': 'hasCountryOcean' },
@@ -544,6 +546,7 @@ SCHEMA = {
             '.Interpretation',
             '{@index}'
         ],
+        '@fromJson': ['_add_interpretation_rank'],
         '@toJson_pre': [
             '_set_units_label',
             '_set_seasonality_labels',

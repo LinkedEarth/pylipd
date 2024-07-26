@@ -3,3 +3,4 @@ __version__ = version('pyleoclim')
 
 
 from .utils import *
+from .classes import *

@@ -369,6 +369,12 @@ class LipdToRDF:
         
         return [obj, objhash, []]
 
+    def _add_interpretation_rank(self, obj, objhash):
+        if "rank" not in obj or type(obj["rank"]) != int:
+            rank = obj["@index"] - 1
+            obj["rank"] = rank
+        return [obj, objhash, []]
+    
     def _wrap_uncertainty(self, obj, objhash) :
         objid = obj["@id"]
         # Deal with uncertainty
