@@ -1,5 +1,5 @@
 from tqdm import tqdm
-from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE, QUERY_DISTINCT_VARIABLE, QUERY_VARIABLE_ESSENTIALS
+from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE, QUERY_DISTINCT_VARIABLE, QUERY_VARIABLE_ESSENTIALS, QUERY_DISTINCT_PROXY, QUERY_FILTER_VARIABLE_PROXY
 
 from .utils.multi_processing import multi_load_lipd_series
 from .utils.rdf_graph import RDFGraph
@@ -95,7 +95,7 @@ class LiPDSeries(RDFGraph):
     def get_all_variable_names(self):
         
         """
-        Get a list of all possible distinct variableNames. Useful for filtering and qeurying. 
+        Get a list of all possible distinct variableNames. Useful for filtering and querying. 
 
         Returns
         -------
@@ -115,6 +115,30 @@ class LiPDSeries(RDFGraph):
         """
 
         return self.query(QUERY_DISTINCT_VARIABLE)[1].iloc[:,0].values.tolist()
+    
+    def get_all_proxy(self):
+        
+        """
+        Get a list of all possible proxy. Useful for filtering and querying. 
+
+        Returns
+        -------
+        list
+            A list of unique proxies
+        
+        Examples
+        --------
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+            lipd = load_dir('Pages2k')
+            S = lipd.to_lipd_series()
+            proxyName = S.get_all_proxy()
+            print(proxyName)
+        """
+        
+        return self.query(QUERY_DISTINCT_PROXY)[1].iloc[:,0].values.tolist()
 
     def get_timeseries_essentials(self):
         '''This function returns information about each variable: `dataSetName`, `archiveType`, `name`, `values`, `units`, `TSID`, `proxy`.
@@ -167,6 +191,18 @@ class LiPDSeries(RDFGraph):
         
         pylipd.lipd_series.LiPDSeries
             A new LiPDSeries object that only contains variables that have the specified name (regex)
+        
+        Examples
+        --------
+        
+        .. jupyter-execute::
+
+            from pylipd.utils.dataset import load_datasets
+            lipd = load_datasets('ODP846.Lawrence.2006.lpd')
+            S = lipd.to_lipd_series()
+            sst = S.filter_by_name('sst')
+            
+            print(sst.get_all_variable_names())
 
         '''
         query = QUERY_FILTER_VARIABLE_NAME
@@ -176,9 +212,52 @@ class LiPDSeries(RDFGraph):
         varuris = [str(row.uri) for row in qres]
         dsuris = [*set([str(row.dsuri) for row in qres])]
 
-        print(len(dsuris))
+        #print(len(dsuris))
 
         rdfgraph = self.get(varuris)
         S = LiPDSeries(rdfgraph.graph)
         S.lipds = {k: self.lipds[k].copy() for k in dsuris}
         return S
+
+    def filter_by_proxy(self, proxy):
+        '''
+        Filters series to return a new LiPDSeries that only keeps variables that have the specified proxy (regex)
+    
+        Parameters
+        ----------
+    
+        proxy : str
+            The name of the proxy to filter by
+    
+        Returns
+        -------
+        
+        pylipd.lipd_series.LiPDSeries
+            A new LiPDSeries object that only contains variables that have the specified name (regex)
+        
+        Examples
+        --------
+        
+        .. jupyter-execute::
+    
+            from pylipd.utils.dataset import load_dir
+            lipd = load_dir('Pages2k')
+            S = lipd.to_lipd_series()
+            S_filtered = S.filter_by_proxy('ring width')
+            print(S_filtered.get_all_proxy())
+    
+        '''
+        query = QUERY_FILTER_VARIABLE_PROXY
+        query = query.replace("[proxy]", proxy)
+    
+        qres, qres_df = self.query(query)
+        varuris = [str(row.uri) for row in qres]
+        dsuris = [*set([str(row.dsuri) for row in qres])]
+    
+        #print(len(dsuris))
+    
+        rdfgraph = self.get(varuris)
+        S = LiPDSeries(rdfgraph.graph)
+        S.lipds = {k: self.lipds[k].copy() for k in dsuris}
+        return S
+    
