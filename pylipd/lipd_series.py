@@ -1,5 +1,5 @@
 from tqdm import tqdm
-from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE, QUERY_DISTINCT_VARIABLE, QUERY_VARIABLE_ESSENTIALS, QUERY_DISTINCT_PROXY, QUERY_FILTER_VARIABLE_PROXY, QUERY_FILTER_VARIABLE_RESOLUTION
+from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE, QUERY_DISTINCT_VARIABLE, QUERY_VARIABLE_ESSENTIALS, QUERY_DISTINCT_PROXY, QUERY_FILTER_VARIABLE_PROXY, QUERY_FILTER_VARIABLE_RESOLUTION, QUERY_LiPDSERIES_PROPERTIES
 from .utils.multi_processing import multi_load_lipd_series
 from .utils.rdf_graph import RDFGraph
 
@@ -174,6 +174,37 @@ class LiPDSeries(RDFGraph):
         qres_df['values']=qres_df['values'].apply(lambda row : np.array(json.loads(row)))
 
         return qres_df
+    
+    def get_variable_properties(self):
+        """
+        Get a list of all the properties name associated with the dataset. Useful to write custom queries
+
+        Returns
+        -------
+        clean_list : list
+            A list of unique variable properties
+        
+        Examples
+        --------
+        
+        .. jupyter-execute::
+
+            from pylipd.utils.dataset import load_dir
+
+            lipd = load_dir()
+            S = lipd.to_lipd_series()
+            l = S.get_variable_properties()
+            
+            print(l)
+
+
+        """
+        
+        query_list = self.query(QUERY_LiPDSERIES_PROPERTIES)[1].iloc[:,0].values.tolist()
+        clean_list = [item.split("#")[-1] for item in query_list]
+        
+        return clean_list
+    
 
     def filter_by_name(self, name):
         '''

@@ -436,6 +436,12 @@ QUERY_VARIABLE_PROPERTIES="""
     }
 """
 
+## At the LiPDSeries level
+
+QUERY_LiPDSERIES_PROPERTIES="""
+    SELECT DISTINCT ?p WHERE {
+        ?uri ?p ?v .}
+    """
 
 QUERY_DATASET_PROPERTIES="""
     PREFIX le: <http://linked.earth/ontology#>
