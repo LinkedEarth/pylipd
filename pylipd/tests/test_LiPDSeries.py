@@ -48,6 +48,11 @@ class TestGetAll():
         D=pages2k
         S = D.to_lipd_series()
         names = S.get_all_proxy()
+    
+    def test_variable_t0(self,pages2k):
+        D=pages2k
+        S = D.to_lipd_series()
+        l = S.get_variable_properties()
         
 class TestFiler():
     
