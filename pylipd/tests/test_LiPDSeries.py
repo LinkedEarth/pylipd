@@ -18,7 +18,7 @@ Notes on how to test:
 4. after `pip install pytest-xdist`, one may execute "pytest -n 4" to test in parallel with number of workers specified by `-n`
 5. for more details, see https://docs.pytest.org/en/stable/usage.html
 """
-
+import pytest
 from pylipd.lipd_series import LiPDSeries
 
 class TestLoad():
@@ -64,6 +64,12 @@ class TestFiler():
         Sfiltered = S.filter_by_proxy('ring width')
         v = Sfiltered.get_all_proxy()
         assert len(v)==1
+    
+    @pytest.mark.parametrize('stats',['Mean','Median','Min','Max'])
+    def test_resolution_t0(self,stats,pages2k):
+        D=pages2k
+        S = D.to_lipd_series()
+        Sfiltered = S.filter_by_resolution(threshold = 10,stats=stats)
         
 
         

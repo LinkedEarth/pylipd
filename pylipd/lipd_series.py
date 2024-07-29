@@ -1,6 +1,5 @@
 from tqdm import tqdm
-from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE, QUERY_DISTINCT_VARIABLE, QUERY_VARIABLE_ESSENTIALS, QUERY_DISTINCT_PROXY, QUERY_FILTER_VARIABLE_PROXY
-
+from .globals.queries import QUERY_FILTER_VARIABLE_NAME, QUERY_VARIABLE, QUERY_DISTINCT_VARIABLE, QUERY_VARIABLE_ESSENTIALS, QUERY_DISTINCT_PROXY, QUERY_FILTER_VARIABLE_PROXY, QUERY_FILTER_VARIABLE_RESOLUTION
 from .utils.multi_processing import multi_load_lipd_series
 from .utils.rdf_graph import RDFGraph
 
@@ -254,10 +253,61 @@ class LiPDSeries(RDFGraph):
         varuris = [str(row.uri) for row in qres]
         dsuris = [*set([str(row.dsuri) for row in qres])]
     
-        #print(len(dsuris))
-    
         rdfgraph = self.get(varuris)
         S = LiPDSeries(rdfgraph.graph)
         S.lipds = {k: self.lipds[k].copy() for k in dsuris}
         return S
     
+    def filter_by_resolution(self, threshold, stats='Mean'):
+        '''
+        Filters series to return a new LiPDSeries that only keeps variables that have a resolution less than the specified threshold. 
+
+        Parameters
+        ----------
+        threshold : float
+            The maximum resolution to keep
+        stats : str, optional
+            Whether to use 'Mean', 'Median', 'Min' or 'Max' resolution. The default is 'Mean'.
+
+        Raises
+        ------
+        ValueError
+            Make sure that the stats is of ['Mean','Median', 'Min', 'Max'].
+
+        Returns
+        -------
+        S : pylipd.lipd_series.LiPDSeries
+            A new LiPDSeries object that only contains the filtered variables
+        
+        Examples
+        --------
+        
+        .. jupyter-execute::
+    
+            from pylipd.utils.dataset import load_dir
+            lipd = load_dir('Pages2k')
+            S = lipd.to_lipd_series()
+            S_filtered = S.filter_by_resolution(10)
+
+        '''
+        
+        stats = stats.capitalize() #make sure that the first letter is capitalized
+        stats_allowed = ['Mean','Median', 'Min', 'Max'] #possible values
+        if stats not in stats_allowed:
+            raise ValueError("Stats must be ['Mean','Median', 'Min', 'Max']")
+        
+        threshold = float(threshold) # make sure this is a float or can be coerced in one
+        
+        query = QUERY_FILTER_VARIABLE_RESOLUTION
+        query = query.replace("[value]", str(threshold))
+        query = query.replace("[stat]", stats)
+
+        qres,q_df = self.query(query)
+        
+        varuris = [str(row.uri) for row in qres]
+        dsuris = [*set([str(row.dsuri) for row in qres])]
+    
+        rdfgraph = self.get(varuris)
+        S = LiPDSeries(rdfgraph.graph)
+        S.lipds = {k: self.lipds[k].copy() for k in dsuris}
+        return S

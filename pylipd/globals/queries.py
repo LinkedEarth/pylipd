@@ -282,6 +282,19 @@ QUERY_FILTER_VARIABLE_PROXY = """
     }
 """
 
+QUERY_FILTER_VARIABLE_RESOLUTION = """
+    SELECT ?uri ?dsuri ?dsname ?tableuri ?id ?v WHERE {
+        ?uri le:hasVariableId ?id .
+        ?uri le:hasResolution ?res .
+        ?res le:has[stat]Value ?v .
+        FILTER(?v<[value]) .
+        ?uri le:foundInDataset ?dsuri .
+        ?uri le:foundInDatasetName ?dataSetName .
+        ?uri le:foundInTable ?tableuri .        
+    }
+"""
+
+
 QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
     PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
     SELECT ?dataSetName ?archiveType ?geo_meanLat ?geo_meanLon ?geo_meanElev 
