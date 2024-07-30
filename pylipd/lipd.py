@@ -20,7 +20,7 @@ from pylipd.classes.dataset import Dataset
 from pylipd.utils.json_to_rdf import JSONToRDF
 from pylipd.utils.rdf_to_json import RDFToJSON
 
-from .globals.queries import QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE, QUERY_DATASET_PROPERTIES, QUERY_VARIABLE_PROPERTIES, QUERY_MODEL_PROPERTIES, QUERY_LOCATION
+from .globals.queries import QUERY_FILTER_TIME, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE, QUERY_DATASET_PROPERTIES, QUERY_VARIABLE_PROPERTIES, QUERY_MODEL_PROPERTIES, QUERY_LOCATION
 from .lipd_series import LiPDSeries
 from .utils.multi_processing import multi_convert_to_rdf, multi_load_lipd
 from .utils.rdf_graph import RDFGraph
@@ -1157,6 +1157,79 @@ class LiPD(RDFGraph):
         qres, qres_df = self.query(query)
         dsnames = [sanitizeId(row.dsname) for row in qres]
         return self.get(dsnames)
+    
+    def filter_by_time(self,timeBound, timeBoundType = 'any', recordLength = None):
+        """
+        Filter the records according to a specified time interval and the length of the record within that interval. Note that this function assumes that all records use the same time representation. 
+        
+        If you are unsure about the time representation, you may need to use `.get_timeseries_essentials`. 
+
+        Parameters
+        ----------
+        timeBound : list
+            Minimum and Maximum age value to search for.
+        timeBoundType : str, optional
+            The type of querying to perform. Possible values include: "any", "entire", and "entirely".
+            - any: Overlap any portions of matching datasets (default)
+            - entirely: are entirely overlapped by matching datasets
+            - entire: overlap entire matching datasets but dataset can be shorter than the bounds
+            The default is 'any'.
+        recordLength : float, optional
+            The minimum length the record needs to have while matching the ageBound criteria. The default is None.
+
+        Raises
+        ------
+        ValueError
+            timeBoundType must take the values in ["any", "entire", and "entirely"]
+
+        Returns
+        -------
+        pylipd.lipd.LiPD
+            A new LiPD object that only contains datasets that have the specified time interval
+            
+        Examples
+        --------
+        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Pages2k sample datasets using this method.
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+
+            lipd = load_dir('Pages2k')
+            Lfiltered = lipd.filter_by_time(timeBound=[0,1800])
+            Lfiltered.get_all_dataset_names()
+
+        """
+        
+        if timeBound and timeBound[0]>timeBound[1]:
+                timeBound = [timeBound[1],timeBound[0]]
+
+        timeBoundType=timeBoundType.lower()
+
+        query = QUERY_FILTER_TIME
+        __, df = self.query(query)
+        if recordLength is None:
+            if timeBoundType == 'entirely':
+                filter_df = df[(df['minage'] <= timeBound[0]) & (df['maxage'] >= timeBound[1])]
+            elif timeBoundType == 'entire':
+                filter_df = df[(df['minage'] >= timeBound[0]) & (df['maxage'] <= timeBound[1])]
+            elif timeBoundType == 'any':
+                filter_df = df[(df['minage'] <= timeBound[1])]
+            else:
+                raise ValueError("timeBoundType must be in ['any', 'entirely','entire']")
+        else:
+            if timeBoundType == 'entirely':
+                filter_df = df[(df['minage'] <= timeBound[0]) & (df['maxage'] >= timeBound[1]) & (np.abs(df['maxage']-df['minage'])>=recordLength)]
+            elif timeBoundType == 'entire':
+                filter_df = df[(df['minage'] >= timeBound[0]) & (df['maxage'] <= timeBound[1]) & (np.abs(df['maxage']-df['minage'])>=recordLength)]
+            elif timeBoundType == 'any':
+                filter_df = df[(df['minage'] <= timeBound[1]) & (np.abs(df['minage']-timeBound[1])>=recordLength)]
+            else:
+                raise ValueError("timeBoundType must be in ['any', 'entirely','entire']")
+            
+        dsnames = list(filter_df['dsname'])
+        return self.get(dsnames)
+    
     
     def get_datasets(self) -> 'list[Dataset]':
         '''

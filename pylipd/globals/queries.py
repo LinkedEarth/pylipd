@@ -259,6 +259,22 @@ QUERY_FILTER_ARCHIVE_TYPE = """
     }
 """
 
+QUERY_FILTER_TIME = """
+    SELECT ?dsname ?minage ?maxage WHERE {
+        ?ds a le:Dataset .
+        ?ds le:hasName ?dsname .
+        
+        ?ds le:hasPaleoData ?data .
+        ?data le:hasMeasurementTable ?table .
+        ?table le:hasVariable ?var .
+        ?table le:hasVariable ?timevar .
+        ?timevar le:hasName ?time_variableName .
+        FILTER (regex(?time_variableName, "year.*") || regex(?time_variableName, "age.*")) .
+        ?timevar le:hasMinValue ?minage .
+        ?timevar le:hasMaxValue ?maxage .
+}
+"""
+
 QUERY_FILTER_VARIABLE_NAME = """
     SELECT ?uri ?dsuri ?dsname ?tableuri ?id ?name WHERE {
         ?uri le:hasVariableId ?id .
