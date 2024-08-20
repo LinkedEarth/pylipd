@@ -98,6 +98,18 @@ class TestFilter():
         Lfiltered = D.filter_by_archive_type('marine sediment')
         assert len(Lfiltered.get_all_archiveTypes())==1
         assert Lfiltered.get_all_archiveTypes()[0] == 'Marine sediment'
+    
+    @pytest.mark.parametrize(('timeBoundType', 'recordLength'),
+                             [('any', None),
+                              ('any', 500),
+                              ('entire', None),
+                              ('entire', 20),
+                              ('entirely',None),
+                              ('entirely', 100)
+                                 ])
+    def test_time_t0(self,timeBoundType,recordLength,pages2k):
+        D=pages2k
+        Lfiltered = D.filter_by_time(timeBound=[0,1800], timeBoundType=timeBoundType,recordLength=recordLength)
 
         
 class TestGet():

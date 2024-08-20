@@ -259,6 +259,22 @@ QUERY_FILTER_ARCHIVE_TYPE = """
     }
 """
 
+QUERY_FILTER_TIME = """
+    SELECT ?dsname ?minage ?maxage WHERE {
+        ?ds a le:Dataset .
+        ?ds le:hasName ?dsname .
+        
+        ?ds le:hasPaleoData ?data .
+        ?data le:hasMeasurementTable ?table .
+        ?table le:hasVariable ?var .
+        ?table le:hasVariable ?timevar .
+        ?timevar le:hasName ?time_variableName .
+        FILTER (regex(?time_variableName, "year.*") || regex(?time_variableName, "age.*")) .
+        ?timevar le:hasMinValue ?minage .
+        ?timevar le:hasMaxValue ?maxage .
+}
+"""
+
 QUERY_FILTER_VARIABLE_NAME = """
     SELECT ?uri ?dsuri ?dsname ?tableuri ?id ?name WHERE {
         ?uri le:hasVariableId ?id .
@@ -281,6 +297,19 @@ QUERY_FILTER_VARIABLE_PROXY = """
         ?uri le:foundInTable ?tableuri .
     }
 """
+
+QUERY_FILTER_VARIABLE_RESOLUTION = """
+    SELECT ?uri ?dsuri ?dsname ?tableuri ?id ?v WHERE {
+        ?uri le:hasVariableId ?id .
+        ?uri le:hasResolution ?res .
+        ?res le:has[stat]Value ?v .
+        FILTER(?v<[value]) .
+        ?uri le:foundInDataset ?dsuri .
+        ?uri le:foundInDatasetName ?dataSetName .
+        ?uri le:foundInTable ?tableuri .        
+    }
+"""
+
 
 QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
     PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
@@ -423,6 +452,12 @@ QUERY_VARIABLE_PROPERTIES="""
     }
 """
 
+## At the LiPDSeries level
+
+QUERY_LiPDSERIES_PROPERTIES="""
+    SELECT DISTINCT ?p WHERE {
+        ?uri ?p ?v .}
+    """
 
 QUERY_DATASET_PROPERTIES="""
     PREFIX le: <http://linked.earth/ontology#>
