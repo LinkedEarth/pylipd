@@ -19,6 +19,7 @@ class Location:
         self.geometryType: str = None
         self.latitude: str = None
         self.locationName: str = None
+        self.locationType: str = None
         self.longitude: str = None
         self.notes: str = None
         self.ocean: str = None
@@ -123,6 +124,12 @@ class Location:
                     if "@value" in val:
                         obj = val["@value"]                        
                     self.siteName = obj
+        
+            elif key == "hasType":
+                for val in value:
+                    if "@value" in val:
+                        obj = val["@value"]                        
+                    self.locationType = obj
             else:
                 for val in value:
                     obj = None
@@ -240,6 +247,16 @@ class Location:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasLocationName"] = [obj]
+                
+
+        if self.locationType:
+            value_obj = self.locationType
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasType"] = [obj]
                 
 
         if self.longitude:
@@ -361,6 +378,11 @@ class Location:
             obj = value_obj
             data["locationName"] = obj
 
+        if self.locationType:
+            value_obj = self.locationType
+            obj = value_obj
+            data["type"] = obj
+
         if self.longitude:
             value_obj = self.longitude
             obj = value_obj
@@ -450,6 +472,10 @@ class Location:
                     value = pvalue
                     obj = value
                     self.siteName = obj
+            elif key == "type":
+                    value = pvalue
+                    obj = value
+                    self.locationType = obj
             else:
                 self.set_non_standard_property(key, pvalue)
                    
@@ -529,6 +555,12 @@ class Location:
 
     def setLocationName(self, locationName:str):
         self.locationName = locationName
+    
+    def getLocationType(self) -> str:
+        return self.locationType
+
+    def setLocationType(self, locationType:str):
+        self.locationType = locationType
     
     def getLongitude(self) -> str:
         return self.longitude

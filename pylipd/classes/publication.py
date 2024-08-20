@@ -405,10 +405,7 @@ class Publication:
         if len(self.authors):
             data["author"] = []
         for value_obj in self.authors:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["author"].append(obj)
 
         if len(self.dataUrls):
@@ -445,10 +442,7 @@ class Publication:
 
         if self.firstAuthor:
             value_obj = self.firstAuthor
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["firstauthor"] = obj
 
         if self.institution:
@@ -520,10 +514,7 @@ class Publication:
                     self.abstract = obj
             elif key == "author":
                 for value in pvalue:
-                    if type(value) is dict:
-                        obj = Person.from_json(value)
-                    else:
-                        obj = value
+                    obj = Person.from_json(value)
                     self.authors.append(obj)
             elif key == "citation":
                     value = pvalue
@@ -543,10 +534,7 @@ class Publication:
                     self.dOI = obj
             elif key == "firstauthor":
                     value = pvalue
-                    if type(value) is dict:
-                        obj = Person.from_json(value)
-                    else:
-                        obj = value
+                    obj = Person.from_json(value)
                     self.firstAuthor = obj
             elif key == "institution":
                     value = pvalue

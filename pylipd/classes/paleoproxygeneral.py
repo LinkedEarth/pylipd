@@ -44,13 +44,13 @@ class PaleoProxyGeneral:
         return None
         
 class PaleoProxyGeneralConstants:
-    biogenic = PaleoProxyGeneral("http://linked.earth/ontology/proxy#biogenic", "biogenic")
-    cryophysical = PaleoProxyGeneral("http://linked.earth/ontology/proxy#cryophysical", "cryophysical")
-    dendrophysical = PaleoProxyGeneral("http://linked.earth/ontology/proxy#dendrophysical", "dendrophysical")
-    elemental = PaleoProxyGeneral("http://linked.earth/ontology/proxy#elemental", "elemental")
-    faunal_assemblage = PaleoProxyGeneral("http://linked.earth/ontology/proxy#faunal_assemblage", "faunal assemblage")
-    floral_assemblage = PaleoProxyGeneral("http://linked.earth/ontology/proxy#floral_assemblage", "floral assemblage")
-    isotopic = PaleoProxyGeneral("http://linked.earth/ontology/proxy#isotopic", "isotopic")
-    mineral = PaleoProxyGeneral("http://linked.earth/ontology/proxy#mineral", "mineral")
-    pyrogenic = PaleoProxyGeneral("http://linked.earth/ontology/proxy#pyrogenic", "pyrogenic")
-    sedimentology = PaleoProxyGeneral("http://linked.earth/ontology/proxy#sedimentology", "sedimentology")
+    biogenic = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#biogenic", "biogenic")
+    cryophysical = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#cryophysical", "cryophysical")
+    dendrophysical = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#dendrophysical", "dendrophysical")
+    elemental = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#elemental", "elemental")
+    faunal_assemblage = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#faunal_assemblage", "faunal assemblage")
+    floral_assemblage = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#floral_assemblage", "floral assemblage")
+    isotopic = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#isotopic", "isotopic")
+    mineral = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#mineral", "mineral")
+    pyrogenic = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#pyrogenic", "pyrogenic")
+    sedimentology = PaleoProxyGeneral("http://linked.earth/ontology/paleo_proxy#sedimentology", "sedimentology")

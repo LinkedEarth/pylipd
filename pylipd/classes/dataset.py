@@ -523,71 +523,47 @@ class Dataset:
         if len(self.chronData):
             data["chronData"] = []
         for value_obj in self.chronData:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["chronData"].append(obj)
 
         if len(self.creators):
             data["creator"] = []
         for value_obj in self.creators:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["creator"].append(obj)
 
         if len(self.fundings):
             data["funding"] = []
         for value_obj in self.fundings:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["funding"].append(obj)
 
         if len(self.investigators):
             data["investigator"] = []
         for value_obj in self.investigators:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["investigator"].append(obj)
 
         if len(self.paleoData):
             data["paleoData"] = []
         for value_obj in self.paleoData:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["paleoData"].append(obj)
 
         if len(self.publications):
             data["pub"] = []
         for value_obj in self.publications:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["pub"].append(obj)
 
         if self.archiveType:
             value_obj = self.archiveType
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["archiveType"] = obj
 
         if self.changeLog:
             value_obj = self.changeLog
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["changelog"] = obj
 
         if self.collectionName:
@@ -607,10 +583,7 @@ class Dataset:
 
         if self.contributor:
             value_obj = self.contributor
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["dataContributor"] = obj
 
         if self.dataSource:
@@ -625,10 +598,7 @@ class Dataset:
 
         if self.location:
             value_obj = self.location
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["geo"] = obj
 
         if self.name:
@@ -675,17 +645,11 @@ class Dataset:
                     self.archiveType = obj
             elif key == "changelog":
                     value = pvalue
-                    if type(value) is dict:
-                        obj = ChangeLog.from_json(value)
-                    else:
-                        obj = value
+                    obj = ChangeLog.from_json(value)
                     self.changeLog = obj
             elif key == "chronData":
                 for value in pvalue:
-                    if type(value) is dict:
-                        obj = ChronData.from_json(value)
-                    else:
-                        obj = value
+                    obj = ChronData.from_json(value)
                     self.chronData.append(obj)
             elif key == "collectionName":
                     value = pvalue
@@ -701,17 +665,11 @@ class Dataset:
                     self.compilationNest = obj
             elif key == "creator":
                 for value in pvalue:
-                    if type(value) is dict:
-                        obj = Person.from_json(value)
-                    else:
-                        obj = value
+                    obj = Person.from_json(value)
                     self.creators.append(obj)
             elif key == "dataContributor":
                     value = pvalue
-                    if type(value) is dict:
-                        obj = Person.from_json(value)
-                    else:
-                        obj = value
+                    obj = Person.from_json(value)
                     self.contributor = obj
             elif key == "dataSetName":
                     value = pvalue
@@ -731,17 +689,11 @@ class Dataset:
                     self.datasetId = obj
             elif key == "funding":
                 for value in pvalue:
-                    if type(value) is dict:
-                        obj = Funding.from_json(value)
-                    else:
-                        obj = value
+                    obj = Funding.from_json(value)
                     self.fundings.append(obj)
             elif key == "geo":
                     value = pvalue
-                    if type(value) is dict:
-                        obj = Location.from_json(value)
-                    else:
-                        obj = value
+                    obj = Location.from_json(value)
                     self.location = obj
             elif key == "googleSpreadSheetKey":
                     value = pvalue
@@ -749,10 +701,7 @@ class Dataset:
                     self.spreadsheetLink = obj
             elif key == "investigator":
                 for value in pvalue:
-                    if type(value) is dict:
-                        obj = Person.from_json(value)
-                    else:
-                        obj = value
+                    obj = Person.from_json(value)
                     self.investigators.append(obj)
             elif key == "notes":
                     value = pvalue
@@ -764,17 +713,11 @@ class Dataset:
                     self.originalDataUrl = obj
             elif key == "paleoData":
                 for value in pvalue:
-                    if type(value) is dict:
-                        obj = PaleoData.from_json(value)
-                    else:
-                        obj = value
+                    obj = PaleoData.from_json(value)
                     self.paleoData.append(obj)
             elif key == "pub":
                 for value in pvalue:
-                    if type(value) is dict:
-                        obj = Publication.from_json(value)
-                    else:
-                        obj = value
+                    obj = Publication.from_json(value)
                     self.publications.append(obj)
             else:
                 self.set_non_standard_property(key, pvalue)

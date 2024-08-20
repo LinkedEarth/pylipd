@@ -163,10 +163,7 @@ class Funding:
         if len(self.investigators):
             data["investigator"] = []
         for value_obj in self.investigators:
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["investigator"].append(obj)
 
         if self.fundingAgency:
@@ -206,10 +203,7 @@ class Funding:
                     self.grants.append(obj)
             elif key == "investigator":
                 for value in pvalue:
-                    if type(value) is dict:
-                        obj = Person.from_json(value)
-                    else:
-                        obj = value
+                    obj = Person.from_json(value)
                     self.investigators.append(obj)
             else:
                 self.set_non_standard_property(key, pvalue)

@@ -190,10 +190,7 @@ class Resolution:
 
         if self.units:
             value_obj = self.units
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["units"] = obj
 
         for key in self.misc:

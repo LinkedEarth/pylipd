@@ -380,34 +380,22 @@ class Interpretation:
 
         if self.seasonality:
             value_obj = self.seasonality
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["seasonality"] = obj
 
         if self.seasonalityGeneral:
             value_obj = self.seasonalityGeneral
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["seasonalityGeneral"] = obj
 
         if self.seasonalityOriginal:
             value_obj = self.seasonalityOriginal
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["seasonalityOriginal"] = obj
 
         if self.variable:
             value_obj = self.variable
-            if hasattr(value_obj, "to_json"):
-                obj = value_obj.to_json()
-            else:
-                obj = value_obj
+            obj = value_obj.to_json()
             data["variable"] = obj
 
         if self.variableDetail:
