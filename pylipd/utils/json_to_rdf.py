@@ -15,8 +15,10 @@ class JSONToRDF:
             if val["@type"] == "uri":
                 valitem = URIRef(val["@id"])
             elif val["@type"] == "literal":
-                dtype = val["@datatype"]
+                dtype:str = val["@datatype"]
                 if dtype:
+                    if type(val["@value"]) == str:
+                        dtype="http://www.w3.org/2001/XMLSchema#string"
                     valitem = Literal(val["@value"], datatype=URIRef(dtype))
                 else:
                     valitem = Literal(val["@value"])

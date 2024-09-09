@@ -560,7 +560,17 @@ class RDFToLiPD:
             del var["hasProxyGeneral"]
         return var
     
-
+    def _set_interpretation_variable_label(self, interp, parent = None) :
+        if "hasVariable" in interp :
+            if "@id" in interp["hasVariable"]:
+                id = interp["hasVariable"]["@id"]
+                if id in RSYNONYMS:
+                    interp["variable"] = RSYNONYMS[id]
+                else:
+                    interp["variable"] = interp["hasVariable"]["label"]
+            del interp["hasVariable"]
+        return interp
+    
     def _set_seasonality_labels(self, interp, parent = None) :
         convs = {
             "hasSeasonality": "seasonality",

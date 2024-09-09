@@ -550,6 +550,7 @@ SCHEMA = {
         '@toJson_pre': [
             '_set_units_label',
             '_set_seasonality_labels',
+            '_set_interpretation_variable_label'
         ],        
         'variable': { 
             'name': 'hasVariable',
