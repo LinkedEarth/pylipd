@@ -1,4 +1,4 @@
-from rdflib import RDF
+from rdflib import RDF, RDFS
 from rdflib.graph import URIRef, Literal
 from rdflib.namespace import XSD
 
@@ -47,4 +47,6 @@ class JSONToRDF:
                 prop = URIRef(ONTONS + propid)
                 if propid == "type":
                     prop = RDF.type
+                if propid == "label":
+                    prop = RDFS.label
                 self._load_triple_into_graph(subject, prop, value)
