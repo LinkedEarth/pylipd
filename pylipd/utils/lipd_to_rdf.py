@@ -189,10 +189,10 @@ class LipdToRDF:
         coords = geo["geometry"]["coordinates"]
         if (coords and len(coords) > 0) :
             ngeo["coordinates"] = str(str(coords[1]) + ",") + str(coords[0])
-            ngeo["wgs84:lat"] = coords[1]
-            ngeo["wgs84:long"] = coords[0]
+            ngeo["latitude"] = coords[1]
+            ngeo["longitude"] = coords[0]
             if (len(coords) > 2) :
-                ngeo["wgs84:alt"] = coords[2]
+                ngeo["elevation"] = coords[2]
         
         if "properties" in geo and isinstance(geo["properties"], dict) :
             for key,value in geo["properties"].items() :
