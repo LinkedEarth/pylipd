@@ -33,7 +33,7 @@ setup(
         "tqdm",
         "bagit",
         "numpy",
-        "bibtextparser"
+        "bibtexparser"
     ],
     python_requires=">=3.9.0"
 )
