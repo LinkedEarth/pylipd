@@ -338,6 +338,7 @@ SCHEMA = {
             '_set_variable_name_from_standard_variable_label',
             '_set_units_label',
             '_set_proxy_label',
+            '_set_archive_type_label',
             '_set_proxy_general_label'
         ],
         '@toJson': [

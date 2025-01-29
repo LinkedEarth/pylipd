@@ -239,20 +239,23 @@ class DataTable:
             df[colname] = json.loads(v.getValues())
         
         # Create metadata as a dictionary and add to dataframe attr
+        # TODO: Make the colname key unique (to allow for multiple variables with same name)
+        # Option1: Use <varname>_<tsid> [ tsid is not always present ]
+        # Option2: Use <varname>_<counter> [ in case tsid is not there ]
         df.attrs = {}
         for v in self.variables:
-            colname = v.getName()
+            key = v.getName()
             if use_standard_names and v.getStandardVariable() is not None:
-                colname = v.getStandardVariable().getLabel()
-            df.attrs[colname] = v.to_json()
-            del df.attrs[colname]["hasValues"]
+                key = v.getStandardVariable().getLabel()
+            df.attrs[key] = v.to_json()
+            del df.attrs[key]["hasValues"]
     
         return df
 
     def setDataFrame(self, df: pd.DataFrame):
         # Create new set of variable objects using the metadata
         self.variables = []
-        for colname in df.attrs:
-            v = Variable.from_json(df.attrs[colname])
-            v.setValues(json.dumps(df[colname].to_list()))
+        for key in df.attrs:
+            v = Variable.from_json(df.attrs[key])
+            v.setValues(json.dumps(df[key].to_list()))
             self.addVariable(v)
