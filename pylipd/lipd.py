@@ -231,7 +231,7 @@ class LiPD(RDFGraph):
         for row in qres:
             self.graph.add((row.s, row.p, row.o, row.g))
         print("Done..")
-
+    
 
     def update_remote_datasets(self, dsnames):
         '''Updates local LiPD Graph for datasets to remote endpoint'''

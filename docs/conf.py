@@ -88,6 +88,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PyLiPD'
+copyright = '2022-2025, Deborah Khider, Varun Ratnakar'
 author = 'Varun Ratnakar, Deborah Khider'
 
 # The version info for the project you're documenting, acts as replacement for
