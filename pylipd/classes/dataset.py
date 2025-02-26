@@ -834,6 +834,8 @@ class Dataset:
 
     def setName(self, name:str):
         self.name = name
+        # **IMPORTANT** Added Manually
+        self.id = self.ns + '/' + self.name
     
     def getNotes(self) -> str:
         return self.notes

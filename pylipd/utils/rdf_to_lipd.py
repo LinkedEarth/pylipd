@@ -417,13 +417,19 @@ class RDFToLiPD:
         
         if "long" in geo :
             geojson["geometry"]["coordinates"][0] = float(geo["long"])
+        if "longitude" in geo :
+            geojson["geometry"]["coordinates"][0] = float(geo["longitude"])
         
         if "lat" in geo :
             geojson["geometry"]["coordinates"][1] = float(geo["lat"])
+        if "latitude" in geo :
+            geojson["geometry"]["coordinates"][1] = float(geo["latitude"])
         
         if "alt" in geo and geo["alt"] != "NA":
             geojson["geometry"]["coordinates"][2] = float(geo["alt"])
-        
+        if "elevation" in geo and geo["elevation"] != "NA":
+            geojson["geometry"]["coordinates"][2] = float(geo["elevation"])
+
         for prop,value in geo.items() :
             if prop[0] == "@" :
                 continue

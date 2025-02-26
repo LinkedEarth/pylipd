@@ -14,6 +14,7 @@ import string
 import io
 import numpy as np
 import json
+import uuid
 
 from pylipd.classes.dataset import Dataset
 
@@ -1267,6 +1268,57 @@ class LiPD(RDFGraph):
         return datasets
     
 
+    def _generate_unique_id(self, prefix='PYD'):
+        # Generate a random UUID
+        random_uuid = uuid.uuid4()  # Generates a random UUID.
+        
+        # Convert UUID format to the specific format we need
+        # UUID is usually in the form '1e2a2846-2048-480b-9ec6-674daef472bd' so we slice and insert accordingly
+        id_str = str(random_uuid)
+        formatted_id = f"{prefix}-{id_str[:5]}-{id_str[9:13]}-{id_str[14:18]}-{id_str[19:23]}-{id_str[24:28]}"
+        
+        return formatted_id
+
+    def _fix_missing_ids(self, ds: Dataset):
+        # Assign variable ids if not present
+        # Assign datatable csv file name if not present
+        pd_counter = 0
+        for pd in ds.getPaleoData():
+            table_counter = 0
+            for table in pd.getMeasurementTables():
+                if not table.getFileName():
+                    table.setFileName(f"paleo{pd_counter}measurement{table_counter}.csv")
+                for v in table.getVariables():
+                    if not v.getVariableId():
+                        v.setVariableId(self._generate_unique_id(prefix='TS'))
+                table_counter += 1
+            pd_counter += 1
+
+        chron_counter = 0
+        for chron in ds.getChronData():
+            table_counter = 0
+            for table in chron.getMeasurementTables():
+                if not table.getFileName():
+                    table.setFileName(f"chron{chron_counter}measurement{table_counter}.csv")
+                for v in table.getVariables():
+                    if not v.getVariableId():
+                        v.setVariableId(self._generate_unique_id(prefix='TS'))
+                table_counter += 1
+
+            model_counter = 0
+            for model in chron.getModeledBy():
+                table_counter = 0
+                for table in model.getEnsembleTables():
+                    if not table.getFileName():
+                        table.setFileName(f"chron{chron_counter}model{model_counter}ensemble{table_counter}.csv")
+                    for v in table.getVariables():
+                        if not v.getVariableId():
+                            v.setVariableId(self._generate_unique_id(prefix='TS'))
+                    table_counter += 1
+                model_counter += 1
+            chron_counter += 1        
+
+
     def load_datasets(self, datasets: 'list[Dataset]'):
         '''
         Loads instances of Dataset class into the LiPD graph
@@ -1295,7 +1347,7 @@ class LiPD(RDFGraph):
         
         '''
         for ds in datasets:
+            self._fix_missing_ids(ds)
             dsuri = ds.id
             j2r = JSONToRDF(self.graph, dsuri)
             j2r.load_data_in_graph(ds.to_data())
-

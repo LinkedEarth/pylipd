@@ -35,5 +35,5 @@ setup(
         "numpy",
         "bibtexparser"
     ],
-    python_requires=">=3.9.0"
+    python_requires=">=3.11.0"
 )

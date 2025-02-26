@@ -243,8 +243,8 @@ QUERY_FILTER_GEO = """
         ?ds a le:Dataset .
         ?ds le:hasName ?dsname .
         ?ds le:hasLocation ?loc .
-        ?loc wgs84:lat ?lat .
-        ?loc wgs84:long ?lon .
+        { {?loc le:hasLatitude ?lat} UNION {?loc wgs84:lat ?lat } } .
+        { {?loc le:hasLongitude ?lon} UNION {?loc wgs84:long ?lon } } .
         FILTER ( ?lat >= [latMin] && ?lat < [latMax] && ?lon >= [lonMin] && ?lon < [lonMax] ) .
     }
 """
@@ -313,6 +313,8 @@ QUERY_FILTER_VARIABLE_RESOLUTION = """
 
 QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
     PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    PREFIX le: <http://linked.earth/ontology#>
+
     SELECT ?dataSetName ?archiveType ?geo_meanLat ?geo_meanLon ?geo_meanElev 
     ?paleoData_variableName ?paleoData_values ?paleoData_units 
     ?paleoData_proxy ?paleoData_proxyGeneral ?time_variableName ?time_values 
@@ -327,9 +329,9 @@ QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
         }
         
         ?ds le:hasLocation ?loc .
-        OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
-        OPTIONAL{?loc wgs84:long ?geo_meanLon .}
-        OPTIONAL {?loc wgs84:alt ?geo_meanElev .}
+        OPTIONAL { {?loc le:hasLatitude ?geo_meanLat} UNION {?loc wgs84:lat ?geo_meanLat } } .
+        OPTIONAL { {?loc le:hasLongitude ?geo_meanLon} UNION {?loc wgs84:long ?geo_meanLon } } .
+        OPTIONAL { {?loc le:hasElevation ?geo_meanElev} UNION {?loc wgs84:alt ?geo_meanElev } } .
         
         ?ds le:hasPaleoData ?data .
         ?data le:hasMeasurementTable ?table .
@@ -380,6 +382,8 @@ QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
 
 QUERY_TIMESERIES_ESSENTIALS_CHRON ="""
     PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    PREFIX le: <http://linked.earth/ontology#>
+
     SELECT ?dataSetName ?archiveType ?geo_meanLat ?geo_meanLon ?geo_meanElev 
     ?chronData_variableName ?chronData_values ?chronData_units 
     ?time_variableName ?time_values 
@@ -394,9 +398,9 @@ QUERY_TIMESERIES_ESSENTIALS_CHRON ="""
         }
         
         ?ds le:hasLocation ?loc .
-        OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
-        OPTIONAL{?loc wgs84:long ?geo_meanLon .}
-        OPTIONAL {?loc wgs84:alt ?geo_meanElev .}
+        OPTIONAL { {?loc le:hasLatitude ?geo_meanLat} UNION {?loc wgs84:lat ?geo_meanLat } } .
+        OPTIONAL { {?loc le:hasLongitude ?geo_meanLon} UNION {?loc wgs84:long ?geo_meanLon } } .
+        OPTIONAL { {?loc le:hasElevation ?geo_meanElev} UNION {?loc wgs84:alt ?geo_meanElev } } .
         
         ?ds le:hasChronData ?data .
         ?data le:hasMeasurementTable ?table .
@@ -512,14 +516,16 @@ QUERY_VARIABLE_ESSENTIALS="""
 
 QUERY_LOCATION ="""
     PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    PREFIX le: <http://linked.earth/ontology#>
+
     SELECT ?dataSetName ?geo_meanLat ?geo_meanLon ?geo_meanElev WHERE {
         ?ds a le:Dataset .
         ?ds le:hasName ?dataSetName .
             FILTER regex(?dataSetName, "[dsname].*", "i").
         
         ?ds le:hasLocation ?loc .
-        OPTIONAL{?loc wgs84:lat ?geo_meanLat .}
-        OPTIONAL{?loc wgs84:long ?geo_meanLon .}
-        OPTIONAL{?loc wgs84:alt ?geo_meanElev .}
-        }
+        OPTIONAL { {?loc le:hasLatitude ?geo_meanLat} UNION {?loc wgs84:lat ?geo_meanLat } } .
+        OPTIONAL { {?loc le:hasLongitude ?geo_meanLon} UNION {?loc wgs84:long ?geo_meanLon } } .
+        OPTIONAL { {?loc le:hasElevation ?geo_meanElev} UNION {?loc wgs84:alt ?geo_meanElev } }        
+    }
 """
