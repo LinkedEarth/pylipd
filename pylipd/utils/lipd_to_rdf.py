@@ -682,6 +682,9 @@ class LipdToRDF:
         if (re.search(r"^-?\d+\.\d+$", value)) :
             return "float"
         
+        if (re.search(r"^[2][0-9]{3}[-][0-1][0-9][-][0-3][0-9]( |T)[0-9]{2}:[0-9]{2}:[0-9]{2}", value)) :
+            return "datetime"
+                
         if (re.search(r"^[2][0-9]{3}[-][0-1][0-9][-][0-3][0-9]", value)) :
             return "date"
         
