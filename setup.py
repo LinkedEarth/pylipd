@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = '1.3.7.b3'
+version = '1.3.7.b4'
 
 # Read the readme file contents into variable
 def read(fname):
@@ -35,5 +35,5 @@ setup(
         "numpy",
         "bibtexparser"
     ],
-    python_requires=">=3.11.0"
+    python_requires=">=3.10.0"
 )
