@@ -20,6 +20,14 @@ LiPDSeries (pylipd.lipd_series.LiPDSeries)
 LiPD Classes 
 """""""""""""
 
+These classes and associated methods are directly derived from the `LinkedEarth Ontology <http://linked.earth/ontology/>`_. See the diagram below to understand how the objects are related to each other and what type of objects/strings the various functions will return.
+
+.. image:: UMLDiagram.png
+   :width: 720px
+   :height: 405px
+   :scale: 100 %
+   :alt: The PyLiPD classes architecture. Credit: Varun Ratnakar
+
 .. autoclass:: pylipd.classes.dataset.Dataset
    :members:
    :undoc-members:
