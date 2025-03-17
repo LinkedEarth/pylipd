@@ -308,7 +308,9 @@ class Location:
             elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
-                if re.match("\d{4}-\d{2}-\d{2}", value):
+                if re.match(r"\d{4}-\d{2}-\d{2}( |T)\d{2}:\d{2}:\d{2}", value):
+                    ptype = "http://www.w3.org/2001/XMLSchema#datetime"   
+                elif re.match(r"\d{4}-\d{2}-\d{2}", value):
                     ptype = "http://www.w3.org/2001/XMLSchema#date"
                 else:
                     ptype = "http://www.w3.org/2001/XMLSchema#string"

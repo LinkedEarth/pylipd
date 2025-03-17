@@ -120,7 +120,9 @@ class DataTable:
             elif tp == "float" or tp == "double":
                 ptype = "http://www.w3.org/2001/XMLSchema#float"
             elif tp == "str":
-                if re.match("\d{4}-\d{2}-\d{2}", value):
+                if re.match(r"\d{4}-\d{2}-\d{2}( |T)\d{2}:\d{2}:\d{2}", value):
+                    ptype = "http://www.w3.org/2001/XMLSchema#datetime"   
+                elif re.match(r"\d{4}-\d{2}-\d{2}", value):
                     ptype = "http://www.w3.org/2001/XMLSchema#date"
                 else:
                     ptype = "http://www.w3.org/2001/XMLSchema#string"
@@ -239,23 +241,20 @@ class DataTable:
             df[colname] = json.loads(v.getValues())
         
         # Create metadata as a dictionary and add to dataframe attr
-        # TODO: Make the colname key unique (to allow for multiple variables with same name)
-        # Option1: Use <varname>_<tsid> [ tsid is not always present ]
-        # Option2: Use <varname>_<counter> [ in case tsid is not there ]
         df.attrs = {}
         for v in self.variables:
-            key = v.getName()
+            colname = v.getName()
             if use_standard_names and v.getStandardVariable() is not None:
-                key = v.getStandardVariable().getLabel()
-            df.attrs[key] = v.to_json()
-            del df.attrs[key]["hasValues"]
+                colname = v.getStandardVariable().getLabel()
+            df.attrs[colname] = v.to_json()
+            del df.attrs[colname]["hasValues"]
     
         return df
 
     def setDataFrame(self, df: pd.DataFrame):
         # Create new set of variable objects using the metadata
         self.variables = []
-        for key in df.attrs:
-            v = Variable.from_json(df.attrs[key])
-            v.setValues(json.dumps(df[key].to_list()))
+        for colname in df.attrs:
+            v = Variable.from_json(df.attrs[colname])
+            v.setValues(json.dumps(df[colname].to_list()))
             self.addVariable(v)
