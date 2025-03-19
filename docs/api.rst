@@ -94,6 +94,9 @@ These classes and associated methods are directly derived from the `LinkedEarth 
 
 LiPD Controlled Vocabulary 
 """""""""""""""""""""""""""
+
+These classes are meant to help dealing with the `LiPD controlled vocabulary <https://lipdverse.org/vocabulary/>`_. The Constants object create classes for each of the terms in the controlled vocabulary. These can be called directly in the creation of LiPD files. 
+
 .. autoclass:: pylipd.classes.archivetype.ArchiveType
    :members:
    :undoc-members:
