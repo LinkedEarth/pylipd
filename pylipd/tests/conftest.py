@@ -20,4 +20,3 @@ def multipleLipds(seed = 20):
 def pages2k():
     D = load_dir()
     return D
-    

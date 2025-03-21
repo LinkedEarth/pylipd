@@ -29,13 +29,22 @@ import urllib as urllib
 class TestLiPDLoad():
     
     def test_load_t0(self, odp846):
+        '''
+        Test for a single file
+
+        '''
         lipd = odp846
     
     def test_load_t1(self,multipleLipds):
+        '''
+        Test for multiple files
+        '''
         lipd, names = multipleLipds
 
     def test_load_t2(self):
-        
+        '''
+        Test for remote files
+        '''
         lipd_remote = LiPD()
         lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic")
         try:
@@ -44,6 +53,9 @@ class TestLiPDLoad():
             pass
     
     def test_load_t3(self,pages2k):
+        '''
+        Test for directory
+        '''
         lipd = pages2k
 
 class Testgetall():
@@ -68,7 +80,7 @@ class Testgetall():
 
 class TestManipulation():
     
-    def test_remove_to(self,pages2k):
+    def test_remove_t0(self,pages2k):
                
         D=pages2k
         names = D.get_all_dataset_names()
