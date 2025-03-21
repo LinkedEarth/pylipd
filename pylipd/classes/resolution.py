@@ -252,29 +252,34 @@ class Resolution:
         return self.maxValue
 
     def setMaxValue(self, maxValue:float):
+        assert isinstance(maxValue, float), "Property maxValue is not of type float"
         self.maxValue = maxValue
     
     def getMeanValue(self) -> float:
         return self.meanValue
 
     def setMeanValue(self, meanValue:float):
+        assert isinstance(meanValue, float), "Property meanValue is not of type float"
         self.meanValue = meanValue
     
     def getMedianValue(self) -> float:
         return self.medianValue
 
     def setMedianValue(self, medianValue:float):
+        assert isinstance(medianValue, float), "Property medianValue is not of type float"
         self.medianValue = medianValue
     
     def getMinValue(self) -> float:
         return self.minValue
 
     def setMinValue(self, minValue:float):
+        assert isinstance(minValue, float), "Property minValue is not of type float"
         self.minValue = minValue
     
     def getUnits(self) -> PaleoUnit:
         return self.units
 
     def setUnits(self, units:PaleoUnit):
+        assert isinstance(units, PaleoUnit), "Property units is not of type PaleoUnit"
         self.units = units
     

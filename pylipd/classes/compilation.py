@@ -166,11 +166,13 @@ class Compilation:
         return self.name
 
     def setName(self, name:str):
+        assert isinstance(name, str), "Property name is not of type str"
         self.name = name
     
     def getVersion(self) -> str:
         return self.version
 
     def setVersion(self, version:str):
+        assert isinstance(version, str), "Property version is not of type str"
         self.version = version
     

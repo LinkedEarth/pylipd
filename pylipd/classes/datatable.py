@@ -207,21 +207,26 @@ class DataTable:
         return self.fileName
 
     def setFileName(self, fileName:str):
+        assert isinstance(fileName, str), "Property fileName is not of type str"
         self.fileName = fileName
     
     def getMissingValue(self) -> str:
         return self.missingValue
 
     def setMissingValue(self, missingValue:str):
+        assert isinstance(missingValue, str), "Property missingValue is not of type str"
         self.missingValue = missingValue
     
     def getVariables(self) -> list[Variable]:
         return self.variables
 
     def setVariables(self, variables:list[Variable]):
+        assert isinstance(variables, list), "Property variables is not a list"
+        assert all(isinstance(x, Variable) for x in variables), "Property variables is not a list of Variable"
         self.variables = variables
 
     def addVariable(self, variables:Variable):
+        assert isinstance(variables, Variable), "Property variables is not of type Variable"
         self.variables.append(variables)
         
     # Special Functions manually added for DataTable class

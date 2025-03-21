@@ -164,11 +164,13 @@ class ChangeLog:
         return self.changes
 
     def setChanges(self, changes:None):
+        assert isinstance(changes, None), "Property changes is not of type None"
         self.changes = changes
     
     def getNotes(self) -> str:
         return self.notes
 
     def setNotes(self, notes:str):
+        assert isinstance(notes, str), "Property notes is not of type str"
         self.notes = notes
     

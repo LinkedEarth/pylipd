@@ -216,23 +216,30 @@ class PaleoData:
         return self.measurementTables
 
     def setMeasurementTables(self, measurementTables:list[DataTable]):
+        assert isinstance(measurementTables, list), "Property measurementTables is not a list"
+        assert all(isinstance(x, DataTable) for x in measurementTables), "Property measurementTables is not a list of DataTable"
         self.measurementTables = measurementTables
 
     def addMeasurementTable(self, measurementTables:DataTable):
+        assert isinstance(measurementTables, DataTable), "Property measurementTables is not of type DataTable"
         self.measurementTables.append(measurementTables)
         
     def getModeledBy(self) -> list[Model]:
         return self.modeledBy
 
     def setModeledBy(self, modeledBy:list[Model]):
+        assert isinstance(modeledBy, list), "Property modeledBy is not a list"
+        assert all(isinstance(x, Model) for x in modeledBy), "Property modeledBy is not a list of Model"
         self.modeledBy = modeledBy
 
     def addModeledBy(self, modeledBy:Model):
+        assert isinstance(modeledBy, Model), "Property modeledBy is not of type Model"
         self.modeledBy.append(modeledBy)
         
     def getName(self) -> str:
         return self.name
 
     def setName(self, name:str):
+        assert isinstance(name, str), "Property name is not of type str"
         self.name = name
     

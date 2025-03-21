@@ -94,7 +94,7 @@ def get_fromjson_item(ptype, range, is_enum):
                     obj = value"""
     return fromjsonitem
 
-def get_python_snippet_for_multi_value_property(pid, propid, pname, ptype, ont_range, python_range, getter, setter, adder, is_enum):
+def get_python_snippet_for_multi_value_property(clsid, pid, propid, pname, ptype, ont_range, python_range, getter, setter, adder, is_enum):
     # Create the python snippet for initialzing property variables
     initvar = f"self.{pname}: list[{python_range}] = []"
 
@@ -136,15 +136,18 @@ def get_python_snippet_for_multi_value_property(pid, propid, pname, ptype, ont_r
         return self.{pname}
 
     def {setter}(self, {pname}:list[{python_range}]):
+        assert isinstance({pname}, list), "Property {pname} is not a list"
+        assert all(isinstance(x, {python_range}) for x in {pname}), "Property {pname} is not a list of {python_range}"
         self.{pname} = {pname}
 
     def {adder}(self, {pname}:{python_range}):
+        assert isinstance({pname}, {python_range}), "Property {pname} is not of type {python_range}"
         self.{pname}.append({pname})
         """
     return (initvar, todata, fromdata, tojson, fromjson, fns)
 
 
-def get_python_snippet_for_property(pid, propid, pname, ptype, ont_range, python_range, getter, setter, is_enum):
+def get_python_snippet_for_property(clsid, pid, propid, pname, ptype, ont_range, python_range, getter, setter, is_enum):
     # Create the python snippet for initialzing property variables
     initvar = f"self.{pname}: {python_range} = None"
 
@@ -185,8 +188,13 @@ def get_python_snippet_for_property(pid, propid, pname, ptype, ont_range, python
         return self.{pname}
 
     def {setter}(self, {pname}:{python_range}):
+        assert isinstance({pname}, {python_range}), "Property {pname} is not of type {python_range}"
         self.{pname} = {pname}
     """
+    # Special case for Dataset
+    if clsid == "Dataset" and pname == "name":
+        fns += f"    self.id = self.ns + '/' + {pname} # FIXME: This is a hack to set the id of the dataset based on the name\n"
+
     return (initvar, todata, fromdata, tojson, fromjson, fns)
 
 
@@ -542,11 +550,11 @@ def generate_lipd_classes():
 
             # Get python snippets for initialization function, todata function, fromdata from, and the setter/getter functions
             if multiple:
-                (initvar, todata, fromdata, tojson, fromjson, fns) = get_python_snippet_for_multi_value_property(pid, propid, mpname, ptype, 
+                (initvar, todata, fromdata, tojson, fromjson, fns) = get_python_snippet_for_multi_value_property(clsid, pid, propid, mpname, ptype, 
                                                                                                ont_range, python_range, 
                                                                                                getter, setter, adder, is_enum)  
             else:
-                (initvar, todata, fromdata, tojson, fromjson, fns) = get_python_snippet_for_property(pid, propid, mpname, ptype, 
+                (initvar, todata, fromdata, tojson, fromjson, fns) = get_python_snippet_for_property(clsid, pid, propid, mpname, ptype, 
                                                                                    ont_range, python_range, 
                                                                                    getter, setter, is_enum)
             
