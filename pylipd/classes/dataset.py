@@ -745,170 +745,170 @@ class Dataset:
         return self.archiveType
 
     def setArchiveType(self, archiveType:ArchiveType):
-        assert isinstance(archiveType, ArchiveType), "Property archiveType is not of type ArchiveType"
+        assert isinstance(archiveType, ArchiveType), f"Error: '{archiveType}' is not of type ArchiveType\nYou can create a new ArchiveType object from a string using the following syntax:\n- Fetch existing ArchiveType by synonym:    ArchiveType.from_synonym(\"{archiveType}\")\n- Create a new custom ArchiveType:    ArchiveType(\"{archiveType}\")"
         self.archiveType = archiveType
     
     def getChangeLog(self) -> ChangeLog:
         return self.changeLog
 
     def setChangeLog(self, changeLog:ChangeLog):
-        assert isinstance(changeLog, ChangeLog), "Property changeLog is not of type ChangeLog"
+        assert isinstance(changeLog, ChangeLog), f"Error: '{changeLog}' is not of type ChangeLog"
         self.changeLog = changeLog
     
     def getChronData(self) -> list[ChronData]:
         return self.chronData
 
     def setChronData(self, chronData:list[ChronData]):
-        assert isinstance(chronData, list), "Property chronData is not a list"
-        assert all(isinstance(x, ChronData) for x in chronData), "Property chronData is not a list of ChronData"
+        assert isinstance(chronData, list), "Error: chronData is not a list"
+        assert all(isinstance(x, ChronData) for x in chronData), f"Error: '{chronData}' is not of type ChronData"
         self.chronData = chronData
 
     def addChronData(self, chronData:ChronData):
-        assert isinstance(chronData, ChronData), "Property chronData is not of type ChronData"
+        assert isinstance(chronData, ChronData), f"Error: '{chronData}' is not of type ChronData"
         self.chronData.append(chronData)
         
     def getCollectionName(self) -> str:
         return self.collectionName
 
     def setCollectionName(self, collectionName:str):
-        assert isinstance(collectionName, str), "Property collectionName is not of type str"
+        assert isinstance(collectionName, str), f"Error: '{collectionName}' is not of type str"
         self.collectionName = collectionName
     
     def getCollectionYear(self) -> str:
         return self.collectionYear
 
     def setCollectionYear(self, collectionYear:str):
-        assert isinstance(collectionYear, str), "Property collectionYear is not of type str"
+        assert isinstance(collectionYear, str), f"Error: '{collectionYear}' is not of type str"
         self.collectionYear = collectionYear
     
     def getCompilationNest(self) -> str:
         return self.compilationNest
 
     def setCompilationNest(self, compilationNest:str):
-        assert isinstance(compilationNest, str), "Property compilationNest is not of type str"
+        assert isinstance(compilationNest, str), f"Error: '{compilationNest}' is not of type str"
         self.compilationNest = compilationNest
     
     def getContributor(self) -> Person:
         return self.contributor
 
     def setContributor(self, contributor:Person):
-        assert isinstance(contributor, Person), "Property contributor is not of type Person"
+        assert isinstance(contributor, Person), f"Error: '{contributor}' is not of type Person"
         self.contributor = contributor
     
     def getCreators(self) -> list[Person]:
         return self.creators
 
     def setCreators(self, creators:list[Person]):
-        assert isinstance(creators, list), "Property creators is not a list"
-        assert all(isinstance(x, Person) for x in creators), "Property creators is not a list of Person"
+        assert isinstance(creators, list), "Error: creators is not a list"
+        assert all(isinstance(x, Person) for x in creators), f"Error: '{creators}' is not of type Person"
         self.creators = creators
 
     def addCreator(self, creators:Person):
-        assert isinstance(creators, Person), "Property creators is not of type Person"
+        assert isinstance(creators, Person), f"Error: '{creators}' is not of type Person"
         self.creators.append(creators)
         
     def getDataSource(self) -> str:
         return self.dataSource
 
     def setDataSource(self, dataSource:str):
-        assert isinstance(dataSource, str), "Property dataSource is not of type str"
+        assert isinstance(dataSource, str), f"Error: '{dataSource}' is not of type str"
         self.dataSource = dataSource
     
     def getDatasetId(self) -> str:
         return self.datasetId
 
     def setDatasetId(self, datasetId:str):
-        assert isinstance(datasetId, str), "Property datasetId is not of type str"
+        assert isinstance(datasetId, str), f"Error: '{datasetId}' is not of type str"
         self.datasetId = datasetId
     
     def getFundings(self) -> list[Funding]:
         return self.fundings
 
     def setFundings(self, fundings:list[Funding]):
-        assert isinstance(fundings, list), "Property fundings is not a list"
-        assert all(isinstance(x, Funding) for x in fundings), "Property fundings is not a list of Funding"
+        assert isinstance(fundings, list), "Error: fundings is not a list"
+        assert all(isinstance(x, Funding) for x in fundings), f"Error: '{fundings}' is not of type Funding"
         self.fundings = fundings
 
     def addFunding(self, fundings:Funding):
-        assert isinstance(fundings, Funding), "Property fundings is not of type Funding"
+        assert isinstance(fundings, Funding), f"Error: '{fundings}' is not of type Funding"
         self.fundings.append(fundings)
         
     def getInvestigators(self) -> list[Person]:
         return self.investigators
 
     def setInvestigators(self, investigators:list[Person]):
-        assert isinstance(investigators, list), "Property investigators is not a list"
-        assert all(isinstance(x, Person) for x in investigators), "Property investigators is not a list of Person"
+        assert isinstance(investigators, list), "Error: investigators is not a list"
+        assert all(isinstance(x, Person) for x in investigators), f"Error: '{investigators}' is not of type Person"
         self.investigators = investigators
 
     def addInvestigator(self, investigators:Person):
-        assert isinstance(investigators, Person), "Property investigators is not of type Person"
+        assert isinstance(investigators, Person), f"Error: '{investigators}' is not of type Person"
         self.investigators.append(investigators)
         
     def getLocation(self) -> Location:
         return self.location
 
     def setLocation(self, location:Location):
-        assert isinstance(location, Location), "Property location is not of type Location"
+        assert isinstance(location, Location), f"Error: '{location}' is not of type Location"
         self.location = location
     
     def getName(self) -> str:
         return self.name
 
     def setName(self, name:str):
-        assert isinstance(name, str), "Property name is not of type str"
+        assert isinstance(name, str), f"Error: '{name}' is not of type str"
         self.name = name
-        self.id = self.ns + '/' + name # FIXME: This is a hack to set the id of the dataset based on the name
+        self.id = self.ns + '/' + name # This is a hack to set the id of the dataset based on the name
 
     def getNotes(self) -> str:
         return self.notes
 
     def setNotes(self, notes:str):
-        assert isinstance(notes, str), "Property notes is not of type str"
+        assert isinstance(notes, str), f"Error: '{notes}' is not of type str"
         self.notes = notes
     
     def getOriginalDataUrl(self) -> str:
         return self.originalDataUrl
 
     def setOriginalDataUrl(self, originalDataUrl:str):
-        assert isinstance(originalDataUrl, str), "Property originalDataUrl is not of type str"
+        assert isinstance(originalDataUrl, str), f"Error: '{originalDataUrl}' is not of type str"
         self.originalDataUrl = originalDataUrl
     
     def getPaleoData(self) -> list[PaleoData]:
         return self.paleoData
 
     def setPaleoData(self, paleoData:list[PaleoData]):
-        assert isinstance(paleoData, list), "Property paleoData is not a list"
-        assert all(isinstance(x, PaleoData) for x in paleoData), "Property paleoData is not a list of PaleoData"
+        assert isinstance(paleoData, list), "Error: paleoData is not a list"
+        assert all(isinstance(x, PaleoData) for x in paleoData), f"Error: '{paleoData}' is not of type PaleoData"
         self.paleoData = paleoData
 
     def addPaleoData(self, paleoData:PaleoData):
-        assert isinstance(paleoData, PaleoData), "Property paleoData is not of type PaleoData"
+        assert isinstance(paleoData, PaleoData), f"Error: '{paleoData}' is not of type PaleoData"
         self.paleoData.append(paleoData)
         
     def getPublications(self) -> list[Publication]:
         return self.publications
 
     def setPublications(self, publications:list[Publication]):
-        assert isinstance(publications, list), "Property publications is not a list"
-        assert all(isinstance(x, Publication) for x in publications), "Property publications is not a list of Publication"
+        assert isinstance(publications, list), "Error: publications is not a list"
+        assert all(isinstance(x, Publication) for x in publications), f"Error: '{publications}' is not of type Publication"
         self.publications = publications
 
     def addPublication(self, publications:Publication):
-        assert isinstance(publications, Publication), "Property publications is not of type Publication"
+        assert isinstance(publications, Publication), f"Error: '{publications}' is not of type Publication"
         self.publications.append(publications)
         
     def getSpreadsheetLink(self) -> str:
         return self.spreadsheetLink
 
     def setSpreadsheetLink(self, spreadsheetLink:str):
-        assert isinstance(spreadsheetLink, str), "Property spreadsheetLink is not of type str"
+        assert isinstance(spreadsheetLink, str), f"Error: '{spreadsheetLink}' is not of type str"
         self.spreadsheetLink = spreadsheetLink
     
     def getVersion(self) -> str:
         return self.version
 
     def setVersion(self, version:str):
-        assert isinstance(version, str), "Property version is not of type str"
+        assert isinstance(version, str), f"Error: '{version}' is not of type str"
         self.version = version
     

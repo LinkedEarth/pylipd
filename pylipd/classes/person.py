@@ -140,6 +140,6 @@ class Person:
         return self.name
 
     def setName(self, name:str):
-        assert isinstance(name, str), "Property name is not of type str"
+        assert isinstance(name, str), f"Error: '{name}' is not of type str"
         self.name = name
     

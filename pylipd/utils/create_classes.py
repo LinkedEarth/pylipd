@@ -130,18 +130,23 @@ def get_python_snippet_for_multi_value_property(clsid, pid, propid, pname, ptype
                 for value in pvalue:{fromjsonitem}
                     self.{pname}.append(obj)"""
     
+    error_msg = "Error: '{" + pname + "}' is not of type " + python_range
+    if is_enum:
+        error_msg += f"\\nYou can create a new {python_range} object from a string using the following syntax:\\n"
+        error_msg += f"- Fetch existing {python_range} by synonym: {python_range}.from_synonym(\\\"{{"+pname+"}\\\")\\n"
+        error_msg += f"- Create a new custom {python_range}: {python_range}(\\\"{{"+pname+"}\\\")"
     # Create the python snippet for getter/setter/adders
     fns = f"""
     def {getter}(self) -> list[{python_range}]:
         return self.{pname}
 
     def {setter}(self, {pname}:list[{python_range}]):
-        assert isinstance({pname}, list), "Property {pname} is not a list"
-        assert all(isinstance(x, {python_range}) for x in {pname}), "Property {pname} is not a list of {python_range}"
+        assert isinstance({pname}, list), "Error: {pname} is not a list"
+        assert all(isinstance(x, {python_range}) for x in {pname}), f"{error_msg}"
         self.{pname} = {pname}
 
     def {adder}(self, {pname}:{python_range}):
-        assert isinstance({pname}, {python_range}), "Property {pname} is not of type {python_range}"
+        assert isinstance({pname}, {python_range}), f"{error_msg}"
         self.{pname}.append({pname})
         """
     return (initvar, todata, fromdata, tojson, fromjson, fns)
@@ -182,18 +187,24 @@ def get_python_snippet_for_property(clsid, pid, propid, pname, ptype, ont_range,
                     value = pvalue{fromjsonitem}
                     self.{pname} = obj"""
     
+    error_msg = "Error: '{" + str(pname) + "}' is not of type " + str(python_range)
+    if is_enum:
+        error_msg += f"\\nYou can create a new {python_range} object from a string using the following syntax:\\n"
+        error_msg += f"- Fetch existing {python_range} by synonym: {python_range}.from_synonym(\\\"{{"+pname+"}\\\")\\n"
+        error_msg += f"- Create a new custom {python_range}: {python_range}(\\\"{{"+pname+"}\\\")"
+
     # Create the python snippet for getter/setter/adders
     fns = f"""
     def {getter}(self) -> {python_range}:
         return self.{pname}
 
     def {setter}(self, {pname}:{python_range}):
-        assert isinstance({pname}, {python_range}), "Property {pname} is not of type {python_range}"
+        assert isinstance({pname}, {python_range}), f"{error_msg}"
         self.{pname} = {pname}
     """
     # Special case for Dataset
     if clsid == "Dataset" and pname == "name":
-        fns += f"    self.id = self.ns + '/' + {pname} # FIXME: This is a hack to set the id of the dataset based on the name\n"
+        fns += f"    self.id = self.ns + '/' + {pname} # This is a hack to set the id of the dataset based on the name\n"
 
     return (initvar, todata, fromdata, tojson, fromjson, fns)
 

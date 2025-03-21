@@ -606,140 +606,140 @@ class Publication:
         return self.abstract
 
     def setAbstract(self, abstract:str):
-        assert isinstance(abstract, str), "Property abstract is not of type str"
+        assert isinstance(abstract, str), f"Error: '{abstract}' is not of type str"
         self.abstract = abstract
     
     def getAuthors(self) -> list[Person]:
         return self.authors
 
     def setAuthors(self, authors:list[Person]):
-        assert isinstance(authors, list), "Property authors is not a list"
-        assert all(isinstance(x, Person) for x in authors), "Property authors is not a list of Person"
+        assert isinstance(authors, list), "Error: authors is not a list"
+        assert all(isinstance(x, Person) for x in authors), f"Error: '{authors}' is not of type Person"
         self.authors = authors
 
     def addAuthor(self, authors:Person):
-        assert isinstance(authors, Person), "Property authors is not of type Person"
+        assert isinstance(authors, Person), f"Error: '{authors}' is not of type Person"
         self.authors.append(authors)
         
     def getCitation(self) -> str:
         return self.citation
 
     def setCitation(self, citation:str):
-        assert isinstance(citation, str), "Property citation is not of type str"
+        assert isinstance(citation, str), f"Error: '{citation}' is not of type str"
         self.citation = citation
     
     def getCiteKey(self) -> str:
         return self.citeKey
 
     def setCiteKey(self, citeKey:str):
-        assert isinstance(citeKey, str), "Property citeKey is not of type str"
+        assert isinstance(citeKey, str), f"Error: '{citeKey}' is not of type str"
         self.citeKey = citeKey
     
     def getDOI(self) -> str:
         return self.dOI
 
     def setDOI(self, dOI:str):
-        assert isinstance(dOI, str), "Property dOI is not of type str"
+        assert isinstance(dOI, str), f"Error: '{dOI}' is not of type str"
         self.dOI = dOI
     
     def getDataUrls(self) -> list[str]:
         return self.dataUrls
 
     def setDataUrls(self, dataUrls:list[str]):
-        assert isinstance(dataUrls, list), "Property dataUrls is not a list"
-        assert all(isinstance(x, str) for x in dataUrls), "Property dataUrls is not a list of str"
+        assert isinstance(dataUrls, list), "Error: dataUrls is not a list"
+        assert all(isinstance(x, str) for x in dataUrls), f"Error: '{dataUrls}' is not of type str"
         self.dataUrls = dataUrls
 
     def addDataUrl(self, dataUrls:str):
-        assert isinstance(dataUrls, str), "Property dataUrls is not of type str"
+        assert isinstance(dataUrls, str), f"Error: '{dataUrls}' is not of type str"
         self.dataUrls.append(dataUrls)
         
     def getFirstAuthor(self) -> Person:
         return self.firstAuthor
 
     def setFirstAuthor(self, firstAuthor:Person):
-        assert isinstance(firstAuthor, Person), "Property firstAuthor is not of type Person"
+        assert isinstance(firstAuthor, Person), f"Error: '{firstAuthor}' is not of type Person"
         self.firstAuthor = firstAuthor
     
     def getInstitution(self) -> str:
         return self.institution
 
     def setInstitution(self, institution:str):
-        assert isinstance(institution, str), "Property institution is not of type str"
+        assert isinstance(institution, str), f"Error: '{institution}' is not of type str"
         self.institution = institution
     
     def getIssue(self) -> str:
         return self.issue
 
     def setIssue(self, issue:str):
-        assert isinstance(issue, str), "Property issue is not of type str"
+        assert isinstance(issue, str), f"Error: '{issue}' is not of type str"
         self.issue = issue
     
     def getJournal(self) -> str:
         return self.journal
 
     def setJournal(self, journal:str):
-        assert isinstance(journal, str), "Property journal is not of type str"
+        assert isinstance(journal, str), f"Error: '{journal}' is not of type str"
         self.journal = journal
     
     def getPages(self) -> str:
         return self.pages
 
     def setPages(self, pages:str):
-        assert isinstance(pages, str), "Property pages is not of type str"
+        assert isinstance(pages, str), f"Error: '{pages}' is not of type str"
         self.pages = pages
     
     def getPublicationType(self) -> str:
         return self.publicationType
 
     def setPublicationType(self, publicationType:str):
-        assert isinstance(publicationType, str), "Property publicationType is not of type str"
+        assert isinstance(publicationType, str), f"Error: '{publicationType}' is not of type str"
         self.publicationType = publicationType
     
     def getPublisher(self) -> str:
         return self.publisher
 
     def setPublisher(self, publisher:str):
-        assert isinstance(publisher, str), "Property publisher is not of type str"
+        assert isinstance(publisher, str), f"Error: '{publisher}' is not of type str"
         self.publisher = publisher
     
     def getReport(self) -> str:
         return self.report
 
     def setReport(self, report:str):
-        assert isinstance(report, str), "Property report is not of type str"
+        assert isinstance(report, str), f"Error: '{report}' is not of type str"
         self.report = report
     
     def getTitle(self) -> str:
         return self.title
 
     def setTitle(self, title:str):
-        assert isinstance(title, str), "Property title is not of type str"
+        assert isinstance(title, str), f"Error: '{title}' is not of type str"
         self.title = title
     
     def getUrls(self) -> list[str]:
         return self.urls
 
     def setUrls(self, urls:list[str]):
-        assert isinstance(urls, list), "Property urls is not a list"
-        assert all(isinstance(x, str) for x in urls), "Property urls is not a list of str"
+        assert isinstance(urls, list), "Error: urls is not a list"
+        assert all(isinstance(x, str) for x in urls), f"Error: '{urls}' is not of type str"
         self.urls = urls
 
     def addUrl(self, urls:str):
-        assert isinstance(urls, str), "Property urls is not of type str"
+        assert isinstance(urls, str), f"Error: '{urls}' is not of type str"
         self.urls.append(urls)
         
     def getVolume(self) -> str:
         return self.volume
 
     def setVolume(self, volume:str):
-        assert isinstance(volume, str), "Property volume is not of type str"
+        assert isinstance(volume, str), f"Error: '{volume}' is not of type str"
         self.volume = volume
     
     def getYear(self) -> int:
         return self.year
 
     def setYear(self, year:int):
-        assert isinstance(year, int), "Property year is not of type int"
+        assert isinstance(year, int), f"Error: '{year}' is not of type int"
         self.year = year
     

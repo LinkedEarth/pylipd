@@ -231,37 +231,37 @@ class Funding:
         return self.fundingAgency
 
     def setFundingAgency(self, fundingAgency:str):
-        assert isinstance(fundingAgency, str), "Property fundingAgency is not of type str"
+        assert isinstance(fundingAgency, str), f"Error: '{fundingAgency}' is not of type str"
         self.fundingAgency = fundingAgency
     
     def getFundingCountry(self) -> str:
         return self.fundingCountry
 
     def setFundingCountry(self, fundingCountry:str):
-        assert isinstance(fundingCountry, str), "Property fundingCountry is not of type str"
+        assert isinstance(fundingCountry, str), f"Error: '{fundingCountry}' is not of type str"
         self.fundingCountry = fundingCountry
     
     def getGrants(self) -> list[str]:
         return self.grants
 
     def setGrants(self, grants:list[str]):
-        assert isinstance(grants, list), "Property grants is not a list"
-        assert all(isinstance(x, str) for x in grants), "Property grants is not a list of str"
+        assert isinstance(grants, list), "Error: grants is not a list"
+        assert all(isinstance(x, str) for x in grants), f"Error: '{grants}' is not of type str"
         self.grants = grants
 
     def addGrant(self, grants:str):
-        assert isinstance(grants, str), "Property grants is not of type str"
+        assert isinstance(grants, str), f"Error: '{grants}' is not of type str"
         self.grants.append(grants)
         
     def getInvestigators(self) -> list[Person]:
         return self.investigators
 
     def setInvestigators(self, investigators:list[Person]):
-        assert isinstance(investigators, list), "Property investigators is not a list"
-        assert all(isinstance(x, Person) for x in investigators), "Property investigators is not a list of Person"
+        assert isinstance(investigators, list), "Error: investigators is not a list"
+        assert all(isinstance(x, Person) for x in investigators), f"Error: '{investigators}' is not of type Person"
         self.investigators = investigators
 
     def addInvestigator(self, investigators:Person):
-        assert isinstance(investigators, Person), "Property investigators is not of type Person"
+        assert isinstance(investigators, Person), f"Error: '{investigators}' is not of type Person"
         self.investigators.append(investigators)
         

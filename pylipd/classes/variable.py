@@ -962,219 +962,219 @@ class Variable:
         return self.archiveType
 
     def setArchiveType(self, archiveType:ArchiveType):
-        assert isinstance(archiveType, ArchiveType), "Property archiveType is not of type ArchiveType"
+        assert isinstance(archiveType, ArchiveType), f"Error: '{archiveType}' is not of type ArchiveType\nYou can create a new ArchiveType object from a string using the following syntax:\n- Fetch existing ArchiveType by synonym:    ArchiveType.from_synonym(\"{archiveType}\")\n- Create a new custom ArchiveType:    ArchiveType(\"{archiveType}\")"
         self.archiveType = archiveType
     
     def getCalibratedVias(self) -> list[Calibration]:
         return self.calibratedVias
 
     def setCalibratedVias(self, calibratedVias:list[Calibration]):
-        assert isinstance(calibratedVias, list), "Property calibratedVias is not a list"
-        assert all(isinstance(x, Calibration) for x in calibratedVias), "Property calibratedVias is not a list of Calibration"
+        assert isinstance(calibratedVias, list), "Error: calibratedVias is not a list"
+        assert all(isinstance(x, Calibration) for x in calibratedVias), f"Error: '{calibratedVias}' is not of type Calibration"
         self.calibratedVias = calibratedVias
 
     def addCalibratedVia(self, calibratedVias:Calibration):
-        assert isinstance(calibratedVias, Calibration), "Property calibratedVias is not of type Calibration"
+        assert isinstance(calibratedVias, Calibration), f"Error: '{calibratedVias}' is not of type Calibration"
         self.calibratedVias.append(calibratedVias)
         
     def getColumnNumber(self) -> int:
         return self.columnNumber
 
     def setColumnNumber(self, columnNumber:int):
-        assert isinstance(columnNumber, int), "Property columnNumber is not of type int"
+        assert isinstance(columnNumber, int), f"Error: '{columnNumber}' is not of type int"
         self.columnNumber = columnNumber
     
     def getDescription(self) -> str:
         return self.description
 
     def setDescription(self, description:str):
-        assert isinstance(description, str), "Property description is not of type str"
+        assert isinstance(description, str), f"Error: '{description}' is not of type str"
         self.description = description
     
     def getFoundInDataset(self) -> None:
         return self.foundInDataset
 
     def setFoundInDataset(self, foundInDataset:None):
-        assert isinstance(foundInDataset, None), "Property foundInDataset is not of type None"
+        assert isinstance(foundInDataset, None), f"Error: '{foundInDataset}' is not of type None"
         self.foundInDataset = foundInDataset
     
     def getFoundInTable(self) -> None:
         return self.foundInTable
 
     def setFoundInTable(self, foundInTable:None):
-        assert isinstance(foundInTable, None), "Property foundInTable is not of type None"
+        assert isinstance(foundInTable, None), f"Error: '{foundInTable}' is not of type None"
         self.foundInTable = foundInTable
     
     def getInstrument(self) -> None:
         return self.instrument
 
     def setInstrument(self, instrument:None):
-        assert isinstance(instrument, None), "Property instrument is not of type None"
+        assert isinstance(instrument, None), f"Error: '{instrument}' is not of type None"
         self.instrument = instrument
     
     def getInterpretations(self) -> list[Interpretation]:
         return self.interpretations
 
     def setInterpretations(self, interpretations:list[Interpretation]):
-        assert isinstance(interpretations, list), "Property interpretations is not a list"
-        assert all(isinstance(x, Interpretation) for x in interpretations), "Property interpretations is not a list of Interpretation"
+        assert isinstance(interpretations, list), "Error: interpretations is not a list"
+        assert all(isinstance(x, Interpretation) for x in interpretations), f"Error: '{interpretations}' is not of type Interpretation"
         self.interpretations = interpretations
 
     def addInterpretation(self, interpretations:Interpretation):
-        assert isinstance(interpretations, Interpretation), "Property interpretations is not of type Interpretation"
+        assert isinstance(interpretations, Interpretation), f"Error: '{interpretations}' is not of type Interpretation"
         self.interpretations.append(interpretations)
         
     def getMaxValue(self) -> float:
         return self.maxValue
 
     def setMaxValue(self, maxValue:float):
-        assert isinstance(maxValue, float), "Property maxValue is not of type float"
+        assert isinstance(maxValue, float), f"Error: '{maxValue}' is not of type float"
         self.maxValue = maxValue
     
     def getMeanValue(self) -> float:
         return self.meanValue
 
     def setMeanValue(self, meanValue:float):
-        assert isinstance(meanValue, float), "Property meanValue is not of type float"
+        assert isinstance(meanValue, float), f"Error: '{meanValue}' is not of type float"
         self.meanValue = meanValue
     
     def getMedianValue(self) -> float:
         return self.medianValue
 
     def setMedianValue(self, medianValue:float):
-        assert isinstance(medianValue, float), "Property medianValue is not of type float"
+        assert isinstance(medianValue, float), f"Error: '{medianValue}' is not of type float"
         self.medianValue = medianValue
     
     def getMinValue(self) -> float:
         return self.minValue
 
     def setMinValue(self, minValue:float):
-        assert isinstance(minValue, float), "Property minValue is not of type float"
+        assert isinstance(minValue, float), f"Error: '{minValue}' is not of type float"
         self.minValue = minValue
     
     def getMissingValue(self) -> str:
         return self.missingValue
 
     def setMissingValue(self, missingValue:str):
-        assert isinstance(missingValue, str), "Property missingValue is not of type str"
+        assert isinstance(missingValue, str), f"Error: '{missingValue}' is not of type str"
         self.missingValue = missingValue
     
     def getName(self) -> str:
         return self.name
 
     def setName(self, name:str):
-        assert isinstance(name, str), "Property name is not of type str"
+        assert isinstance(name, str), f"Error: '{name}' is not of type str"
         self.name = name
     
     def getNotes(self) -> str:
         return self.notes
 
     def setNotes(self, notes:str):
-        assert isinstance(notes, str), "Property notes is not of type str"
+        assert isinstance(notes, str), f"Error: '{notes}' is not of type str"
         self.notes = notes
     
     def getPartOfCompilation(self) -> Compilation:
         return self.partOfCompilation
 
     def setPartOfCompilation(self, partOfCompilation:Compilation):
-        assert isinstance(partOfCompilation, Compilation), "Property partOfCompilation is not of type Compilation"
+        assert isinstance(partOfCompilation, Compilation), f"Error: '{partOfCompilation}' is not of type Compilation"
         self.partOfCompilation = partOfCompilation
     
     def getPhysicalSample(self) -> None:
         return self.physicalSample
 
     def setPhysicalSample(self, physicalSample:None):
-        assert isinstance(physicalSample, None), "Property physicalSample is not of type None"
+        assert isinstance(physicalSample, None), f"Error: '{physicalSample}' is not of type None"
         self.physicalSample = physicalSample
     
     def getProxy(self) -> PaleoProxy:
         return self.proxy
 
     def setProxy(self, proxy:PaleoProxy):
-        assert isinstance(proxy, PaleoProxy), "Property proxy is not of type PaleoProxy"
+        assert isinstance(proxy, PaleoProxy), f"Error: '{proxy}' is not of type PaleoProxy\nYou can create a new PaleoProxy object from a string using the following syntax:\n- Fetch existing PaleoProxy by synonym:    PaleoProxy.from_synonym(\"{proxy}\")\n- Create a new custom PaleoProxy:    PaleoProxy(\"{proxy}\")"
         self.proxy = proxy
     
     def getProxyGeneral(self) -> PaleoProxyGeneral:
         return self.proxyGeneral
 
     def setProxyGeneral(self, proxyGeneral:PaleoProxyGeneral):
-        assert isinstance(proxyGeneral, PaleoProxyGeneral), "Property proxyGeneral is not of type PaleoProxyGeneral"
+        assert isinstance(proxyGeneral, PaleoProxyGeneral), f"Error: '{proxyGeneral}' is not of type PaleoProxyGeneral\nYou can create a new PaleoProxyGeneral object from a string using the following syntax:\n- Fetch existing PaleoProxyGeneral by synonym:    PaleoProxyGeneral.from_synonym(\"{proxyGeneral}\")\n- Create a new custom PaleoProxyGeneral:    PaleoProxyGeneral(\"{proxyGeneral}\")"
         self.proxyGeneral = proxyGeneral
     
     def getResolution(self) -> Resolution:
         return self.resolution
 
     def setResolution(self, resolution:Resolution):
-        assert isinstance(resolution, Resolution), "Property resolution is not of type Resolution"
+        assert isinstance(resolution, Resolution), f"Error: '{resolution}' is not of type Resolution"
         self.resolution = resolution
     
     def getStandardVariable(self) -> PaleoVariable:
         return self.standardVariable
 
     def setStandardVariable(self, standardVariable:PaleoVariable):
-        assert isinstance(standardVariable, PaleoVariable), "Property standardVariable is not of type PaleoVariable"
+        assert isinstance(standardVariable, PaleoVariable), f"Error: '{standardVariable}' is not of type PaleoVariable\nYou can create a new PaleoVariable object from a string using the following syntax:\n- Fetch existing PaleoVariable by synonym:    PaleoVariable.from_synonym(\"{standardVariable}\")\n- Create a new custom PaleoVariable:    PaleoVariable(\"{standardVariable}\")"
         self.standardVariable = standardVariable
     
     def getUncertainty(self) -> str:
         return self.uncertainty
 
     def setUncertainty(self, uncertainty:str):
-        assert isinstance(uncertainty, str), "Property uncertainty is not of type str"
+        assert isinstance(uncertainty, str), f"Error: '{uncertainty}' is not of type str"
         self.uncertainty = uncertainty
     
     def getUncertaintyAnalytical(self) -> str:
         return self.uncertaintyAnalytical
 
     def setUncertaintyAnalytical(self, uncertaintyAnalytical:str):
-        assert isinstance(uncertaintyAnalytical, str), "Property uncertaintyAnalytical is not of type str"
+        assert isinstance(uncertaintyAnalytical, str), f"Error: '{uncertaintyAnalytical}' is not of type str"
         self.uncertaintyAnalytical = uncertaintyAnalytical
     
     def getUncertaintyReproducibility(self) -> str:
         return self.uncertaintyReproducibility
 
     def setUncertaintyReproducibility(self, uncertaintyReproducibility:str):
-        assert isinstance(uncertaintyReproducibility, str), "Property uncertaintyReproducibility is not of type str"
+        assert isinstance(uncertaintyReproducibility, str), f"Error: '{uncertaintyReproducibility}' is not of type str"
         self.uncertaintyReproducibility = uncertaintyReproducibility
     
     def getUnits(self) -> PaleoUnit:
         return self.units
 
     def setUnits(self, units:PaleoUnit):
-        assert isinstance(units, PaleoUnit), "Property units is not of type PaleoUnit"
+        assert isinstance(units, PaleoUnit), f"Error: '{units}' is not of type PaleoUnit\nYou can create a new PaleoUnit object from a string using the following syntax:\n- Fetch existing PaleoUnit by synonym:    PaleoUnit.from_synonym(\"{units}\")\n- Create a new custom PaleoUnit:    PaleoUnit(\"{units}\")"
         self.units = units
     
     def getValues(self) -> str:
         return self.values
 
     def setValues(self, values:str):
-        assert isinstance(values, str), "Property values is not of type str"
+        assert isinstance(values, str), f"Error: '{values}' is not of type str"
         self.values = values
     
     def getVariableId(self) -> str:
         return self.variableId
 
     def setVariableId(self, variableId:str):
-        assert isinstance(variableId, str), "Property variableId is not of type str"
+        assert isinstance(variableId, str), f"Error: '{variableId}' is not of type str"
         self.variableId = variableId
     
     def getVariableType(self) -> str:
         return self.variableType
 
     def setVariableType(self, variableType:str):
-        assert isinstance(variableType, str), "Property variableType is not of type str"
+        assert isinstance(variableType, str), f"Error: '{variableType}' is not of type str"
         self.variableType = variableType
     
     def isComposite(self) -> bool:
         return self.composite
 
     def setComposite(self, composite:bool):
-        assert isinstance(composite, bool), "Property composite is not of type bool"
+        assert isinstance(composite, bool), f"Error: '{composite}' is not of type bool"
         self.composite = composite
     
     def isPrimary(self) -> bool:
         return self.primary
 
     def setPrimary(self, primary:bool):
-        assert isinstance(primary, bool), "Property primary is not of type bool"
+        assert isinstance(primary, bool), f"Error: '{primary}' is not of type bool"
         self.primary = primary
     

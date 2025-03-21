@@ -478,97 +478,97 @@ class Calibration:
         return self.dOI
 
     def setDOI(self, dOI:str):
-        assert isinstance(dOI, str), "Property dOI is not of type str"
+        assert isinstance(dOI, str), f"Error: '{dOI}' is not of type str"
         self.dOI = dOI
     
     def getDatasetRange(self) -> str:
         return self.datasetRange
 
     def setDatasetRange(self, datasetRange:str):
-        assert isinstance(datasetRange, str), "Property datasetRange is not of type str"
+        assert isinstance(datasetRange, str), f"Error: '{datasetRange}' is not of type str"
         self.datasetRange = datasetRange
     
     def getEquation(self) -> str:
         return self.equation
 
     def setEquation(self, equation:str):
-        assert isinstance(equation, str), "Property equation is not of type str"
+        assert isinstance(equation, str), f"Error: '{equation}' is not of type str"
         self.equation = equation
     
     def getEquationIntercept(self) -> str:
         return self.equationIntercept
 
     def setEquationIntercept(self, equationIntercept:str):
-        assert isinstance(equationIntercept, str), "Property equationIntercept is not of type str"
+        assert isinstance(equationIntercept, str), f"Error: '{equationIntercept}' is not of type str"
         self.equationIntercept = equationIntercept
     
     def getEquationR2(self) -> str:
         return self.equationR2
 
     def setEquationR2(self, equationR2:str):
-        assert isinstance(equationR2, str), "Property equationR2 is not of type str"
+        assert isinstance(equationR2, str), f"Error: '{equationR2}' is not of type str"
         self.equationR2 = equationR2
     
     def getEquationSlope(self) -> str:
         return self.equationSlope
 
     def setEquationSlope(self, equationSlope:str):
-        assert isinstance(equationSlope, str), "Property equationSlope is not of type str"
+        assert isinstance(equationSlope, str), f"Error: '{equationSlope}' is not of type str"
         self.equationSlope = equationSlope
     
     def getEquationSlopeUncertainty(self) -> str:
         return self.equationSlopeUncertainty
 
     def setEquationSlopeUncertainty(self, equationSlopeUncertainty:str):
-        assert isinstance(equationSlopeUncertainty, str), "Property equationSlopeUncertainty is not of type str"
+        assert isinstance(equationSlopeUncertainty, str), f"Error: '{equationSlopeUncertainty}' is not of type str"
         self.equationSlopeUncertainty = equationSlopeUncertainty
     
     def getMethod(self) -> str:
         return self.method
 
     def setMethod(self, method:str):
-        assert isinstance(method, str), "Property method is not of type str"
+        assert isinstance(method, str), f"Error: '{method}' is not of type str"
         self.method = method
     
     def getMethodDetail(self) -> str:
         return self.methodDetail
 
     def setMethodDetail(self, methodDetail:str):
-        assert isinstance(methodDetail, str), "Property methodDetail is not of type str"
+        assert isinstance(methodDetail, str), f"Error: '{methodDetail}' is not of type str"
         self.methodDetail = methodDetail
     
     def getNotes(self) -> str:
         return self.notes
 
     def setNotes(self, notes:str):
-        assert isinstance(notes, str), "Property notes is not of type str"
+        assert isinstance(notes, str), f"Error: '{notes}' is not of type str"
         self.notes = notes
     
     def getProxyDataset(self) -> str:
         return self.proxyDataset
 
     def setProxyDataset(self, proxyDataset:str):
-        assert isinstance(proxyDataset, str), "Property proxyDataset is not of type str"
+        assert isinstance(proxyDataset, str), f"Error: '{proxyDataset}' is not of type str"
         self.proxyDataset = proxyDataset
     
     def getSeasonality(self) -> str:
         return self.seasonality
 
     def setSeasonality(self, seasonality:str):
-        assert isinstance(seasonality, str), "Property seasonality is not of type str"
+        assert isinstance(seasonality, str), f"Error: '{seasonality}' is not of type str"
         self.seasonality = seasonality
     
     def getTargetDataset(self) -> str:
         return self.targetDataset
 
     def setTargetDataset(self, targetDataset:str):
-        assert isinstance(targetDataset, str), "Property targetDataset is not of type str"
+        assert isinstance(targetDataset, str), f"Error: '{targetDataset}' is not of type str"
         self.targetDataset = targetDataset
     
     def getUncertainty(self) -> str:
         return self.uncertainty
 
     def setUncertainty(self, uncertainty:str):
-        assert isinstance(uncertainty, str), "Property uncertainty is not of type str"
+        assert isinstance(uncertainty, str), f"Error: '{uncertainty}' is not of type str"
         self.uncertainty = uncertainty
     

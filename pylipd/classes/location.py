@@ -502,104 +502,104 @@ class Location:
         return self.continent
 
     def setContinent(self, continent:str):
-        assert isinstance(continent, str), "Property continent is not of type str"
+        assert isinstance(continent, str), f"Error: '{continent}' is not of type str"
         self.continent = continent
     
     def getCoordinates(self) -> str:
         return self.coordinates
 
     def setCoordinates(self, coordinates:str):
-        assert isinstance(coordinates, str), "Property coordinates is not of type str"
+        assert isinstance(coordinates, str), f"Error: '{coordinates}' is not of type str"
         self.coordinates = coordinates
     
     def getCoordinatesFor(self) -> None:
         return self.coordinatesFor
 
     def setCoordinatesFor(self, coordinatesFor:None):
-        assert isinstance(coordinatesFor, None), "Property coordinatesFor is not of type None"
+        assert isinstance(coordinatesFor, None), f"Error: '{coordinatesFor}' is not of type None"
         self.coordinatesFor = coordinatesFor
     
     def getCountry(self) -> str:
         return self.country
 
     def setCountry(self, country:str):
-        assert isinstance(country, str), "Property country is not of type str"
+        assert isinstance(country, str), f"Error: '{country}' is not of type str"
         self.country = country
     
     def getCountryOcean(self) -> str:
         return self.countryOcean
 
     def setCountryOcean(self, countryOcean:str):
-        assert isinstance(countryOcean, str), "Property countryOcean is not of type str"
+        assert isinstance(countryOcean, str), f"Error: '{countryOcean}' is not of type str"
         self.countryOcean = countryOcean
     
     def getDescription(self) -> str:
         return self.description
 
     def setDescription(self, description:str):
-        assert isinstance(description, str), "Property description is not of type str"
+        assert isinstance(description, str), f"Error: '{description}' is not of type str"
         self.description = description
     
     def getElevation(self) -> str:
         return self.elevation
 
     def setElevation(self, elevation:str):
-        assert isinstance(elevation, str), "Property elevation is not of type str"
+        assert isinstance(elevation, str), f"Error: '{elevation}' is not of type str"
         self.elevation = elevation
     
     def getGeometryType(self) -> str:
         return self.geometryType
 
     def setGeometryType(self, geometryType:str):
-        assert isinstance(geometryType, str), "Property geometryType is not of type str"
+        assert isinstance(geometryType, str), f"Error: '{geometryType}' is not of type str"
         self.geometryType = geometryType
     
     def getLatitude(self) -> str:
         return self.latitude
 
     def setLatitude(self, latitude:str):
-        assert isinstance(latitude, str), "Property latitude is not of type str"
+        assert isinstance(latitude, str), f"Error: '{latitude}' is not of type str"
         self.latitude = latitude
     
     def getLocationName(self) -> str:
         return self.locationName
 
     def setLocationName(self, locationName:str):
-        assert isinstance(locationName, str), "Property locationName is not of type str"
+        assert isinstance(locationName, str), f"Error: '{locationName}' is not of type str"
         self.locationName = locationName
     
     def getLocationType(self) -> str:
         return self.locationType
 
     def setLocationType(self, locationType:str):
-        assert isinstance(locationType, str), "Property locationType is not of type str"
+        assert isinstance(locationType, str), f"Error: '{locationType}' is not of type str"
         self.locationType = locationType
     
     def getLongitude(self) -> str:
         return self.longitude
 
     def setLongitude(self, longitude:str):
-        assert isinstance(longitude, str), "Property longitude is not of type str"
+        assert isinstance(longitude, str), f"Error: '{longitude}' is not of type str"
         self.longitude = longitude
     
     def getNotes(self) -> str:
         return self.notes
 
     def setNotes(self, notes:str):
-        assert isinstance(notes, str), "Property notes is not of type str"
+        assert isinstance(notes, str), f"Error: '{notes}' is not of type str"
         self.notes = notes
     
     def getOcean(self) -> str:
         return self.ocean
 
     def setOcean(self, ocean:str):
-        assert isinstance(ocean, str), "Property ocean is not of type str"
+        assert isinstance(ocean, str), f"Error: '{ocean}' is not of type str"
         self.ocean = ocean
     
     def getSiteName(self) -> str:
         return self.siteName
 
     def setSiteName(self, siteName:str):
-        assert isinstance(siteName, str), "Property siteName is not of type str"
+        assert isinstance(siteName, str), f"Error: '{siteName}' is not of type str"
         self.siteName = siteName
     

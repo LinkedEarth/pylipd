@@ -508,97 +508,97 @@ class Interpretation:
         return self.basis
 
     def setBasis(self, basis:str):
-        assert isinstance(basis, str), "Property basis is not of type str"
+        assert isinstance(basis, str), f"Error: '{basis}' is not of type str"
         self.basis = basis
     
     def getDirection(self) -> str:
         return self.direction
 
     def setDirection(self, direction:str):
-        assert isinstance(direction, str), "Property direction is not of type str"
+        assert isinstance(direction, str), f"Error: '{direction}' is not of type str"
         self.direction = direction
     
     def getMathematicalRelation(self) -> str:
         return self.mathematicalRelation
 
     def setMathematicalRelation(self, mathematicalRelation:str):
-        assert isinstance(mathematicalRelation, str), "Property mathematicalRelation is not of type str"
+        assert isinstance(mathematicalRelation, str), f"Error: '{mathematicalRelation}' is not of type str"
         self.mathematicalRelation = mathematicalRelation
     
     def getNotes(self) -> str:
         return self.notes
 
     def setNotes(self, notes:str):
-        assert isinstance(notes, str), "Property notes is not of type str"
+        assert isinstance(notes, str), f"Error: '{notes}' is not of type str"
         self.notes = notes
     
     def getRank(self) -> str:
         return self.rank
 
     def setRank(self, rank:str):
-        assert isinstance(rank, str), "Property rank is not of type str"
+        assert isinstance(rank, str), f"Error: '{rank}' is not of type str"
         self.rank = rank
     
     def getScope(self) -> str:
         return self.scope
 
     def setScope(self, scope:str):
-        assert isinstance(scope, str), "Property scope is not of type str"
+        assert isinstance(scope, str), f"Error: '{scope}' is not of type str"
         self.scope = scope
     
     def getSeasonality(self) -> InterpretationSeasonality:
         return self.seasonality
 
     def setSeasonality(self, seasonality:InterpretationSeasonality):
-        assert isinstance(seasonality, InterpretationSeasonality), "Property seasonality is not of type InterpretationSeasonality"
+        assert isinstance(seasonality, InterpretationSeasonality), f"Error: '{seasonality}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym:    InterpretationSeasonality.from_synonym(\"{seasonality}\")\n- Create a new custom InterpretationSeasonality:    InterpretationSeasonality(\"{seasonality}\")"
         self.seasonality = seasonality
     
     def getSeasonalityGeneral(self) -> InterpretationSeasonality:
         return self.seasonalityGeneral
 
     def setSeasonalityGeneral(self, seasonalityGeneral:InterpretationSeasonality):
-        assert isinstance(seasonalityGeneral, InterpretationSeasonality), "Property seasonalityGeneral is not of type InterpretationSeasonality"
+        assert isinstance(seasonalityGeneral, InterpretationSeasonality), f"Error: '{seasonalityGeneral}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym:    InterpretationSeasonality.from_synonym(\"{seasonalityGeneral}\")\n- Create a new custom InterpretationSeasonality:    InterpretationSeasonality(\"{seasonalityGeneral}\")"
         self.seasonalityGeneral = seasonalityGeneral
     
     def getSeasonalityOriginal(self) -> InterpretationSeasonality:
         return self.seasonalityOriginal
 
     def setSeasonalityOriginal(self, seasonalityOriginal:InterpretationSeasonality):
-        assert isinstance(seasonalityOriginal, InterpretationSeasonality), "Property seasonalityOriginal is not of type InterpretationSeasonality"
+        assert isinstance(seasonalityOriginal, InterpretationSeasonality), f"Error: '{seasonalityOriginal}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym:    InterpretationSeasonality.from_synonym(\"{seasonalityOriginal}\")\n- Create a new custom InterpretationSeasonality:    InterpretationSeasonality(\"{seasonalityOriginal}\")"
         self.seasonalityOriginal = seasonalityOriginal
     
     def getVariable(self) -> InterpretationVariable:
         return self.variable
 
     def setVariable(self, variable:InterpretationVariable):
-        assert isinstance(variable, InterpretationVariable), "Property variable is not of type InterpretationVariable"
+        assert isinstance(variable, InterpretationVariable), f"Error: '{variable}' is not of type InterpretationVariable\nYou can create a new InterpretationVariable object from a string using the following syntax:\n- Fetch existing InterpretationVariable by synonym:    InterpretationVariable.from_synonym(\"{variable}\")\n- Create a new custom InterpretationVariable:    InterpretationVariable(\"{variable}\")"
         self.variable = variable
     
     def getVariableDetail(self) -> str:
         return self.variableDetail
 
     def setVariableDetail(self, variableDetail:str):
-        assert isinstance(variableDetail, str), "Property variableDetail is not of type str"
+        assert isinstance(variableDetail, str), f"Error: '{variableDetail}' is not of type str"
         self.variableDetail = variableDetail
     
     def getVariableGeneral(self) -> str:
         return self.variableGeneral
 
     def setVariableGeneral(self, variableGeneral:str):
-        assert isinstance(variableGeneral, str), "Property variableGeneral is not of type str"
+        assert isinstance(variableGeneral, str), f"Error: '{variableGeneral}' is not of type str"
         self.variableGeneral = variableGeneral
     
     def getVariableGeneralDirection(self) -> str:
         return self.variableGeneralDirection
 
     def setVariableGeneralDirection(self, variableGeneralDirection:str):
-        assert isinstance(variableGeneralDirection, str), "Property variableGeneralDirection is not of type str"
+        assert isinstance(variableGeneralDirection, str), f"Error: '{variableGeneralDirection}' is not of type str"
         self.variableGeneralDirection = variableGeneralDirection
     
     def isLocal(self) -> str:
         return self.local
 
     def setLocal(self, local:str):
-        assert isinstance(local, str), "Property local is not of type str"
+        assert isinstance(local, str), f"Error: '{local}' is not of type str"
         self.local = local
     

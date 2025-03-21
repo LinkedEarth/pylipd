@@ -252,42 +252,42 @@ class Model:
         return self.code
 
     def setCode(self, code:str):
-        assert isinstance(code, str), "Property code is not of type str"
+        assert isinstance(code, str), f"Error: '{code}' is not of type str"
         self.code = code
     
     def getDistributionTables(self) -> list[DataTable]:
         return self.distributionTables
 
     def setDistributionTables(self, distributionTables:list[DataTable]):
-        assert isinstance(distributionTables, list), "Property distributionTables is not a list"
-        assert all(isinstance(x, DataTable) for x in distributionTables), "Property distributionTables is not a list of DataTable"
+        assert isinstance(distributionTables, list), "Error: distributionTables is not a list"
+        assert all(isinstance(x, DataTable) for x in distributionTables), f"Error: '{distributionTables}' is not of type DataTable"
         self.distributionTables = distributionTables
 
     def addDistributionTable(self, distributionTables:DataTable):
-        assert isinstance(distributionTables, DataTable), "Property distributionTables is not of type DataTable"
+        assert isinstance(distributionTables, DataTable), f"Error: '{distributionTables}' is not of type DataTable"
         self.distributionTables.append(distributionTables)
         
     def getEnsembleTables(self) -> list[DataTable]:
         return self.ensembleTables
 
     def setEnsembleTables(self, ensembleTables:list[DataTable]):
-        assert isinstance(ensembleTables, list), "Property ensembleTables is not a list"
-        assert all(isinstance(x, DataTable) for x in ensembleTables), "Property ensembleTables is not a list of DataTable"
+        assert isinstance(ensembleTables, list), "Error: ensembleTables is not a list"
+        assert all(isinstance(x, DataTable) for x in ensembleTables), f"Error: '{ensembleTables}' is not of type DataTable"
         self.ensembleTables = ensembleTables
 
     def addEnsembleTable(self, ensembleTables:DataTable):
-        assert isinstance(ensembleTables, DataTable), "Property ensembleTables is not of type DataTable"
+        assert isinstance(ensembleTables, DataTable), f"Error: '{ensembleTables}' is not of type DataTable"
         self.ensembleTables.append(ensembleTables)
         
     def getSummaryTables(self) -> list[DataTable]:
         return self.summaryTables
 
     def setSummaryTables(self, summaryTables:list[DataTable]):
-        assert isinstance(summaryTables, list), "Property summaryTables is not a list"
-        assert all(isinstance(x, DataTable) for x in summaryTables), "Property summaryTables is not a list of DataTable"
+        assert isinstance(summaryTables, list), "Error: summaryTables is not a list"
+        assert all(isinstance(x, DataTable) for x in summaryTables), f"Error: '{summaryTables}' is not of type DataTable"
         self.summaryTables = summaryTables
 
     def addSummaryTable(self, summaryTables:DataTable):
-        assert isinstance(summaryTables, DataTable), "Property summaryTables is not of type DataTable"
+        assert isinstance(summaryTables, DataTable), f"Error: '{summaryTables}' is not of type DataTable"
         self.summaryTables.append(summaryTables)
         

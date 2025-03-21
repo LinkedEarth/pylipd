@@ -192,20 +192,20 @@ class PhysicalSample:
         return self.housedAt
 
     def setHousedAt(self, housedAt:str):
-        assert isinstance(housedAt, str), "Property housedAt is not of type str"
+        assert isinstance(housedAt, str), f"Error: '{housedAt}' is not of type str"
         self.housedAt = housedAt
     
     def getIGSN(self) -> str:
         return self.iGSN
 
     def setIGSN(self, iGSN:str):
-        assert isinstance(iGSN, str), "Property iGSN is not of type str"
+        assert isinstance(iGSN, str), f"Error: '{iGSN}' is not of type str"
         self.iGSN = iGSN
     
     def getName(self) -> str:
         return self.name
 
     def setName(self, name:str):
-        assert isinstance(name, str), "Property name is not of type str"
+        assert isinstance(name, str), f"Error: '{name}' is not of type str"
         self.name = name
     
