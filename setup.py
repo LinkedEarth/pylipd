@@ -15,6 +15,7 @@ setup(
     zip_safe=False,
     version=version,
     license='Apache-2.0',
+    license_files=['LICENSE'],
     description='Python utilities for handling LiPD data',
     long_description=read("README.md"),
     long_description_content_type = 'text/markdown',
