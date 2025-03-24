@@ -851,8 +851,9 @@ class LiPD(RDFGraph):
         --------
         
         .. jupyter-execute::
-            
+        
             from pylipd.utils.dataset import load_dir
+            
             lipd = load_dir('Temp12k')
             df = lipd.get_all_compilation_names()
             print(df)
@@ -1180,6 +1181,7 @@ class LiPD(RDFGraph):
         If searching for multiple archiveTypes, you can construct the name as follows:
         
         .. jupyter-execute::
+
             from pylipd.utils.dataset import load_dir
 
             lipd = load_dir('Pages2k')
@@ -1227,6 +1229,7 @@ class LiPD(RDFGraph):
         If searching for multiple dataset names, you can construct the name as follows:
         
         .. jupyter-execute::
+        
             from pylipd.utils.dataset import load_dir
 
             lipd = load_dir('Pages2k')
