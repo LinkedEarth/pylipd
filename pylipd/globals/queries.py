@@ -259,6 +259,14 @@ QUERY_FILTER_ARCHIVE_TYPE = """
     }
 """
 
+QUERY_FILTER_DATASET_NAME = """
+    SELECT ?dsname WHERE {
+        ?ds a le:Dataset .
+        ?ds le:hasName ?dsname .
+        FILTER regex(?dsname, "[datasetName].*", "i")
+    }
+"""
+
 QUERY_FILTER_TIME = """
     SELECT ?dsname ?minage ?maxage WHERE {
         ?ds a le:Dataset .
@@ -528,4 +536,28 @@ QUERY_LOCATION ="""
         OPTIONAL { {?loc le:hasLongitude ?geo_meanLon} UNION {?loc wgs84:long ?geo_meanLon } } .
         OPTIONAL { {?loc le:hasElevation ?geo_meanElev} UNION {?loc wgs84:alt ?geo_meanElev } }        
     }
+"""
+
+QUERY_FILTER_COMPILATION="""
+        SELECT DISTINCT ?dataSetName WHERE {
+            ?ds a le:Dataset .
+            ?ds le:hasName ?dataSetName .
+        
+            ?ds le:hasPaleoData ?data .
+            ?data le:hasMeasurementTable ?table .
+            ?table le:hasVariable ?var .
+            
+            ?var le:partOfCompilation ?compilation . 
+            ?compilation le:hasName ?compilationName .
+            FILTER regex(?compilationName, "[compilationName].*", "i")}
+            
+    """
+
+QUERY_COMPILATION_NAME="""
+        PREFIX le: <http://linked.earth/ontology#>
+        
+        SELECT DISTINCT ?compilationName WHERE {
+            ?var a le:Variable .
+            ?var le:partOfCompilation ?compilation . 
+            ?compilation le:hasName ?compilationName .}
 """

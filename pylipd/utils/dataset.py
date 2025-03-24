@@ -14,7 +14,7 @@ from pylipd.lipd import LiPD
 
 DATA_DIR = Path(__file__).parents[1].joinpath("data").resolve()
 FOLDER_DIR = DATA_DIR.joinpath('Pages2k/')
-#print(DATA_DIR)
+TEMP12_DIR = DATA_DIR.joinpath('Temp12k')
 
 def available_dataset_names():
     '''Helper function to easily see what datasets are available to load
@@ -31,7 +31,10 @@ def available_dataset_names():
     dir_name = str(FOLDER_DIR)+'/*.lpd'
     files_dir = (glob.glob(dir_name))
     
-    files = files_unique + files_dir
+    temp12_dir = str(TEMP12_DIR)+'/*.lpd'
+    temp12_files = (glob.glob(temp12_dir)) 
+    
+    files = files_unique + files_dir + temp12_files
     
     names = []
     for item in files:
@@ -49,8 +52,11 @@ def load_datasets(names):
     files_unique = glob.glob(path_name)
     dir_name = str(FOLDER_DIR)+'/*.lpd'
     files_dir = (glob.glob(dir_name)) 
+    temp12_dir = str(TEMP12_DIR)+'/*.lpd'
+    temp12_files = (glob.glob(temp12_dir)) 
     
-    files = files_unique + files_dir
+       
+    files = files_unique + files_dir + temp12_files
     
     full_paths = []
     for name in names:
@@ -67,10 +73,13 @@ def load_datasets(names):
 
 def load_dir(name = 'Pages2k'):
     
-    if name!= 'Pages2k':
-        raise ValueError("Option for folder is 'Pages2k")
-    
+        
     L = LiPD()
-    L.load_from_dir(str(FOLDER_DIR))
+    if name == 'Pages2k':
+        L.load_from_dir(str(FOLDER_DIR))
+    elif name == 'Temp12k':
+        L.load_from_dir(str(TEMP12_DIR))
+    else:
+        raise ValueError('Directory should be either Pages2k or Temp12k')
     
     return L

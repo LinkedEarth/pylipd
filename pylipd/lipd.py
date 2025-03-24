@@ -21,7 +21,8 @@ from pylipd.classes.dataset import Dataset
 from pylipd.utils.json_to_rdf import JSONToRDF
 from pylipd.utils.rdf_to_json import RDFToJSON
 
-from .globals.queries import QUERY_FILTER_TIME, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE, QUERY_DATASET_PROPERTIES, QUERY_VARIABLE_PROPERTIES, QUERY_MODEL_PROPERTIES, QUERY_LOCATION
+from .globals.queries import QUERY_FILTER_TIME, QUERY_BIBLIO, QUERY_DSID, QUERY_DSNAME, QUERY_ENSEMBLE_TABLE, QUERY_ENSEMBLE_TABLE_SHORT, QUERY_FILTER_ARCHIVE_TYPE, QUERY_FILTER_GEO, QUERY_VARIABLE, QUERY_VARIABLE_GRAPH, QUERY_UNIQUE_ARCHIVE_TYPE, QUERY_TIMESERIES_ESSENTIALS_CHRON, QUERY_TIMESERIES_ESSENTIALS_PALEO, QUERY_DISTINCT_VARIABLE, QUERY_DATASET_PROPERTIES, QUERY_VARIABLE_PROPERTIES, QUERY_MODEL_PROPERTIES, QUERY_LOCATION, QUERY_FILTER_DATASET_NAME, QUERY_FILTER_COMPILATION, QUERY_COMPILATION_NAME
+
 from .lipd_series import LiPDSeries
 from .utils.multi_processing import multi_convert_to_rdf, multi_load_lipd
 from .utils.rdf_graph import RDFGraph
@@ -837,6 +838,30 @@ class LiPD(RDFGraph):
             
                 
         return self.query(query)[1]
+    
+    def get_all_compilation_names(self):
+        '''Return the names of the compilation present in the LiPD object     
+
+        Returns
+        -------
+        l : list
+            A list returning the names of the available compilations.
+        
+        Examples
+        --------
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+            lipd = load_dir('Temp12k')
+            df = lipd.get_all_compilation_names()
+            print(df)
+
+        '''
+        
+        qres, qres_df = self.query(QUERY_COMPILATION_NAME)
+        return [sanitizeId(row.compilationName) for row in qres]
+
 
     def get_ensemble_tables(self, dsname = None, ensembleVarName = None, ensembleDepthVarName = 'depth'):
         '''Gets ensemble tables from the LiPD graph
@@ -1150,14 +1175,112 @@ class LiPD(RDFGraph):
 
             lipd = load_dir('Pages2k')
             Lfiltered = lipd.filter_by_archive_type('marine')
-            Lfiltered.get_all_dataset_names()
+            Lfiltered.get_all_archiveTypes()
+        
+        If searching for multiple archiveTypes, you can construct the name as follows:
+        
+        .. jupyter-execute::
+            from pylipd.utils.dataset import load_dir
+
+            lipd = load_dir('Pages2k')
+            Lfiltered = lipd.filter_by_archive_type('marine|coral')
+            Lfiltered.get_all_archiveTypes()
         
         '''
+        
         query = QUERY_FILTER_ARCHIVE_TYPE
         query = query.replace("[archiveType]", archiveType)
         qres, qres_df = self.query(query)
         dsnames = [sanitizeId(row.dsname) for row in qres]
         return self.get(dsnames)
+
+    
+    def filter_by_datasetName(self, datasetName):
+        '''
+        Filters datasets to return a new LiPD object that only keeps datasets that have the specified names
+
+        Parameters
+        ----------
+
+        datasetName : str 
+            The datasetNames to filter by
+
+        Returns
+        -------
+        
+        pylipd.lipd.LiPD
+            A new LiPD object that only contains datasets that have the specified archive type (regex)
+        
+        Examples
+        --------
+        
+        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Pages2k sample datasets using this method.
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import load_dir
+
+            lipd = load_dir('Pages2k')
+            Lfiltered = lipd.filter_by_datasetName('Ocn-RedSea.Felis.2000')
+            Lfiltered.get_all_dataset_names()
+        
+        If searching for multiple dataset names, you can construct the name as follows:
+        
+        .. jupyter-execute::
+            from pylipd.utils.dataset import load_dir
+
+            lipd = load_dir('Pages2k')
+            dsnames = ['Ocn-RedSea.Felis.2000','Ant-WAIS-Divide.Severinghaus.2012']
+            dsquery = '|'.join(dsnames)
+            Lfiltered = lipd.filter_by_datasetName(dsquery)
+            Lfiltered.get_all_dataset_names()
+            
+        '''
+        
+        query = QUERY_FILTER_DATASET_NAME
+        query = query.replace("[datasetName]", datasetName)
+        qres, qres_df = self.query(query)
+        dsnames = [sanitizeId(row.dsname) for row in qres]
+        return self.get(dsnames)
+    
+    def filter_by_compilationName(self, compilationName):
+        '''
+        Filters datasets to return a new LiPD object that only keeps datasets that have the specific compilation
+
+        Parameters
+        ----------
+
+        compilationName : str 
+            The name of the compilation to filter by
+
+        Returns
+        -------
+        
+        pylipd.lipd.LiPD
+            A new LiPD object that only contains datasets that have the specified archive type (regex)
+        
+        Examples
+        --------
+        
+        pyLipd ships with existing datasets that can be loaded directly through the package. Let's load the Pages2k sample datasets using this method.
+        
+        .. jupyter-execute::
+            
+            from pylipd.utils.dataset import available_dataset_names, load_datasets
+
+            dsList = available_dataset_names()
+            D = load_datasets(dsList)
+            Dfiltered = D.filter_by_compilationName('Temp12k')
+            Dfiltered.get_all_dataset_names()
+        
+        '''
+        
+        query = QUERY_FILTER_COMPILATION
+        query = query.replace("[compilationName]", compilationName)
+        qres, qres_df = self.query(query)
+        dsnames = [sanitizeId(row.dataSetName) for row in qres]
+        return self.get(dsnames)
+        
     
     def filter_by_time(self,timeBound, timeBoundType = 'any', recordLength = None):
         """

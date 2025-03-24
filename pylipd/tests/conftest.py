@@ -1,4 +1,3 @@
-from pylipd.lipd import LiPD
 from pylipd.utils.dataset import available_dataset_names, load_datasets, load_dir
 import pytest 
 import random
@@ -18,5 +17,10 @@ def multipleLipds(seed = 20):
 
 @pytest.fixture
 def pages2k():
-    D = load_dir()
+    D = load_dir('Pages2k')
+    return D
+
+@pytest.fixture
+def temp12k():
+    D = load_dir('Temp12k')
     return D
