@@ -4,3 +4,7 @@ requires = [
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# This section disables PEP 621 auto-discovery of dynamic fields
+metadata.dynamic = []
