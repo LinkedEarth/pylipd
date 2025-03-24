@@ -23,5 +23,6 @@ jobs:
       run: |
         rm -rf build/ dist/ *.egg-info
         python -m build
+        unzip -p dist/*.whl '*/METADATA' | grep -i license || true #debug step
         twine check dist/*
         twine upload dist/*
