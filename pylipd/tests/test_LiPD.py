@@ -76,6 +76,10 @@ class Testgetall():
     def test_variables_t0(self,odp846):
         lipd = odp846
         df = lipd.get_all_variables()
+    
+    def test_compilation_t0(self, temp12k):
+        lipd = temp12k
+        comps = lipd.get_all_compilation_names()
         
 
 class TestManipulation():
@@ -105,11 +109,34 @@ class TestFilter():
         Lfiltered = D.filter_by_geo_bbox(0,25,50,50)
         assert len(Lfiltered.get_all_dataset_names()) == 5
     
-    def test_archive_to(self,pages2k):
+    def test_archive_t0(self,pages2k):
         D=pages2k
         Lfiltered = D.filter_by_archive_type('marine sediment')
         assert len(Lfiltered.get_all_archiveTypes())==1
         assert Lfiltered.get_all_archiveTypes()[0] == 'Marine sediment'
+    
+    def test_archive_t1(self,pages2k):
+        D=pages2k
+        Lfiltered = D.filter_by_archive_type('marine|coral')
+        assert len(Lfiltered.get_all_archiveTypes())==2
+        assert 'Marine sediment' in Lfiltered.get_all_archiveTypes()
+        assert 'Coral' in Lfiltered.get_all_archiveTypes()
+    
+    def test_dataset_t0(self, pages2k):
+        D=pages2k
+        Lfiltered = D.filter_by_datasetName('Ocn-RedSea.Felis.2000')
+        names = Lfiltered.get_all_dataset_names()
+        assert len(names) == 1
+        assert 'Ocn-RedSea.Felis.2000' in names
+    
+    def test_dataset_t1(self, pages2k):
+        D=pages2k
+        Lfiltered = D.filter_by_datasetName('Ocn-RedSea.Felis.2000|Ant-WAIS-Divide.Severinghaus.2012')
+        names = Lfiltered.get_all_dataset_names()
+        assert len(names) == 2
+        assert 'Ocn-RedSea.Felis.2000' in names
+        assert 'Ant-WAIS-Divide.Severinghaus.2012'
+    
     
     @pytest.mark.parametrize(('timeBoundType', 'recordLength'),
                              [('any', None),
@@ -123,6 +150,11 @@ class TestFilter():
         D=pages2k
         Lfiltered = D.filter_by_time(timeBound=[0,1800], timeBoundType=timeBoundType,recordLength=recordLength)
 
+    def test_compilation_t0(self, temp12k):
+        D=temp12k
+        DFiltered = D.filter_by_compilationName('Temp12k')
+        
+        
         
 class TestGet():
     @pytest.mark.parametrize('dataframe',['True', 'False'])
