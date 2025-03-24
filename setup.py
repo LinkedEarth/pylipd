@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = '1.3.7.b4'
+version = '1.4.0'
 
 # Read the readme file contents into variable
 def read(fname):
@@ -14,7 +14,7 @@ setup(
     package_data={'': ['data/*.lpd', 'data/Pages2k/*.lpd', 'globals/synonyms.json']},
     zip_safe=False,
     version=version,
-    license='Apache 2-0 License',
+    license='Apache-2.0',
     description='Python utilities for handling LiPD data',
     long_description=read("README.md"),
     long_description_content_type = 'text/markdown',
@@ -35,5 +35,5 @@ setup(
         "numpy",
         "bibtexparser"
     ],
-    python_requires=">=3.10.0"
+    python_requires=">=3.11.0"
 )
