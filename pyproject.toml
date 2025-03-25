@@ -1,6 +1,35 @@
-[build-system]
-requires = [
-    "setuptools>=68.0",
-    "wheel"
+[project]
+name = "pylipd"
+version = "1.4.0"
+description = "Python utilities for handling LiPD data"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [
+  { name = "Varun Ratnakar", email = "varunratnakar@gmail.com" },
+  { name = "Deborah Khider" }
 ]
+requires-python = ">=3.11"
+dependencies = [
+  "rdflib",
+  "pandas",
+  "doi2bib",
+  "pybtex",
+  "tqdm",
+  "bagit",
+  "numpy",
+  "bibtexparser"
+]
+
+[tool.setuptools.package-data]
+"pylipd" = ["data/**/*.lpd", "globals/*.json"]
+
+[tool.setuptools]
+license-files = []
+
+[project.urls]
+Homepage = "https://github.com/linkedearth/pylipd"
+Issues = "https://github.com/linkedearth/pylipd/issues"
+
+[build-system]
+requires = ["setuptools>=69.0.2", "wheel"]
 build-backend = "setuptools.build_meta"
