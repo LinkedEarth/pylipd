@@ -745,7 +745,7 @@ class Dataset:
         return self.archiveType
 
     def setArchiveType(self, archiveType:ArchiveType):
-        assert isinstance(archiveType, ArchiveType), f"Error: '{archiveType}' is not of type ArchiveType\nYou can create a new ArchiveType object from a string using the following syntax:\n- Fetch existing ArchiveType by synonym:    ArchiveType.from_synonym(\"{archiveType}\")\n- Create a new custom ArchiveType:    ArchiveType(\"{archiveType}\")"
+        assert isinstance(archiveType, ArchiveType), f"Error: '{archiveType}' is not of type ArchiveType\nYou can create a new ArchiveType object from a string using the following syntax:\n- Fetch existing ArchiveType by synonym: ArchiveType.from_synonym(\"{archiveType}\")\n- Create a new custom ArchiveType: ArchiveType(\"{archiveType}\")"
         self.archiveType = archiveType
     
     def getChangeLog(self) -> ChangeLog:

@@ -440,7 +440,12 @@ SCHEMA = {
             'alternates': ['hasResolution']
         },
         'physicalSample': {
+            'name': 'hasPhysicalSample',
+            'schema': 'PhysicalSample',
+            'category': 'PhysicalSample',
+            'alternates': ['hasPhysicalSample'],
             'type': 'Individual',
+            'multiple': True
         },
         'uncertainty': { 
             'name': 'hasUncertainty'         

@@ -550,28 +550,28 @@ class Interpretation:
         return self.seasonality
 
     def setSeasonality(self, seasonality:InterpretationSeasonality):
-        assert isinstance(seasonality, InterpretationSeasonality), f"Error: '{seasonality}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym:    InterpretationSeasonality.from_synonym(\"{seasonality}\")\n- Create a new custom InterpretationSeasonality:    InterpretationSeasonality(\"{seasonality}\")"
+        assert isinstance(seasonality, InterpretationSeasonality), f"Error: '{seasonality}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym: InterpretationSeasonality.from_synonym(\"{seasonality}\")\n- Create a new custom InterpretationSeasonality: InterpretationSeasonality(\"{seasonality}\")"
         self.seasonality = seasonality
     
     def getSeasonalityGeneral(self) -> InterpretationSeasonality:
         return self.seasonalityGeneral
 
     def setSeasonalityGeneral(self, seasonalityGeneral:InterpretationSeasonality):
-        assert isinstance(seasonalityGeneral, InterpretationSeasonality), f"Error: '{seasonalityGeneral}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym:    InterpretationSeasonality.from_synonym(\"{seasonalityGeneral}\")\n- Create a new custom InterpretationSeasonality:    InterpretationSeasonality(\"{seasonalityGeneral}\")"
+        assert isinstance(seasonalityGeneral, InterpretationSeasonality), f"Error: '{seasonalityGeneral}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym: InterpretationSeasonality.from_synonym(\"{seasonalityGeneral}\")\n- Create a new custom InterpretationSeasonality: InterpretationSeasonality(\"{seasonalityGeneral}\")"
         self.seasonalityGeneral = seasonalityGeneral
     
     def getSeasonalityOriginal(self) -> InterpretationSeasonality:
         return self.seasonalityOriginal
 
     def setSeasonalityOriginal(self, seasonalityOriginal:InterpretationSeasonality):
-        assert isinstance(seasonalityOriginal, InterpretationSeasonality), f"Error: '{seasonalityOriginal}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym:    InterpretationSeasonality.from_synonym(\"{seasonalityOriginal}\")\n- Create a new custom InterpretationSeasonality:    InterpretationSeasonality(\"{seasonalityOriginal}\")"
+        assert isinstance(seasonalityOriginal, InterpretationSeasonality), f"Error: '{seasonalityOriginal}' is not of type InterpretationSeasonality\nYou can create a new InterpretationSeasonality object from a string using the following syntax:\n- Fetch existing InterpretationSeasonality by synonym: InterpretationSeasonality.from_synonym(\"{seasonalityOriginal}\")\n- Create a new custom InterpretationSeasonality: InterpretationSeasonality(\"{seasonalityOriginal}\")"
         self.seasonalityOriginal = seasonalityOriginal
     
     def getVariable(self) -> InterpretationVariable:
         return self.variable
 
     def setVariable(self, variable:InterpretationVariable):
-        assert isinstance(variable, InterpretationVariable), f"Error: '{variable}' is not of type InterpretationVariable\nYou can create a new InterpretationVariable object from a string using the following syntax:\n- Fetch existing InterpretationVariable by synonym:    InterpretationVariable.from_synonym(\"{variable}\")\n- Create a new custom InterpretationVariable:    InterpretationVariable(\"{variable}\")"
+        assert isinstance(variable, InterpretationVariable), f"Error: '{variable}' is not of type InterpretationVariable\nYou can create a new InterpretationVariable object from a string using the following syntax:\n- Fetch existing InterpretationVariable by synonym: InterpretationVariable.from_synonym(\"{variable}\")\n- Create a new custom InterpretationVariable: InterpretationVariable(\"{variable}\")"
         self.variable = variable
     
     def getVariableDetail(self) -> str:

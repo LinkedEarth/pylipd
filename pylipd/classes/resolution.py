@@ -280,6 +280,6 @@ class Resolution:
         return self.units
 
     def setUnits(self, units:PaleoUnit):
-        assert isinstance(units, PaleoUnit), f"Error: '{units}' is not of type PaleoUnit\nYou can create a new PaleoUnit object from a string using the following syntax:\n- Fetch existing PaleoUnit by synonym:    PaleoUnit.from_synonym(\"{units}\")\n- Create a new custom PaleoUnit:    PaleoUnit(\"{units}\")"
+        assert isinstance(units, PaleoUnit), f"Error: '{units}' is not of type PaleoUnit\nYou can create a new PaleoUnit object from a string using the following syntax:\n- Fetch existing PaleoUnit by synonym: PaleoUnit.from_synonym(\"{units}\")\n- Create a new custom PaleoUnit: PaleoUnit(\"{units}\")"
         self.units = units
     

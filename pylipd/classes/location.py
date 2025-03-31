@@ -512,11 +512,11 @@ class Location:
         assert isinstance(coordinates, str), f"Error: '{coordinates}' is not of type str"
         self.coordinates = coordinates
     
-    def getCoordinatesFor(self) -> None:
+    def getCoordinatesFor(self) -> object:
         return self.coordinatesFor
 
-    def setCoordinatesFor(self, coordinatesFor:None):
-        assert isinstance(coordinatesFor, None), f"Error: '{coordinatesFor}' is not of type None"
+    def setCoordinatesFor(self, coordinatesFor:object):
+        assert isinstance(coordinatesFor, object), f"Error: '{coordinatesFor}' is not of type object"
         self.coordinatesFor = coordinatesFor
     
     def getCountry(self) -> str:

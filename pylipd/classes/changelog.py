@@ -160,11 +160,11 @@ class ChangeLog:
             self.misc[key] = []
         self.misc[key].append(value)
         
-    def getChanges(self) -> None:
+    def getChanges(self) -> object:
         return self.changes
 
-    def setChanges(self, changes:None):
-        assert isinstance(changes, None), f"Error: '{changes}' is not of type None"
+    def setChanges(self, changes:object):
+        assert isinstance(changes, object), f"Error: '{changes}' is not of type object"
         self.changes = changes
     
     def getNotes(self) -> str:

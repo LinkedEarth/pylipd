@@ -13,6 +13,7 @@ from pylipd.classes.paleoproxy import PaleoProxy
 from pylipd.classes.paleoproxygeneral import PaleoProxyGeneral
 from pylipd.classes.paleounit import PaleoUnit
 from pylipd.classes.paleovariable import PaleoVariable
+from pylipd.classes.physicalsample import PhysicalSample
 from pylipd.classes.resolution import Resolution
 
 class Variable:
@@ -35,7 +36,7 @@ class Variable:
         self.name: str = None
         self.notes: str = None
         self.partOfCompilation: Compilation = None
-        self.physicalSample: None = None
+        self.physicalSamples: list[PhysicalSample] = []
         self.primary: bool = None
         self.proxy: PaleoProxy = None
         self.proxyGeneral: PaleoProxyGeneral = None
@@ -159,6 +160,15 @@ class Variable:
                         obj = val["@value"]                        
                     self.notes = obj
         
+            elif key == "hasPhysicalSample":
+                for val in value:
+                    if "@id" in val:
+                        obj = PhysicalSample.from_data(val["@id"], data)
+                    else:
+                        obj = val["@value"]
+            
+                    self.physicalSamples.append(obj)
+        
             elif key == "hasProxy":
                 for val in value:
                     obj = PaleoProxy.from_synonym(re.sub("^.*?#", "", val["@id"]))
@@ -248,11 +258,6 @@ class Variable:
                         obj = val["@value"]
                                     
                     self.partOfCompilation = obj
-        
-            elif key == "physicalSample":
-                for val in value:
-                    obj = val["@id"]                        
-                    self.physicalSample = obj
             else:
                 for val in value:
                     obj = None
@@ -306,6 +311,23 @@ class Variable:
                 }
                 data = value_obj.to_data(data)
             data[self.id]["hasInterpretation"].append(obj)
+
+        if len(self.physicalSamples):
+            data[self.id]["hasPhysicalSample"] = []
+        for value_obj in self.physicalSamples:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
+            data[self.id]["hasPhysicalSample"].append(obj)
 
         if self.archiveType:
             value_obj = self.archiveType
@@ -466,15 +488,6 @@ class Variable:
                 }
                 data = value_obj.to_data(data)
             data[self.id]["partOfCompilation"] = [obj]
-                
-
-        if self.physicalSample:
-            value_obj = self.physicalSample
-            obj = {
-                "@id": value_obj,
-                "@type": "uri"
-            }
-            data[self.id]["physicalSample"] = [obj]
                 
 
         if self.primary:
@@ -675,6 +688,12 @@ class Variable:
             obj = value_obj.to_json()
             data["interpretation"].append(obj)
 
+        if len(self.physicalSamples):
+            data["physicalSample"] = []
+        for value_obj in self.physicalSamples:
+            obj = value_obj.to_json()
+            data["physicalSample"].append(obj)
+
         if self.archiveType:
             value_obj = self.archiveType
             obj = value_obj.to_json()
@@ -739,11 +758,6 @@ class Variable:
             value_obj = self.partOfCompilation
             obj = value_obj.to_json()
             data["inCompilationBeta"] = obj
-
-        if self.physicalSample:
-            value_obj = self.physicalSample
-            obj = value_obj
-            data["physicalSample"] = obj
 
         if self.primary:
             value_obj = self.primary
@@ -899,9 +913,9 @@ class Variable:
                     obj = value
                     self.columnNumber = obj
             elif key == "physicalSample":
-                    value = pvalue
-                    obj = value
-                    self.physicalSample = obj
+                for value in pvalue:
+                    obj = PhysicalSample.from_json(value)
+                    self.physicalSamples.append(obj)
             elif key == "proxy":
                     value = pvalue
                     obj = PaleoProxy.from_synonym(re.sub("^.*?#", "", value))
@@ -962,7 +976,7 @@ class Variable:
         return self.archiveType
 
     def setArchiveType(self, archiveType:ArchiveType):
-        assert isinstance(archiveType, ArchiveType), f"Error: '{archiveType}' is not of type ArchiveType\nYou can create a new ArchiveType object from a string using the following syntax:\n- Fetch existing ArchiveType by synonym:    ArchiveType.from_synonym(\"{archiveType}\")\n- Create a new custom ArchiveType:    ArchiveType(\"{archiveType}\")"
+        assert isinstance(archiveType, ArchiveType), f"Error: '{archiveType}' is not of type ArchiveType\nYou can create a new ArchiveType object from a string using the following syntax:\n- Fetch existing ArchiveType by synonym: ArchiveType.from_synonym(\"{archiveType}\")\n- Create a new custom ArchiveType: ArchiveType(\"{archiveType}\")"
         self.archiveType = archiveType
     
     def getCalibratedVias(self) -> list[Calibration]:
@@ -991,25 +1005,25 @@ class Variable:
         assert isinstance(description, str), f"Error: '{description}' is not of type str"
         self.description = description
     
-    def getFoundInDataset(self) -> None:
+    def getFoundInDataset(self) -> object:
         return self.foundInDataset
 
-    def setFoundInDataset(self, foundInDataset:None):
-        assert isinstance(foundInDataset, None), f"Error: '{foundInDataset}' is not of type None"
+    def setFoundInDataset(self, foundInDataset:object):
+        assert isinstance(foundInDataset, object), f"Error: '{foundInDataset}' is not of type object"
         self.foundInDataset = foundInDataset
     
-    def getFoundInTable(self) -> None:
+    def getFoundInTable(self) -> object:
         return self.foundInTable
 
-    def setFoundInTable(self, foundInTable:None):
-        assert isinstance(foundInTable, None), f"Error: '{foundInTable}' is not of type None"
+    def setFoundInTable(self, foundInTable:object):
+        assert isinstance(foundInTable, object), f"Error: '{foundInTable}' is not of type object"
         self.foundInTable = foundInTable
     
-    def getInstrument(self) -> None:
+    def getInstrument(self) -> object:
         return self.instrument
 
-    def setInstrument(self, instrument:None):
-        assert isinstance(instrument, None), f"Error: '{instrument}' is not of type None"
+    def setInstrument(self, instrument:object):
+        assert isinstance(instrument, object), f"Error: '{instrument}' is not of type object"
         self.instrument = instrument
     
     def getInterpretations(self) -> list[Interpretation]:
@@ -1080,25 +1094,30 @@ class Variable:
         assert isinstance(partOfCompilation, Compilation), f"Error: '{partOfCompilation}' is not of type Compilation"
         self.partOfCompilation = partOfCompilation
     
-    def getPhysicalSample(self) -> None:
-        return self.physicalSample
+    def getPhysicalSamples(self) -> list[PhysicalSample]:
+        return self.physicalSamples
 
-    def setPhysicalSample(self, physicalSample:None):
-        assert isinstance(physicalSample, None), f"Error: '{physicalSample}' is not of type None"
-        self.physicalSample = physicalSample
-    
+    def setPhysicalSamples(self, physicalSamples:list[PhysicalSample]):
+        assert isinstance(physicalSamples, list), "Error: physicalSamples is not a list"
+        assert all(isinstance(x, PhysicalSample) for x in physicalSamples), f"Error: '{physicalSamples}' is not of type PhysicalSample"
+        self.physicalSamples = physicalSamples
+
+    def addPhysicalSample(self, physicalSamples:PhysicalSample):
+        assert isinstance(physicalSamples, PhysicalSample), f"Error: '{physicalSamples}' is not of type PhysicalSample"
+        self.physicalSamples.append(physicalSamples)
+        
     def getProxy(self) -> PaleoProxy:
         return self.proxy
 
     def setProxy(self, proxy:PaleoProxy):
-        assert isinstance(proxy, PaleoProxy), f"Error: '{proxy}' is not of type PaleoProxy\nYou can create a new PaleoProxy object from a string using the following syntax:\n- Fetch existing PaleoProxy by synonym:    PaleoProxy.from_synonym(\"{proxy}\")\n- Create a new custom PaleoProxy:    PaleoProxy(\"{proxy}\")"
+        assert isinstance(proxy, PaleoProxy), f"Error: '{proxy}' is not of type PaleoProxy\nYou can create a new PaleoProxy object from a string using the following syntax:\n- Fetch existing PaleoProxy by synonym: PaleoProxy.from_synonym(\"{proxy}\")\n- Create a new custom PaleoProxy: PaleoProxy(\"{proxy}\")"
         self.proxy = proxy
     
     def getProxyGeneral(self) -> PaleoProxyGeneral:
         return self.proxyGeneral
 
     def setProxyGeneral(self, proxyGeneral:PaleoProxyGeneral):
-        assert isinstance(proxyGeneral, PaleoProxyGeneral), f"Error: '{proxyGeneral}' is not of type PaleoProxyGeneral\nYou can create a new PaleoProxyGeneral object from a string using the following syntax:\n- Fetch existing PaleoProxyGeneral by synonym:    PaleoProxyGeneral.from_synonym(\"{proxyGeneral}\")\n- Create a new custom PaleoProxyGeneral:    PaleoProxyGeneral(\"{proxyGeneral}\")"
+        assert isinstance(proxyGeneral, PaleoProxyGeneral), f"Error: '{proxyGeneral}' is not of type PaleoProxyGeneral\nYou can create a new PaleoProxyGeneral object from a string using the following syntax:\n- Fetch existing PaleoProxyGeneral by synonym: PaleoProxyGeneral.from_synonym(\"{proxyGeneral}\")\n- Create a new custom PaleoProxyGeneral: PaleoProxyGeneral(\"{proxyGeneral}\")"
         self.proxyGeneral = proxyGeneral
     
     def getResolution(self) -> Resolution:
@@ -1112,7 +1131,7 @@ class Variable:
         return self.standardVariable
 
     def setStandardVariable(self, standardVariable:PaleoVariable):
-        assert isinstance(standardVariable, PaleoVariable), f"Error: '{standardVariable}' is not of type PaleoVariable\nYou can create a new PaleoVariable object from a string using the following syntax:\n- Fetch existing PaleoVariable by synonym:    PaleoVariable.from_synonym(\"{standardVariable}\")\n- Create a new custom PaleoVariable:    PaleoVariable(\"{standardVariable}\")"
+        assert isinstance(standardVariable, PaleoVariable), f"Error: '{standardVariable}' is not of type PaleoVariable\nYou can create a new PaleoVariable object from a string using the following syntax:\n- Fetch existing PaleoVariable by synonym: PaleoVariable.from_synonym(\"{standardVariable}\")\n- Create a new custom PaleoVariable: PaleoVariable(\"{standardVariable}\")"
         self.standardVariable = standardVariable
     
     def getUncertainty(self) -> str:
@@ -1140,7 +1159,7 @@ class Variable:
         return self.units
 
     def setUnits(self, units:PaleoUnit):
-        assert isinstance(units, PaleoUnit), f"Error: '{units}' is not of type PaleoUnit\nYou can create a new PaleoUnit object from a string using the following syntax:\n- Fetch existing PaleoUnit by synonym:    PaleoUnit.from_synonym(\"{units}\")\n- Create a new custom PaleoUnit:    PaleoUnit(\"{units}\")"
+        assert isinstance(units, PaleoUnit), f"Error: '{units}' is not of type PaleoUnit\nYou can create a new PaleoUnit object from a string using the following syntax:\n- Fetch existing PaleoUnit by synonym: PaleoUnit.from_synonym(\"{units}\")\n- Create a new custom PaleoUnit: PaleoUnit(\"{units}\")"
         self.units = units
     
     def getValues(self) -> str:

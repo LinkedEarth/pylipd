@@ -130,6 +130,8 @@ def get_python_snippet_for_multi_value_property(clsid, pid, propid, pname, ptype
                 for value in pvalue:{fromjsonitem}
                     self.{pname}.append(obj)"""
     
+    if python_range is None:
+        python_range = "object"
     error_msg = "Error: '{" + pname + "}' is not of type " + python_range
     if is_enum:
         error_msg += f"\\nYou can create a new {python_range} object from a string using the following syntax:\\n"
@@ -187,6 +189,9 @@ def get_python_snippet_for_property(clsid, pid, propid, pname, ptype, ont_range,
                     value = pvalue{fromjsonitem}
                     self.{pname} = obj"""
     
+    if python_range is None:
+        python_range = "object"
+            
     error_msg = "Error: '{" + str(pname) + "}' is not of type " + str(python_range)
     if is_enum:
         error_msg += f"\\nYou can create a new {python_range} object from a string using the following syntax:\\n"
