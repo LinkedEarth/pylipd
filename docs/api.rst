@@ -3,7 +3,9 @@
 PyLiPD User API
 ===============
 
-The following describes the main classes that makes up PyLiPD. Most users will only interface with the functionalies contained in these classes. 
+The following describes the main classes that makes up PyLiPD. Most users will only interface with the functionalies contained in these classes. These classes are organized into 4 modules, aimed at different functionalities:
+* For opening and manipulating LiPD files, the LiPD and LiPDSeries contain most of the functionalities to open local and remote files, get essential information and perform queries.
+* To edit and create LiPD files, the LiPD classes and LiPD Controlled Vocabulary Modules contain information about the ontology underpinning the LiPD format.  
 
 LiPD (pylipd.lipd.LiPD)
 """"""""""""""""""
