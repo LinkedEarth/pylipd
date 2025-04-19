@@ -437,6 +437,21 @@ class LipdToRDF:
         list = Collection(self.graph, listid, listitems)
         return listid
 
+    def _parse_changes(self, changes, parent=None):
+        newChanges = []
+        if not isinstance(changes, list):
+            changes = [changes]
+        
+        for change in changes:
+            for name in change.keys():
+                notes = change[name] or []
+                newChange = {
+                    "name": name,
+                    "notes": [item[0] for item in notes]
+                }
+                newChanges.append(newChange)
+        return newChanges
+    
 
     def _add_variable_values(self, obj, objhash) :
         csvname = obj["@parent"]["@id"] + ".csv"

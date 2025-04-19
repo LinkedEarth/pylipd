@@ -635,3 +635,10 @@ class RDFToLiPD:
                 values = unzip_string(values["base64_zlib"])
                 var["hasValues"] = values
         return var
+    
+    def _changes_to_json(self, change, parent=None):
+        newChange = {}
+        if "name" in change:
+            newChange[change["name"]] = change.get("notes", [])
+            return newChange
+        return None
