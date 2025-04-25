@@ -43,3 +43,7 @@ In addition to the minimal working examples in the documentation, more comprehen
 ## Availability
 
 PyLiPD is an open-source software released under the Apache 2.0 license and is actively maintained as part of the LinkedEarth project. It is available through PyPi (https://pypi.org/project/pylipd/) and GitHub (https://github.com/linkedearth/pylipd). Documentation is available through readthedocs (https://pylipd.readthedocs.io/en/latest/index.html).
+
+## Acknowledgment
+
+This work is supported by the US National Science Foundation grant RISE 2126510 to Khider. 
