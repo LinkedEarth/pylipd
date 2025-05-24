@@ -330,7 +330,7 @@ SCHEMA = {
         }
     },    
     'DataTable': {
-        '@id': ['{filename}', '_trunc(4)'],
+        '@id': ['{@parent.@id}', '.DataTable.', '{filename}', '_trunc(4)'],
         'filename': { 
             'name': 'hasFileName'
         },

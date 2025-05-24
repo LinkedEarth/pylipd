@@ -454,7 +454,11 @@ class LipdToRDF:
     
 
     def _add_variable_values(self, obj, objhash) :
-        csvname = obj["@parent"]["@id"] + ".csv"
+        if "filename" in obj["@parent"]:
+            csvname = obj["@parent"]["filename"]
+        else:
+            csvname = re.sub(r"^.*\.", "", obj["@parent"]["@id"]) + ".csv"
+
         if "number" not in obj:
             obj["number"] = obj["@index"]
         if type(obj["number"]) is str:
