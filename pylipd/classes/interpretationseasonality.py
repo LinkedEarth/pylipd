@@ -5,6 +5,9 @@
 from pylipd.globals.synonyms import SYNONYMS
 
 class InterpretationSeasonality:
+    """Enumeration helper representing LiPD controlled vocabulary term group `InterpretationSeasonality`.
+    AUTO-GENERATED – do not modify by hand.
+    """
     synonyms = SYNONYMS["INTERPRETATION"]["InterpretationSeasonality"]
 
     def __init__(self, id, label):
@@ -15,12 +18,15 @@ class InterpretationSeasonality:
             self.id == value.id
         
     def getLabel(self):
+        """Return the human-readable label for this enumeration value."""
         return self.label
 
     def getId(self):
+        """Return the identifier/URI for this enumeration value."""
         return self.id
     
     def to_data(self, data={}):
+        """Serialise this enumeration value to the internal JSON-LD graph format."""
         data[self.id] ={
             "label": [
                 {
@@ -33,17 +39,22 @@ class InterpretationSeasonality:
         return data
 
     def to_json(self):
+        """Return a minimal JSON value (string) corresponding to this synonym."""
         data = self.label
         return data
 
     @classmethod
     def from_synonym(cls, synonym):
+        """Return a new `InterpretationSeasonality` instance matching a synonym string, or `None`."""
         if synonym.lower() in InterpretationSeasonality.synonyms:
             synobj = InterpretationSeasonality.synonyms[synonym.lower()]
             return InterpretationSeasonality(synobj['id'], synobj['label'])
         return None
         
 class InterpretationSeasonalityConstants:
+    """Namespace-style container holding pre-instantiated InterpretationSeasonality enumeration values.
+    Each attribute corresponds to one controlled vocabulary entry.
+    """
     Annual = InterpretationSeasonality("http://linked.earth/ontology/interpretation#Annual", "Annual")
     Winter = InterpretationSeasonality("http://linked.earth/ontology/interpretation#Winter", "Winter")
     Apr = InterpretationSeasonality("http://linked.earth/ontology/interpretation#Apr", "Apr")

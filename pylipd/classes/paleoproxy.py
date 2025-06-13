@@ -5,6 +5,9 @@
 from pylipd.globals.synonyms import SYNONYMS
 
 class PaleoProxy:
+    """Enumeration helper representing LiPD controlled vocabulary term group `PaleoProxy`.
+    AUTO-GENERATED – do not modify by hand.
+    """
     synonyms = SYNONYMS["PROXIES"]["PaleoProxy"]
 
     def __init__(self, id, label):
@@ -15,12 +18,15 @@ class PaleoProxy:
             self.id == value.id
         
     def getLabel(self):
+        """Return the human-readable label for this enumeration value."""
         return self.label
 
     def getId(self):
+        """Return the identifier/URI for this enumeration value."""
         return self.id
     
     def to_data(self, data={}):
+        """Serialise this enumeration value to the internal JSON-LD graph format."""
         data[self.id] ={
             "label": [
                 {
@@ -33,17 +39,22 @@ class PaleoProxy:
         return data
 
     def to_json(self):
+        """Return a minimal JSON value (string) corresponding to this synonym."""
         data = self.label
         return data
 
     @classmethod
     def from_synonym(cls, synonym):
+        """Return a new `PaleoProxy` instance matching a synonym string, or `None`."""
         if synonym.lower() in PaleoProxy.synonyms:
             synobj = PaleoProxy.synonyms[synonym.lower()]
             return PaleoProxy(synobj['id'], synobj['label'])
         return None
         
 class PaleoProxyConstants:
+    """Namespace-style container holding pre-instantiated PaleoProxy enumeration values.
+    Each attribute corresponds to one controlled vocabulary entry.
+    """
     accumulation_rate = PaleoProxy("http://linked.earth/ontology/paleo_proxy#accumulation_rate", "accumulation rate")
     ACL = PaleoProxy("http://linked.earth/ontology/paleo_proxy#ACL", "ACL")
     Al2O3 = PaleoProxy("http://linked.earth/ontology/paleo_proxy#Al2O3", "Al2O3")
