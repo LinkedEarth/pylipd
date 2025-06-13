@@ -5,28 +5,70 @@
 from pylipd.globals.synonyms import SYNONYMS
 
 class PaleoProxy:
-    """Enumeration helper representing LiPD controlled vocabulary term group `PaleoProxy`.
-    AUTO-GENERATED – do not modify by hand.
-    """
+    """Controlled-vocabulary class for `PaleoProxy` terms."""
     synonyms = SYNONYMS["PROXIES"]["PaleoProxy"]
 
     def __init__(self, id, label):
+        """Initialize a PaleoProxy term.
+
+        Parameters
+        ----------
+        id : str
+            The full URI identifier for this term.
+        label : str
+            The human-readable label for this term.
+        """
         self.id = id
         self.label = label
     
     def __eq__(self, value: object) -> bool:
-            self.id == value.id
+        """Check equality based on term ID.
+
+        Parameters
+        ----------
+        value : object
+            The object to compare against.
+
+        Returns
+        -------
+        bool
+            True if the IDs match, False otherwise.
+        """
+        return self.id == value.id
         
     def getLabel(self):
-        """Return the human-readable label for this enumeration value."""
+        """Return the human-readable label of the term.
+
+        Returns
+        -------
+        str
+            The label for this term.
+        """
         return self.label
 
     def getId(self):
-        """Return the identifier/URI for this enumeration value."""
+        """Return the full URI identifier of the term.
+
+        Returns
+        -------
+        str
+            The URI identifier for this term.
+        """
         return self.id
     
     def to_data(self, data={}):
-        """Serialise this enumeration value to the internal JSON-LD graph format."""
+        """Serialize this term to JSON-LD format.
+
+        Parameters
+        ----------
+        data : dict, optional
+            Existing data dictionary to extend.
+
+        Returns
+        -------
+        dict
+            The updated data dictionary.
+        """
         data[self.id] ={
             "label": [
                 {
@@ -39,22 +81,36 @@ class PaleoProxy:
         return data
 
     def to_json(self):
-        """Return a minimal JSON value (string) corresponding to this synonym."""
+        """Return the plain-text label (used in lightweight JSON).
+
+        Returns
+        -------
+        str
+            The label for this term.
+        """
         data = self.label
         return data
 
     @classmethod
     def from_synonym(cls, synonym):
-        """Return a new `PaleoProxy` instance matching a synonym string, or `None`."""
+        """Create a PaleoProxy instance from a synonym string.
+
+        Parameters
+        ----------
+        synonym : str
+            A synonym or alternative name for the term.
+
+        Returns
+        -------
+        PaleoProxy or None
+            The PaleoProxy instance if found, None otherwise.
+        """
         if synonym.lower() in PaleoProxy.synonyms:
             synobj = PaleoProxy.synonyms[synonym.lower()]
             return PaleoProxy(synobj['id'], synobj['label'])
         return None
         
 class PaleoProxyConstants:
-    """Namespace-style container holding pre-instantiated PaleoProxy enumeration values.
-    Each attribute corresponds to one controlled vocabulary entry.
-    """
     accumulation_rate = PaleoProxy("http://linked.earth/ontology/paleo_proxy#accumulation_rate", "accumulation rate")
     ACL = PaleoProxy("http://linked.earth/ontology/paleo_proxy#ACL", "ACL")
     Al2O3 = PaleoProxy("http://linked.earth/ontology/paleo_proxy#Al2O3", "Al2O3")

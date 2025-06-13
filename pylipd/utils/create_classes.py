@@ -134,8 +134,8 @@ def get_python_snippet_for_multi_value_property(clsid, pid, propid, pname, ptype
     error_msg = "Error: '{" + pname + "}' is not of type " + python_range
     if is_enum:
         error_msg += f"\\nYou can create a new {python_range} object from a string using the following syntax:\\n"
-        error_msg += f"- Fetch existing {python_range} by synonym: {python_range}.from_synonym(\\\"{{"+pname+"}}\\\")\\n"
-        error_msg += f"- Create a new custom {python_range}: {python_range}(\\\"{{"+pname+"}}\\\")"
+        error_msg += f"- Fetch existing {python_range} by synonym: {python_range}.from_synonym(\\\"{{"+pname+"}\\\")\\n"
+        error_msg += f"- Create a new custom {python_range}: {python_range}(\\\"{{"+pname+"}\\\")"
     # Create the python snippet for getter/setter/adders
     fns = f"""
     def {getter}(self) -> list[{python_range}]:
@@ -215,8 +215,8 @@ def get_python_snippet_for_property(clsid, pid, propid, pname, ptype, ont_range,
     error_msg = "Error: '{" + str(pname) + "}' is not of type " + str(python_range)
     if is_enum:
         error_msg += f"\\nYou can create a new {python_range} object from a string using the following syntax:\\n"
-        error_msg += f"- Fetch existing {python_range} by synonym: {python_range}.from_synonym(\\\"{{"+pname+"}}\\\")\\n"
-        error_msg += f"- Create a new custom {python_range}: {python_range}(\\\"{{"+pname+"}}\\\")"
+        error_msg += f"- Fetch existing {python_range} by synonym: {python_range}.from_synonym(\\\"{{"+pname+"}\\\")\\n"
+        error_msg += f"- Create a new custom {python_range}: {python_range}(\\\"{{"+pname+"}\\\")"
 
     # Create the python snippet for getter/setter/adders
     fns = f"""
@@ -263,27 +263,71 @@ def generate_enum_classes():
 """)
                 outf.write("from pylipd.globals.synonyms import SYNONYMS\n\n")
 
-                outf.write(f"class {clsid}:\n    \"\"\"Enumeration helper representing LiPD controlled vocabulary term group `{clsid}`.\n    AUTO-GENERATED – do not modify by hand.\n    \"\"\"")
+                outf.write(f"class {clsid}:\n    \"\"\"Controlled-vocabulary class for `{clsid}` terms.\"\"\"")
                 outf.write(f"""
     synonyms = SYNONYMS["{sectionid}"]["{clsid}"]
 
     def __init__(self, id, label):
+        \"\"\"Initialize a {clsid} term.
+
+        Parameters
+        ----------
+        id : str
+            The full URI identifier for this term.
+        label : str
+            The human-readable label for this term.
+        \"\"\"
         self.id = id
         self.label = label
     
     def __eq__(self, value: object) -> bool:
-            self.id == value.id
+        \"\"\"Check equality based on term ID.
+
+        Parameters
+        ----------
+        value : object
+            The object to compare against.
+
+        Returns
+        -------
+        bool
+            True if the IDs match, False otherwise.
+        \"\"\"
+        return self.id == value.id
         
     def getLabel(self):
-        \"\"\"Return the human-readable label for this enumeration value.\"\"\"
+        \"\"\"Return the human-readable label of the term.
+
+        Returns
+        -------
+        str
+            The label for this term.
+        \"\"\"
         return self.label
 
     def getId(self):
-        \"\"\"Return the identifier/URI for this enumeration value.\"\"\"
+        \"\"\"Return the full URI identifier of the term.
+
+        Returns
+        -------
+        str
+            The URI identifier for this term.
+        \"\"\"
         return self.id
     
     def to_data(self, data={{}}):
-        \"\"\"Serialise this enumeration value to the internal JSON-LD graph format.\"\"\"
+        \"\"\"Serialize this term to JSON-LD format.
+
+        Parameters
+        ----------
+        data : dict, optional
+            Existing data dictionary to extend.
+
+        Returns
+        -------
+        dict
+            The updated data dictionary.
+        \"\"\"
         data[self.id] ={{
             "label": [
                 {{
@@ -296,20 +340,37 @@ def generate_enum_classes():
         return data
 
     def to_json(self):
-        \"\"\"Return a minimal JSON value (string) corresponding to this synonym.\"\"\"
+        \"\"\"Return the plain-text label (used in lightweight JSON).
+
+        Returns
+        -------
+        str
+            The label for this term.
+        \"\"\"
         data = self.label
         return data
 
     @classmethod
     def from_synonym(cls, synonym):
-        \"\"\"Return a new `{clsid}` instance matching a synonym string, or `None`.\"\"\"
+        \"\"\"Create a {clsid} instance from a synonym string.
+
+        Parameters
+        ----------
+        synonym : str
+            A synonym or alternative name for the term.
+
+        Returns
+        -------
+        {clsid} or None
+            The {clsid} instance if found, None otherwise.
+        \"\"\"
         if synonym.lower() in {clsid}.synonyms:
             synobj = {clsid}.synonyms[synonym.lower()]
             return {clsid}(synobj['id'], synobj['label'])
         return None
         
 """)
-                outf.write(f"class {clsid}Constants:\n    \"\"\"Namespace-style container holding pre-instantiated {clsid} enumeration values.\n    Each attribute corresponds to one controlled vocabulary entry.\n    \"\"\"")
+                outf.write(f"class {clsid}Constants:")
                 for synonym in synonyms:
                     synobj = synonyms[synonym]
                     synid = re.sub("[^a-zA-Z0-9]", "_", re.sub(".*?#", "", synobj["id"]))
@@ -371,14 +432,19 @@ def generate_class_file(clsid, import_snippets, initvar_snippets,
         outf.write("\n")
 
 
-        # Write the class header + docstring
-        outf.write(f"class {clsid}:\n    \"\"\"PyLiPD representation of the `{clsid}` concept from the LinkedEarth ontology.\n\n    This class is AUTO-GENERATED by `create_classes.py`; do not edit by hand.\n    Use the public getter/setter helpers to manipulate its fields.\n    \"\"\"\n")
+        # Write the class header
+        outf.write(f"class {clsid}:\n    \"\"\"Auto-generated LinkedEarth class representing `{clsid}`.\"\"\"")
 
 
         # Write the init function
         outf.write(f"""
     def __init__(self):
-        \"\"\"Instantiate a blank \`{clsid}\` object with a freshly minted identifier.\n\n        All ontology-defined properties are initialised to `None` (for single-valued\n        properties) or an empty list (for multi-valued properties).\n        \"\"\"
+        \"\"\"Initialize a new {clsid} instance.\"\"\"
+        """)
+        for snippet in initvar_snippets:
+            outf.write(f"""
+        {snippet}""")
+        outf.write(f"""
         self.misc = {{}}
         self.ontns = "{ONTONS}"
         self.ns = "{NSURL}"
@@ -391,20 +457,20 @@ def generate_class_file(clsid, import_snippets, initvar_snippets,
         outf.write(f"""
     @staticmethod
     def from_data(id, data) -> '{clsid}':
-        \"\"\"Create a `{clsid}` instance from a JSON-LD data dictionary produced by
-        :py:meth:`to_data`.
+        \"\"\"Instantiate `{clsid}` from an ontology-style data graph.
 
         Parameters
         ----------
         id : str
-            The URI of the node representing this object in the graph.
+            The node identifier for this object.
         data : dict
-            Complete JSON-LD graph keyed by node id.
+            Dictionary mapping node ids to their predicate lists.
 
         Returns
         -------
         {clsid}
-            A populated object.\n        \"\"\"
+            The populated `{clsid}` instance.
+        \"\"\"
         self = {clsid}()
         self.id = id
         mydata = data[id]
@@ -434,18 +500,18 @@ def generate_class_file(clsid, import_snippets, initvar_snippets,
         # Write the to_data function
         outf.write(f"""
     def to_data(self, data={{}}):
-        \"\"\"Serialise the object to the LiPD JSON-LD graph structure used internally.
+        \"\"\"Serialize the object into a JSON-LD compatible dictionary.
 
         Parameters
         ----------
         data : dict, optional
-            Graph dictionary to append the representation into. New dictionaries
-            are created on demand.
+            Existing data dictionary to extend.
 
         Returns
         -------
         dict
-            Updated graph dictionary.\n        \"\"\"
+            The updated data dictionary.
+        \"\"\"
         data[self.id] = {{}}
         data[self.id]["type"] = [
             {{
@@ -488,7 +554,13 @@ def generate_class_file(clsid, import_snippets, initvar_snippets,
         # Write the to_json function
         outf.write(f"""
     def to_json(self):
-        \"\"\"Return a lightweight, user-friendly JSON representation of the object.\n        Intended for external consumption (e.g., saving to file or UI rendering).\n        \"\"\"
+        \"\"\"Return a lightweight JSON representation (used by LiPD).
+
+        Returns
+        -------
+        dict
+            A dictionary representation of this object.
+        \"\"\"
         data = {{
             "@id": self.id
         }}""")
@@ -508,18 +580,18 @@ def generate_class_file(clsid, import_snippets, initvar_snippets,
         outf.write(f"""
     @staticmethod
     def from_json(data) -> '{clsid}':
-        \"\"\"Re-instantiate a `{clsid}` from the lightweight JSON produced by
-        :py:meth:`to_json`.
+        \"\"\"Instantiate `{clsid}` from its lightweight JSON representation.
 
         Parameters
         ----------
         data : dict
-            JSON representation.
+            The JSON dictionary to parse.
 
         Returns
         -------
         {clsid}
-            Populated instance.\n        \"\"\"
+            The populated `{clsid}` instance.
+        \"\"\"
         self = {clsid}()
         for key in data:
             pvalue = data[key]
@@ -538,25 +610,56 @@ def generate_class_file(clsid, import_snippets, initvar_snippets,
         # Write the functions to handle non standard properties
         outf.write(f"""
     def set_non_standard_property(self, key, value):
-        \"\"\"Assign a non-ontology property.\n\n        These *misc* properties are preserved during serialisation but have no
-        dedicated first-class attribute on the object.\n        \"\"\"
+        \"\"\"Store a predicate that is not defined in the ontology schema.
+
+        This is useful for forward-compatibility with new properties that are
+        not yet part of the official schema.
+
+        Parameters
+        ----------
+        key : str
+            The property name.
+        value : any
+            The property value.
+        \"\"\"
         if key not in self.misc:
             self.misc[key] = value
     
     def get_non_standard_property(self, key):
-        \"\"\"Retrieve a previously stored non-ontology property.\n\n        Raises
-        ------
-        KeyError
-            If the property is not present.\n        \"\"\"
+        \"\"\"Return a single non-standard property by key.
+
+        Parameters
+        ----------
+        key : str
+            The property name.
+
+        Returns
+        -------
+        any
+            The property value.
+        \"\"\"
         return self.misc[key]
                 
     def get_all_non_standard_properties(self):
-        \"\"\"Return the entire miscellaneous property dictionary.\"\"\"
+        \"\"\"Return the dictionary of all non-standard properties.
+
+        Returns
+        -------
+        dict
+            Dictionary of all non-standard properties.
+        \"\"\"
         return self.misc
 
     def add_non_standard_property(self, key, value):
-        \"\"\"Append *value* to a list-valued miscellaneous property identified by
-        *key*. Creates the list when needed.\n        \"\"\"
+        \"\"\"Append a value to a list-valued non-standard property.
+
+        Parameters
+        ----------
+        key : str
+            The property name.
+        value : any
+            The value to append.
+        \"\"\"
         if key not in self.misc:
             self.misc[key] = []
         self.misc[key].append(value)

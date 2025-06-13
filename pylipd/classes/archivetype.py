@@ -5,28 +5,70 @@
 from pylipd.globals.synonyms import SYNONYMS
 
 class ArchiveType:
-    """Enumeration helper representing LiPD controlled vocabulary term group `ArchiveType`.
-    AUTO-GENERATED – do not modify by hand.
-    """
+    """Controlled-vocabulary class for `ArchiveType` terms."""
     synonyms = SYNONYMS["ARCHIVES"]["ArchiveType"]
 
     def __init__(self, id, label):
+        """Initialize a ArchiveType term.
+
+        Parameters
+        ----------
+        id : str
+            The full URI identifier for this term.
+        label : str
+            The human-readable label for this term.
+        """
         self.id = id
         self.label = label
     
     def __eq__(self, value: object) -> bool:
-            self.id == value.id
+        """Check equality based on term ID.
+
+        Parameters
+        ----------
+        value : object
+            The object to compare against.
+
+        Returns
+        -------
+        bool
+            True if the IDs match, False otherwise.
+        """
+        return self.id == value.id
         
     def getLabel(self):
-        """Return the human-readable label for this enumeration value."""
+        """Return the human-readable label of the term.
+
+        Returns
+        -------
+        str
+            The label for this term.
+        """
         return self.label
 
     def getId(self):
-        """Return the identifier/URI for this enumeration value."""
+        """Return the full URI identifier of the term.
+
+        Returns
+        -------
+        str
+            The URI identifier for this term.
+        """
         return self.id
     
     def to_data(self, data={}):
-        """Serialise this enumeration value to the internal JSON-LD graph format."""
+        """Serialize this term to JSON-LD format.
+
+        Parameters
+        ----------
+        data : dict, optional
+            Existing data dictionary to extend.
+
+        Returns
+        -------
+        dict
+            The updated data dictionary.
+        """
         data[self.id] ={
             "label": [
                 {
@@ -39,22 +81,36 @@ class ArchiveType:
         return data
 
     def to_json(self):
-        """Return a minimal JSON value (string) corresponding to this synonym."""
+        """Return the plain-text label (used in lightweight JSON).
+
+        Returns
+        -------
+        str
+            The label for this term.
+        """
         data = self.label
         return data
 
     @classmethod
     def from_synonym(cls, synonym):
-        """Return a new `ArchiveType` instance matching a synonym string, or `None`."""
+        """Create a ArchiveType instance from a synonym string.
+
+        Parameters
+        ----------
+        synonym : str
+            A synonym or alternative name for the term.
+
+        Returns
+        -------
+        ArchiveType or None
+            The ArchiveType instance if found, None otherwise.
+        """
         if synonym.lower() in ArchiveType.synonyms:
             synobj = ArchiveType.synonyms[synonym.lower()]
             return ArchiveType(synobj['id'], synobj['label'])
         return None
         
 class ArchiveTypeConstants:
-    """Namespace-style container holding pre-instantiated ArchiveType enumeration values.
-    Each attribute corresponds to one controlled vocabulary entry.
-    """
     Borehole = ArchiveType("http://linked.earth/ontology/archive#Borehole", "Borehole")
     Coral = ArchiveType("http://linked.earth/ontology/archive#Coral", "Coral")
     FluvialSediment = ArchiveType("http://linked.earth/ontology/archive#FluvialSediment", "Fluvial sediment")
