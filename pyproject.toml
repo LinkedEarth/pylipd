@@ -17,7 +17,9 @@ dependencies = [
   "tqdm",
   "bagit",
   "numpy",
-  "bibtexparser"
+  "bibtexparser",
+  "beautifulsoup4",
+  "requests"
 ]
 
 [tool.setuptools.package-data]
