@@ -243,8 +243,8 @@ QUERY_FILTER_GEO = """
         ?ds a le:Dataset .
         ?ds le:hasName ?dsname .
         ?ds le:hasLocation ?loc .
-        { {?loc le:hasLatitude ?lat} UNION {?loc wgs84:lat ?lat } } .
-        { {?loc le:hasLongitude ?lon} UNION {?loc wgs84:long ?lon } } .
+        ?loc le:hasLatitude ?lat .
+        ?loc le:hasLongitude ?lon .
         FILTER ( ?lat >= [latMin] && ?lat < [latMax] && ?lon >= [lonMin] && ?lon < [lonMax] ) .
     }
 """
@@ -337,9 +337,9 @@ QUERY_TIMESERIES_ESSENTIALS_PALEO ="""
         }
         
         ?ds le:hasLocation ?loc .
-        OPTIONAL { {?loc le:hasLatitude ?geo_meanLat} UNION {?loc wgs84:lat ?geo_meanLat } } .
-        OPTIONAL { {?loc le:hasLongitude ?geo_meanLon} UNION {?loc wgs84:long ?geo_meanLon } } .
-        OPTIONAL { {?loc le:hasElevation ?geo_meanElev} UNION {?loc wgs84:alt ?geo_meanElev } } .
+        OPTIONAL { ?loc le:hasLatitude ?geo_meanLat } .
+        OPTIONAL { ?loc le:hasLongitude ?geo_meanLon } .
+        OPTIONAL { ?loc le:hasElevation ?geo_meanElev } .
         
         ?ds le:hasPaleoData ?data .
         ?data le:hasMeasurementTable ?table .
@@ -406,9 +406,9 @@ QUERY_TIMESERIES_ESSENTIALS_CHRON ="""
         }
         
         ?ds le:hasLocation ?loc .
-        OPTIONAL { {?loc le:hasLatitude ?geo_meanLat} UNION {?loc wgs84:lat ?geo_meanLat } } .
-        OPTIONAL { {?loc le:hasLongitude ?geo_meanLon} UNION {?loc wgs84:long ?geo_meanLon } } .
-        OPTIONAL { {?loc le:hasElevation ?geo_meanElev} UNION {?loc wgs84:alt ?geo_meanElev } } .
+        OPTIONAL { ?loc le:hasLatitude ?geo_meanLat } .
+        OPTIONAL { ?loc le:hasLongitude ?geo_meanLon } .
+        OPTIONAL { ?loc le:hasElevation ?geo_meanElev } .
         
         ?ds le:hasChronData ?data .
         ?data le:hasMeasurementTable ?table .
@@ -532,9 +532,9 @@ QUERY_LOCATION ="""
             FILTER regex(?dataSetName, "[dsname].*", "i").
         
         ?ds le:hasLocation ?loc .
-        OPTIONAL { {?loc le:hasLatitude ?geo_meanLat} UNION {?loc wgs84:lat ?geo_meanLat } } .
-        OPTIONAL { {?loc le:hasLongitude ?geo_meanLon} UNION {?loc wgs84:long ?geo_meanLon } } .
-        OPTIONAL { {?loc le:hasElevation ?geo_meanElev} UNION {?loc wgs84:alt ?geo_meanElev } }        
+        OPTIONAL { ?loc le:hasLatitude ?geo_meanLat } .
+        OPTIONAL { ?loc le:hasLongitude ?geo_meanLon } .
+        OPTIONAL { ?loc le:hasElevation ?geo_meanElev } .
     }
 """
 
