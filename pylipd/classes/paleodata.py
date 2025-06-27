@@ -174,7 +174,7 @@ class PaleoData:
         return data
 
     def to_json(self):
-        """Return a lightweight JSON representation (used by LipdVerse).
+        """Return a lightweight JSON representation (used by LiPD).
 
         Returns
         -------

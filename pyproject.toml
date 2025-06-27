@@ -1,14 +1,15 @@
 [project]
 name = "pylipd"
-version = "1.4.1"
+version = "1.4.2"
 description = "Python utilities for handling LiPD data"
 readme = "README.md"
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
 authors = [
   { name = "Varun Ratnakar", email = "varunratnakar@gmail.com" },
   { name = "Deborah Khider" }
 ]
 requires-python = ">=3.11"
+license-files = ["LICENSE"]
 dependencies = [
   "rdflib",
   "pandas",
@@ -22,11 +23,13 @@ dependencies = [
   "requests"
 ]
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pylipd*"]
+exclude = ["test_data*", "lipdverse_data*", "compilation_analysis*", "examples*", "docs*", "build*", "dist*"]
+
 [tool.setuptools.package-data]
 "pylipd" = ["data/**/*.lpd", "globals/*.json"]
-
-[tool.setuptools]
-license-files = []
 
 [project.urls]
 Homepage = "https://github.com/linkedearth/pylipd"

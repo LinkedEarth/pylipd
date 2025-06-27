@@ -37,7 +37,7 @@ class Variable:
         self.missingValue: str = None
         self.name: str = None
         self.notes: str = None
-        self.partOfCompilation: Compilation = None
+        self.partOfCompilations: list[Compilation] = []
         self.physicalSamples: list[PhysicalSample] = []
         self.primary: bool = None
         self.proxy: PaleoProxy = None
@@ -272,8 +272,8 @@ class Variable:
                         obj = Compilation.from_data(val["@id"], data)
                     else:
                         obj = val["@value"]
-                                    
-                    self.partOfCompilation = obj
+            
+                    self.partOfCompilations.append(obj)
             else:
                 for val in value:
                     obj = None
@@ -339,6 +339,23 @@ class Variable:
                 }
                 data = value_obj.to_data(data)
             data[self.id]["hasInterpretation"].append(obj)
+
+        if len(self.partOfCompilations):
+            data[self.id]["partOfCompilation"] = []
+        for value_obj in self.partOfCompilations:
+            if type(value_obj) is str:
+                obj = {
+                    "@value": value_obj,
+                    "@type": "literal",
+                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            else:
+                obj = {
+                    "@id": value_obj.id,
+                    "@type": "uri"
+                }
+                data = value_obj.to_data(data)
+            data[self.id]["partOfCompilation"].append(obj)
 
         if len(self.physicalSamples):
             data[self.id]["hasPhysicalSample"] = []
@@ -499,23 +516,6 @@ class Variable:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasNotes"] = [obj]
-                
-
-        if self.partOfCompilation:
-            value_obj = self.partOfCompilation
-            if type(value_obj) is str:
-                obj = {
-                    "@value": value_obj,
-                    "@type": "literal",
-                    "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-                }
-            else:
-                obj = {
-                    "@id": value_obj.id,
-                    "@type": "uri"
-                }
-                data = value_obj.to_data(data)
-            data[self.id]["partOfCompilation"] = [obj]
                 
 
         if self.primary:
@@ -700,7 +700,7 @@ class Variable:
         return data
 
     def to_json(self):
-        """Return a lightweight JSON representation (used by LipdVerse).
+        """Return a lightweight JSON representation (used by LiPD).
 
         Returns
         -------
@@ -722,6 +722,12 @@ class Variable:
         for value_obj in self.interpretations:
             obj = value_obj.to_json()
             data["interpretation"].append(obj)
+
+        if len(self.partOfCompilations):
+            data["inCompilationBeta"] = []
+        for value_obj in self.partOfCompilations:
+            obj = value_obj.to_json()
+            data["inCompilationBeta"].append(obj)
 
         if len(self.physicalSamples):
             data["physicalSample"] = []
@@ -788,11 +794,6 @@ class Variable:
             value_obj = self.notes
             obj = value_obj
             data["notes"] = obj
-
-        if self.partOfCompilation:
-            value_obj = self.partOfCompilation
-            obj = value_obj.to_json()
-            data["inCompilationBeta"] = obj
 
         if self.primary:
             value_obj = self.primary
@@ -928,9 +929,9 @@ class Variable:
                     obj = value
                     self.values = obj
             elif key == "inCompilationBeta":
-                    value = pvalue
+                for value in pvalue:
                     obj = Compilation.from_json(value)
-                    self.partOfCompilation = obj
+                    self.partOfCompilations.append(obj)
             elif key == "interpretation":
                 for value in pvalue:
                     obj = Interpretation.from_json(value)
@@ -1398,27 +1399,39 @@ class Variable:
         assert isinstance(notes, str), f"Error: '{notes}' is not of type str"
         self.notes = notes
     
-    def getPartOfCompilation(self) -> Compilation:
-        """Get partOfCompilation.
+    def getPartOfCompilations(self) -> list[Compilation]:
+        """Get partOfCompilations list.
 
         Returns
         -------
-        Compilation
-            The current value of partOfCompilation.
+        list[Compilation]
+            A list of Compilation objects.
         """
-        return self.partOfCompilation
+        return self.partOfCompilations
 
-    def setPartOfCompilation(self, partOfCompilation:Compilation):
-        """Set partOfCompilation.
+    def setPartOfCompilations(self, partOfCompilations:list[Compilation]):
+        """Set the partOfCompilations list.
 
         Parameters
         ----------
-        partOfCompilation : Compilation
-            The value to assign.
+        partOfCompilations : list[Compilation]
+            The list to assign.
         """
-        assert isinstance(partOfCompilation, Compilation), f"Error: '{partOfCompilation}' is not of type Compilation"
-        self.partOfCompilation = partOfCompilation
-    
+        assert isinstance(partOfCompilations, list), "Error: partOfCompilations is not a list"
+        assert all(isinstance(x, Compilation) for x in partOfCompilations), f"Error: '{partOfCompilations}' is not of type Compilation"
+        self.partOfCompilations = partOfCompilations
+
+    def addPartOfCompilation(self, partOfCompilations:Compilation):
+        """Add a value to the partOfCompilations list.
+
+        Parameters
+        ----------
+        partOfCompilations : Compilation
+            The value to append.
+        """
+        assert isinstance(partOfCompilations, Compilation), f"Error: '{partOfCompilations}' is not of type Compilation"
+        self.partOfCompilations.append(partOfCompilations)
+        
     def getPhysicalSamples(self) -> list[PhysicalSample]:
         """Get physicalSamples list.
 

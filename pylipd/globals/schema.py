@@ -500,7 +500,9 @@ SCHEMA = {
         'inCompilationBeta': {
             'name': 'partOfCompilation',
             'schema': 'Compilation',
-            'category': 'Compilation'
+            'category': 'Compilation',
+            'type': 'Individual',
+            'multiple': True            
         },
         'notes': {
             'name': 'hasNotes',
