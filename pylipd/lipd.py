@@ -394,6 +394,8 @@ class LiPD(RDFGraph):
 
     def get_timeseries(self, dsnames, to_dataframe=False, mode="paleo", time="age"):
         '''Get Legacy LiPD like Time Series Object (tso)
+        
+        This function is meant to provide legacy support to the older version of the LiPD utilities, which retruns a dictionary ot timeseries objects. The function also supports returning to a pandas.DataFrame, essentially flattening all the information. This is useful to explore all possible properties but can be slow for large number of datasets or if you only require some standard information. In this case, use `get_timeseries_essentials`. 
 
         Parameters
         ----------
@@ -403,6 +405,12 @@ class LiPD(RDFGraph):
         
         to_dataframe : bool {True; False}
             Whether to return a dataframe along the dictionary. Default is False
+        
+        mode: 'paleo' or 'chron'
+            Whether to return information from the PaleoData or ChronData objects
+        
+        time: 'age' or 'year'
+            Whether the time is expressed as year or age
         
         Returns
         -------
@@ -415,6 +423,8 @@ class LiPD(RDFGraph):
 
         Examples
         --------
+        
+        To only return a list of timeseries objects
 
         .. jupyter-execute::
 
@@ -428,6 +438,25 @@ class LiPD(RDFGraph):
                 for tso in tsos:
                     if 'paleoData_variableName' in tso:
                         print(dsname+': '+tso['paleoData_variableName']+': '+tso['archiveType'])
+        
+        
+        To return a dataframe in addition to the list of timeseries objects
+        
+        
+        .. jupyter-execute::
+            
+            from pylipd.lipd import LiPD
+            
+            lipd_remote = LiPD()
+            lipd_remote.set_endpoint("https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic")
+            ts_list, df = lipd_remote.get_timeseries(["Ocn-MadangLagoonPapuaNewGuinea.Kuhnert.2001", "MD98_2181.Stott.2007", "Ant-WAIS-Divide.Severinghaus.2012"], to_dataframe = True)
+            df.head()
+        
+        See also
+        --------
+        
+        pylipd.lipd.LiPD.get_timeseries_essentials
+        
         '''
         
         if type(dsnames)==str:
