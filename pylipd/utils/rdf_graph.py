@@ -185,6 +185,50 @@ class RDFGraph:
         result_df = sparql_results_to_df(result)
         
         return result, result_df 
+
+    def update(self, update_query, remote=False):
+        '''Execute a SPARQL UPDATE query on the graph
+
+        Parameters
+        ----------
+
+        update_query : str
+            SPARQL UPDATE query (INSERT, DELETE, etc.)
+
+        remote: bool
+            (Optional) If set to True, the update will be made to the remote endpoint (if set)
+
+        Returns
+        -------
+
+        None
+
+        Examples
+        --------
+
+        .. jupyter-execute::
+
+            from pylipd.utils.rdf_graph import RDFGraph
+
+            rdf = RDFGraph()
+            rdf.load(["../examples/rdf/graph.ttl"])
+            update_query = """PREFIX le: <http://linked.earth/ontology#>
+                            DELETE { ?var le:hasMinValue ?oldMin }
+                            INSERT { ?var le:hasMinValue "10.5"^^xsd:double }
+                            WHERE { ?var le:hasMinValue ?oldMin }"""
+            rdf.update(update_query)
+        '''
+
+        if remote and hasattr(self, 'endpoint') and self.endpoint:
+            print("Making remote update to endpoint: " + self.endpoint)
+            # For remote updates, you might need to use a different approach
+            # depending on the endpoint's capabilities
+            raise NotImplementedError("Remote SPARQL UPDATE not yet implemented")
+        
+        try:
+            self.graph.update(update_query)
+        except Exception as e:
+            raise Exception(f"SPARQL UPDATE failed: {e}")
     
     def remove(self, ids):
         '''Removes ids(s) from the graph

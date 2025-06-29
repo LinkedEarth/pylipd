@@ -178,7 +178,7 @@ class TestGet():
         var1.getMissingValue()
         var1.getName()
         var1.getNotes()
-        var1.getPartOfCompilation()
+        var1.getPartOfCompilations()
         var1.getProxy()
         var1.getProxyGeneral()
         var1.getResolution()
