@@ -1,0 +1,27 @@
+@prefix : <http://linked.earth/ontology/chron_proxy#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix le: <http://linked.earth/ontology#> .
+@base <http://linked.earth/ontology/chron_proxy#> .
+
+<http://linked.earth/ontology/chron_proxy#> rdf:type owl:Ontology ;
+                                 owl:versionIRI <http://linked.earth/ontology/chron_proxy/2.0.0> ;
+                                 dcterms:contributor <http://w3id.org/people/varunr> ,
+                                                     <http://earth.usc.edu/~khider/> ;
+                                 dcterms:creator <http://earth.usc.edu/~khider/> ,
+                                                 <http://orcid.org/0000-0001-5920-4751> ,
+                                                 <http://www.cefns.nau.edu/~npm4/> ;
+                                 dcterms:license "http://creativecommons.org/licenses/by/2.0/" ;
+                                 dcterms:title "The Chron Proxy Ontology"@en ;
+                                 vann:preferredNamespacePrefix "cproxy" ;
+                                 vann:preferredNamespaceUri "http://linked.earth/ontology/chron_proxy#" ;
+                                 owl:versionInfo "2.0.0"@en .
+
+#################################################################
+#    Individuals
+#################################################################

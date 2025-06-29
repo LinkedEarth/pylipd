@@ -1,0 +1,173 @@
+@prefix :        <http://linked.earth/ontolog/instrument#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml:     <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+@prefix le:      <http://linked.earth/ontology#> .
+
+:CFAMS
+      a       owl:Class ;
+      rdfs:label "Continuous-flow AMS system"@en ;
+      rdfs:subClassOf :AcceleratorMassSpectrometer .
+
+:Microscope
+      a       owl:Class ;
+      rdfs:label "Microscope"@en ;
+      rdfs:subClassOf :Instrument .
+
+:SIMS
+      a       owl:Class ;
+      rdfs:label "Secondary ion mass spectrometer"@en ;
+      rdfs:subClassOf :SecondaryIonMassSpectrometer .
+
+:GC-IR-MS
+      a       owl:Class ;
+      rdfs:label "Gas Chromatography - Isotope ratio -Mass Spectrometer"@en ;
+      rdfs:subClassOf :GasChromatographyMassSpectrometer .
+
+:Spectrometer
+      a       owl:Class ;
+      rdfs:label "Spectrometer"@en ;
+      rdfs:subClassOf :Instrument .
+
+:GasChromatographyMassSpectrometer
+      a       owl:Class ;
+      rdfs:label "Gas chromatography - mass spectrometer"@en ;
+      rdfs:subClassOf :MassSpectrometer .
+
+:ICP-MS
+      a       owl:Class ;
+      rdfs:label "Inductively coupled plasma mass spectrometer"@en ;
+      rdfs:subClassOf :IsotopeRatioMassSpectrometer .
+
+:NOSAMSTandetron
+      a       owl:Class ;
+      rdfs:label "NOSAMS tandetron"@en ;
+      rdfs:subClassOf :AcceleratorMassSpectrometer .
+
+:MC-ICP-MS
+      a       owl:Class ;
+      rdfs:label "Multi-collector (MC) Inductively coupled plasma mass spectrometry (ICPMS)"@en ;
+      rdfs:subClassOf :IsotopeRatioMassSpectrometer .
+
+:BinocularMicroscope
+      a       owl:Class ;
+      rdfs:label "Binocular microscope"@en ;
+      rdfs:subClassOf :Microscope .
+
+:LA-ICP-MS
+      a       owl:Class ;
+      rdfs:label "Laser-ablation (LA) Inductively coupled plasma mass spectrometry (ICP-MS)"@en ;
+      rdfs:subClassOf :IsotopeRatioMassSpectrometer .
+
+:AcceleratorMassSpectrometerInstrument
+      a       owl:Class ;
+      rdfs:label "Accelerator mass spectrometer"@en ;
+      rdfs:subClassOf :AcceleratorMassSpectrometer .
+
+:Instrument
+      a       owl:Class ;
+      rdfs:label "Instrument"@en .
+
+:GasChromatograph
+      a       owl:Class ;
+      rdfs:label "Gas chromatograph"@en ;
+      rdfs:subClassOf :Instrument .
+
+:EnergyDispersiveSpectrometer
+      a       owl:Class ;
+      rdfs:label "Energy dispersive spectrometer"@en ;
+      rdfs:subClassOf :Spectrometer .
+
+:MassSpectrometerInstrument
+      a       owl:Class ;
+      rdfs:label "Mass spectrometer"@en ;
+      rdfs:subClassOf :MassSpectrometer .
+
+:CRDS
+      a       owl:Class ;
+      rdfs:label "Cavity Ring-Down Spectroscopy"@en ;
+      rdfs:subClassOf :Spectroscope .
+
+:RockHammer
+      a       owl:Class ;
+      rdfs:label "Rock hammer"@en ;
+      rdfs:subClassOf :Instrument .
+
+:IRMS
+      a       owl:Class ;
+      rdfs:comment "An <b>isotope-ration mass spectrometer</b> measures the relative abundance of isotopes in a given sample."@en ;
+      rdfs:label "Isotope ratio mass spectrometer"@en ;
+      rdfs:subClassOf :IsotopeRatioMassSpectrometer .
+
+:ZeissPetrographicMicroscope
+      a       owl:Class ;
+      rdfs:label "Zeiss petrographic microscope"@en ;
+      rdfs:subClassOf :Microscope .
+
+:     a       owl:Ontology ;
+      dcterms:contributor <http://www.isi.edu/~gil/> , <http://w3id.org/people/dgarijo> ;
+      dcterms:creator <http://orcid.org/0000-0001-5920-4751> , <http://www.cefns.nau.edu/~npm4/> , <http://earth.usc.edu/~khider/> ;
+      dcterms:license <http://creativecommons.org/licenses/by/2.0/> ;
+      dcterms:title "The Linked Earth Instrument Ontology"@en ;
+      vann:preferredNamespacePrefix
+              "le" ;
+      vann:preferredNamespaceUri
+              "http://linked.earth/ontology/instrument#" ;
+      owl:versionIRI <http://linked.earth/ontology/instrument/1.0.0> ;
+      owl:versionInfo "1.0.0"@en .
+
+:WavelengthDispersiveSpectrometer
+      a       owl:Class ;
+      rdfs:label "Wavelength dispersive spectrometry"@en ;
+      rdfs:subClassOf :Spectrometer .
+
+:SecondaryIonMassSpectrometer
+      a       owl:Class ;
+      rdfs:label "Secondary ion mass spectrometer"@en ;
+      rdfs:subClassOf :MassSpectrometer .
+
+:AcceleratorMassSpectrometer
+      a       owl:Class ;
+      rdfs:label "Accelerator mass spectrometer"@en ;
+      rdfs:subClassOf :MassSpectrometer .
+
+:ICP-OES
+      a       owl:Class ;
+      rdfs:label "Inductively coupled plasma optical emission spectrometry"@en ;
+      rdfs:subClassOf :Spectroscope .
+
+:GCMS
+      a       owl:Class ;
+      rdfs:label "Gas chromatography mass spectrometer"@en ;
+      rdfs:subClassOf :GasChromatographyMassSpectrometer .
+
+:SHRIMP
+      a       owl:Class ;
+      rdfs:label "Sensitive high-resolution ion microprobe"@en ;
+      rdfs:subClassOf :SecondaryIonMassSpectrometer .
+
+:IsotopeRatioMassSpectrometer
+      a       owl:Class ;
+      rdfs:label "Isotope ratio mass spectrometer"@en ;
+      rdfs:subClassOf :MassSpectrometer .
+
+:ICP-AES
+      a       owl:Class ;
+      rdfs:comment "Inductively coupled plasma atomic emission spectroscopy (ICP-AES), also referred to as inductively coupled plasma optical emission spectrometry (ICP-OES), is an analytical technique used for the detection of trace metals."@en ;
+      rdfs:label "Inductively coupled plasma atomic emission spectroscope"@en ;
+      rdfs:subClassOf :Spectroscope ;
+      owl:equivalentClass :ICP-OES .
+
+:Spectroscope
+      a       owl:Class ;
+      rdfs:label "Spectroscope"@en ;
+      rdfs:subClassOf :Instrument .
+
+:MassSpectrometer
+      a       owl:Class ;
+      rdfs:label "Mass spectrometer"@en ;
+      rdfs:subClassOf :Spectrometer .

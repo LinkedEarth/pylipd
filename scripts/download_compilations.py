@@ -117,6 +117,47 @@ class LiPDCompilationDownloader:
         print(f"  No download link found for {compilation_name}")
         return None
 
+    def cleanup_macos_artifacts(self, directory):
+        """Remove macOS artifacts like __MACOSX directories and .DS_Store files."""
+        directory = Path(directory)
+        cleanup_count = 0
+        
+        # Find and remove __MACOSX directories
+        macosx_dirs = list(directory.rglob("__MACOSX"))
+        for macosx_dir in macosx_dirs:
+            if macosx_dir.is_dir():
+                try:
+                    import shutil
+                    shutil.rmtree(macosx_dir)
+                    cleanup_count += 1
+                    print(f"    Removed: {macosx_dir}")
+                except Exception as e:
+                    print(f"    Warning: Could not remove {macosx_dir}: {e}")
+        
+        # Find and remove .DS_Store files
+        dsstore_files = list(directory.rglob(".DS_Store"))
+        for dsstore_file in dsstore_files:
+            try:
+                dsstore_file.unlink()
+                cleanup_count += 1
+                print(f"    Removed: {dsstore_file}")
+            except Exception as e:
+                print(f"    Warning: Could not remove {dsstore_file}: {e}")
+        
+        # Find and remove resource fork files (._filename)
+        resource_fork_files = list(directory.rglob("._*"))
+        for rf_file in resource_fork_files:
+            if rf_file.is_file():
+                try:
+                    rf_file.unlink()
+                    cleanup_count += 1
+                    print(f"    Removed: {rf_file}")
+                except Exception as e:
+                    print(f"    Warning: Could not remove {rf_file}: {e}")
+        
+        if cleanup_count > 0:
+            print(f"    ✓ Cleaned up {cleanup_count} macOS artifacts")
+
     def download_compilation(self, compilation_name, download_url):
         """
         Download and extract LiPD files for a compilation.
@@ -161,6 +202,9 @@ class LiPDCompilationDownloader:
                         extracted_count += 1
             
             print(f"  Extracted {extracted_count} LiPD files to {compilation_dir}")
+            
+            # Clean up macOS artifacts after extraction
+            self.cleanup_macos_artifacts(compilation_dir)
             
             # Clean up temporary file
             os.unlink(temp_zip_path)

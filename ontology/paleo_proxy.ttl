@@ -1,0 +1,991 @@
+@prefix : <http://linked.earth/ontology/paleo_proxy#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix le: <http://linked.earth/ontology#> .
+@base <http://linked.earth/ontology/paleo_proxy#> .
+
+<http://linked.earth/ontology/paleo_proxy#> rdf:type owl:Ontology ;
+                                 owl:versionIRI <http://linked.earth/ontology/paleo_proxy/2.0.0> ;
+                                 dcterms:contributor <http://w3id.org/people/varunr> ,
+                                                     <http://earth.usc.edu/~khider/> ;
+                                 dcterms:creator <http://earth.usc.edu/~khider/> ,
+                                                 <http://orcid.org/0000-0001-5920-4751> ,
+                                                 <http://www.cefns.nau.edu/~npm4/> ;
+                                 dcterms:license "http://creativecommons.org/licenses/by/2.0/" ;
+                                 dcterms:title "The Paleo Proxy Ontology"@en ;
+                                 vann:preferredNamespacePrefix "pproxy" ;
+                                 vann:preferredNamespaceUri "http://linked.earth/ontology/paleo_proxy#" ;
+                                 owl:versionInfo "2.0.0"@en .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://linked.earth/ontology/paleo_proxy#accumulation_rate
+:accumulation_rate rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "sed accumulation" ;
+		rdfs:comment ""@en ;
+		rdfs:label "accumulation rate"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#ACL
+:ACL rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "average chain length" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4170" ;
+		rdfs:comment "a chain length index that is the average number of carbon atoms within organic compound chains in a sample."@en ;
+		rdfs:label "ACL"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Al2O3
+:Al2O3 rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "aluminum oxide" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=305" ;
+		rdfs:comment "an inorganic compound that has the chemical formula Al2O3."@en ;
+		rdfs:label "Al2O3"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#alkenone
+:alkenone rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "alkenone" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2485" ;
+		rdfs:comment "a ketone that is a long-chain unsaturated methyl and ethyl n-ketone produced by a few phytoplankton species of the class Prymnesiophyceae (Credit: Wikipedia)."@en ;
+		rdfs:label "alkenone"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#amoeba
+:amoeba rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "testate amoeba" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3577" ;
+		rdfs:comment "an identifiable organism that is an ameboid protist with a test and that belongs to the kingdom Protozoa. Traditionally, those species that form large networks of anastomosing pseudopodia, despite of some of them having tests e.g. Foraminifera, are not counted amongst testate amoebae (Credit: Wikipedia)."@en ;
+		rdfs:label "amoeba"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Ba_Al
+:Ba_Al rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "barium/aluminum" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2410" ;
+		rdfs:comment "the elemental ratio of barium to aluminum."@en ;
+		rdfs:label "Ba/Al"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Ba_Ca
+:Ba_Ca rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "BaCa" ;
+		le:hasNoaaPastName "barium/calcium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=317" ;
+		rdfs:comment "the elemental ratio of barium to calcium."@en ;
+		rdfs:label "Ba/Ca"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#biomarker
+:biomarker rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "C15 fatty alcohols" ;
+		le:hasSynonym "C37.concentration" ;
+		rdfs:comment ""@en ;
+		rdfs:label "biomarker"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#BIT
+:BIT rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "BITindex" ;
+		le:hasNoaaPastName "branched and isoprenoid tetraether index" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1676" ;
+		rdfs:comment "an organic compound index that is the abundance of branched tetraethers relative to isoprenoid tetraethers, indicative of the relative amounts of soil organic matter and aquatic organic matter."@en ;
+		rdfs:label "BIT"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#borehole
+:borehole rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "borehole" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=114" ;
+		rdfs:comment "a data type that consists of direct measurements of subsurface temperature from boreholes drilled into materials such as rock and glacier ice."@en ;
+		rdfs:label "borehole"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#BSi
+:BSi rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "biogenic silica" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4018" ;
+		rdfs:comment "a hydrated, amorphous form of silicon dioxide with the formula SiO2•nH20 that is biogenically precipitated by a variety of organisms including chrysophytes, diatoms, radiolarians, silicoflagellates, and sponges (Credit: Last et al. 2001 Tracking Environmental Change Using Lake Sediments)."@en ;
+		rdfs:label "BSi"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#bubble_frequency
+:bubble_frequency rdf:type owl:NamedIndividual, :PaleoProxy ;
+		rdfs:comment ""@en ;
+		rdfs:label "bubble frequency"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#bulk_density
+:bulk_density rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "gamma" ;
+		rdfs:comment ""@en ;
+		rdfs:label "bulk density"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#bulk_sediment
+:bulk_sediment rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "BulkSed" ;
+		le:hasNoaaPastName "dry sediment" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1502" ;
+		rdfs:comment "sediment from which all water has been removed."@en ;
+		rdfs:label "bulk sediment"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#C_N
+:C_N rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "carbon/nitrogen" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=750" ;
+		rdfs:comment "the elemental ratio of carbon to nitrogen."@en ;
+		rdfs:label "C/N"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Ca_K
+:Ca_K rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "calcium/potassium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3783" ;
+		rdfs:comment "the elemental ratio of calcium to potassium."@en ;
+		rdfs:label "Ca/K"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Ca_Ti
+:Ca_Ti rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "calcium/titanium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1635" ;
+		rdfs:comment "the elemental ratio of calcium to titanium."@en ;
+		rdfs:label "Ca/Ti"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#CaCO3
+:CaCO3 rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "calcium carbonate" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1515" ;
+		rdfs:comment "a carbonate with the chemical formula CaCO3 but of unspecified crystal structure."@en ;
+		rdfs:label "CaCO3"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#calcification_rate
+:calcification_rate rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "calcification" ;
+		le:hasNoaaPastName "calcification rate" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=756" ;
+		rdfs:comment "a formation rate that is a rate of skeletal growth in calcifying organisms, often expressed as a mass times unit area per time (e.g., g cm2/yr)"@en ;
+		rdfs:label "calcification rate"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#calcite
+:calcite rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "calcite" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=482" ;
+		rdfs:comment "a calcium carbonate with rhombohedral crystal structure."@en ;
+		rdfs:label "calcite"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#carbonate
+:carbonate rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "authigenic carbonate" ;
+		le:hasSynonym "Carbonate content" ;
+		le:hasNoaaPastName "carbonate" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=692" ;
+		rdfs:comment "an identified mineral characterized by a fundamental anionic structure of CO3(2-) (Credit: Dictionary of Geological Terms)."@en ;
+		rdfs:label "carbonate"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#cellulose
+:cellulose rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "cellulose" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=689" ;
+		rdfs:comment "an organooxygen compound with the general formula (C6H10O5)n and that is an important structural component of the cell walls of green plants."@en ;
+		rdfs:label "cellulose"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#charcoal
+:charcoal rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "charcoal" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=630" ;
+		rdfs:comment "a bulk biological material that consists of any black-colored plant-derived material that has had its chemical composition and structure altered as a result of heating in a fire, and retains recognizable anatomic structure of the plant material, even if only in a fragmentary form (Credit: Smol et al. 2001 Tracking Environmental Change Using Lake Sediments)."@en ;
+		rdfs:label "charcoal"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#chironomid
+:chironomid rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Chironomid" ;
+		le:hasSynonym "midge" ;
+		le:hasNoaaPastName "midge" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1571" ;
+		rdfs:comment "an identifiable organism that belongs to one of several families in the kingdom Animalia, phylum Arthropoda, class Insecta, order Diptera."@en ;
+		rdfs:label "chironomid"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#chlorophyll
+:chlorophyll rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "chlorophyll" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1615" ;
+		rdfs:comment "an organic pigment that is any of several green pigments found in cyanobacteria and the chloroplasts of algae and plants and that is composed of carbon, hydrogen, oxygen, nitrogen, and magnesium."@en ;
+		rdfs:label "chlorophyll"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#chrysophyte_assemblage
+:chrysophyte_assemblage rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "chrysophyte" ;
+		le:hasNoaaPastName "chrysophyte assemblage" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4080" ;
+		rdfs:comment "an assemblage of golden or golden-brown algae that belong to the kingdom Chromista, class Chrysophyceae."@en ;
+		rdfs:label "chrysophyte assemblage"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#cladoceran
+:cladoceran rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Cladocera" ;
+		le:hasNoaaPastName "cladoceran" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3587" ;
+		rdfs:comment "an identifiable organism commonly known as a water flea that belongs to the kingdom Animalia, phylum Arthropoda, class Branchiopoda, order Cladocera."@en ;
+		rdfs:label "cladoceran"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#coccolithophore
+:coccolithophore rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "coccolith" ;
+		le:hasNoaaPastName "coccolithophore" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3250" ;
+		rdfs:comment "an identifiable organism that is a unicellular phytoplankton and that belongs to the kingdom Chromista, phylum Haptophyta, class Prymnesiophyceae."@en ;
+		rdfs:label "coccolithophore"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#d13C
+:d13C rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "d13Cwax" ;
+		le:hasNoaaPastName "delta 13C" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=320" ;
+		rdfs:comment "the ratio of two isotopes of carbon, 13C/12C, in a sample compared to that of a standard, typically the Pee Dee Belemnite, as in: ((13C/12C sample)/(13C/12C standard) - 1) x 1000."@en ;
+		rdfs:label "d13C"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#d15N
+:d15N rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "delta 15N" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=322" ;
+		rdfs:comment "the ratio of two isotopes of nitrogen, 15N/14N, in a sample compared to that of a standard, typically modern air ratios, as in: ((15N/14N sample)/(15N/14N standard) - 1) x 1000."@en ;
+		rdfs:label "d15N"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#d15N_d40Ar
+:d15N_d40Ar rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "15N/40Ar fractionation" ;
+		le:hasSynonym "d15Nd40Ar" ;
+		rdfs:comment ""@en ;
+		rdfs:label "d15N/d40Ar"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#d18O
+:d18O rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "cellulose d18O" ;
+		le:hasSynonym "delta18O" ;
+		le:hasSynonym "foram d18O" ;
+		le:hasNoaaPastName "delta 18O" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=323" ;
+		rdfs:comment "the ratio of two isotopes of oxygen, 18O/16O, in a sample compared to that of a standard, typically either Pee Dee Belemnite or standard mean ocean water, as in: ((18O/16O sample)/(18O/16O standard) - 1) x 1000."@en ;
+		rdfs:label "d18O"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#dD
+:dD rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "d2H" ;
+		le:hasSynonym "dDwax" ;
+		le:hasSynonym "leaf wax" ;
+		le:hasSynonym "LeafWax" ;
+		le:hasSynonym "leafWax" ;
+		le:hasNoaaPastName "delta 2H" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=324" ;
+		rdfs:comment "the ratio of two isotopes of hydrogen, 2H/1H, in a sample compared to that of a standard, typically standard mean ocean water, as in: ((2H/1H sample)/(2H/1H standard) - 1) x 1000."@en ;
+		rdfs:label "dD"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#deuterium_excess
+:deuterium_excess rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "deterium excess" ;
+		le:hasSynonym "dx" ;
+		le:hasNoaaPastName "deuterium excess" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1426" ;
+		rdfs:comment "a measure of how different a delta 2H value is from the value expected from the Global Meteoric Water Line, that is delta 2H - 8* delta 18O."@en ;
+		rdfs:label "deuterium excess"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#diatom
+:diatom rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "diatom" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1601" ;
+		rdfs:comment "an identifiable organism that is a unicellular phytoplankton and that belongs to the kingdom Chromista, phylum Ochrophyta, class Bacillariophyceae."@en ;
+		rdfs:label "diatom"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#dinocyst
+:dinocyst rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "dynocist MAT" ;
+		le:hasNoaaPastName "dinoflagellate" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4532" ;
+		rdfs:comment "an identifiable organism that belongs to the kingdom Chromista, division Pyrrophycophyta."@en ;
+		rdfs:label "dinocyst"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#dry_bulk_density
+:dry_bulk_density rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "DBD" ;
+		rdfs:comment ""@en ;
+		rdfs:label "dry bulk density"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Eu_Zr
+:Eu_Zr rdf:type owl:NamedIndividual, :PaleoProxy ;
+		rdfs:comment ""@en ;
+		rdfs:label "Eu/Zr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Fe
+:Fe rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "iron" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=285" ;
+		rdfs:comment "a chemical element with atomic number 26."@en ;
+		rdfs:label "Fe"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Fe_Al
+:Fe_Al rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "iron/aluminum" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2416" ;
+		rdfs:comment "the elemental ratio of iron to aluminum."@en ;
+		rdfs:label "Fe/Al"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#foraminifera
+:foraminifera rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "benthic foraminifers" ;
+		le:hasSynonym "foraminifer" ;
+		le:hasSynonym "N. dutertrei" ;
+		le:hasSynonym "planktonic foraminifera" ;
+		le:hasSynonym "planktonic foraminifera" ;
+		le:hasSynonym "transfer function" ;
+		le:hasSynonym "Uvigerina mediterranea" ;
+		le:hasNoaaPastName "foraminifer" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2500" ;
+		rdfs:comment "an identifiable organism that belongs to the kingdom Protozoa, order Foraminiferida."@en ;
+		rdfs:label "foraminifera"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#GDGT
+:GDGT rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "brGDGT" ;
+		le:hasNoaaPastName "glycerol dialkyl glycerol tetraether" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1680" ;
+		rdfs:comment "an ether that is a tetraether membrane lipid and that contains between 0 and 4 cyclopentane moieties, with an increasing number of cyclopentane moieties related to the temperature of formation."@en ;
+		rdfs:label "GDGT"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#grain_size
+:grain_size rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "particle size" ;
+		le:hasNoaaPastName "grain size" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1233" ;
+		rdfs:comment "the diameter of individual grains of a material such as sediment, dust, or ice."@en ;
+		rdfs:label "grain size"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#HBI
+:HBI rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "highly-branched isoprenoid alkene" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2283" ;
+		rdfs:comment "an alkene that is highly-branched and composed of a number of isoprene (C5H8) units and that is produced by a relatively small number of marine and freshwater diatoms belonging to the Haslea, Navicula, Pleurosigma, and Rhizosolenia genera (Credit: Belt et al. 2013, 10.1016/j.quascirev.2012.12.001)."@en ;
+		rdfs:label "HBI"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#historical
+:historical rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Documentary" ;
+		le:hasSynonym "historic" ;
+		le:hasNoaaPastName "historical" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3460" ;
+		rdfs:comment "a data type that includes measurements of past climatic conditions and climate-dependent phenomena as observed and recorded by humans not using modern meteorological instruments."@en ;
+		rdfs:label "historical"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#humification
+:humification rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "humification index" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2129" ;
+		rdfs:comment "a measure of the extent to which a peat sample has undergone decomposition and humic acids have been produced."@en ;
+		rdfs:label "humification"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#ice_accumulation
+:ice_accumulation rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Ice Accumulation" ;
+		rdfs:comment ""@en ;
+		rdfs:label "ice accumulation"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#ice_melt
+:ice_melt rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "melt" ;
+		le:hasSynonym "melt layer" ;
+		le:hasNoaaPastName "ice melt" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4951" ;
+		rdfs:comment "the ice mass loss from a glacier, ice-cap, ice-sheet, or ice-shelf through phase transformation to liquid water."@en ;
+		rdfs:label "ice melt"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#inorganic_carbon
+:inorganic_carbon rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "TIC" ;
+		le:hasNoaaPastName "inorganic carbon" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=996" ;
+		rdfs:comment "carbon that is derived from an inorganic source."@en ;
+		rdfs:label "inorganic carbon"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#IP25
+:IP25 rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "ice proxy with 25 carbon atoms" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2493" ;
+		rdfs:comment "a highly-branched isoprenoid alkene that contains 25 carbon atoms and that is produced selectively by sea ice diatoms (Credit: Belt et al. 2013, 10.1016/j.quascirev.2012.12.001)."@en ;
+		rdfs:label "IP25"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#lake_level
+:lake_level rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Lake stratigraphy and radiocarbon dating of macrofossils" ;
+		le:hasSynonym "lakeLevel" ;
+		le:hasSynonym "lakelevel" ;
+		le:hasSynonym "LakeStatus" ;
+		le:hasNoaaPastName "lake level" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2137" ;
+		rdfs:comment "a geographic variable that quantifies the height of the lake water surface relative to some datum."@en ;
+		rdfs:label "lake level"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#latewood_cellulose
+:latewood_cellulose rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "late-wood cellulose" ;
+		le:hasNoaaPastName "latewood cellulose" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1589" ;
+		rdfs:comment "cellulose from wood that formed late in the growing season and that tends to consist of small and thick-walled cells."@en ;
+		rdfs:label "latewood cellulose"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#LDI
+:LDI rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "long chain diol" ;
+		le:hasNoaaPastName "long-chain diol index" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=5705" ;
+		rdfs:comment "an organic compound index calculated based on the relative abundance of long chain alkyl 1,13- and 1,15-diols."@en ;
+		rdfs:label "LDI"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#macrofossils
+:macrofossils rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "plant macrofossils" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4595" ;
+		rdfs:comment "a data type that includes measurements of plant remains large enough to be observed without a microscope."@en ;
+		rdfs:label "macrofossils"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#magnetic
+:magnetic rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "ARM/IRM" ;
+		le:hasSynonym "IRM" ;
+		rdfs:comment ""@en ;
+		rdfs:label "magnetic"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#magnetic_susceptibility
+:magnetic_susceptibility rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Magnetic Susceptibility" ;
+		le:hasSynonym "MS" ;
+		le:hasNoaaPastName "magnetic susceptibility" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1793" ;
+		rdfs:comment "a magnetic moment that is the degree to which a material can be magnetized in an external magnetic field."@en ;
+		rdfs:label "magnetic susceptibility"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#mass_accumulation_rate
+:mass_accumulation_rate rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "MAR" ;
+		le:hasNoaaPastName "mass per area per time unit" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4704" ;
+		rdfs:comment "a rate unit that is a standard measure of the accumulation or flow of mass per unit area per time."@en ;
+		rdfs:label "mass accumulation rate"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#maximum_latewood_density
+:maximum_latewood_density rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "delta Density" ;
+		le:hasSynonym "MXD" ;
+		le:hasNoaaPastName "latewood density" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1573" ;
+		rdfs:comment "the density of xylem cells in wood that formed near the end of the growing season and that tend to be small and thick-walled."@en ;
+		rdfs:label "maximum latewood density"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Mg
+:Mg rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "magnesium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=891" ;
+		rdfs:comment "a chemical element with atomic number 12."@en ;
+		rdfs:label "Mg"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Mg_Ca
+:Mg_Ca rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "foram Mg/Ca" ;
+		le:hasSynonym "Foram Mg/Ca" ;
+		le:hasSynonym "MgCa" ;
+		le:hasNoaaPastName "magnesium/calcium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=327" ;
+		rdfs:comment "the elemental ratio of magnesium to calcium."@en ;
+		rdfs:label "Mg/Ca"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#multiproxy
+:multiproxy rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "hybrid" ;
+		le:hasSynonym "Hybrid Grain Size" ;
+		le:hasSynonym "hybrid-ice" ;
+		le:hasSynonym "hybrid-lake" ;
+		le:hasSynonym "pore ice d2H and d18O" ;
+		le:hasSynonym "Ti" ;
+		le:hasSynonym "Ca" ;
+		le:hasSynonym "K" ;
+		le:hasNoaaPastName "multiple proxies" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3630" ;
+		rdfs:comment "a material used to create a climate reconstruction that consists of proxies from more than two proxy data types."@en ;
+		rdfs:label "multiproxy"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#needs_to_be_changed
+:needs_to_be_changed rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "PCA" ;
+		rdfs:comment ""@en ;
+		rdfs:label "needs to be changed"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#needsToBeChanged
+:needsToBeChanged rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "((( calcium carbonate ))) accumulation /// null" ;
+		le:hasSynonym "3-OH-Fatty Acids" ;
+		le:hasSynonym "Age" ;
+		le:hasSynonym "CAS" ;
+		le:hasSynonym "CIA" ;
+		le:hasSynonym "coral" ;
+		le:hasSynonym "element" ;
+		le:hasSynonym "Element Ratio" ;
+		le:hasSynonym "ice" ;
+		le:hasSynonym "isotope" ;
+		le:hasSynonym "isotope diffusion" ;
+		le:hasSynonym "MG0" ;
+		le:hasSynonym "middle-wood cellulose" ;
+		le:hasSynonym "mineral" ;
+		le:hasSynonym "mineralogy" ;
+		le:hasSynonym "percent" ;
+		le:hasSynonym "sediment" ;
+		le:hasSynonym "Sediment" ;
+		le:hasSynonym "TDS" ;
+		le:hasSynonym "trace element / CA" ;
+		le:hasSynonym "TraceElement" ;
+		le:hasSynonym "u Cluster 2" ;
+		rdfs:comment ""@en ;
+		rdfs:label "needsToBeChanged"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#ostracod
+:ostracod rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "ostracod" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1002" ;
+		rdfs:comment "an identifiable organism that belongs to the kingdom Animalia, phylum Arthropoda, class Ostracoda."@en ;
+		rdfs:label "ostracod"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#P-aqueous
+:P-aqueous rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Paq" ;
+		le:hasNoaaPastName "P-aqueous" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1000103" ;
+		rdfs:comment "an organic compound index that measures the relative predominance of submerged versus emergent aquatic plants and that is generally calculated from n-alkanes as (C23 + C25)/(C23 + C25 + C29 + C31)."@en ;
+		rdfs:label "P-aqueous"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#peat_ash
+:peat_ash rdf:type owl:NamedIndividual, :PaleoProxy ;
+		rdfs:comment ""@en ;
+		rdfs:label "peat ash"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#pH
+:pH rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "pH" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=569" ;
+		rdfs:comment "a measure of acidity that is calculated as the negative logarithm of the hydrogen ion concentration."@en ;
+		rdfs:label "pH"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#pollen
+:pollen rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "aquatic palynomorphs" ;
+		le:hasNoaaPastName "pollen" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=5578" ;
+		rdfs:comment "a bulk biological material that consists of microscopic grains produced by seed plants for reproduction."@en ;
+		rdfs:label "pollen"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#radiolaria
+:radiolaria rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "radiolarian" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2796" ;
+		rdfs:comment "an identifiable organism that belongs to the kingdom Protozoa, order Radiolaria."@en ;
+		rdfs:label "radiolaria"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Rb
+:Rb rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "rubidium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=913" ;
+		rdfs:comment "a chemical element with atomic number 37."@en ;
+		rdfs:label "Rb"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Rb_Sr
+:Rb_Sr rdf:type owl:NamedIndividual, :PaleoProxy ;
+		rdfs:comment ""@en ;
+		rdfs:label "Rb/Sr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#reflectance
+:reflectance rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "reflectance" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1005" ;
+		rdfs:comment "an electromagnetic property that measures the amount of light that reflects from the surface of a material."@en ;
+		rdfs:label "reflectance"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#ring_width
+:ring_width rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "TRW" ;
+		le:hasNoaaPastName "ring width" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3639" ;
+		rdfs:comment "a physical measurement of the width of all or of some subcomponent of one annual ring from a tree."@en ;
+		rdfs:label "ring width"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Sr
+:Sr rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "strontium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=290" ;
+		rdfs:comment "a chemical element with atomic number 38."@en ;
+		rdfs:label "Sr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Sr_Ca
+:Sr_Ca rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Ca/Sr" ;
+		le:hasSynonym "Coral Sr/Ca" ;
+		le:hasSynonym "SrCa" ;
+		le:hasNoaaPastName "strontium/calcium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=328" ;
+		rdfs:comment "the elemental ratio of strontium to calcium."@en ;
+		rdfs:label "Sr/Ca"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#stratigraphy
+:stratigraphy rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "Minerogenic layers" ;
+		le:hasSynonym "Plant detrital layers" ;
+		le:hasSynonym "Stratigraphy" ;
+		rdfs:comment ""@en ;
+		rdfs:label "stratigraphy"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#sulfur
+:sulfur rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "S" ;
+		le:hasNoaaPastName "sulfur" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=902" ;
+		rdfs:comment "a chemical element with atomic number 16."@en ;
+		rdfs:label "sulfur"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#TEX86
+:TEX86 rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "tetraether index of 86 carbon atoms" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1599" ;
+		rdfs:comment "an organic compound index that is calculated as the ratio of different isoprenoidal glycerol dialkyl glycerol tetraethers."@en ;
+		rdfs:label "TEX86"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Ti
+:Ti rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "titanium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=292" ;
+		rdfs:comment "a chemical element with atomic number 22."@en ;
+		rdfs:label "Ti"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Ti_Al
+:Ti_Al rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "titanium/aluminum" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3687" ;
+		rdfs:comment "the elemental ratio of titanium to aluminum."@en ;
+		rdfs:label "Ti/Al"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#Ti_Ca
+:Ti_Ca rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "ln(ti/ca)" ;
+		le:hasSynonym "Ti/CA" ;
+		le:hasNoaaPastName "titanium/calcium" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2426" ;
+		rdfs:comment "the elemental ratio of titanium to calcium."@en ;
+		rdfs:label "Ti/Ca"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#TOC
+:TOC rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasNoaaPastName "organic carbon" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=995" ;
+		rdfs:comment "carbon that is derived from an organic source."@en ;
+		rdfs:label "TOC"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#total_nitrogen
+:total_nitrogen rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "TN" ;
+		rdfs:comment ""@en ;
+		rdfs:label "total nitrogen"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#varve_thickness
+:varve_thickness rdf:type owl:NamedIndividual, :PaleoProxy ;
+		le:hasSynonym "varve" ;
+		le:hasSynonym "Varve" ;
+		le:hasSynonym "varve property" ;
+		le:hasSynonym "varves" ;
+		le:hasNoaaPastName "varve thickness" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1630" ;
+		rdfs:comment "the thickness of a sublayer of or an entire annually-resolved varve in a sediment sequence."@en ;
+		rdfs:label "varve thickness"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#biogenic
+:biogenic rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		le:hasNoaaPastName "biological material" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=444" ;
+		rdfs:comment "measurements of cells or collections of cells that partially or completely compose an organism or group of organisms."@en ;
+		rdfs:label "biogenic"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#biomarker
+:biomarker rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		le:hasNoaaPastName "organic compound" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1596" ;
+		rdfs:comment "a compound that consists of one or more atoms of carbon covalently linked to atoms of other elements, most commonly hydrogen, oxgen, or nitrogen."@en ;
+		rdfs:label "biomarker"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#borehole
+:borehole rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		le:hasNoaaPastName "borehole" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=114" ;
+		rdfs:comment "a data type that consists of direct measurements of subsurface temperature from boreholes drilled into materials such as rock and glacier ice."@en ;
+		rdfs:label "borehole"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#cryophysical
+:cryophysical rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		rdfs:comment ""@en ;
+		rdfs:label "cryophysical"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#dendrophysical
+:dendrophysical rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		rdfs:comment ""@en ;
+		rdfs:label "dendrophysical"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#elemental
+:elemental rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		rdfs:comment ""@en ;
+		rdfs:label "elemental"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#faunal_assemblage
+:faunal_assemblage rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		rdfs:comment ""@en ;
+		rdfs:label "faunal assemblage"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#floral_assemblage
+:floral_assemblage rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		rdfs:comment ""@en ;
+		rdfs:label "floral assemblage"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#historical
+:historical rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		le:hasNoaaPastName "historical" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3460" ;
+		rdfs:comment "a data type that includes measurements of past climatic conditions and climate-dependent phenomena as observed and recorded by humans not using modern meteorological instruments."@en ;
+		rdfs:label "historical"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#isotopic
+:isotopic rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		le:hasNoaaPastName "isotope" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4584" ;
+		rdfs:comment "a measure of chemical composition that relates to variants of a given element that differ in neutron number."@en ;
+		rdfs:label "isotopic"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#mineral
+:mineral rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		rdfs:comment ""@en ;
+		rdfs:label "mineral"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#multiproxy
+:multiproxy rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		le:hasNoaaPastName "multiple proxies" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3630" ;
+		rdfs:comment "a material used to create a climate reconstruction that consists of proxies from more than two proxy data types."@en ;
+		rdfs:label "multiproxy"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#pyrogenic
+:pyrogenic rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		le:hasNoaaPastName "fire history" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=115" ;
+		rdfs:comment "a data type that includes measurements made to deduce the past history of fire, whether from tree rings, sediment, or other natural archives."@en ;
+		rdfs:label "pyrogenic"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#reflectance
+:reflectance rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		le:hasNoaaPastName "reflectance" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1005" ;
+		rdfs:comment "an electromagnetic property that measures the amount of light that reflects from the surface of a material."@en ;
+		rdfs:label "reflectance"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#sedimentology
+:sedimentology rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		rdfs:comment ""@en ;
+		rdfs:label "sedimentology"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_proxy#stratigraphy
+:stratigraphy rdf:type owl:NamedIndividual, :PaleoProxyGeneral ;
+		rdfs:comment ""@en ;
+		rdfs:label "stratigraphy"@en .
+
+

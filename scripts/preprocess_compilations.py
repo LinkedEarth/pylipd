@@ -720,6 +720,61 @@ class SPARQLOptimizedLiPDStatisticsUpdater:
         total_processed = saved_count + len(datasets_to_copy) + total_skipped
         print(f"    📊 Summary: {total_processed} total files - {saved_count} updated, {len(datasets_to_copy)} copied, {total_skipped} skipped")
 
+    def cleanup_macos_artifacts(self):
+        """Remove macOS artifacts like __MACOSX directories and .DS_Store files."""
+        print("Cleaning up macOS artifacts...")
+        
+        cleanup_stats = {
+            'macosx_dirs_removed': 0,
+            'dsstore_files_removed': 0,
+            'resource_fork_files_removed': 0
+        }
+        
+        # Find and remove __MACOSX directories
+        macosx_dirs = list(self.input_dir.rglob("__MACOSX"))
+        for macosx_dir in macosx_dirs:
+            if macosx_dir.is_dir():
+                try:
+                    shutil.rmtree(macosx_dir)
+                    cleanup_stats['macosx_dirs_removed'] += 1
+                    print(f"  Removed: {macosx_dir}")
+                except Exception as e:
+                    print(f"  Warning: Could not remove {macosx_dir}: {e}")
+        
+        # Find and remove .DS_Store files
+        dsstore_files = list(self.input_dir.rglob(".DS_Store"))
+        for dsstore_file in dsstore_files:
+            try:
+                dsstore_file.unlink()
+                cleanup_stats['dsstore_files_removed'] += 1
+                print(f"  Removed: {dsstore_file}")
+            except Exception as e:
+                print(f"  Warning: Could not remove {dsstore_file}: {e}")
+        
+        # Find and remove resource fork files (._filename)
+        resource_fork_files = list(self.input_dir.rglob("._*"))
+        for rf_file in resource_fork_files:
+            if rf_file.is_file():
+                try:
+                    rf_file.unlink()
+                    cleanup_stats['resource_fork_files_removed'] += 1
+                    print(f"  Removed: {rf_file}")
+                except Exception as e:
+                    print(f"  Warning: Could not remove {rf_file}: {e}")
+        
+        total_removed = (cleanup_stats['macosx_dirs_removed'] + 
+                        cleanup_stats['dsstore_files_removed'] + 
+                        cleanup_stats['resource_fork_files_removed'])
+        
+        if total_removed > 0:
+            print(f"✓ Cleanup complete: Removed {cleanup_stats['macosx_dirs_removed']} __MACOSX dirs, "
+                  f"{cleanup_stats['dsstore_files_removed']} .DS_Store files, "
+                  f"{cleanup_stats['resource_fork_files_removed']} resource fork files")
+        else:
+            print("✓ No macOS artifacts found to clean up")
+        
+        return cleanup_stats
+
     def run_sparql_optimized_update_process(self):
         """Run the SPARQL-optimized statistics update process."""
         print("Starting SPARQL-Optimized LiPD Variable Statistics Update Process")
@@ -728,6 +783,9 @@ class SPARQLOptimizedLiPDStatisticsUpdater:
         if not self.input_dir:
             print("Error: Input directory is required")
             return
+        
+        # Clean up macOS artifacts first
+        cleanup_stats = self.cleanup_macos_artifacts()
         
         # Find all LiPD files
         lipd_files = list(self.input_dir.rglob("*.lpd"))

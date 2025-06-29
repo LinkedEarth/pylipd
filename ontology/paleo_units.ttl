@@ -1,0 +1,870 @@
+@prefix : <http://linked.earth/ontology/paleo_units#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix le: <http://linked.earth/ontology#> .
+@base <http://linked.earth/ontology/paleo_units#> .
+
+<http://linked.earth/ontology/paleo_units#> rdf:type owl:Ontology ;
+                                 owl:versionIRI <http://linked.earth/ontology/paleo_units/2.0.0> ;
+                                 dcterms:contributor <http://w3id.org/people/varunr> ,
+                                                     <http://earth.usc.edu/~khider/> ;
+                                 dcterms:creator <http://earth.usc.edu/~khider/> ,
+                                                 <http://orcid.org/0000-0001-5920-4751> ,
+                                                 <http://www.cefns.nau.edu/~npm4/> ;
+                                 dcterms:license "http://creativecommons.org/licenses/by/2.0/" ;
+                                 dcterms:title "The Paleo Units Ontology"@en ;
+                                 vann:preferredNamespacePrefix "punits" ;
+                                 vann:preferredNamespaceUri "http://linked.earth/ontology/paleo_units#" ;
+                                 owl:versionInfo "2.0.0"@en .
+
+#################################################################
+#    Data properties
+#################################################################
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://linked.earth/ontology/paleo_units#atomic_ratio
+:atomic_ratio rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "Atomic ratio" ;
+		le:hasNoaaPastName "atomic ratio" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=5701" ;
+		rdfs:comment "a dimensionless unit that is the ratio of atoms of one kind to atoms of another kind."@en ;
+		rdfs:label "atomic ratio"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#cgs
+:cgs rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "dimensionless (CGS system)" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=631" ;
+		rdfs:comment "a dimensionless measure of volume magnetic susceptibility that results from values of magnetization and magnetic field strength in centimeter-gram-second units, i.e., electromagnetic units. The dimensionless cgs value of volume magnetic susceptibility can be multiplied by 4*pi to generate the dimensionless SI value."@en ;
+		rdfs:label "cgs"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#cm
+:cm rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "cmblf" ;
+		le:hasNoaaPastName "centimeter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=122" ;
+		rdfs:comment "a length unit which is equal to one hundredth of a meter or 101 m (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "cm"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#cm_kyr
+:cm_kyr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "centimeter per kiloyear" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2371" ;
+		rdfs:comment "a length per time unit that is one hundredth of a meter, or 102 m, per one thousand years, or 103 years."@en ;
+		rdfs:label "cm/kyr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#cm_yr
+:cm_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "cm/a" ;
+		le:hasSynonym "cm yr-1" ;
+		le:hasNoaaPastName "centimeter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1713" ;
+		rdfs:comment "a length per time unit that is one hundredth of a meter, or 104 m, per one year."@en ;
+		rdfs:label "cm/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#cm3
+:cm3 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "cubic centimeter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1712" ;
+		rdfs:comment "a volume unit which is equal to one millionth of a cubic meter or 105 m6, or to 1 ml (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "cm3"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count
+:count rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "number" ;
+		le:hasSynonym "#" ;
+		le:hasSynonym "counts" ;
+		le:hasSynonym "dark_sum" ;
+		le:hasSynonym "cts" ;
+		le:hasNoaaPastName "count" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=704" ;
+		rdfs:comment "a dimensionless unit that denotes a simple count of things (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "count"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count_century
+:count_century rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "envents/100yrs" ;
+		le:hasNoaaPastName "count per century" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2373" ;
+		rdfs:comment "a count per time unit that is a simple count of the occurrence of a substance per one hundred years."@en ;
+		rdfs:label "count/century"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count_cm2
+:count_cm2 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "number/cm2" ;
+		le:hasNoaaPastName "count per square centimeter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3814" ;
+		rdfs:comment "a count per area unit that applies to an area of one square centimeter, or 107 square meters."@en ;
+		rdfs:label "count/cm2"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count_cm2_yr
+:count_cm2_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "grains>255 micron/cm2/yr" ;
+		le:hasSynonym "no/cm2/yr" ;
+		le:hasNoaaPastName "count per square centimeter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1715" ;
+		rdfs:comment "a count per area per time unit that is a simple count of a substance per one ten-thousandth of a square meter, or 108 m2, and per one year."@en ;
+		rdfs:label "count/cm2/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count_cm3
+:count_cm3 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "bubbles/cm3" ;
+		le:hasSynonym "#/cm3" ;
+		le:hasNoaaPastName "count per cubic centimeter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3815" ;
+		rdfs:comment "a count per volume unit that applies to one cubic centimeter, or 109 cubic meters."@en ;
+		rdfs:label "count/cm3"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count_g
+:count_g rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "count per gram" ;
+		le:hasSynonym "grains/g" ;
+		le:hasSynonym "millions of valves/g dry sed" ;
+		le:hasNoaaPastName "count per gram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3796" ;
+		rdfs:comment "a count per mass unit that applies to one gram."@en ;
+		rdfs:label "count/g"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count_kyr
+:count_kyr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "frequency/1000yrs" ;
+		le:hasNoaaPastName "count per kiloyear" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1000203" ;
+		rdfs:comment "a count per time unit that is a simple count of a substance per one thousand years, or 1010 years."@en ;
+		rdfs:label "count/kyr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count_mL
+:count_mL rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "count per milliliter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3801" ;
+		rdfs:comment "a count per volume unit that applies to one milliliter, or 1011 liters."@en ;
+		rdfs:label "count/mL"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#count_yr
+:count_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "Floods per year" ;
+		le:hasSynonym "Floods per yr" ;
+		le:hasSynonym "floods/yr" ;
+		le:hasNoaaPastName "count per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1720" ;
+		rdfs:comment "a count per time unit that is a simple count of the occurrence of a substance per one year."@en ;
+		rdfs:label "count/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#cps
+:cps rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "count per second" ;
+		le:hasNoaaPastName "count per second" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1721" ;
+		rdfs:comment "a count per time unit that is a simple count of the occurrence of a substance per one second."@en ;
+		rdfs:label "cps"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#day
+:day rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "days" ;
+		le:hasNoaaPastName "day" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=270" ;
+		rdfs:comment "a duration unit that is equal to 24 hours."@en ;
+		rdfs:label "day"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#degC
+:degC rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "GDD5" ;
+		le:hasSynonym "((( null ))) deg C /// degC" ;
+		le:hasSynonym "degrees" ;
+		le:hasSynonym "ºC" ;
+		le:hasSynonym "Deg" ;
+		le:hasSynonym "GDD" ;
+		le:hasSynonym "kelvin" ;
+		le:hasNoaaPastName "degree Celsius" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=29" ;
+		rdfs:comment "a temperature unit which is equal to one kelvin degree. However, they have their zeros at different points. The centigrade scale has its zero at 273.15 K (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "degC"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#degree
+:degree rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "decimal degrees" ;
+		le:hasNoaaPastName "degree" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1264" ;
+		rdfs:comment "an angle unit which is equal to 1/360 of a full rotation or 1.745331012 rad (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "degree"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#fraction
+:fraction rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "fractional abundance" ;
+		le:hasSynonym "fraction 0 to 1" ;
+		le:hasSynonym "relative abundance" ;
+		le:hasNoaaPastName "fraction" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3820" ;
+		rdfs:comment "a dimensionless unit that relates the part (the numerator) to the whole (the denominator) and that, by definition, ranges from 0 to 1 (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "fraction"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g
+:g rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "gram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=258" ;
+		rdfs:comment "a mass unit which is equal to one thousandth of a kilogram or 1013 kg (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "g"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g_cm_yr
+:g_cm_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "gram per centimeter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1000009" ;
+		rdfs:comment "a mass per length per time unit that is one thousandth of a kilogram, or 1014 kg, per one hundredth of a meter, or 1015 m, per one year."@en ;
+		rdfs:label "g/cm/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g_cm2
+:g_cm2 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "gcm2" ;
+		le:hasSynonym "g cm-1" ;
+		le:hasNoaaPastName "gram per square centimeter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1724" ;
+		rdfs:comment "an area density unit which is equal to the mass of an object in grams, or 1016 kilogram, per square centimeter, or 1017 square meters."@en ;
+		rdfs:label "g/cm2"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g_cm2_kyr
+:g_cm2_kyr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "g/cm2/ka" ;
+		le:hasNoaaPastName "gram per square centimeter per kiloyear" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1725" ;
+		rdfs:comment "a mass per area per time unit that is one thousandth of a kilogram, or 1018 kg, per one ten-thousandth of a square meter, or 1019 m20, per one thousand years."@en ;
+		rdfs:label "g/cm2/kyr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g_cm2_yr
+:g_cm2_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "g/m^2/a" ;
+		le:hasSynonym "gcm-2yr-1" ;
+		le:hasSynonym "g.cm-2.a-1" ;
+		le:hasSynonym "g/cm^2/y" ;
+		le:hasSynonym "gcm-2a-1" ;
+		le:hasNoaaPastName "gram per square centimeter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1726" ;
+		rdfs:comment "a mass per area per time unit that is one thousandth of a kilogram, or 1021 kg, per one ten-thousandth of a square meter, or 1022 m23, per one year."@en ;
+		rdfs:label "g/cm2/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g_cm3
+:g_cm3 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "g/cc" ;
+		le:hasSynonym "g_cm3" ;
+		le:hasSynonym "grams/cubic cm" ;
+		le:hasNoaaPastName "gram per cubic centimeter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1727" ;
+		rdfs:comment "a mass density unit which is equal to mass of an object in grams divided by the volume in cubic centimeters (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "g/cm3"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g_L
+:g_L rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "gram per liter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3824" ;
+		rdfs:comment "a mass density unit which is equal to mass of an object in grams divided by the volume in liters (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "g/L"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g_m2
+:g_m2 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "g/m" ;
+		le:hasNoaaPastName "gram per square meter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4871" ;
+		rdfs:comment "an area density unit which is equal to the mass of an object in grams, or 1024 kg, per square meter."@en ;
+		rdfs:label "g/m2"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#g_m2_yr
+:g_m2_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "gm2yr-1" ;
+		le:hasNoaaPastName "gram per square meter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1729" ;
+		rdfs:comment "a mass per area per time unit that is one thousandth of a kilogram, or 1025 kg, per one square meter, per one year."@en ;
+		rdfs:label "g/m2/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#grayscale
+:grayscale rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "grayscale" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=548" ;
+		rdfs:comment "reflectance that is quantified only according to intensity, or the amount of light, with low values indicating black and high values indicating white."@en ;
+		rdfs:label "grayscale"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#kg_m2_yr
+:kg_m2_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "kilogram per square meter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3832" ;
+		rdfs:comment "a mass per area per time unit that is one kilogram per one square meter, per one year."@en ;
+		rdfs:label "kg/m2/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#kg_m3
+:kg_m3 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "kilogram per square meter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4874" ;
+		rdfs:comment "an area density unit which is equal to the mass of an object in kilograms per square meter."@en ;
+		rdfs:label "kg/m3"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#km2
+:km2 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "square kilometer" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3804" ;
+		rdfs:comment "an area unit which is equal to one million square meters or 1026 m27."@en ;
+		rdfs:label "km2"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#km3
+:km3 rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "cubic kilometer" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3835" ;
+		rdfs:comment "a volume unit which is equal to one billion cubic meters or 1028 m29."@en ;
+		rdfs:label "km3"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#log_mg_L_
+:log_mg_L_ rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "log mg/L" ;
+		rdfs:comment ""@en ;
+		rdfs:label "log(mg/L)"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#m
+:m rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "meter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=124" ;
+		rdfs:comment "a length unit which is equal to the length of the path traveled by light in vacuum during a time interval of 1/299 792 458 of a second (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "m"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#m3_kg
+:m3_kg rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "m^3 kg^-1" ;
+		le:hasSynonym "m3kg-1" ;
+		le:hasSynonym "m3kg1" ;
+		le:hasNoaaPastName "cubic meter per kilogram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1734" ;
+		rdfs:comment "a specific volume unit which is equal to one cubic meter volume occupied by one kilogram of a particular substance (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "m3/kg"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mg
+:mg rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "milligram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=637" ;
+		rdfs:comment "a mass unit which is equal to one thousandth of a gram or 1030 g (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "mg"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mg_cm2_yr
+:mg_cm2_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "milligram per square centimeter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1738" ;
+		rdfs:comment "a mass per area per time unit that is one thousandth of a gram, or 1031 g, per one ten-thousandth of a square meter, or 1032 m33, per one year."@en ;
+		rdfs:label "mg/cm2/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mg_g
+:mg_g rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "mg g-1" ;
+		le:hasSynonym "mill/g" ;
+		le:hasNoaaPastName "milligram per gram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1739" ;
+		rdfs:comment "a mass fraction unit that measures the number of milligrams, or 1034 g, of one subcomponent of a sample relative to one gram of either another subcomponent or of the entire sample."@en ;
+		rdfs:label "mg/g"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mg_kg
+:mg_kg rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "milligram per kilogram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2390" ;
+		rdfs:comment "a mass fraction unit that measures the number of milligrams, or 1035 kg, of one subcomponent of a sample relative to one kilogram of either another subcomponent or of the entire sample."@en ;
+		rdfs:label "mg/kg"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mg_L
+:mg_L rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "milligram per liter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3842" ;
+		rdfs:comment "a mass density unit which is equal to mass of an object in milligrams, or 1036 g, divided by the volume in liters (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "mg/L"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mm
+:mm rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "depth_sample" ;
+		le:hasNoaaPastName "millimeter" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=128" ;
+		rdfs:comment "a length unit which is equal to one thousandth of a meter or 1037 m (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "mm"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mm_day
+:mm_day rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "millimeter per day" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3847" ;
+		rdfs:comment "a length per time unit that is one thousandth of a meter, or 1038 m, per one day."@en ;
+		rdfs:label "mm/day"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mm_season
+:mm_season rdf:type owl:NamedIndividual, :PaleoUnit ;
+		rdfs:comment ""@en ;
+		rdfs:label "mm/season"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mm_yr
+:mm_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "mm/a" ;
+		le:hasSynonym "((( null ))) mm /// mm/a" ;
+		le:hasNoaaPastName "millimeter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3849" ;
+		rdfs:comment "a length per time unit that is one thousandth of a meter, or 1039 m, per one year."@en ;
+		rdfs:label "mm/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#mmol_mol
+:mmol_mol rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "mmol_mol" ;
+		le:hasNoaaPastName "millimole per mole" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1745" ;
+		rdfs:comment "a mole fraction unit that measures the number of millimoles, or 1040 mole, of one subcomponent of a sample relative to one mole of either another subcomponent or of the entire sample."@en ;
+		rdfs:label "mmol/mol"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#months_year
+:months_year rdf:type owl:NamedIndividual, :PaleoUnit ;
+		rdfs:comment ""@en ;
+		rdfs:label "months/year"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#needsToBeChanged
+:needsToBeChanged rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "1s" ;
+		le:hasSynonym "a€°" ;
+		le:hasSynonym "Floods per 30 years" ;
+		le:hasSynonym "Floods per 30 yrs (200 yr running average)" ;
+		le:hasSynonym "HU" ;
+		le:hasSynonym "layers/200yrs" ;
+		le:hasSynonym "[±]" ;
+		le:hasSynonym "0.5s" ;
+		le:hasSynonym "1 sigma" ;
+		le:hasSynonym "10-5" ;
+		le:hasSynonym "10^-9 Am2/yr" ;
+		le:hasSynonym "1sigma" ;
+		le:hasSynonym "a°" ;
+		le:hasSynonym "AfAE’A†a€™AfA¢A¢a€sA¬A…A¡AfAE’A¢a‚¬A¡Afa€sA‚Aug/g" ;
+		le:hasSynonym "unknown" ;
+		le:hasSynonym "mcm" ;
+		le:hasSynonym "mwe" ;
+		le:hasSynonym "1041 m3/kg" ;
+		le:hasSynonym "am2kg-1" ;
+		le:hasSynonym "area" ;
+		le:hasSynonym "Aug/cm2/ka" ;
+		le:hasSynonym "gomcm2yr-1" ;
+		le:hasSynonym "sum" ;
+		le:hasSynonym "total" ;
+		le:hasSynonym "cm2yr-1" ;
+		le:hasSynonym "square mm/cubic cm" ;
+		rdfs:comment ""@en ;
+		rdfs:label "needsToBeChanged"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#ng
+:ng rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "ng/sample" ;
+		le:hasNoaaPastName "nanogram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=954" ;
+		rdfs:comment "a mass unit which is equal to one thousandth of one millionth of a gram or 1042 g (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "ng"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#ng_g
+:ng_g rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "ng/g sed" ;
+		le:hasNoaaPastName "nanogram per gram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3900" ;
+		rdfs:comment "a mass fraction unit that measures the number of nanograms, or 1043 g, of one subcomponent of a sample relative to one gram of either another subcomponent or of the entire sample."@en ;
+		rdfs:label "ng/g"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#peak_area
+:peak_area rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "pa/kcps" ;
+		le:hasNoaaPastName "peak area integral" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1754" ;
+		rdfs:comment "an area unit that is calculated as the area under the curve of a measured spectrum and that generally gives relative information about the abundance of various sample sub-components."@en ;
+		rdfs:label "peak area"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#percent
+:percent rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "%" ;
+		le:hasSynonym "((( null ))) % /// percent" ;
+		le:hasSynonym "wt %" ;
+		le:hasSynonym "% abs" ;
+		le:hasSynonym "mol%" ;
+		le:hasSynonym "mole per mole * 100" ;
+		le:hasSynonym "percentByWeight" ;
+		le:hasSynonym "Precent" ;
+		le:hasNoaaPastName "percent" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=145" ;
+		rdfs:comment "a concentration unit that denotes numbers as fractions of 100 (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "percent"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#permil
+:permil rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "((( null ))) per mil /// permil" ;
+		le:hasSynonym "per mil vs PDB" ;
+		le:hasSynonym "((( null ))) per mil /// unitless" ;
+		le:hasSynonym "per mil" ;
+		le:hasSynonym "per mil (VPDB)" ;
+		le:hasSynonym "per mil vs VPDB" ;
+		le:hasSynonym "permil (VSMOW)" ;
+		le:hasSynonym "per mil (PDB)" ;
+		le:hasSynonym "permil vs PDB" ;
+		le:hasSynonym "permil (PDB)" ;
+		le:hasSynonym "permil (SMOW)" ;
+		le:hasSynonym "permil SMOW" ;
+		le:hasSynonym "permil VSMOW" ;
+		le:hasSynonym "permil (VPDB)" ;
+		le:hasSynonym "permil VPDB" ;
+		le:hasSynonym "permil vs VPDB" ;
+		le:hasSynonym "permil PDB" ;
+		le:hasSynonym "permil VPDB 1sig" ;
+		le:hasSynonym "‰ PDB" ;
+		le:hasSynonym "per mil VSMOW" ;
+		le:hasSynonym "((( null ))) permil /// unitless" ;
+		le:hasSynonym "+/- permil PDB" ;
+		le:hasSynonym "+/- permil SMOW" ;
+		le:hasSynonym "± permil" ;
+		le:hasSynonym "per mil VSMOW 1sig" ;
+		le:hasSynonym "((( null ))) permil /// per mil" ;
+		le:hasSynonym "‰ SMOW" ;
+		le:hasSynonym "1000*counts/counts" ;
+		le:hasSynonym "d18O" ;
+		le:hasSynonym "PDB" ;
+		le:hasSynonym "pemil" ;
+		le:hasSynonym "permil (PBD)" ;
+		le:hasSynonym "permil (SMOW" ;
+		le:hasSynonym "not PDB!)" ;
+		le:hasSynonym "permil v pdb" ;
+		le:hasSynonym "permil VMOW" ;
+		le:hasSynonym "permil VSMOW 1sig" ;
+		le:hasSynonym "permit" ;
+		le:hasSynonym "perml" ;
+		le:hasNoaaPastName "per mil" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=142" ;
+		rdfs:comment "a parts per thousand unit, often used directly to refer to isotopic ratios and calculated by calculating the ratio of isotopic concentrations in a sample and in a standard, subtracting one and multiplying by one thousand."@en ;
+		rdfs:label "permil"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#pH
+:pH rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "acidity" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=773" ;
+		rdfs:comment "a solution property that quantifies the concentration of hydrogen ions."@en ;
+		rdfs:label "pH"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#ppb
+:ppb rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "parts per billion" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=144" ;
+		rdfs:comment "a parts per notation unit which denotes the amount of a given substance in a total amount of 1,000,000,000 regardless of the units of measure as long as they are the same or 1 part in 1044 (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "ppb"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#ppm
+:ppm rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "parts per million" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=143" ;
+		rdfs:comment "a parts per notation unit which denotes the amount of a given substance in a total amount of 1,000,000 regardless of the units of measure used as long as they are the same or 1 part in 1045 (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "ppm"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#practical_salinity_unit
+:practical_salinity_unit rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "psu" ;
+		le:hasNoaaPastName "practical salinity unit" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3897" ;
+		rdfs:comment "a relative unit for the salinity of water that is defined in terms of the ratio of the electrical conductivity of a water sample at 15 degrees Celsius and the pressure of one standard atmosphere, to that of a solution of 32.4356 grams of potassium chloride (KCl) in 1 kilogram of water at the same temperature and pressure. By definition, a ratio that is exactly equal to one corresponds to a practical salinity of 35."@en ;
+		rdfs:label "practical salinity unit"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#ratio
+:ratio rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "ratio cps" ;
+		le:hasSynonym "g/g" ;
+		le:hasSynonym "(mg/kg)/(mg/kg)" ;
+		le:hasSynonym "cps/cps" ;
+		le:hasSynonym "grams/dry weight" ;
+		le:hasSynonym "sediment 130um" ;
+		le:hasSynonym "((( null ))) ratio /// unitless" ;
+		le:hasSynonym "mm/m" ;
+		le:hasSynonym "mol_mol" ;
+		le:hasSynonym "mol/mol" ;
+		le:hasSynonym "R660_670" ;
+		le:hasNoaaPastName "relative unit" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4144" ;
+		rdfs:comment "a dimensionless unit that is a ratio of a measurement to some arbitrarily or non-arbitrarily chosen reference value."@en ;
+		rdfs:label "ratio"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#SI
+:SI rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "10^-6SI" ;
+		le:hasSynonym "dimensionless (SI)" ;
+		le:hasSynonym "si" ;
+		le:hasSynonym "SI 10^-5" ;
+		le:hasNoaaPastName "dimensionless (SI system)" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1251" ;
+		rdfs:comment "a dimensionless measure of volume magnetic susceptibility that results from values of magnetization and magnetic field strength in Standard International units, i.e., ampere per meter."@en ;
+		rdfs:label "SI"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#ug_cm2_yr
+:ug_cm2_yr rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "ugcm-2yr-1" ;
+		le:hasNoaaPastName "microgram per square centimeter per year" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4400" ;
+		rdfs:comment "a mass per area per time unit that is one millionth of a gram, or 1046 g, per one ten-thousandth of a square meter, or 1047 m48, per one year."@en ;
+		rdfs:label "ug/cm2/yr"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#ug_g
+:ug_g rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "ug/g dry sediment" ;
+		le:hasSynonym "ug/g dry sed" ;
+		le:hasSynonym "ug g-1 dw" ;
+		le:hasSynonym "microg_g" ;
+		le:hasSynonym "[ug/g]" ;
+		le:hasNoaaPastName "microgram per gram" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1740" ;
+		rdfs:comment "a mass fraction unit that measures the number of micrograms, or 1049 grams, of one subcomponent of a sample relative to one gram of either another subcomponent or of the entire sample."@en ;
+		rdfs:label "ug/g"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#um
+:um rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "micrometer" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=126" ;
+		rdfs:comment "a length unit which is equal to one millionth of a meter or 1050 m (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "um"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#umol_mol
+:umol_mol rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasNoaaPastName "micromole per mole" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2407" ;
+		rdfs:comment "a mole fraction unit that measures the number of micromoles, or 1051 mole, of one subcomponent of a sample relative to one mole of either another subcomponent or of the entire sample."@en ;
+		rdfs:label "umol/mol"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#unitless
+:unitless rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "unitless index" ;
+		le:hasSynonym "index" ;
+		le:hasSynonym "type" ;
+		le:hasSynonym "absorbance units" ;
+		le:hasSynonym "FTIRS absorbance units" ;
+		le:hasSynonym "name" ;
+		le:hasSynonym "UK37" ;
+		le:hasSynonym "unitless (anomalies)" ;
+		le:hasSynonym "PC" ;
+		le:hasSynonym "standardized" ;
+		le:hasSynonym "0-10" ;
+		le:hasNoaaPastName "dimensionless" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=622" ;
+		rdfs:comment "a unit that is a standard measure of physical quantity consisting of only a numerical number without any units (Credit: Units of measurement ontology)."@en ;
+		rdfs:label "unitless"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#yr_14C_BP
+:yr_14C_BP rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "radiocarbon years BP" ;
+		le:hasSynonym "14C yr BP" ;
+		le:hasSynonym "yr 14C yr BP" ;
+		le:hasSynonym "bp14C" ;
+		le:hasSynonym "C14yr BP" ;
+		le:hasNoaaPastName "radiocarbon year before present" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1288" ;
+		rdfs:comment "an age unit of years, derived from radiocarbon dating without calibration to actual years, before present with present defined as 1950 Common Era. Times after 1950 CE are expressed as negative values."@en ;
+		rdfs:label "yr 14C BP"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#yr_AD
+:yr_AD rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "yr" ;
+		le:hasSynonym "CE" ;
+		le:hasSynonym "AD" ;
+		le:hasSynonym "year ce" ;
+		le:hasSynonym "ad/bc" ;
+		le:hasSynonym "cal yr AD" ;
+		le:hasSynonym "year A.D." ;
+		le:hasSynonym "year C.E." ;
+		le:hasSynonym "year CE" ;
+		le:hasSynonym "yr AD" ;
+		le:hasSynonym "yr ce" ;
+		le:hasSynonym "yrad/bc" ;
+		le:hasNoaaPastName "year Common Era" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=132" ;
+		rdfs:comment "an age unit of years for the Julian and Gregorian calendars relative to the start of the present era. Times prior to the start of the present era are expressed as negative values."@en ;
+		rdfs:label "yr AD"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#yr_b2k
+:yr_b2k rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "b2000" ;
+		le:hasSynonym "cal. BP2000" ;
+		le:hasSynonym "Years before 2k" ;
+		rdfs:comment ""@en ;
+		rdfs:label "yr b2k"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#yr_BP
+:yr_BP rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "BP" ;
+		le:hasSynonym "cal years BP" ;
+		le:hasSynonym "cal year BP" ;
+		le:hasSynonym "cal yr BP" ;
+		le:hasSynonym "year BP" ;
+		le:hasSynonym "years BP" ;
+		le:hasSynonym "yr B.P." ;
+		le:hasSynonym "yrs bp" ;
+		le:hasSynonym "cal yr B.P." ;
+		le:hasSynonym "age=1950-year" ;
+		le:hasSynonym "cal age BP" ;
+		le:hasSynonym "cal bp" ;
+		le:hasSynonym "cal yrs BP" ;
+		le:hasSynonym "yr bo" ;
+		le:hasSynonym "yr P" ;
+		le:hasSynonym "Calibrated" ;
+		le:hasNoaaPastName "calendar year before present" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=133" ;
+		rdfs:comment "an age unit of years, calibrated to actual years if derived from radiocarbon dating, before present with present defined as 1950 Common Era. Times after 1950 CE are expressed as negative values."@en ;
+		rdfs:label "yr BP"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#yr_ka
+:yr_ka rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "ka" ;
+		le:hasNoaaPastName "calendar kiloyear before present" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1702" ;
+		rdfs:comment "an age unit of 1052 years, calibrated to actual years if derived from radiocarbon dating, before present with present defined as 1950 Common Era. Times after 1950 CE are expressed as negative values."@en ;
+		rdfs:label "yr ka"@en .
+
+
+
+###  http://linked.earth/ontology/paleo_units#z_score
+:z_score rdf:type owl:NamedIndividual, :PaleoUnit ;
+		le:hasSynonym "zscore" ;
+		le:hasSynonym "SD units" ;
+		le:hasSynonym "std dev" ;
+		le:hasSynonym "SD" ;
+		le:hasSynonym "sd" ;
+		le:hasNoaaPastName "standard deviation unit" ;
+		le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=536" ;
+		rdfs:comment "a mathematical unit that describes how many standard deviations away from the mean a value is."@en ;
+		rdfs:label "z score"@en .
+
+

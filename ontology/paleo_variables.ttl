@@ -1,0 +1,4241 @@
+@prefix : <http://linked.earth/ontology/paleo_variables#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix le: <http://linked.earth/ontology#> .
+@base <http://linked.earth/ontology/paleo_variables#> .
+
+<http://linked.earth/ontology/paleo_variables#> rdf:type owl:Ontology ;
+                                 owl:versionIRI <http://linked.earth/ontology/paleo_variables/2.0.0> ;
+                                 dcterms:contributor <http://earth.usc.edu/~khider/> ,
+                                                     <http://w3id.org/people/varunr> ;
+                                 dcterms:creator <http://earth.usc.edu/~khider/> ,
+                                                 <http://orcid.org/0000-0001-5920-4751> ,
+                                                 <http://www.cefns.nau.edu/~npm4/> ;
+                                 dcterms:license "http://creativecommons.org/licenses/by/2.0/" ;
+                                 dcterms:title "The Paleo Variables Ontology"@en ;
+                                 vann:preferredNamespacePrefix "pvars" ;
+                                 vann:preferredNamespaceUri "http://linked.earth/ontology/paleo_variables#" ;
+                                 owl:versionInfo "2.0.0"@en .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/contributor
+dcterms:contributor rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/creator
+dcterms:creator rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/license
+dcterms:license rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/title
+dcterms:title rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespacePrefix
+vann:preferredNamespacePrefix rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespaceUri
+vann:preferredNamespaceUri rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://linked.earth/ontology/paleo_variables#PaleoVariable
+:PaleoVariable rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://linked.earth/ontology/paleo_variables#ACL
+:ACL rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "average chain length" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4170" ;
+     le:hasSynonym "ACL (27-33)" ,
+                 "ACL25-35" ,
+                 "ACL27-31" ,
+                 "ACLC22-30" ,
+                 "Average Chain Length" ,
+                 "AverageChainLength20to30" ,
+                 "AverageChainLength20to32" ;
+     rdfs:comment "a chain length index that is the average number of carbon atoms within organic compound chains in a sample."@en ;
+     rdfs:label "ACL"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#AET_PET
+:AET_PET rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         rdfs:comment ""@en ;
+         rdfs:label "AET/PET"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#ARM_IRM
+:ARM_IRM rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "anhysteretic remanent magnetization/isothermal remanent magnetization" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1790" ;
+         le:hasSynonym "arm_irm" ;
+         rdfs:comment "a magnetic ratio of the anhysteretic remanent magnetization to the isothermal remanent magnetization, which can yield a qualitative measure of magnetic grain size (higher values indicating finer grain sizes)."@en ;
+         rdfs:label "ARM/IRM"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#ARSTAN
+:ARSTAN rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "ARSTAN chronology method" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1591" ;
+        le:hasSynonym "ARS" ;
+        rdfs:comment "a tree ring chronology method that uses Program ARSTAN, developed by Dr. Edward R. Cook at the Tree-Ring Laboratory, Lamont-Doherty Earth Observatory of Columbia University, Palisades, New York (Cook 1985), in its standard configuration but with autoregressive modeling to remove autocorrelation and further reincorporation of the pooled autoregression (persistence) into the resultant chronology."@en ;
+        rdfs:label "ARSTAN"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Al
+:Al rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "aluminum" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=774" ;
+    le:hasSynonym "Al peak area" ,
+                "AlProp" ;
+    rdfs:comment "a chemical element with atomic number 13."@en ;
+    rdfs:label "Al"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Al2O3
+:Al2O3 rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "aluminum oxide" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=305" ;
+       le:hasSynonym "AL2O3" ;
+       rdfs:comment "an inorganic compound that has the chemical formula Al2O3."@en ;
+       rdfs:label "Al2O3"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#As
+:As rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "arsenic" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=829" ;
+    le:hasSynonym "ppm As" ;
+    rdfs:comment "a chemical element with atomic number 33."@en ;
+    rdfs:label "As"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#BIT
+:BIT rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "branched and isoprenoid tetraether index" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1676" ;
+     le:hasSynonym "BITindex" ,
+                 "BITindex-3pt" ;
+     rdfs:comment "an organic compound index that is the abundance of branched tetraethers relative to isoprenoid tetraethers, indicative of the relative amounts of soil organic matter and aquatic organic matter."@en ;
+     rdfs:label "BIT"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#BSi
+:BSi rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "biogenic silica" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4018" ;
+     le:hasSynonym "BioSi" ,
+                 "Bsi_3pt" ,
+                 "Bsi_Raw" ,
+                 "Inferred BSi" ;
+     rdfs:comment "a hydrated, amorphous form of silicon dioxide with the formula SiO2•nH20 that is biogenically precipitated by a variety of organisms including chrysophytes, diatoms, radiolarians, silicoflagellates, and sponges (Credit: Last et al. 2001 Tracking Environmental Change Using Lake Sediments)."@en ;
+     rdfs:label "BSi"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ba
+:Ba rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "barium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=831" ;
+    le:hasSynonym "Ba (ppm)" ,
+                "Ba peak area" ,
+                "ppm Ba" ;
+    rdfs:comment "a chemical element with atomic number 56."@en ;
+    rdfs:label "Ba"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ba_Al
+:Ba_Al rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "barium/aluminum" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2410" ;
+       le:hasSynonym "ppmBa/%Al" ;
+       rdfs:comment "the elemental ratio of barium to aluminum."@en ;
+       rdfs:label "Ba/Al"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ba_Ca
+:Ba_Ca rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "barium/calcium" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=317" ;
+       le:hasSynonym "BaCa" ,
+                   "Ba_Ca" ;
+       rdfs:comment "the elemental ratio of barium to calcium."@en ;
+       rdfs:label "Ba/Ca"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Be
+:Be rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "beryllium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=833" ;
+    le:hasSynonym "ppm Be" ;
+    rdfs:comment "a chemical element with atomic number 4."@en ;
+    rdfs:label "Be"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Br
+:Br rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "bromine" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1634" ;
+    rdfs:comment "a chemical element with atomic number 35."@en ;
+    rdfs:label "Br"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C20n-alkenoicAcid
+:C20n-alkenoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C20 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3961" ;
+                   le:hasSynonym "C20 FAME Concentration" ,
+                               "C20 SEM" ,
+                               "C20 concentration" ,
+                               "C20 n" ,
+                               "C20FAMEconcentration" ,
+                               "C20SEM" ,
+                               "C20concentration" ,
+                               "C20n" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C19H39COOH."@en ;
+                   rdfs:label "C20n-alkenoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C21n-alkanoicAcid
+:C21n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C21 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3962" ;
+                   le:hasSynonym "C21 FAME Concentration" ,
+                               "C21 concentration" ,
+                               "C21FAMEconcentration" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C20H41COOH."@en ;
+                   rdfs:label "C21n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C22n-alkanoicAcid
+:C22n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C22 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2277" ;
+                   le:hasSynonym "C22 FAME Concentration" ,
+                               "C22 SEM" ,
+                               "C22 n" ,
+                               "C22FAMEconcentration" ,
+                               "C22SEM" ,
+                               "C22concentration" ,
+                               "C22n" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C21H43COOH."@en ;
+                   rdfs:label "C22n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C23n-alkanoicAcid
+:C23n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C23 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3963" ;
+                   le:hasSynonym "C23 FAME Concentration" ,
+                               "C23 concentration" ,
+                               "C23 n" ,
+                               "C23C31" ,
+                               "C23FAMEconcentration" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C22H45COOH."@en ;
+                   rdfs:label "C23n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C24n-alkanoicAcid
+:C24n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C24 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2278" ;
+                   le:hasSynonym "C24 FAME Concentration" ,
+                               "C24 SEM" ,
+                               "C24 concentration" ,
+                               "C24 n" ,
+                               "C24FAMEconcentration" ,
+                               "C24SEM" ,
+                               "C24concentration" ,
+                               "C24n" ,
+                               "n C24" ,
+                               "nC24" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C23H47COOH."@en ;
+                   rdfs:label "C24n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C25_2n-alkanoicAcid
+:C25_2n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                              :PaleoVariable ;
+                     le:hasSynonym "C25:2 concentration" ;
+                     rdfs:comment ""@en ;
+                     rdfs:label "C25_2n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C25n-alkanoicAcid
+:C25n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C25 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3964" ;
+                   le:hasSynonym "C25 FAME Concentration" ,
+                               "C25 concentration" ,
+                               "C25 n" ,
+                               "C25FAMEconcentration" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C24H49COOH."@en ;
+                   rdfs:label "C25n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C26n-alkanoicAcid
+:C26n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C26 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2279" ;
+                   le:hasSynonym "C26 FAME Concentration" ,
+                               "C26 SEM" ,
+                               "C26 concentration" ,
+                               "C26 n" ,
+                               "C26FAMEconcentration" ,
+                               "C26OH0x2F0x28C26OH0x2BC290x29" ,
+                               "C26SEM" ,
+                               "C26concentration" ,
+                               "C26n" ,
+                               "n C26" ,
+                               "nC26" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C25H51COOH."@en ;
+                   rdfs:label "C26n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C27n-alkanoicAcid
+:C27n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C27 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3968" ;
+                   le:hasSynonym "C27 FAME Concentration" ,
+                               "C27 concentration" ,
+                               "C27 n" ,
+                               "C27FAMEconcentration" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C26H53COOH."@en ;
+                   rdfs:label "C27n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C28n-alkanoicAcid
+:C28n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C28 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2280" ;
+                   le:hasSynonym "C28 FAME Concentration" ,
+                               "C28 SEM" ,
+                               "C28 concentration" ,
+                               "C28 n" ,
+                               "C28FAMEconcentration" ,
+                               "C28SEM" ,
+                               "C28concentration" ,
+                               "C28n" ,
+                               "n C28" ,
+                               "n-C28" ,
+                               "nC28" ,
+                               "nC28_err" ,
+                               "nC28_rep" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C27H55COOH."@en ;
+                   rdfs:label "C28n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C29n-alkanoicAcid
+:C29n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C29 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3965" ;
+                   le:hasSynonym "C29 FAME Concentration" ,
+                               "C29 concentration" ,
+                               "C29 n" ,
+                               "C29FAMEconcentration" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C28H57COOH."@en ;
+                   rdfs:label "C29n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C30n-alkanoicAcid
+:C30n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C30 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2281" ;
+                   le:hasSynonym "C30 FAME Concentration" ,
+                               "C30 SEM" ,
+                               "C30 concentration" ,
+                               "C30 n" ,
+                               "C30FAMEconcentration" ,
+                               "C30SEM" ,
+                               "C30concentration" ,
+                               "C30n" ,
+                               "nC30_rep" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C29H59COOH."@en ;
+                   rdfs:label "C30n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C31n-alkanoicAcid
+:C31n-alkanoicAcid rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "C31 n-alkanoic acid" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3966" ;
+                   le:hasSynonym "C31 concentration" ,
+                               "C31FAMEconcentration" ,
+                               "C32FAMEconcentration" ;
+                   rdfs:comment "a n-alkanoic acid with the formula C30H61COOH."@en ;
+                   rdfs:label "C31n-alkanoicAcid"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C37Alkenone
+:C37Alkenone rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "C37 alkenone" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4585" ;
+             le:hasSynonym "C37.concentration" ,
+                         "totalC37" ;
+             rdfs:comment "an alkenone that contains 37 carbon atoms."@en ;
+             rdfs:label "C37Alkenone"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C37_2Alkenone
+:C37_2Alkenone rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasNoaaPastName "C37:2 alkenone" ;
+               le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4586" ;
+               le:hasSynonym "C37:2" ;
+               rdfs:comment "a C37 alkenone that is di-unsaturated."@en ;
+               rdfs:label "C37:2Alkenone"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C37_3aAlkenone
+:C37_3aAlkenone rdf:type owl:NamedIndividual ,
+                         :PaleoVariable ;
+                le:hasNoaaPastName "C37:3 alkenone" ;
+                le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4587" ;
+                le:hasSynonym "C37:3a" ;
+                rdfs:comment "a C37 alkenone that is tri-unsaturated."@en ;
+                rdfs:label "C37:3aAlkenone"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C37_3bAlkenone
+:C37_3bAlkenone rdf:type owl:NamedIndividual ,
+                         :PaleoVariable ;
+                le:hasNoaaPastName "C37:3 alkenone" ;
+                le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4587" ;
+                le:hasSynonym "C37:3b" ;
+                rdfs:comment "a C37 alkenone that is tri-unsaturated."@en ;
+                rdfs:label "C37:3bAlkenone"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C37_4Alkenone
+:C37_4Alkenone rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasNoaaPastName "C37:4 alkenone" ;
+               le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4588" ;
+               le:hasSynonym "C34:4" ,
+                           "C370x3A4" ;
+               rdfs:comment "a C37 alkenone that is tetra-unsaturated."@en ;
+               rdfs:label "C37:4Alkenone"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#CBT
+:CBT rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "cyclization index of branched tetraethers" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1678" ;
+     rdfs:comment "an organic compound index that is calculated from the ratio of branched tetraethers with one cyclopentane moiety to those with none and that is correlated to soil pH."@en ;
+     rdfs:label "CBT"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#CCA1
+:CCA1 rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "multivariate eigenvector-based variable" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4060" ;
+      le:hasSynonym "caaxis1" ;
+      rdfs:comment "a statistical variable that is calculated using eigenvector-based methods to combine multiple data variables for data compression and dimensionality reduction."@en ;
+      rdfs:label "CCA1"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#CCA2
+:CCA2 rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "multivariate eigenvector-based variable" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4060" ;
+      le:hasSynonym "caaxis2" ;
+      rdfs:comment "a statistical variable that is calculated using eigenvector-based methods to combine multiple data variables for data compression and dimensionality reduction."@en ;
+      rdfs:label "CCA2"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#CPI
+:CPI rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "carbon preference index" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2125" ;
+     le:hasSynonym "CPI (27-33)" ,
+                 "CPI22-30" ,
+                 "CPI_25-33" ,
+                 "CarbonPreferenceIndex20to30" ,
+                 "CarbonPreferenceIndex20to32" ;
+     rdfs:comment "an organic compound index that is based on n-alkanes to quantify preservation/degradation patterns in sediments and/or source material of organic matter."@en ;
+     rdfs:label "CPI"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#C_N
+:C_N rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "carbon/nitrogen" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=750" ;
+     le:hasSynonym "C/N organic" ,
+                 "C_N" ,
+                 "molarCN" ;
+     rdfs:comment "the elemental ratio of carbon to nitrogen."@en ;
+     rdfs:label "C/N"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ca
+:Ca rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "calcium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=848" ;
+    le:hasSynonym "% Ca-detr" ,
+                "% Ca-ex" ,
+                "Ca peak area" ,
+                "CaProp" ,
+                "Ca__" ;
+    rdfs:comment "a chemical element with atomic number 20."@en ;
+    rdfs:label "Ca"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#CaCO3
+:CaCO3 rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "calcium carbonate" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=980" ;
+       le:hasSynonym "% CaCO3-ex" ,
+                   "CaCO3-IC" ;
+       rdfs:comment "a carbonate with the chemical formula CaCO3 but of unspecified crystal structure."@en ;
+       rdfs:label "CaCO3"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#CaO
+:CaO rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "calcium oxide" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1661" ;
+     rdfs:comment "an inorganic compound that has the chemical formula CaO."@en ;
+     rdfs:label "CaO"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ca_K
+:Ca_K rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "calcium/potassium" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3783" ;
+      rdfs:comment "the elemental ratio of calcium to potassium."@en ;
+      rdfs:label "Ca/K"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ca_Sr
+:Ca_Sr rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "calcium/strontium" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3684" ;
+       rdfs:comment "the elemental ratio of calcium to strontium."@en ;
+       rdfs:label "Ca/Sr"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ca_Ti
+:Ca_Ti rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "calcium/titanium" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1635" ;
+       le:hasSynonym "Ca/Ti-z" ,
+                   "Ti/Ca" ;
+       rdfs:comment "the elemental ratio of calcium to titanium."@en ;
+       rdfs:label "Ca/Ti"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Cd
+:Cd rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "cadmium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=846" ;
+    le:hasSynonym "Cd MAR (ug/cm2/ky)" ,
+                "ppm Cd" ;
+    rdfs:comment "a chemical element with atomic number 48."@en ;
+    rdfs:label "Cd"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Cd_Mn
+:Cd_Mn rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasSynonym "ppm Cd/% Mn" ;
+       rdfs:comment ""@en ;
+       rdfs:label "Cd/Mn"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Cl
+:Cl rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "chlorine" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=850" ;
+    le:hasSynonym "Cl_" ;
+    rdfs:comment "a chemical element with atomic number 17."@en ;
+    rdfs:label "Cl"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Co
+:Co rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "cobalt" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=859" ;
+    le:hasSynonym "ppm Co" ;
+    rdfs:comment "a chemical element with atomic number 27."@en ;
+    rdfs:label "Co"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Cr
+:Cr rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "chromium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=854" ;
+    le:hasSynonym "ppm Cr" ;
+    rdfs:comment "a chemical element with atomic number 24."@en ;
+    rdfs:label "Cr"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Cu
+:Cu rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "copper" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=284" ;
+    le:hasSynonym "ppm Cu" ;
+    rdfs:comment "a chemical element with atomic number 29."@en ;
+    rdfs:label "Cu"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#DWHI
+:DWHI rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "ecosystem index" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4940" ;
+      rdfs:comment "a measurement of ecosystem quantities or properties, such as a ratio or count, that is derived from a series of observations and that is used as an indicator or measure."@en ;
+      rdfs:label "DWHI"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Dd2H
+:Dd2H rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasSynonym "ΔδDterr-aq" ;
+      rdfs:comment ""@en ;
+      rdfs:label "Dd2H"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#EPS
+:EPS rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "expressed population signal" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2359" ;
+     rdfs:comment "an extension of the correlation coefficient that quantifies how well a chronology based on a finite number of samples represents the hypothetical perfect or true chronology and that is calculated as: (nRBAR)/(nRBAR + 1-RBAR) where n is the number of samples and RBAR is the mean intersample correlation coefficient."@en ;
+     rdfs:label "EPS"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#ElNinoEvent
+:ElNinoEvent rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "El Niño event" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2301" ;
+             le:hasSynonym "ENSO_events" ;
+             rdfs:comment "an index of the El Niño Southern Oscillation that quantifies the occurrence of anomalously warm sea surface temperatures in the eastern tropical Pacific."@en ;
+             rdfs:label "ElNinoEvent"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Eu_Zr
+:Eu_Zr rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasSynonym "Eu/Zr-z" ;
+       rdfs:comment ""@en ;
+       rdfs:label "Eu/Zr"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Fe
+:Fe rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "iron" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=285" ;
+    le:hasSynonym "Fe peak area" ,
+                "FeProp" ;
+    rdfs:comment "a chemical element with atomic number 26."@en ;
+    rdfs:label "Fe"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Fe2O3
+:Fe2O3 rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "iron(III) oxide" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1663" ;
+       rdfs:comment "an inorganic compound that has the chemical formula Fe2O3."@en ;
+       rdfs:label "Fe2O3"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Fe_Al
+:Fe_Al rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "iron/aluminum" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2416" ;
+       rdfs:comment "the elemental ratio of iron to aluminum."@en ;
+       rdfs:label "Fe/Al"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Fe_Ca
+:Fe_Ca rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "iron/calcium" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1637" ;
+       le:hasSynonym "ln(Fe/Ca)" ;
+       rdfs:comment "the elemental ratio of iron to calcium."@en ;
+       rdfs:label "Fe/Ca"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Fe_K
+:Fe_K rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "iron/potassium" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3785" ;
+      rdfs:comment "the elemental ratio of iron to potassium."@en ;
+      rdfs:label "Fe/K"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Fe_Mn
+:Fe_Mn rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "iron/manganese" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1638" ;
+       rdfs:comment "the elemental ratio of iron to manganese."@en ;
+       rdfs:label "Fe/Mn"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#GDGT
+:GDGT rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "glycerol dialkyl glycerol tetraether" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1103" ;
+      le:hasSynonym "brGDGT" ;
+      rdfs:comment "an organooxygen compound that is a tetraether membrane lipid and that contains between 0 and 4 cyclopentane moieties, with an increasing number of cyclopentane moieties related to the temperature of formation."@en ;
+      rdfs:label "GDGT"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#GDGT-0_Cren
+:GDGT-0_Cren rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             rdfs:comment ""@en ;
+             rdfs:label "GDGT-0/Cren"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#IP25
+:IP25 rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "ice proxy with 25 carbon atoms" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2493" ;
+      le:hasSynonym "IP25_flux" ;
+      rdfs:comment "a highly-branched isoprenoid alkene that contains 25 carbon atoms and that is produced selectively by sea ice diatoms (Credit: Belt et al. 2013, 10.1016/j.quascirev.2012.12.001)."@en ;
+      rdfs:label "IP25"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#IRM
+:IRM rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "isothermal remanent magnetization" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1085" ;
+     le:hasSynonym "IRM_softFlux" ,
+                 "irm" ;
+     rdfs:comment "the remanent magnetization that is acquired without the aid of changes in temperature, generally from the application and subsequent removal of an applied direct current field (Credit: Encyclopedia of Geomagnetism and Paleomagnetism)."@en ;
+     rdfs:label "IRM"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#ITCZ
+:ITCZ rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "Intertropical Convergence Zone index" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1000118" ;
+      le:hasSynonym "ITCZ_index" ;
+      rdfs:comment "a circulation index that measures some aspect of the belt of low pressure where trade winds converge, such as its latitudinal position."@en ;
+      rdfs:label "ITCZ"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#JulianDay
+:JulianDay rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           rdfs:comment ""@en ;
+           rdfs:label "JulianDay"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#K2O
+:K2O rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "potassium oxide" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1666" ;
+     rdfs:comment "an inorganic compound that has the chemical formula K2O."@en ;
+     rdfs:label "K2O"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#K37
+:K37 rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasSynonym "K37s" ;
+     rdfs:comment ""@en ;
+     rdfs:label "K37"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#K_Al
+:K_Al rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "potassium/aluminum" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2422" ;
+      le:hasSynonym "ln(K/Al)" ;
+      rdfs:comment "the elemental ratio of potassium to aluminum."@en ;
+      rdfs:label "K/Al"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#LDI
+:LDI rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "long-chain diol index" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=5705" ;
+     rdfs:comment "an organic compound index calculated based on the relative abundance of long chain alkyl 1,13- and 1,15-diols."@en ;
+     rdfs:label "LDI"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#LOI
+:LOI rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "loss on ignition" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=703" ;
+     rdfs:comment "pyrolysis that involves strongly heating (‘igniting’) a sample of material at a specified temperature, allowing volatile substances to escape, until its mass ceases to change. This may be done in air, or in some other reactive or inert atmosphere (Credit: Wikipedia)."@en ;
+     rdfs:label "LOI"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#La
+:La rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "lanthanum" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=286" ;
+    le:hasSynonym "ppm La" ;
+    rdfs:comment "a chemical element with atomic number 57."@en ;
+    rdfs:label "La"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#MAR
+:MAR rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "mass per area per time unit" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4704" ;
+     le:hasSynonym "Bulk MAR" ,
+                 "CordMAR" ,
+                 "Mo MAR (ug/cm2/ky)" ,
+                 "bulkMAR" ,
+                 "massacum" ;
+     rdfs:comment "a rate unit that is a standard measure of the accumulation or flow of mass per unit area per time."@en ;
+     rdfs:label "MAR"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#MBT
+:MBT rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "methylation index of branched tetraethers" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1683" ;
+     le:hasSynonym "MBT’" ,
+                 "MBT’5Me" ;
+     rdfs:comment "an organic compound index that is calculated as the ratio of various branched tetraethers and that reflects temperature and/or soil pH."@en ;
+     rdfs:label "MBT"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#MS
+:MS rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "magnetic susceptibility" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1793" ;
+    le:hasSynonym "AVG_MS_DRS1_2A_3_2B_4" ,
+                "Avg_MS" ,
+                "Magnetic Susceptibility" ,
+                "MassMagSus" ,
+                "SI" ;
+    rdfs:comment "a magnetic moment that is the degree to which a material can be magnetized in an external magnetic field."@en ;
+    rdfs:label "MS"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#MXD
+:MXD rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "latewood density" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1573" ;
+     rdfs:comment "the density of xylem cells in wood that formed near the end of the growing season and that tend to be small and thick-walled."@en ;
+     rdfs:label "MXD"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Mg
+:Mg rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "magnesium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=891" ;
+    le:hasSynonym "% Mg" ,
+                "%Mg" ,
+                "MgDetrended" ,
+                "Mg__" ,
+                "detrendMg" ;
+    rdfs:comment "a chemical element with atomic number 12."@en ;
+    rdfs:label "Mg"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#MgO
+:MgO rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "magnesium oxide" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=307" ;
+     rdfs:comment "an inorganic compound that has the chemical formula MgO."@en ;
+     rdfs:label "MgO"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Mg_Ca
+:Mg_Ca rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "magnesium/calcium" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4392" ;
+       le:hasSynonym "CDR3_MgCa" ,
+                   "Mg/Ca Raw" ,
+                   "MgCa" ,
+                   "Mg_Ca" ,
+                   "NdutertreiMg/Ca" ,
+                   "mgca_bulloides" ,
+                   "mgca_crassaformis" ,
+                   "mgca_dutertrei" ,
+                   "mgca_inflata" ,
+                   "mgca_obliquiloculata" ,
+                   "mgca_pachyderma" ,
+                   "mgca_pachyderma_d" ,
+                   "mgca_ruber" ,
+                   "mgca_ruber_lato" ,
+                   "mgca_ruber_pink" ,
+                   "mgca_ruber_stricto" ,
+                   "mgca_sacculifer" ,
+                   "mgca_truncatulinoides" ,
+                   "planktic.MgCa" ;
+       rdfs:comment "the elemental ratio of magnesium to calcium."@en ;
+       rdfs:label "Mg/Ca"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Mn
+:Mn rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "manganese" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=287" ;
+    le:hasSynonym "% Mn" ,
+                "ppm Mn" ;
+    rdfs:comment "a chemical element with atomic number 25."@en ;
+    rdfs:label "Mn"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#MnO
+:MnO rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "manganese oxide" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1668" ;
+     rdfs:comment "an inorganic compound that is any of the oxides of manganese, containing oxygen and manganese atoms."@en ;
+     rdfs:label "MnO"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Mn_Fe
+:Mn_Fe rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "manganese/iron" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1013" ;
+       rdfs:comment "the elemental ratio of manganese to iron."@en ;
+       rdfs:label "Mn/Fe"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Mn_Mo
+:Mn_Mo rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       rdfs:comment ""@en ;
+       rdfs:label "Mn/Mo"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Mo
+:Mo rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "molybdenum" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=897" ;
+    le:hasSynonym "Mo_xs" ,
+                "ppm Mo" ;
+    rdfs:comment "a chemical element with atomic number 42."@en ;
+    rdfs:label "Mo"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#NO3
+:NO3 rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "nitrate" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=971" ;
+     le:hasSynonym "NO3_" ;
+     rdfs:comment "an inorganic compound that has the chemical formula NO3(-)."@en ;
+     rdfs:label "NO3"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#N_C
+:N_C rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasSynonym "NC" ;
+     rdfs:comment ""@en ;
+     rdfs:label "N/C"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Na2O
+:Na2O rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "sodium oxide" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1670" ;
+      rdfs:comment "an inorganic compound that has the chemical formula Na2O."@en ;
+      rdfs:label "Na2O"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ni
+:Ni rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "nickel" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=899" ;
+    le:hasSynonym "ppm Ni" ;
+    rdfs:comment "a chemical element with atomic number 28."@en ;
+    rdfs:label "Ni"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#PC1
+:PC1 rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "empirical orthogonal function" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1368" ;
+     le:hasSynonym "P1" ,
+                 "PC1gs" ,
+                 "PCA1" ,
+                 "droughtIndex (PC1)" ;
+     rdfs:comment "a multivariate eigenvector-based variable that is one of a set of linearly uncorrelated spatial patterns that are derived using an orthogonal transformation on a set of continuous data observations."@en ;
+     rdfs:label "PC1"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#PC2
+:PC2 rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "empirical orthogonal function" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1368" ;
+     le:hasSynonym "PCA2" ;
+     rdfs:comment "a multivariate eigenvector-based variable that is one of a set of linearly uncorrelated spatial patterns that are derived using an orthogonal transformation on a set of continuous data observations."@en ;
+     rdfs:label "PC2"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#PC3
+:PC3 rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "empirical orthogonal function" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1368" ;
+     rdfs:comment "a multivariate eigenvector-based variable that is one of a set of linearly uncorrelated spatial patterns that are derived using an orthogonal transformation on a set of continuous data observations."@en ;
+     rdfs:label "PC3"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Paq
+:Paq rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "P-aqueous" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1000103" ;
+     rdfs:comment "an organic compound index that measures the relative predominance of submerged versus emergent aquatic plants and that is generally calculated from n-alkanes as (C23 + C25)/(C23 + C25 + C29 + C31)."@en ;
+     rdfs:label "Paq"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Pb
+:Pb rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "lead" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=758" ;
+    le:hasSynonym "ppm Pb" ;
+    rdfs:comment "a chemical element with atomic number 82."@en ;
+    rdfs:label "Pb"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Picea_Artemisia
+:Picea_Artemisia rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 le:hasSynonym "Picea/Artemesia" ;
+                 rdfs:comment ""@en ;
+                 rdfs:label "Picea/Artemisia"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Picea_Pinus
+:Picea_Pinus rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             rdfs:comment ""@en ;
+             rdfs:label "Picea/Pinus"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Pinus_Artemisia
+:Pinus_Artemisia rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 rdfs:comment ""@en ;
+                 rdfs:label "Pinus/Artemisia"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Poaceae_Ephedra
+:Poaceae_Ephedra rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 rdfs:comment ""@en ;
+                 rdfs:label "Poaceae/Ephedra"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#R570_R630
+:R570_R630 rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasSynonym "R570_630" ;
+           rdfs:comment ""@en ;
+           rdfs:label "R570/R630"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#R650_R700
+:R650_R700 rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasSynonym "R650_700" ;
+           rdfs:comment ""@en ;
+           rdfs:label "R650/R700"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#RABD660670
+:RABD660670 rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasSynonym "R660_670" ,
+                        "RABD660;670 index" ,
+                        "RABD660_670" ;
+            rdfs:comment ""@en ;
+            rdfs:label "RABD660670"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#RAN15
+:RAN15 rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "organic compound index" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3954" ;
+       rdfs:comment "a measurement of specific organic compounds, such as a ratio or count, that is derived from a series of observations and that is used as an indicator or measure of environmental conditions."@en ;
+       rdfs:label "RAN15"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#RBAR
+:RBAR rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "average correlation coefficient" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2358" ;
+      le:hasSynonym "RBar" ;
+      rdfs:comment "an extension of the correlation coefficent that measures the common variance between series in a tree ring chronology and that is calculated by taking the average of the correlations calculated between all series."@en ;
+      rdfs:label "RBAR"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Rb
+:Rb rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "rubidium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=913" ;
+    le:hasSynonym "Rb peak area" ;
+    rdfs:comment "a chemical element with atomic number 37."@en ;
+    rdfs:label "Rb"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Rb87_Sr86
+:Rb87_Sr86 rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "87Rb/86Sr" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2430" ;
+           le:hasSynonym "Rb/Sr" ;
+           rdfs:comment "the ratio of a radioactive isotope of rubidium with 50 neutrons and a stable isotope of strontium with 48 neutrons."@en ;
+           rdfs:label "Rb87/Sr86"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#SO4
+:SO4 rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "sulfate" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1339" ;
+     le:hasSynonym "SO4__" ;
+     rdfs:comment "an inorganic compound that has the formula SO4(2-)."@en ;
+     rdfs:label "SO4"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#SSS
+:SSS rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     rdfs:comment ""@en ;
+     rdfs:label "SSS"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Sc
+:Sc rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "scandium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=915" ;
+    le:hasSynonym "ppm Sc" ;
+    rdfs:comment "a chemical element with atomic number 21."@en ;
+    rdfs:label "Sc"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Si
+:Si rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "silicon" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1649" ;
+    le:hasSynonym "Si peak area" ,
+                "SiProp" ,
+                "norm Silicon" ,
+                "silicon" ;
+    rdfs:comment "a chemical element with atomic number 14."@en ;
+    rdfs:label "Si"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Si_Al
+:Si_Al rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "silicon/aluminum" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3685" ;
+       rdfs:comment "the elemental ratio of silicon to aluminum."@en ;
+       rdfs:label "Si/Al"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Si_Ti
+:Si_Ti rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "silicon/aluminum" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3685" ;
+       le:hasSynonym "norm Si/Ti" ;
+       rdfs:comment "the elemental ratio of silicon to aluminum."@en ;
+       rdfs:label "Si/Ti"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Sr
+:Sr rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "strontium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=290" ;
+    le:hasSynonym "SR" ,
+                "Sr (ppm)" ,
+                "Sr peak area" ,
+                "ppm Sr" ;
+    rdfs:comment "a chemical element with atomic number 38."@en ;
+    rdfs:label "Sr"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Sr_Ca
+:Sr_Ca rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "strontium/calcium" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3912" ;
+       le:hasSynonym "CDR3_SrCa" ,
+                   "SrCa" ,
+                   "SrCa_annual" ,
+                   "Sr_Ca" ,
+                   "WR11_SrCa" ;
+       rdfs:comment "the elemental ratio of strontium to calcium."@en ;
+       rdfs:label "Sr/Ca"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#TDS
+:TDS rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "total dissolved solids" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3911" ;
+     rdfs:comment "a solution property that is the combined content of all inorganic and organic substances contained in a liquid in molecular, ionized or micro-granular (colloidal sol) suspended form (Credit: Wikipedia)."@en ;
+     rdfs:label "TDS"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#TEX86
+:TEX86 rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "tetraether index of 86 carbon atoms" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1599" ;
+       le:hasSynonym "tex86l" ;
+       rdfs:comment "an organic compound index that is calculated as the ratio of different isoprenoidal glycerol dialkyl glycerol tetraethers."@en ;
+       rdfs:label "TEX86"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#TIC
+:TIC rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "inorganic carbon" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=996" ;
+     le:hasSynonym "% IC" ;
+     rdfs:comment "carbon that is derived from an inorganic source."@en ;
+     rdfs:label "TIC"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#TOC
+:TOC rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "organic carbon" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=995" ;
+     le:hasSynonym "% OC" ,
+                 "% Organic carbon" ,
+                 "Corg" ,
+                 "OC-MAR (g)" ,
+                 "OC-MAR (mg)" ,
+                 "Organic carbon concentration" ,
+                 "TOC_flux" ,
+                 "TOCmg" ;
+     rdfs:comment "carbon that is derived from an organic source."@en ;
+     rdfs:label "TOC"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#TOC_TN
+:TOC_TN rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        rdfs:comment ""@en ;
+        rdfs:label "TOC/TN"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ti
+:Ti rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "titanium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=292" ;
+    le:hasSynonym "% Ti" ,
+                "%Ti" ,
+                "Ti peak area" ,
+                "TiProp" ,
+                "Tiash" ,
+                "Titanium" ;
+    rdfs:comment "a chemical element with atomic number 22."@en ;
+    rdfs:label "Ti"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#TiO2
+:TiO2 rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "titanium dioxide" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1673" ;
+      rdfs:comment "an inorganic compound that has the chemical formula TiO2."@en ;
+      rdfs:label "TiO2"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ti_Al
+:Ti_Al rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "titanium/aluminum" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3687" ;
+       rdfs:comment "the elemental ratio of titanium to aluminum."@en ;
+       rdfs:label "Ti/Al"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Ti_Ca
+:Ti_Ca rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "titanium/calcium" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2426" ;
+       le:hasSynonym "ln(Ti/Ca)" ,
+                   "ln(ti/ca)" ,
+                   "log(Ti/Ca)" ;
+       rdfs:comment "the elemental ratio of titanium to calcium."@en ;
+       rdfs:label "Ti/Ca"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#UK37
+:UK37 rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "alkenone unsaturation index Uk37" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4027" ;
+      le:hasSynonym "sumUK37" ;
+      rdfs:comment "an alkenone unsaturation index that compares the amounts of C37:2, C37:3, and C37:4 alkenones, as (C37:2-C37:4)/(C37:2+C37:3+C37:4)."@en ;
+      rdfs:label "UK37"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Uk37
+:Uk37 rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "alkenone unsaturation index Uk37" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4027" ;
+      le:hasSynonym "UK37" ,
+                  "UK37-SFS Values" ;
+      rdfs:comment "an alkenone unsaturation index that compares the amounts of C37:2, C37:3, and C37:4 alkenones, as (C37:2-C37:4)/(C37:2+C37:3+C37:4)."@en ;
+      rdfs:label "Uk37"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Uk37_
+:Uk37_ rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "alkenone unsaturation index Uk37 prime" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4028" ;
+       le:hasSynonym "UK’37" ;
+       rdfs:comment "an alkenone unsaturation index that compares the amounts of C37:2 and C37:3 alkenones, as C37:2/(C37:2+C37:3)."@en ;
+       rdfs:label "Uk37’"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#V
+:V rdf:type owl:NamedIndividual ,
+            :PaleoVariable ;
+   le:hasNoaaPastName "vanadium" ;
+   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=930" ;
+   le:hasSynonym "ppm V" ;
+   rdfs:comment "a chemical element with atomic number 23."@en ;
+   rdfs:label "V"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#V_Al
+:V_Al rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "vanadium/aluminum" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2428" ;
+      rdfs:comment "the elemental ratio of vanadium to aluminum."@en ;
+      rdfs:label "V/Al"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Y
+:Y rdf:type owl:NamedIndividual ,
+            :PaleoVariable ;
+   le:hasNoaaPastName "yttrium" ;
+   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=293" ;
+   le:hasSynonym "ppm Y" ;
+   rdfs:comment "a chemical element with atomic number 39."@en ;
+   rdfs:label "Y"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Zn
+:Zn rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "zinc" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=315" ;
+    le:hasSynonym "ppm Zn" ;
+    rdfs:comment "a chemical element with atomic number 30."@en ;
+    rdfs:label "Zn"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Zr
+:Zr rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "zirconium" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1022" ;
+    le:hasSynonym "ppm Zr" ;
+    rdfs:comment "a chemical element with atomic number 40."@en ;
+    rdfs:label "Zr"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#Zr_Al
+:Zr_Al rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "zirconium/aluminum" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3689" ;
+       rdfs:comment "the elemental ratio of zirconium to aluminum."@en ;
+       rdfs:label "Zr/Al"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#accumulation
+:accumulation rdf:type owl:NamedIndividual ,
+                       :PaleoVariable ;
+              le:hasNoaaPastName "accumulation rate" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=618" ;
+              le:hasSynonym "Accumulation" ,
+                          "Accumulation rate ice (kg/m2/yr)" ,
+                          "Ice Accumulation" ,
+                          "acc" ;
+              rdfs:comment "a formation rate that is the rate of accumulation of a bulk archive material (e.g., sediment, ice, etc)."@en ;
+              rdfs:label "accumulation"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#age
+:age rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "age" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=241" ;
+     le:hasSynonym "Age" ,
+                 "Age_original" ,
+                 "IntCal09Age" ,
+                 "Marine09" ,
+                 "Median cal age" ,
+                 "SHCal04Age" ,
+                 "ageBacon" ,
+                 "ageBchron" ,
+                 "ageDuplicate" ,
+                 "ageEnsemble" ,
+                 "ageMarine09" ,
+                 "ageMedian" ,
+                 "ageMedianBacon" ,
+                 "ageOriginal" ,
+                 "ageOther" ,
+                 "ageOxCal" ,
+                 "ageRounded" ,
+                 "ageStalAge" ,
+                 "age_Calibrated" ,
+                 "age_alt" ,
+                 "agecopRa" ,
+                 "agelinInterp" ,
+                 "agelinReg" ,
+                 "medianAge" ,
+                 "varveCountedAgeAD0x2FBC" ,
+                 "varveCountedAgeKa" ;
+     rdfs:comment "the age, either directly measured or inferred, of the midpoint of a sample."@en ;
+     rdfs:label "age"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#age14C
+:age14C rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "radiocarbon year" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3914" ;
+        le:hasSynonym "C14age" ,
+                    "c14age" ,
+                    "radiocarbonDatesAD0x2FBC" ;
+        rdfs:comment "an duration unit of years, derived from radiocarbon dating without calibration to actual years."@en ;
+        rdfs:label "age14C"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#ammonium
+:ammonium rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "ammonium" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=826" ;
+          le:hasSynonym "NH4_" ;
+          rdfs:comment "an inorganic compound that has the chemical formula NH4(+)."@en ;
+          rdfs:label "ammonium"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#amps
+:amps rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "ampere" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1254" ;
+      le:hasSynonym "Amps" ;
+      rdfs:comment "an electric current unit which is equal to the constant current which, if maintained in two straight parallel conductors of infinite length, of negligible circular cross-section, and placed 1 m apart in vacuum, would produce between these conductors a force equal to 2 x 101 newton per meter of length (Credit: Units of measurement ontology)."@en ;
+      rdfs:label "amps"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#aragonite
+:aragonite rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "aragonite" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1519" ;
+           le:hasSynonym "Aragonite" ;
+           rdfs:comment "a calcium carbonate with orthorhombic crystal structure."@en ;
+           rdfs:label "aragonite"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#ash
+:ash rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     rdfs:comment ""@en ;
+     rdfs:label "ash"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#boron
+:boron rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "boron" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1188" ;
+       le:hasSynonym "B" ;
+       rdfs:comment "a chemical element with atomic number 5."@en ;
+       rdfs:label "boron"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIIa
+:brGDGT-IIIa rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+             le:hasSynonym "Br1050" ,
+                         "IIIa" ,
+                         "br1050" ,
+                         "brGDGTIIIa" ;
+             rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+             rdfs:label "brGDGT-IIIa"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIIa_
+:brGDGT-IIIa_ rdf:type owl:NamedIndividual ,
+                       :PaleoVariable ;
+              le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+              le:hasSynonym "IIIa’" ;
+              rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+              rdfs:label "brGDGT-IIIa’"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIIb
+:brGDGT-IIIb rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+             le:hasSynonym "Br1048" ,
+                         "IIIb" ,
+                         "br1048" ,
+                         "brGDGTIIIb" ;
+             rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+             rdfs:label "brGDGT-IIIb"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIIb_
+:brGDGT-IIIb_ rdf:type owl:NamedIndividual ,
+                       :PaleoVariable ;
+              le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+              le:hasSynonym "IIIb’" ;
+              rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+              rdfs:label "brGDGT-IIIb’"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIIc
+:brGDGT-IIIc rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+             le:hasSynonym "IIIc" ;
+             rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+             rdfs:label "brGDGT-IIIc"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIIc_
+:brGDGT-IIIc_ rdf:type owl:NamedIndividual ,
+                       :PaleoVariable ;
+              le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+              le:hasSynonym "IIIc’" ;
+              rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+              rdfs:label "brGDGT-IIIc’"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIa
+:brGDGT-IIa rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+            le:hasSynonym "Br1036" ,
+                        "IIa" ,
+                        "br1036" ,
+                        "brGDGTIia" ;
+            rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+            rdfs:label "brGDGT-IIa"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIa_
+:brGDGT-IIa_ rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+             le:hasSynonym "IIa’" ;
+             rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+             rdfs:label "brGDGT-IIa’"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIb
+:brGDGT-IIb rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+            le:hasSynonym "IIb" ,
+                        "brGDGTIib" ;
+            rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+            rdfs:label "brGDGT-IIb"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIb_
+:brGDGT-IIb_ rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+             le:hasSynonym "IIb’" ;
+             rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+             rdfs:label "brGDGT-IIb’"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIc
+:brGDGT-IIc rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+            le:hasSynonym "IIc" ;
+            rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+            rdfs:label "brGDGT-IIc"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-IIc_
+:brGDGT-IIc_ rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+             le:hasSynonym "IIc’" ;
+             rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+             rdfs:label "brGDGT-IIc’"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-Ia
+:brGDGT-Ia rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+           le:hasSynonym "Ia" ,
+                       "brGDGTIa" ;
+           rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+           rdfs:label "brGDGT-Ia"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-Ib
+:brGDGT-Ib rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+           le:hasSynonym "Br1020" ,
+                       "Ib" ,
+                       "br1020" ,
+                       "brGDGTIb" ;
+           rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+           rdfs:label "brGDGT-Ib"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-Ic
+:brGDGT-Ic rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+           le:hasSynonym "Ic" ;
+           rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+           rdfs:label "brGDGT-Ic"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#brGDGT-Id
+:brGDGT-Id rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "branched glycerol dialkyl glycerol tetraether" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1675" ;
+           le:hasSynonym "Id" ;
+           rdfs:comment "a glycerol dialkyl glycerol tetraether that has branched alkyl chains and that is of bacterial origin."@en ;
+           rdfs:label "brGDGT-Id"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#bubbleNumberDensity
+:bubbleNumberDensity rdf:type owl:NamedIndividual ,
+                              :PaleoVariable ;
+                     rdfs:comment ""@en ;
+                     rdfs:label "bubbleNumberDensity"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#bulkDensity
+:bulkDensity rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasSynonym "bulk density" ;
+             rdfs:comment "The density of bulk sediment measured in mass divided by volume"@en ;
+             rdfs:label "bulkDensity"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#calcificationRate
+:calcificationRate rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "calcification rate" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=756" ;
+                   le:hasSynonym "calcification" ;
+                   rdfs:comment "a formation rate that is a rate of skeletal growth in calcifying organisms, often expressed as a mass times unit area per time (e.g., g cm2/yr)"@en ;
+                   rdfs:label "calcificationRate"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#calcite
+:calcite rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "calcite" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=482" ;
+         le:hasSynonym "Calcite" ;
+         rdfs:comment "a calcium carbonate with rhombohedral crystal structure."@en ;
+         rdfs:label "calcite"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#carbon
+:carbon rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "carbon" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=841" ;
+        le:hasSynonym "% TC" ,
+                    "% Total C" ,
+                    "%_tc" ,
+                    "C" ,
+                    "x_C" ;
+        rdfs:comment "a chemical element with atomic number 6."@en ;
+        rdfs:label "carbon"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#carbonate
+:carbonate rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "carbonate" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=692" ;
+           le:hasSynonym "% Carbonate" ;
+           rdfs:comment "an identified mineral characterized by a fundamental anionic structure of CO3(2-) (Credit: Dictionary of Geological Terms)."@en ;
+           rdfs:label "carbonate"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#charcoal
+:charcoal rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "charcoal" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=630" ;
+          le:hasSynonym "chacoal_influx" ;
+          rdfs:comment "a bulk biological material that consists of any black-colored plant-derived material that has had its chemical composition and structure altered as a result of heating in a fire, and retains recognizable anatomic structure of the plant material, even if only in a fragmentary form (Credit: Smol et al. 2001 Tracking Environmental Change Using Lake Sediments)."@en ;
+          rdfs:label "charcoal"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#chloride
+:chloride rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "chloride" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=852" ;
+          rdfs:comment "chlorine that has acquired a negative one charge as the result of gaining an electron."@en ;
+          rdfs:label "chloride"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#circulationIndex
+:circulationIndex rdf:type owl:NamedIndividual ,
+                           :PaleoVariable ;
+                  le:hasNoaaPastName "circulation index" ;
+                  le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2270" ;
+                  le:hasSynonym "GoE" ,
+                              "GoF" ;
+                  rdfs:comment "a circulation variable that describes or quantifies a climate pattern with identifiable characteristics, specific regional effects, and often oscillatory behavior (Credit: Wikipedia)."@en ;
+                  rdfs:label "circulationIndex"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#clay
+:clay rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "clay" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1532" ;
+      le:hasSynonym "%_clay" ,
+                  "Clay" ,
+                  "x_Clay" ;
+      rdfs:comment "the abundance or concentration of particles with a diameter less than 0.004 millimeters."@en ;
+      rdfs:label "clay"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#cluster
+:cluster rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "statistical variable" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1101" ;
+         le:hasSynonym "cluster2" ;
+         rdfs:comment "a variable that is derived through the analysis of numerical data."@en ;
+         rdfs:label "cluster"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#composite
+:composite rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "proxy composite" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3909" ;
+           le:hasSynonym "Hybrid" ,
+                       "hybrid" ;
+           rdfs:comment "a statistical variable that results from compositing multiple, usually normalized, proxy time series."@en ;
+           rdfs:label "composite"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#concentration
+:concentration rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasNoaaPastName "concentration unit" ;
+               le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3908" ;
+               le:hasSynonym "Concentration (C25-35)" ,
+                           "Friedel-3-ene concentration" ,
+                           "Hop-17(21)-ene concentration" ;
+               rdfs:comment "a unit which represents a standard measurement of how much of a given substance there is mixed with another substance (Credit: Units of measurement ontology)."@en ;
+               rdfs:label "concentration"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#core
+:core rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasSynonym "Core" ,
+                  "Core ID" ,
+                  "Core Name" ,
+                  "Core Section" ,
+                  "Core name" ,
+                  "CoreName" ,
+                  "CoreSect1H" ,
+                  "Core_number" ,
+                  "DUNE_A" ,
+                  "Stal.ID" ,
+                  "core name" ,
+                  "originalCoreName" ;
+      rdfs:comment ""@en ;
+      rdfs:label "core"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#correction
+:correction rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "corrected" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=675" ;
+            le:hasSynonym "Iso adjustment for ocean calibration" ,
+                        "Years for ocean correction" ,
+                        "hasAragoniteCorrection" ,
+                        "hasAragoniteCorrectionComposite" ;
+            rdfs:comment "a data transformation that involves correcting one or more values in a time series for known, often non-climatic, factors. These factors include, for example, changes in ice volume through time, the Suess effect, and biological offsets."@en ;
+            rdfs:label "correction"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#correlationCoefficient
+:correlationCoefficient rdf:type owl:NamedIndividual ,
+                                 :PaleoVariable ;
+                        le:hasNoaaPastName "correlation coefficient" ;
+                        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3427" ;
+                        le:hasSynonym "corrs" ;
+                        rdfs:comment "a goodness-of-fit measure that quantifies the strength and direction of the linear relationship between two variables and that is defined as the (sample) covariance of the variables divided by the product of their (sample) standard deviations."@en ;
+                        rdfs:label "correlationCoefficient"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#count
+:count rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "count" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=704" ;
+       le:hasSynonym "Numbe_counted" ,
+                   "Number_counted" ,
+                   "Slide count" ,
+                   "TotalAmmoniaBeccarii" ,
+                   "Total_grains_counted" ,
+                   "Varve_number" ,
+                   "abundance" ,
+                   "count_analyses_B3" ,
+                   "count_analyses_C2" ,
+                   "count_analyses_C3" ,
+                   "count_analyses_C5" ,
+                   "count_analyses_C6" ,
+                   "numInZone" ,
+                   "number" ,
+                   "sampleDensity" ,
+                   "total" ,
+                   "total_non_Chaetoceros_counted" ,
+                   "total_xount" ;
+       rdfs:comment "a dimensionless unit that denotes a simple count of things (Credit: Units of measurement ontology)."@en ;
+       rdfs:label "count"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#d13C
+:d13C rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "delta 13C" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=320" ;
+      le:hasSynonym "Bulk OM d13C" ,
+                  "C13bulk" ,
+                  "C21 d13C" ,
+                  "C23 d13C" ,
+                  "C25 d13C" ,
+                  "C25:2 d13C" ,
+                  "C27 d13C" ,
+                  "C28 d13C vs. VPDB" ,
+                  "C29 d13C" ,
+                  "C29 δ13C" ,
+                  "C31 d13C" ,
+                  "C31 δ13C" ,
+                  "C31d13C_PDB" ,
+                  "C33 δ13C" ,
+                  "CDR3_d13C" ,
+                  "D13C" ,
+                  "D13C_C28" ,
+                  "D13C_FAME" ,
+                  "Friedel-3-ene d13C" ,
+                  "Hop-17(21)-ene d13C" ,
+                  "Taraxer-14-ene d13C" ,
+                  "d13/12C" ,
+                  "d13C C18 FAME" ,
+                  "d13C C18 FAME SEM" ,
+                  "d13C C20 FAME" ,
+                  "d13C C20 FAME SEM" ,
+                  "d13C C21 alkane" ,
+                  "d13C C21 alkane SEM" ,
+                  "d13C C22 FAME" ,
+                  "d13C C22 FAME SEM" ,
+                  "d13C C23 alkane" ,
+                  "d13C C23 alkane SEM" ,
+                  "d13C C24 FAME" ,
+                  "d13C C24 FAME SEM" ,
+                  "d13C C25" ,
+                  "d13C C25 alkane" ,
+                  "d13C C25 alkane SEM" ,
+                  "d13C C26 FAME" ,
+                  "d13C C26 FAME SEM" ,
+                  "d13C C27" ,
+                  "d13C C27 alkane" ,
+                  "d13C C27 alkane SEM" ,
+                  "d13C C28 FAME" ,
+                  "d13C C28 FAME SEM" ,
+                  "d13C C29" ,
+                  "d13C C29 alkane" ,
+                  "d13C C29 alkane SEM" ,
+                  "d13C C30 FAME" ,
+                  "d13C C30 FAME SEM" ,
+                  "d13C C31" ,
+                  "d13C C31 alkane" ,
+                  "d13C C31 alkane SEM" ,
+                  "d13C C32 FAME" ,
+                  "d13C C32 FAME SEM" ,
+                  "d13C C33 alkane" ,
+                  "d13C C33 alkane SEM" ,
+                  "d13C C34 FAME" ,
+                  "d13C C34 FAME SEM" ,
+                  "d13C C35 alkane" ,
+                  "d13C C35 alkane SEM" ,
+                  "d13C VPDB" ,
+                  "d13C bulk" ,
+                  "d13C bulk calcite" ,
+                  "d13C carbonate" ,
+                  "d13C organic" ,
+                  "d13C ostracod" ,
+                  "d13CComposite" ,
+                  "d13CMean" ,
+                  "d13CPisid" ,
+                  "d13CPrecisionComposite" ,
+                  "d13CStandardComposite" ,
+                  "d13C_C31" ,
+                  "d13C_org" ,
+                  "d13Ccarb" ,
+                  "d13CleafwaxC27" ,
+                  "d13CleafwaxC27err" ,
+                  "d13CleafwaxC29" ,
+                  "d13CleafwaxC29err" ,
+                  "d13CleafwaxC31" ,
+                  "d13CleafwaxC31err" ,
+                  "d13CleafwaxC33" ,
+                  "d13CleafwaxC33err" ,
+                  "d13Cwax" ,
+                  "d13c_bulloides" ,
+                  "d13c_dutertrei" ,
+                  "d13c_pachyderma" ,
+                  "d13c_pachyderma_d" ,
+                  "d13c_ruber" ,
+                  "d13c_ruber_pink" ,
+                  "d13c_sacculifer" ,
+                  "planktic.d13C" ,
+                  "δ13C n-alkanes" ,
+                  "δ13C n-alkanes std dev" ;
+      rdfs:comment "the ratio of two isotopes of carbon, 13C/12C, in a sample compared to that of a standard, typically the Pee Dee Belemnite, as in: ((13C/12C sample)/(13C/12C standard) - 1) x 1000."@en ;
+      rdfs:label "d13C"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#d15N
+:d15N rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "delta 15N" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=322" ;
+      le:hasSynonym "Bulk OM d15N" ,
+                  "d15N/14N" ,
+                  "dN15" ,
+                  "dN15_corrected" ;
+      rdfs:comment "the ratio of two isotopes of nitrogen, 15N/14N, in a sample compared to that of a standard, typically modern air ratios, as in: ((15N/14N sample)/(15N/14N standard) - 1) x 1000."@en ;
+      rdfs:label "d15N"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#d18O
+:d18O rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "delta 18O" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=323" ;
+      le:hasSynonym "CDR3_d18O" ,
+                  "Chironomid d18O" ,
+                  "D18O" ,
+                  "G. ruber w δ18O [‰ PDB]" ,
+                  "Gbulloidesd18O" ,
+                  "Ndutertreid18O" ,
+                  "WR11_d18O" ,
+                  "bagd18O" ,
+                  "d180_corrc" ,
+                  "d18O (Sea Level Corrected)" ,
+                  "d18O Avg" ,
+                  "d18O Chironomid" ,
+                  "d18O Lake water" ,
+                  "d18O VPDB" ,
+                  "d18O bulk calcite" ,
+                  "d18O carbonate" ,
+                  "d18O carbonate corrected for dolomite" ,
+                  "d18O chironomid" ,
+                  "d18O encrustation" ,
+                  "d18O ostracod" ,
+                  "d18O pore ice" ,
+                  "d18O pore ice sw corr" ,
+                  "d18OBsi" ,
+                  "d18OComposite" ,
+                  "d18OPisid" ,
+                  "d18OTerrestrialGastropods" ,
+                  "d18O_210yr" ,
+                  "d18O_Gb" ,
+                  "d18O_Grass_leaf" ,
+                  "d18O_PDB" ,
+                  "d18O_SMOW" ,
+                  "d18O_Sphagnum" ,
+                  "d18O_annual" ,
+                  "d18O_sw" ,
+                  "d18O_sw_annual" ,
+                  "d18O_swcorr" ,
+                  "d18O_vPDB" ,
+                  "d18O_vp–sp" ,
+                  "d18Ocarb" ,
+                  "d18Odiatom" ,
+                  "d18Og.rub" ,
+                  "d18Omean" ,
+                  "d18Osw" ,
+                  "d18Osw-g.rub" ,
+                  "d18Osw-sl-g.rubw" ,
+                  "d18Otr" ,
+                  "d18Otr+" ,
+                  "d18Otr-" ,
+                  "d18o_acicula" ,
+                  "d18o_bulloides" ,
+                  "d18o_crassaformis" ,
+                  "d18o_dutertrei" ,
+                  "d18o_inflata" ,
+                  "d18o_mabahethi" ,
+                  "d18o_marginata" ,
+                  "d18o_menardii" ,
+                  "d18o_obliquiloculata" ,
+                  "d18o_pachyderma" ,
+                  "d18o_pachyderma_d" ,
+                  "d18o_peregrina" ,
+                  "d18o_quinqueloba" ,
+                  "d18o_ruber" ,
+                  "d18o_ruber_lato" ,
+                  "d18o_ruber_pink" ,
+                  "d18o_ruber_stricto" ,
+                  "d18o_sacculifer" ,
+                  "d18o_tumida" ,
+                  "dd18O5pt" ,
+                  "nonReliabled18O" ,
+                  "planktic.d18O" ,
+                  "ruberD18" ,
+                  "x18O" ,
+                  "x18ORub_" ,
+                  "δ18O" ;
+      rdfs:comment "the ratio of two isotopes of oxygen, 18O/16O, in a sample compared to that of a standard, typically either Pee Dee Belemnite or standard mean ocean water, as in: ((18O/16O sample)/(18O/16O standard) - 1) x 1000."@en ;
+      rdfs:label "d18O"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#d2H
+:d2H rdf:type owl:NamedIndividual ,
+              :PaleoVariable ;
+     le:hasNoaaPastName "delta 2H" ;
+     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=324" ;
+     le:hasSynonym "C20 d2H" ,
+                 "C20 d2H SEM" ,
+                 "C20d2H" ,
+                 "C21 d2H" ,
+                 "C22 d2H" ,
+                 "C22 d2H SEM" ,
+                 "C22d2H" ,
+                 "C23 d2H" ,
+                 "C23 δD" ,
+                 "C24 d2H" ,
+                 "C24d2H" ,
+                 "C25 d2H" ,
+                 "C25 δD" ,
+                 "C25:2 d2H" ,
+                 "C26 d2H" ,
+                 "C26 d2H SEM" ,
+                 "C26d2H" ,
+                 "C27 d2H" ,
+                 "C28 d2H" ,
+                 "C28 d2H SEM" ,
+                 "C28_dD" ,
+                 "C28_dDIV" ,
+                 "C28d2H" ,
+                 "C29 d2H" ,
+                 "C29 dD" ,
+                 "C29 δD" ,
+                 "C29 δD Corrected" ,
+                 "C29 δD ice volume adjusted" ,
+                 "C29 δD ice volume and vegetation adjusted" ,
+                 "C29-C31 δD" ,
+                 "C30 d2H" ,
+                 "C30 d2H SEM" ,
+                 "C30 dD" ,
+                 "C30 dD IV corrected (3°C)" ,
+                 "C30 dD IV corrected (7°C)" ,
+                 "C30d2H" ,
+                 "C31 d2H" ,
+                 "C31 dD" ,
+                 "C31 δD" ,
+                 "C31dD" ,
+                 "C31dDsd" ,
+                 "C32 dD" ,
+                 "C33 δD" ,
+                 "Dd" ,
+                 "Friedel-3-ene d2H" ,
+                 "Hop-17(21)-ene d2H" ,
+                 "Long Chain n-alkane avg d2H" ,
+                 "Long chain n-acid avg d2H" ,
+                 "Mid-chain n-acid avg d2H" ,
+                 "Midchain n-alkane avg d2H" ,
+                 "Precip d2H" ,
+                 "Taraxer-14-ene d2H" ,
+                 "bagdD" ,
+                 "d2H C20" ,
+                 "d2H C20 FAME" ,
+                 "d2H C20 FAME SEM" ,
+                 "d2H C21 alkane" ,
+                 "d2H C21 alkane SEM" ,
+                 "d2H C22" ,
+                 "d2H C22 FAME" ,
+                 "d2H C22 FAME SEM" ,
+                 "d2H C23" ,
+                 "d2H C23 alkane" ,
+                 "d2H C23 alkane SEM" ,
+                 "d2H C24 FAME" ,
+                 "d2H C24 FAME SEM" ,
+                 "d2H C25" ,
+                 "d2H C25 alkane" ,
+                 "d2H C25 alkane SEM" ,
+                 "d2H C25 error" ,
+                 "d2H C25:2" ,
+                 "d2H C26 FAME" ,
+                 "d2H C26 FAME SEM" ,
+                 "d2H C27" ,
+                 "d2H C27 alkane" ,
+                 "d2H C27 alkane SEM" ,
+                 "d2H C27 error" ,
+                 "d2H C28 FAME" ,
+                 "d2H C28 FAME SEM" ,
+                 "d2H C29" ,
+                 "d2H C29 alkane" ,
+                 "d2H C29 alkane SEM" ,
+                 "d2H C29 error" ,
+                 "d2H C30" ,
+                 "d2H C30 FAME" ,
+                 "d2H C30 FAME SEM" ,
+                 "d2H C31" ,
+                 "d2H C31 alkane" ,
+                 "d2H C31 alkane SEM" ,
+                 "d2H C31 error" ,
+                 "d2H C32 FAME" ,
+                 "d2H C32 FAME SEM" ,
+                 "d2H C33 alkane" ,
+                 "d2H C33 alkane SEM" ,
+                 "d2H avg" ,
+                 "d2H pore ice" ,
+                 "d2H pore ice sw corr" ,
+                 "d2H precip" ,
+                 "d2HC24" ,
+                 "d2HC26" ,
+                 "d2HC28" ,
+                 "d2HC29" ,
+                 "d2HC30" ,
+                 "d2H_C16" ,
+                 "d2H_C26" ,
+                 "d2H_C28" ,
+                 "d2H_C30" ,
+                 "d2HleafwaxC29" ,
+                 "d2HleafwaxC29err" ,
+                 "d2HleafwaxC31" ,
+                 "d2HleafwaxC31err" ,
+                 "d2HleafwaxC33" ,
+                 "d2HleafwaxC33err" ,
+                 "d2Hsw" ,
+                 "dD" ,
+                 "dD IV" ,
+                 "dDC29" ,
+                 "dDC31" ,
+                 "dDP" ,
+                 "dD_C29" ,
+                 "dD_C31" ,
+                 "dD_C31_sd" ,
+                 "dD_IVandbio" ,
+                 "dD_IVonly" ,
+                 "dD_swcorr" ,
+                 "dDwax" ,
+                 "dDwax Corrected" ,
+                 "dDwax_corr" ,
+                 "dDwax_iv" ,
+                 "nC28_dD" ,
+                 "nC30_dD" ,
+                 "δDaq" ,
+                 "δDterr" ;
+     rdfs:comment "the ratio of two isotopes of hydrogen, 2H/1H, in a sample compared to that of a standard, typically standard mean ocean water, as in: ((2H/1H sample)/(2H/1H standard) - 1) x 1000."@en ;
+     rdfs:label "d2H"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#d2HUncertaintyHigh80
+:d2HUncertaintyHigh80 rdf:type owl:NamedIndividual ,
+                               :PaleoVariable ;
+                      le:hasSynonym "Precip dD 90 CI" ;
+                      rdfs:comment ""@en ;
+                      rdfs:label "d2HUncertaintyHigh80"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#d2HUncertaintyLow80
+:d2HUncertaintyLow80 rdf:type owl:NamedIndividual ,
+                              :PaleoVariable ;
+                     le:hasSynonym "Precip dD 10 CI" ;
+                     rdfs:comment ""@en ;
+                     rdfs:label "d2HUncertaintyLow80"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#deleteMe
+:deleteMe rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasSynonym "A" ,
+                      "CAL" ,
+                      "Calibrated" ,
+                      "IMON1953/3" ,
+                      "LazerProfiler" ,
+                      "RCS.ars" ,
+                      "SAUG/3" ,
+                      "SETE/3" ,
+                      "SFEV/3" ,
+                      "SHIV/3" ,
+                      "TETE/3" ,
+                      "TFEV/3" ,
+                      "THIV/3" ,
+                      "UnkownColumn" ,
+                      "average C26 C28" ,
+                      "hobdob" ,
+                      "interval" ,
+                      "noID" ;
+          rdfs:comment ""@en ;
+          rdfs:label "deleteMe"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#deltaRelativeHumidity
+:deltaRelativeHumidity rdf:type owl:NamedIndividual ,
+                                :PaleoVariable ;
+                       le:hasSynonym "∆RH_mid" ;
+                       rdfs:comment ""@en ;
+                       rdfs:label "deltaRelativeHumidity"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#deltaTemperature
+:deltaTemperature rdf:type owl:NamedIndividual ,
+                           :PaleoVariable ;
+                  le:hasSynonym "deltaT" ;
+                  rdfs:comment ""@en ;
+                  rdfs:label "deltaTemperature"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#density
+:density rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "density" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=681" ;
+         le:hasSynonym "Density" ;
+         rdfs:comment "a physical property that quantifies the compactness of a substance."@en ;
+         rdfs:label "density"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#depth
+:depth rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "depth" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=242" ;
+       le:hasSynonym "Adjusted Depth" ,
+                   "Composite Depth" ,
+                   "Composite Depth in Core" ,
+                   "Composite depth" ,
+                   "Composite depth mid" ,
+                   "Composite_depth" ,
+                   "Core depth" ,
+                   "Depth" ,
+                   "Depth blf" ,
+                   "DrillHole Depth" ,
+                   "MidpointDepth" ,
+                   "Section Depth" ,
+                   "Section depth" ,
+                   "compositeDepth" ,
+                   "cor_depth_cm" ,
+                   "depth corrected" ,
+                   "depthByCore" ,
+                   "depthComp" ,
+                   "depthComposite" ,
+                   "depth_cmbs" ,
+                   "depth_core" ,
+                   "depth_core1" ,
+                   "depth_corr_cm" ,
+                   "depth_merge" ,
+                   "depth_merged" ,
+                   "depthice" ,
+                   "depthwe" ,
+                   "drive-depth" ,
+                   "mean depth" ,
+                   "originalCoreDepth" ;
+       rdfs:comment "the location of the midpoint of a sample measured as a distance from some datum, usually the core top."@en ;
+       rdfs:label "depth"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#depthBottom
+:depthBottom rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "depth at sample start" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1291" ;
+             le:hasSynonym "Bot" ,
+                         "Bottom Depth" ,
+                         "Bottom_depth" ,
+                         "Composite depth bottom" ,
+                         "Section depth bottom" ,
+                         "bot" ,
+                         "bottom depth in section" ,
+                         "bottomDepth" ,
+                         "depth.bottom" ,
+                         "depth_bot" ,
+                         "depth_bottom" ,
+                         "uncorrected_depth_bot" ;
+             rdfs:comment "the location of the oldest end of a sample measured as a distance from some datum, usually the core top."@en ;
+             rdfs:label "depthBottom"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#depthTop
+:depthTop rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "acetic acid" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1224" ;
+          le:hasSynonym "Composite depth top" ,
+                      "Section depth top" ,
+                      "Top" ,
+                      "Top Depth" ,
+                      "Top_depth" ,
+                      "depth.top" ,
+                      "depth_top" ,
+                      "depth_top_m" ,
+                      "logdepthtop" ,
+                      "logdepthtop-EDC99" ,
+                      "logdepttop" ,
+                      "top" ,
+                      "top depth in section" ,
+                      "topDepth" ,
+                      "uncorrected_depth_top" ;
+          rdfs:comment "an organooxygen compound with the chemical formula C2H3O2."@en ;
+          rdfs:label "depthTop"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#deuteriumExcess
+:deuteriumExcess rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 le:hasNoaaPastName "deuterium excess" ;
+                 le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1426" ;
+                 le:hasSynonym "bagDexcess" ,
+                             "d-excess" ,
+                             "d-excess pore ice" ,
+                             "d-excess pore ice sw corr" ,
+                             "d-excess sw" ,
+                             "d-excess_swcorr" ,
+                             "deutEx" ,
+                             "dxs" ;
+                 rdfs:comment "a measure of how different a delta 2H value is from the value expected from the Global Meteoric Water Line, that is delta 2H - 8* delta 18O."@en ;
+                 rdfs:label "deuteriumExcess"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#diatom
+:diatom rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "diatom" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1601" ;
+        le:hasSynonym "%Benthic" ,
+                    "%Indif." ,
+                    "%Saline" ,
+                    "%benth.dia" ,
+                    "%fresh" ,
+                    "%plank.dia" ,
+                    "%saline.dia" ,
+                    "SumDiatoms" ;
+        rdfs:comment "an identifiable organism that is a unicellular phytoplankton and that belongs to the kingdom Chromista, phylum Ochrophyta, class Bacillariophyceae."@en ;
+        rdfs:label "diatom"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#diatomCount
+:diatomCount rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "diatom index" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3772" ;
+             le:hasSynonym "Diatoms_per_traverse" ,
+                         "diatom_abundance" ,
+                         "seaIceDiatoms" ;
+             rdfs:comment "a measurement of diatoms, such as a ratio or count, that is derived from a series of observations and that is used as an indicator or measure."@en ;
+             rdfs:label "diatomCount"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#dinocyst
+:dinocyst rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "total dinocysts" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3259" ;
+          le:hasSynonym "flux_dino" ;
+          rdfs:comment "the total count of dinocysts in a sample."@en ;
+          rdfs:label "dinocyst"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#dolomite
+:dolomite rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "dolomite" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=990" ;
+          le:hasSynonym "% Dolomite" ;
+          rdfs:comment "a carbonate with the formula CaMg(CO3)2."@en ;
+          rdfs:label "dolomite"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#dryBulkDensity
+:dryBulkDensity rdf:type owl:NamedIndividual ,
+                         :PaleoVariable ;
+                le:hasSynonym "DBD" ,
+                            "Dry Bulk Density" ,
+                            "EstDryBD" ,
+                            "dbd" ,
+                            "dry_bd" ;
+                rdfs:comment ""@en ;
+                rdfs:label "dryBulkDensity"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#duration
+:duration rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "duration unit" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=278" ;
+          le:hasSynonym "yearsPerSample" ;
+          rdfs:comment "a time unit that measures the duration of a period of time."@en ;
+          rdfs:label "duration"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#dust
+:dust rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "dust" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=867" ;
+      le:hasSynonym "0.50_quantile_dust_flux" ,
+                  "DMAR" ,
+                  "dustFlux" ;
+      rdfs:comment "a bulk geological material that consists of organic or inorganic particles of typically clay and silt size that are transportable by wind."@en ;
+      rdfs:label "dust"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#effectivePrecipitation
+:effectivePrecipitation rdf:type owl:NamedIndividual ,
+                                 :PaleoVariable ;
+                        le:hasNoaaPastName "precipitation minus evaporation" ;
+                        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2312" ;
+                        le:hasSynonym "Moisture_index" ,
+                                    "effectiveMoisture" ,
+                                    "waterBalance" ;
+                        rdfs:comment "the hydroclimate rate that is the difference in rate between precipitation and evaporation at the earth’s surface."@en ;
+                        rdfs:label "effectivePrecipitation"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#elevation
+:elevation rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "collection elevation" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=537" ;
+           le:hasSynonym "elevation a.s.l." ,
+                       "elevation sample" ;
+           rdfs:comment "sampling metadata that identifies the elevation, either above or below sea level, at which a sample was collected or a reconstruction was generated."@en ;
+           rdfs:label "elevation"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#epsilonC28C22
+:epsilonC28C22 rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasSynonym "Epsilon C28-C22" ,
+                           "Epsilon28-22" ;
+               rdfs:comment ""@en ;
+               rdfs:label "epsilonC28C22"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#epsilonC28C24
+:epsilonC28C24 rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasSynonym "Epsilon C28-C24" ;
+               rdfs:comment ""@en ;
+               rdfs:label "epsilonC28C24"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#epsilonC29C23
+:epsilonC29C23 rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasSynonym "Epsilon C29-C23" ;
+               rdfs:comment ""@en ;
+               rdfs:label "epsilonC29C23"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#equilibriumLineAltitude
+:equilibriumLineAltitude rdf:type owl:NamedIndividual ,
+                                  :PaleoVariable ;
+                         le:hasNoaaPastName "equilibrium line altitude" ;
+                         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2303" ;
+                         le:hasSynonym "ELA" ,
+                                     "ELA_alt" ;
+                         rdfs:comment "a cryospheric quantity that is the elevation at which the mass balance of an ice sheet or glacier is zero over the year, that is where ablation equals accumulation."@en ;
+                         rdfs:label "equilibriumLineAltitude"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#event
+:event rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       rdfs:comment ""@en ;
+       rdfs:label "event"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#eventLayer
+:eventLayer rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "event layer" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2233" ;
+            le:hasSynonym "layer" ,
+                        "layer_type" ;
+            rdfs:comment "a formation property that describes or quantifies layers within a sample that formed due to unusual environmental or climatic events."@en ;
+            rdfs:label "eventLayer"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#facies
+:facies rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasSynonym "Facies" ,
+                    "lithologic unit" ,
+                    "lithology" ;
+        rdfs:comment ""@en ;
+        rdfs:label "facies"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#feldspar
+:feldspar rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "feldspar group" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=992" ;
+          rdfs:comment "a silicate mineral with the general formula XAl(Al,Si)3O8 where X can be K, Na, Ca, Ba, Rb, Sr, or Fe."@en ;
+          rdfs:label "feldspar"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#flood
+:flood rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasSynonym "M-flood" ,
+                   "M-flood 200 yr avg" ,
+                   "M-flood 30 yr sum" ,
+                   "P-flood" ,
+                   "P-flood 200 yr avg" ,
+                   "P-flood 30 yr sum" ,
+                   "floods" ;
+       rdfs:comment ""@en ;
+       rdfs:label "flood"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#fluorine
+:fluorine rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "fluorine" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=870" ;
+          le:hasSynonym "F" ,
+                      "F_" ;
+          rdfs:comment "a chemical element with atomic number 9."@en ;
+          rdfs:label "fluorine"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#foraminifera
+:foraminifera rdf:type owl:NamedIndividual ,
+                       :PaleoVariable ;
+              le:hasNoaaPastName "foraminifer" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1778" ;
+              le:hasSynonym "Foram" ;
+              rdfs:comment "an identifiable organism that belongs to the kingdom Protozoa, order Foraminiferida."@en ;
+              rdfs:label "foraminifera"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#gamma
+:gamma rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "gamma radiation" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1619" ;
+       rdfs:comment "an electromagnetic property that measures the emission of gamma radiation by a material."@en ;
+       rdfs:label "gamma"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#glacierCoverage
+:glacierCoverage rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 rdfs:comment ""@en ;
+                 rdfs:label "glacierCoverage"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#globigerinoidesRuber
+:globigerinoidesRuber rdf:type owl:NamedIndividual ,
+                               :PaleoVariable ;
+                      le:hasNoaaPastName "Globigerinoides ruber" ;
+                      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2621" ;
+                      le:hasSynonym "Gruber" ;
+                      rdfs:comment "a particular species of the genus Globigerinoides."@en ;
+                      rdfs:label "globigerinoidesRuber"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#grainSize
+:grainSize rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "grain size" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1233" ;
+           le:hasSynonym "250-31 um" ,
+                       "63-4 um" ,
+                       "<16 μm" ,
+                       "<2 um" ,
+                       "<2um" ,
+                       "<4 um" ,
+                       ">63 um" ,
+                       "D50" ,
+                       "Grain size mean" ,
+                       "GrainSizeMode" ;
+           rdfs:comment "the diameter of individual grains of a material such as sediment, dust, or ice."@en ;
+           rdfs:label "grainSize"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#grayscale
+:grayscale rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "grayscale" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=548" ;
+           le:hasSynonym "grayscale20lp_detrended" ,
+                       "grey_scale" ;
+           rdfs:comment "reflectance that is quantified only according to intensity, or the amount of light, with low values indicating black and high values indicating white."@en ;
+           rdfs:label "grayscale"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#growing_degree_days
+:growing_degree_days rdf:type owl:NamedIndividual ,
+                              :PaleoVariable ;
+                     le:hasNoaaPastName "growing degree days" ;
+                     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1386" ;
+                     le:hasSynonym "GDD5" ;
+                     rdfs:comment "a temperature index that integrates warmth above a base temperature (usually 10 degrees Celsius) through time."@en ;
+                     rdfs:label "growing degree days"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#growthRate
+:growthRate rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "growth rate" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=547" ;
+            le:hasSynonym "GrowthRate" ;
+            rdfs:comment "a formation rate that is the rate of linear growth of a deposit (e.g., speleothem, mollusk shell), sometimes calculated from the width of an annual growth band."@en ;
+            rdfs:label "growthRate"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#hasGap
+:hasGap rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        rdfs:comment ""@en ;
+        rdfs:label "hasGap"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#hasHiatus
+:hasHiatus rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasSynonym "hasHiatusComposite" ;
+           rdfs:comment "Is there a hiatus at this level"@en ;
+           rdfs:label "hasHiatus"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#hole
+:hole rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      rdfs:comment ""@en ;
+      rdfs:label "hole"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#humidificationIndex
+:humidificationIndex rdf:type owl:NamedIndividual ,
+                              :PaleoVariable ;
+                     le:hasNoaaPastName "humification index" ;
+                     le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2129" ;
+                     le:hasSynonym "HIndex" ,
+                                 "Hindex" ,
+                                 "HumidificationIndex" ;
+                     rdfs:comment "a measure of the extent to which a peat sample has undergone decomposition and humic acids have been produced."@en ;
+                     rdfs:label "humidificationIndex"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#iceMelt
+:iceMelt rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "ice melt" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4951" ;
+         le:hasSynonym "ice_melt_fraction" ,
+                     "melt" ,
+                     "meltLayerFrequency" ,
+                     "meltLayers" ;
+         rdfs:comment "the ice mass loss from a glacier, ice-cap, ice-sheet, or ice-shelf through phase transformation to liquid water."@en ;
+         rdfs:label "iceMelt"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#iceRaftedDebris
+:iceRaftedDebris rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 le:hasNoaaPastName "ice rafted debris" ;
+                 le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1544" ;
+                 le:hasSynonym "IRD" ;
+                 rdfs:comment "mineral matter that was transported over a body of water on ice."@en ;
+                 rdfs:label "iceRaftedDebris"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#inc_coh
+:inc_coh rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "incoherent:coherent scattering" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3720" ;
+         le:hasSynonym "Inc/Coh" ;
+         rdfs:comment "a ratio of scattering in x-ray fluorescence analysis, that can be used as a proxy for the amount of organic matter in a sample."@en ;
+         rdfs:label "inc/coh"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#index
+:index rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "statistical variable" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1101" ;
+       le:hasSynonym "PLS-1" ,
+                   "PLS-2" ,
+                   "SM/IlliteChlorite" ;
+       rdfs:comment "a variable that is derived through the analysis of numerical data."@en ;
+       rdfs:label "index"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#isReliable
+:isReliable rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasSynonym "ReliabIeYN1" ,
+                        "ReliabIeYN2" ,
+                        "Reliable?" ,
+                        "reliable" ,
+                        "reliable 1" ,
+                        "reliable 2" ,
+                        "reliable_1" ,
+                        "reliable_2" ,
+                        "reliable_3" ,
+                        "reliable_4" ;
+            rdfs:comment ""@en ;
+            rdfs:label "isReliable"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#lakeArea
+:lakeArea rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "lake area" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4050" ;
+          rdfs:comment "a geographic variable that quantifies the surface area of one or multiple lakes."@en ;
+          rdfs:label "lakeArea"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#lakeLevel
+:lakeLevel rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "lake level" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2137" ;
+           le:hasSynonym "Lake Level" ,
+                       "Lake Level a.s.l." ,
+                       "LakeDepth" ,
+                       "LakeLevel_cm_" ,
+                       "depth.lake" ,
+                       "lakeLevelRelative" ,
+                       "lakeStatus" ;
+           rdfs:comment "a geographic variable that quantifies the height of the lake water surface relative to some datum."@en ;
+           rdfs:label "lakeLevel"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#lakeTrend
+:lakeTrend rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           rdfs:comment ""@en ;
+           rdfs:label "lakeTrend"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#lakeVolume
+:lakeVolume rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            rdfs:comment ""@en ;
+            rdfs:label "lakeVolume"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#landscapeCover
+:landscapeCover rdf:type owl:NamedIndividual ,
+                         :PaleoVariable ;
+                le:hasNoaaPastName "ecosystem quantity" ;
+                le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4934" ;
+                le:hasSynonym "OpenVegetation___" ;
+                rdfs:comment "an ecosystem variable that quantifies some aspect of the components of an ecosystem."@en ;
+                rdfs:label "landscapeCover"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#latitude
+:latitude rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "latitude" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=453" ;
+          le:hasSynonym "latitude sample" ;
+          rdfs:comment "sampling metadata that identifies the latitude at which a sample was collected or a reconstruction was generated."@en ;
+          rdfs:label "latitude"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#layerThickness
+:layerThickness rdf:type owl:NamedIndividual ,
+                         :PaleoVariable ;
+                le:hasNoaaPastName "layer thickness" ;
+                le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=603" ;
+                le:hasSynonym "Fld lay thick" ,
+                            "Flood lay (annual)" ,
+                            "Flood lay (fall)" ,
+                            "Flood lay (spring)" ,
+                            "Flood lay (summer)" ,
+                            "Flood lay (winter)" ,
+                            "LaminaThickenss" ,
+                            "Lamina_thickness" ,
+                            "debrisLayThick" ,
+                            "eventLayerThick" ,
+                            "floodLayThick" ;
+                rdfs:comment "a measure of raw, or true, ice layer thickness, i.e. uncorrected for compaction and flow."@en ;
+                rdfs:label "layerThickness"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#lithics
+:lithics rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "grain size" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1233" ;
+         le:hasSynonym "%_lithics" ,
+                     "Lithic Flux" ,
+                     "Lithics" ;
+         rdfs:comment "the diameter of individual grains of a material such as sediment, dust, or ice."@en ;
+         rdfs:label "lithics"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#longitude
+:longitude rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "longitude" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=454" ;
+           le:hasSynonym "longitude sample" ;
+           rdfs:comment "sampling metadata that describes the longitude at which a sample was collected or a reconstruction was generated."@en ;
+           rdfs:label "longitude"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#material
+:material rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "reconstruction material" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4857" ;
+          le:hasSynonym "Material" ;
+          rdfs:comment "a material that is used in a statistically-based climate reconstruction."@en ;
+          rdfs:label "material"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#mineralogy
+:mineralogy rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "identified mineral" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1001" ;
+            le:hasSynonym "mineral_flux" ,
+                        "mineralogyComposite" ;
+            rdfs:comment "a geological material that has been identified based on composition and crystal structure as a specific mineral or as belonging to a certain mineral class."@en ;
+            rdfs:label "mineralogy"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#needsToBeChanged
+:needsToBeChanged rdf:type owl:NamedIndividual ,
+                           :PaleoVariable ;
+                  le:hasSynonym "((( null ))) AC Ratio? /// pollenRatio" ,
+                              "-" ,
+                              "10%max" ,
+                              "10%min" ,
+                              "100yrSum" ,
+                              "10YrRun.Avg." ,
+                              "20%max" ,
+                              "20%min" ,
+                              "30%max" ,
+                              "30%min" ,
+                              "50%max" ,
+                              "50%min" ,
+                              "80%max" ,
+                              "80%min" ,
+                              "A odd (25-35)" ,
+                              "A/C" ,
+                              "A/C Ratio" ,
+                              "Alkenones" ,
+                              "Analogues" ,
+                              "Analogues#" ,
+                              "BS" ,
+                              "BS_COMX" ,
+                              "BS_Landscape_Openness" ,
+                              "Bag" ,
+                              "Benthic" ,
+                              "C170x2D28" ,
+                              "CAST1" ,
+                              "CAST2" ,
+                              "CI" ,
+                              "CIA" ,
+                              "CMT" ,
+                              "CMT_max" ,
+                              "CMT_min" ,
+                              "CMTmax" ,
+                              "CMTmin" ,
+                              "CT" ,
+                              "Cal" ,
+                              "D" ,
+                              "DEC" ,
+                              "Di" ,
+                              "DryElements" ,
+                              "E2Hterr-2Haq" ,
+                              "EM1" ,
+                              "EM2" ,
+                              "EM3" ,
+                              "EMI" ,
+                              "Eaq-p" ,
+                              "HC/G" ,
+                              "HII (H-set)" ,
+                              "HII (N-set)" ,
+                              "HII std (H-set)" ,
+                              "HII std (N-set)" ,
+                              "HulunNuur" ,
+                              "IMI" ,
+                              "Intv0x2E" ,
+                              "JulT-eSEP" ,
+                              "LORCA" ,
+                              "LSR (cm/ky)" ,
+                              "Laminae" ,
+                              "Lyc.added" ,
+                              "MG0" ,
+                              "MST" ,
+                              "MShellCrn" ,
+                              "Mag0x2E" ,
+                              "Mark add" ,
+                              "Mark found" ,
+                              "Mean consensus" ,
+                              "Mean_anomaly" ,
+                              "Minidiscus?" ,
+                              "Mode" ,
+                              "MoistElements" ,
+                              "NE.ars" ,
+                              "OEP" ,
+                              "PPexp" ,
+                              "RRA" ,
+                              "Reconstructed" ,
+                              "S52" ,
+                              "TCT" ,
+                              "TOTC" ,
+                              "TS" ,
+                              "TSAR" ,
+                              "TSAR5pt" ,
+                              "TT" ,
+                              "Taraxer-14-ene concentration" ,
+                              "Th13C" ,
+                              "Ts" ,
+                              "U_xs" ,
+                              "Unit" ,
+                              "WACLS" ,
+                              "WACLS_total" ,
+                              "WAINV" ,
+                              "WAINV_total" ,
+                              "WAPLS-2" ,
+                              "WMT" ,
+                              "Water/relict ice age" ,
+                              "aridity" ,
+                              "bag" ,
+                              "bagDepth" ,
+                              "benth" ,
+                              "calibrated" ,
+                              "d0x2800x2E10x29" ,
+                              "d0x2800x2E50x29" ,
+                              "d0x2800x2E90x29" ,
+                              "d13o_pachyderma" ,
+                              "distance" ,
+                              "dln" ,
+                              "drive-type" ,
+                              "eSEP_PLS_C2" ,
+                              "eSEP_WMAT" ,
+                              "kyryr BP2" ,
+                              "log[EM3/(EM1+EM2)]" ,
+                              "lower band" ,
+                              "mineral" ,
+                              "n-Alkane" ,
+                              "s" ,
+                              "stage" ,
+                              "tempSource" ,
+                              "thin-mid" ,
+                              "thisShouldntBeEmpty" ,
+                              "thisShouldntBeEmpty1" ,
+                              "unnamed" ,
+                              "water" ,
+                              "x00x2E020xB5m0x2D30x2E890xB5m" ,
+                              "x10000x2E010xB5m0x2D20000x2E000xB5m" ,
+                              "x1250x2E000xB5m0x2D2490x2E990xB5m" ,
+                              "x150x2E600xB5m0x2D300x2E990xB5m" ,
+                              "x2500x2E000xB5m0x2D4990x2E990xB5m" ,
+                              "x30x2E900xB5m0x2D70x2E790xB5m" ,
+                              "x310x2E000xB5m0x2D620x2E490xB5m" ,
+                              "x5000x2E000xB5m0x2D10000x2E000xB5m" ,
+                              "x620x2E500xB5m0x2D1240x2E990xB5m" ,
+                              "x70x2E800xB5m0x2D150x2E590xB5m" ;
+                  rdfs:comment "https://doi.org/10.1023/B:JOPL.0000042907.90500.5aa"@en ;
+                  rdfs:label "needsToBeChanged"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#needsToBeSplitIntoMultipleColumns
+:needsToBeSplitIntoMultipleColumns rdf:type owl:NamedIndividual ,
+                                            :PaleoVariable ;
+                                   le:hasSynonym "depth-range" ,
+                                               "depthRange" ,
+                                               "depth_range" ;
+                                   rdfs:comment ""@en ;
+                                   rdfs:label "needsToBeSplitIntoMultipleColumns"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#nitrate
+:nitrate rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "nitrate" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=971" ;
+         rdfs:comment "an inorganic compound that has the chemical formula NO3(-)."@en ;
+         rdfs:label "nitrate"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#nitrogen
+:nitrogen rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "nitrogen" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1014" ;
+          le:hasSynonym "N" ;
+          rdfs:comment "a chemical element with atomic number 7."@en ;
+          rdfs:label "nitrogen"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#notes
+:notes rdf:type owl:NamedIndividual ,
+                :PaleoVariable ;
+       le:hasNoaaPastName "notes" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1483" ;
+       le:hasSynonym "BSI_regime" ,
+                   "BSi_regime" ,
+                   "CodeName" ,
+                   "CommentRegardingReliability" ,
+                   "Commentregardingreliability1" ,
+                   "Commentregardingreliability2" ,
+                   "Commentregardingreliability3" ,
+                   "Commentregardingreliability4" ,
+                   "Reworked" ,
+                   "color" ,
+                   "entityName" ,
+                   "note" ,
+                   "notes_C5" ,
+                   "repeats" ;
+       rdfs:comment "sampling metadata that describes study-specific aspects of sample collection and/or analysis."@en ;
+       rdfs:label "notes"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#organicCarbon
+:organicCarbon rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasNoaaPastName "organic carbon" ;
+               le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=995" ;
+               le:hasSynonym "Acc Rate TOC" ,
+                           "C_organic_flux" ,
+                           "Corg dens" ;
+               rdfs:comment "carbon that is derived from an organic source."@en ;
+               rdfs:label "organicCarbon"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#organicMatter
+:organicMatter rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasNoaaPastName "organic matter" ;
+               le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1551" ;
+               le:hasSynonym "%_tom" ,
+                           "OM" ,
+                           "OM dens" ,
+                           "organic" ;
+               rdfs:comment "a bulk biological material that consists of complex substances of mainly carbon, hydrogen, and oxygen with subordinate amounts of nitrogen, sulfur, and other elements, produced by the growth of organisms (Credit: Smol et al. 2001 Tracking Environmental Change Using Lake Sediments)."@en ;
+               rdfs:label "organicMatter"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#organicNitrogen
+:organicNitrogen rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 le:hasSynonym "Norg" ;
+                 rdfs:comment ""@en ;
+                 rdfs:label "organicNitrogen"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#oxygen
+:oxygen rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "oxygen" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1016" ;
+        le:hasSynonym "%O" ;
+        rdfs:comment "a chemical element with atomic number 8."@en ;
+        rdfs:label "oxygen"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#pH
+:pH rdf:type owl:NamedIndividual ,
+             :PaleoVariable ;
+    le:hasNoaaPastName "pH" ;
+    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=569" ;
+    le:hasSynonym "pHsoil" ,
+                "soilPH" ;
+    rdfs:comment "a measure of acidity that is calculated as the negative logarithm of the hydrogen ion concentration."@en ;
+    rdfs:label "pH"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#peat
+:peat rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "peat" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1623" ;
+      le:hasSynonym "Peat" ,
+                  "peatFlux" ;
+      rdfs:comment "a bulk biological material that consists of an unconsolidated combustible deposit of partially carbonized plant remains, common in bogs, fens, and lakes in tundra or periglacial regions (Credit: Smol et al. 2001 Tracking Environmental Change Using Lake Sediments)."@en ;
+      rdfs:label "peat"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#percent
+:percent rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "ecosystem quantity" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4934" ;
+         le:hasSynonym "WoodyCover___" ;
+         rdfs:comment "an ecosystem variable that quantifies some aspect of the components of an ecosystem."@en ;
+         rdfs:label "percent"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#phosphorus
+:phosphorus rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "phosphorus" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1018" ;
+            le:hasSynonym "%P" ;
+            rdfs:comment "a chemical element with atomic number 15."@en ;
+            rdfs:label "phosphorus"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#potassium
+:potassium rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "potassium" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=911" ;
+           le:hasSynonym "% K" ,
+                       "%K" ,
+                       "K" ,
+                       "K peak area" ,
+                       "KProp" ,
+                       "K_" ;
+           rdfs:comment "a chemical element with atomic number 19."@en ;
+           rdfs:label "potassium"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#precipitation
+:precipitation rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasNoaaPastName "precipitation" ;
+               le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=560" ;
+               le:hasSynonym "Annual Precipitation" ,
+                           "MAP" ,
+                           "P" ,
+                           "Pannom" ,
+                           "Panom" ,
+                           "Precip" ,
+                           "Precipitation" ,
+                           "Summer Precipitation" ,
+                           "Summer precipitation" ,
+                           "Winter Precipitation" ,
+                           "precip51yr" ,
+                           "precip5yr" ,
+                           "precipitation (with H-set)" ,
+                           "precipobs" ;
+               rdfs:comment "the hydroclimatic rate of rain, snow, sleet or hail that falls to the ground."@en ;
+               rdfs:label "precipitation"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#productivity
+:productivity rdf:type owl:NamedIndividual ,
+                       :PaleoVariable ;
+              le:hasNoaaPastName "productivity" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3293" ;
+              rdfs:comment "an ecosystem process variable that quantifies the rate of generation of biomass in an ecosystem."@en ;
+              rdfs:label "productivity"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#pyrite
+:pyrite rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "pyrite" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2467" ;
+        rdfs:comment "a sulfide mineral with the formula FeS2."@en ;
+        rdfs:label "pyrite"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#quartz
+:quartz rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "quartz" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4379" ;
+        rdfs:comment "a silicate mineral with the formula SiO2."@en ;
+        rdfs:label "quartz"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#reflectance
+:reflectance rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "reflectance" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1005" ;
+             le:hasSynonym "Brightness" ,
+                         "X_radiograph_dark_layer" ,
+                         "blueIntensity" ,
+                         "red_color_intensity_units" ,
+                         "redness" ;
+             rdfs:comment "an electromagnetic property that measures the amount of light that reflects from the surface of a material."@en ;
+             rdfs:label "reflectance"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#relativeHumidity
+:relativeHumidity rdf:type owl:NamedIndividual ,
+                           :PaleoVariable ;
+                  le:hasNoaaPastName "relative humidity" ;
+                  le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2314" ;
+                  le:hasSynonym "RH" ;
+                  rdfs:comment "the hydroclimate ratio of water vapor present in air to the amount of water needed to achieve saturation at the local temperature."@en ;
+                  rdfs:label "relativeHumidity"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#residualChronology
+:residualChronology rdf:type owl:NamedIndividual ,
+                             :PaleoVariable ;
+                    le:hasNoaaPastName "residual chronology method" ;
+                    le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1592" ;
+                    le:hasSynonym "residual" ;
+                    rdfs:comment "a tree ring chronology method that uses Program ARSTAN, developed by Dr. Edward R. Cook at the Tree-Ring Laboratory, Lamont-Doherty Earth Observatory of Columbia University, Palisades, New York (Cook 1985), in its standard configuration but additionally using autoregressive modeling to remove autocorrelation."@en ;
+                    rdfs:label "residualChronology"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#ringWidth
+:ringWidth rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "ring width" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3639" ;
+           le:hasSynonym "TRW" ,
+                       "trsgi" ;
+           rdfs:comment "a physical measurement of the width of all or of some subcomponent of one annual ring from a tree."@en ;
+           rdfs:label "ringWidth"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#salinity
+:salinity rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "salinity" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4396" ;
+          le:hasSynonym "SAUG" ,
+                      "SETE" ,
+                      "SFEV" ,
+                      "SHIV" ,
+                      "logSalinity" ,
+                      "sss" ;
+          rdfs:comment "a solution property that is the amount of salt dissolved in a body of water."@en ;
+          rdfs:label "salinity"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sampleCount
+:sampleCount rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "count" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=704" ;
+             le:hasSynonym "num_samples" ;
+             rdfs:comment "a dimensionless unit that denotes a simple count of things (Credit: Units of measurement ontology)."@en ;
+             rdfs:label "sampleCount"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sampleID
+:sampleID rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasNoaaPastName "sample identification" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1482" ;
+          le:hasSynonym "DateID" ,
+                      "ID" ,
+                      "Lab Code" ,
+                      "Lab ID" ,
+                      "OriginalSampleID" ,
+                      "Sample" ,
+                      "Sample ID" ,
+                      "Sample Label" ,
+                      "Sample interval" ,
+                      "Sample label" ,
+                      "label" ,
+                      "plotName" ,
+                      "sambleID" ,
+                      "sample" ,
+                      "sample # in section" ,
+                      "sampleIDa" ,
+                      "sampleIDb" ,
+                      "sampleIDc" ,
+                      "sampleNumber" ,
+                      "sample_code" ,
+                      "sample_number" ,
+                      "samples" ,
+                      "sisalSampleID" ,
+                      "sisalSampleIDComposite" ,
+                      "smapleID" ;
+          rdfs:comment "sampling metadata that designates either a widely-used or lab-specific name for a sample and which can contain such attributes as core, section, and/or site."@en ;
+          rdfs:label "sampleID"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sand
+:sand rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "sand" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1537" ;
+      le:hasSynonym "%_sand" ,
+                  "Sand" ,
+                  "x_Sand" ;
+      rdfs:comment "the abundance or concentration of particles with a diameter between 0.0625 and 2 millimeters."@en ;
+      rdfs:label "sand"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#seaIce
+:seaIce rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "sea ice cover" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2317" ;
+        le:hasSynonym "IMON1953" ,
+                    "Sea_Ice_conc" ,
+                    "Sea_Ice_months" ;
+        rdfs:comment "a cryospheric quantity that is a measure of the extent to which the ocean surface is covered by sea ice."@en ;
+        rdfs:label "seaIce"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#section
+:section rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasSynonym "Sec label" ,
+                     "Section" ,
+                     "Section #" ,
+                     "Section [#]" ,
+                     "Section number" ,
+                     "core_section" ,
+                     "section name" ;
+         rdfs:comment ""@en ;
+         rdfs:label "section"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sedimentDry
+:sedimentDry rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "dry sediment" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1502" ;
+             le:hasSynonym "clastic" ,
+                         "clastic_flux" ,
+                         "dry sample mass" ,
+                         "mass dry" ,
+                         "mass dry 106 to 1000 um" ,
+                         "mass dry 63 to 106 um" ,
+                         "mass dry >1mm" ,
+                         "massDry" ,
+                         "massDry_1mm" ,
+                         "sedimentWeight" ;
+             rdfs:comment "sediment from which all water has been removed."@en ;
+             rdfs:label "sedimentDry"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sedimentationRate
+:sedimentationRate rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "sedimentation rate" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1007" ;
+                   le:hasSynonym "Mean Sedim rate" ,
+                               "Sedim rate" ,
+                               "sed rate" ,
+                               "sedRate" ;
+                   rdfs:comment "a formation rate that is the amount of sediment deposited during a certain time span, normally expressed as a length per time (e.g., cm/yr)."@en ;
+                   rdfs:label "sedimentationRate"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#segmentLength
+:segmentLength rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasSynonym "segment" ;
+               rdfs:comment "average segment length across multiple tree ring timeseries from a site"@en ;
+               rdfs:label "segmentLength"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sequence
+:sequence rdf:type owl:NamedIndividual ,
+                   :PaleoVariable ;
+          le:hasSynonym "Pollen Sequence" ;
+          rdfs:comment ""@en ;
+          rdfs:label "sequence"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#silt
+:silt rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "silt" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1538" ;
+      le:hasSynonym "%_silt" ,
+                  "Silt" ,
+                  "x_Silt" ;
+      rdfs:comment "the abundance or concentration of particles with a diameter between 0.004 and 0.0625 millimeters."@en ;
+      rdfs:label "silt"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#site
+:site rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasSynonym "CoreSite" ,
+                  "Drilling project" ,
+                  "LakeName" ,
+                  "Region" ,
+                  "Site" ,
+                  "SiteName" ,
+                  "site/hole" ,
+                  "siteName" ;
+      rdfs:comment ""@en ;
+      rdfs:label "site"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#siteCount
+:siteCount rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasSynonym "#ofSites" ;
+           rdfs:comment ""@en ;
+           rdfs:label "siteCount"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sodium
+:sodium rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "sodium" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=920" ;
+        le:hasSynonym "Na" ,
+                    "Na_" ;
+        rdfs:comment "a chemical element with atomic number 11."@en ;
+        rdfs:label "sodium"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#solarIrradiance
+:solarIrradiance rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 le:hasNoaaPastName "solar irradiance" ;
+                 le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4376" ;
+                 le:hasSynonym "SunFrac" ;
+                 rdfs:comment "a forcing variable that is the radiation from the sun integrated over the whole electromagnetic spectrum and over the entire solar disk. The quantity applies outside the atmosphere, by default at a distance of one astronomical unit from the sun."@en ;
+                 rdfs:label "solarIrradiance"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#streamflow
+:streamflow rdf:type owl:NamedIndividual ,
+                     :PaleoVariable ;
+            le:hasNoaaPastName "streamflow" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1396" ;
+            le:hasSynonym "AprQ" ,
+                        "AugQ" ,
+                        "DecQ" ,
+                        "FebQ" ,
+                        "JanQ" ,
+                        "JulyQ" ,
+                        "JuneQ" ,
+                        "MarchQ" ,
+                        "MayQ" ,
+                        "NovQ" ,
+                        "OctQ" ,
+                        "SeptQ" ,
+                        "discharge" ;
+            rdfs:comment "the hydroclimatic rate of flow of water in streams, rivers, and other channels."@en ;
+            rdfs:label "streamflow"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sulfate
+:sulfate rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "sulfate" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=794" ;
+         rdfs:comment "an inorganic compound that has the formula SO4(2-)."@en ;
+         rdfs:label "sulfate"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#sulfur
+:sulfur rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "sulfur" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=902" ;
+        le:hasSynonym "S" ,
+                    "Sulfur" ,
+                    "Sulphur" ;
+        rdfs:comment "a chemical element with atomic number 16."@en ;
+        rdfs:label "sulfur"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#temperature
+:temperature rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "temperature variable" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4633" ;
+             le:hasSynonym "APR" ,
+                         "AUG" ,
+                         "FRA06 Air Temperature" ,
+                         "Feb" ,
+                         "Ice_core_C" ,
+                         "JUL" ,
+                         "JUN" ,
+                         "Jan" ,
+                         "JulTanom" ,
+                         "JulTanomLoess" ,
+                         "MAAT" ,
+                         "MAT" ,
+                         "MAY" ,
+                         "MSAT" ,
+                         "MSAT Russell 2018" ,
+                         "MeanT" ,
+                         "NOV" ,
+                         "OCT" ,
+                         "PLS_C2_temp" ,
+                         "Pollen_T" ,
+                         "SBT" ,
+                         "SEP" ,
+                         "SST" ,
+                         "SST-d18O" ,
+                         "SST_LDI" ,
+                         "SST_amj" ,
+                         "SST_from_Uk37" ,
+                         "SST_from_planktic0x2EMgCa" ,
+                         "SST_from_planktic0x2Ed18O" ,
+                         "T anomaly" ,
+                         "TETE" ,
+                         "TFEV" ,
+                         "THIV" ,
+                         "Tanom" ,
+                         "Temp" ,
+                         "Temp Anom 10 CI" ,
+                         "Temp Anom 25" ,
+                         "Temp Anom 75" ,
+                         "Temp Anom 90" ,
+                         "Temp Anom Best" ,
+                         "Temp Anom FOR15" ,
+                         "Temp Anom FRA06" ,
+                         "Temp Anom FRA06-TR" ,
+                         "Temperature" ,
+                         "Tsource" ,
+                         "deep.temp" ,
+                         "interpolatedTemperature" ,
+                         "nonReliableTemperature" ,
+                         "nonReliableTemperature 1" ,
+                         "nonReliableTemperature_1" ,
+                         "nonReliableTemperature_2" ,
+                         "nonReliableTemperature_3" ,
+                         "nonReliableTemperature_4" ,
+                         "nonReliabletemperature" ,
+                         "nonReliabletemperature 2" ,
+                         "smoothedTemp" ,
+                         "soilTemp" ,
+                         "subT" ,
+                         "t-source" ,
+                         "temp" ,
+                         "temp2" ,
+                         "temp2s" ,
+                         "tempAv0" ,
+                         "tempAv8" ,
+                         "tempK" ,
+                         "tempNoElevCorrection" ,
+                         "tempNoSourceCorrection" ,
+                         "tempPartialCorrect" ,
+                         "tempSmooth5" ,
+                         "temperature 1" ,
+                         "temperature 2" ,
+                         "temperatureComposite" ,
+                         "temperature_1" ,
+                         "temperature_2" ,
+                         "temperature_3" ,
+                         "temperature_4" ,
+                         "temperaturer2" ;
+             rdfs:comment "an earth system variable that quantifies the degree or intensity of heat present in a material."@en ;
+             rdfs:label "temperature"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#thickness
+:thickness rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "thickness" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3300" ;
+           le:hasSynonym "Samp thick" ,
+                       "Sample thickness" ,
+                       "Thickness" ,
+                       "sample_thickness" ,
+                       "thicknessComposite" ;
+           rdfs:comment "a physical property that is the height of a layer or object from top to bottom."@en ;
+           rdfs:label "thickness"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#totalCarbon
+:totalCarbon rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasSynonym "TC" ;
+             rdfs:comment ""@en ;
+             rdfs:label "totalCarbon"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#totalNitrogen
+:totalNitrogen rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasSynonym "TN" ;
+               rdfs:comment ""@en ;
+               rdfs:label "totalNitrogen"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#totalPollen
+:totalPollen rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "pollen" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4549" ;
+             le:hasSynonym "TotalPollen" ,
+                         "TreePollen" ;
+             rdfs:comment "a data type that includes measurements of plant pollen and spores."@en ;
+             rdfs:label "totalPollen"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#treeCover
+:treeCover rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasSynonym "TreeCover" ;
+           rdfs:comment ""@en ;
+           rdfs:label "treeCover"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertainty
+:uncertainty rdf:type owl:NamedIndividual ,
+                      :PaleoVariable ;
+             le:hasNoaaPastName "unspecified margin of error" ;
+             le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2196" ;
+             le:hasSynonym "13CleafwaxC29-33err" ,
+                         "A_site_std" ,
+                         "Age_uncertainty" ,
+                         "Annual Precipitation Error" ,
+                         "C20 Total Unc" ,
+                         "C22 Total Unc" ,
+                         "C24 Total Unc" ,
+                         "C26 Total Unc" ,
+                         "C28 Total Unc" ,
+                         "C30 Total Unc" ,
+                         "Calibration Error" ,
+                         "DMAR_error" ,
+                         "DMAR_uncertainty" ,
+                         "Epsilon C28-C22 uncertainty" ,
+                         "Epsilon C28-C24 uncertainty" ,
+                         "Epsilon Uncertainty" ,
+                         "Epsilon28-22uncertainty" ,
+                         "JAS_error" ,
+                         "JASerror" ,
+                         "SrCaUncertainty" ,
+                         "Summer Precipitation Error" ,
+                         "TTerror" ,
+                         "T_site_std" ,
+                         "UK37_error" ,
+                         "UK_error" ,
+                         "Winter Precipitation error" ,
+                         "ageError" ,
+                         "ageUncertainty" ,
+                         "ageUncertaintyOther" ,
+                         "bubbleNumberDensityError" ,
+                         "d13C Error" ,
+                         "d13C std dev" ,
+                         "d13CPrecision" ,
+                         "d13CStandard" ,
+                         "d13C_error" ,
+                         "d18O error" ,
+                         "d18OPrecision" ,
+                         "d18OPrecisionComposite" ,
+                         "d18OStandard" ,
+                         "d18OStandardComposite" ,
+                         "d18OUncertainty" ,
+                         "d18O_Grass_leaf_error" ,
+                         "d18O_Sphagnum_error" ,
+                         "d18O_error" ,
+                         "d2HleafwaxC28err" ,
+                         "dD error" ,
+                         "dD unc" ,
+                         "dDUncertainty" ,
+                         "err" ,
+                         "error" ,
+                         "error1" ,
+                         "error2" ,
+                         "error3" ,
+                         "lakeAreaError" ,
+                         "lakeVolumeError" ,
+                         "nC30_err" ,
+                         "precipitationUncertainty" ,
+                         "range" ,
+                         "tempError" ,
+                         "temperatureUncertainty" ,
+                         "temperature_error" ,
+                         "uncertainty (±)" ,
+                         "uncertainty.temperature" ,
+                         "uncertainty_1" ,
+                         "uncertainty_2" ,
+                         "uncertainty_3" ,
+                         "uncertainty_4" ,
+                         "uncertainty_temperature" ;
+             rdfs:comment "the value, that when added to and subtracted from the mean estimate, creates a interval that is believed to capture the true value according to an unspecified calculation."@en ;
+             rdfs:label "uncertainty"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertainty1s
+:uncertainty1s rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasNoaaPastName "68% confidence interval margin of error" ;
+               le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3444" ;
+               le:hasSynonym "2H_dino_1sig" ,
+                           "C23 stdev" ,
+                           "C23 δD std dev" ,
+                           "C24 d2H stdev" ,
+                           "C25 stdev" ,
+                           "C25 δD std dev" ,
+                           "C27 stdev" ,
+                           "C29 d13C std dev" ,
+                           "C29 dD std dev" ,
+                           "C29 stdev" ,
+                           "C29 δ13C Std Dev" ,
+                           "C29 δ13C std dev" ,
+                           "C29 δ13C std dev [±]" ,
+                           "C29 δD Std Dev" ,
+                           "C29 δD std dev" ,
+                           "C29 δD std dev [±]" ,
+                           "C30 dD std dev" ,
+                           "C31 d13C std dev" ,
+                           "C31 dD std dev" ,
+                           "C31 δ13C Std Dev" ,
+                           "C31 δ13C std dev" ,
+                           "C31 δD Std Dev" ,
+                           "C31 δD std dev" ,
+                           "C31d13Csd" ,
+                           "C33 δ13C Std Dev" ,
+                           "C33 δD Std Dev" ,
+                           "CBTsd" ,
+                           "MAP1-sigma" ,
+                           "MBTsd" ,
+                           "Mg_Ca_sd" ,
+                           "SD" ,
+                           "SD_anomaly" ,
+                           "SE" ,
+                           "StDev C28 dD" ,
+                           "U371sigmaUncertainty-" ,
+                           "WMT1-sigma" ,
+                           "d excess stdev" ,
+                           "d13C_C31_sd" ,
+                           "dD std dev" ,
+                           "from_68" ,
+                           "precipitation std" ,
+                           "precipitation std (with H-set)" ,
+                           "sd" ,
+                           "std" ,
+                           "stdDev" ,
+                           "stdDev___" ,
+                           "stdev C24" ,
+                           "stdev C26" ,
+                           "stdev C28" ,
+                           "stdev weighted average" ,
+                           "stdevC24" ,
+                           "stdevC25" ,
+                           "stdevC26" ,
+                           "stdevC27" ,
+                           "stdevC28" ,
+                           "stdevC29" ,
+                           "stdevC31" ,
+                           "to_68" ;
+               rdfs:comment "the value, that when added to and subtracted from the mean estimate, creates a confidence interval that captures the true value 68% of the time."@en ;
+               rdfs:label "uncertainty1s"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertainty2s
+:uncertainty2s rdf:type owl:NamedIndividual ,
+                        :PaleoVariable ;
+               le:hasNoaaPastName "95% confidence interval margin of error" ;
+               le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=708" ;
+               le:hasSynonym "2 sigma" ,
+                           "MAP2-sigma" ,
+                           "WMT2-sigma" ,
+                           "from_95" ,
+                           "to_95" ;
+               rdfs:comment "the value, that when added to and subtracted from the mean estimate, creates a confidence interval that captures the true value 95% of the time."@en ;
+               rdfs:label "uncertainty2s"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyHigh
+:uncertaintyHigh rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 le:hasNoaaPastName "unspecified error upper bound" ;
+                 le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2197" ;
+                 le:hasSynonym "Acc max" ,
+                             "AgeOld" ,
+                             "Age_max" ,
+                             "Chironomid d18O max" ,
+                             "IMON1953_s" ,
+                             "JAS+" ,
+                             "MAP_max" ,
+                             "MAT_max" ,
+                             "MATmax" ,
+                             "MaxElevM" ,
+                             "PannomMax" ,
+                             "PannomMaxUncertainty" ,
+                             "PanomMax" ,
+                             "PanomMaxUncertainty" ,
+                             "Pmax" ,
+                             "SAUG_s" ,
+                             "SETE_s" ,
+                             "SFEV_s" ,
+                             "SHIV_s" ,
+                             "SunFracMax" ,
+                             "TETE_s" ,
+                             "TFEV_s" ,
+                             "THIV_s" ,
+                             "TreeCover_max" ,
+                             "UncertaintyDust0x5B0x250x5D0x28Plus0x29" ,
+                             "WMT_max" ,
+                             "WMTmax" ,
+                             "age max" ,
+                             "ageBaconUncertaintyHigh" ,
+                             "ageBchronUncertaintyHigh" ,
+                             "ageMax" ,
+                             "ageOld" ,
+                             "ageOxCalUncertaintyHigh" ,
+                             "ageStalAgeUncertaintyHigh" ,
+                             "ageUncertaintyHigh" ,
+                             "age_max" ,
+                             "age_old" ,
+                             "agecopRaUncertaintyHigh" ,
+                             "agelinInterpUncertaintyHigh" ,
+                             "agelinRegUncertaintyHigh" ,
+                             "cal_age_range_old" ,
+                             "d18OUncertaintyHigh" ,
+                             "errorUp" ,
+                             "errorUp2" ,
+                             "error_older_age" ,
+                             "lakeLevelHi" ,
+                             "lakeLevelMax" ,
+                             "max Age" ,
+                             "max RH" ,
+                             "max age" ,
+                             "maxAge" ,
+                             "meltUncertaintyHigh" ,
+                             "precip+" ,
+                             "tempErrorPlus" ,
+                             "tempErrorUpper" ,
+                             "temperatureWarm" ,
+                             "uncertainty_plus" ,
+                             "upper band" ,
+                             "upperErr" ,
+                             "upperErr2" ,
+                             "year_old" ,
+                             "∆RH_upper" ;
+                 rdfs:comment "the upper (maximum) bound of the interval believed to capture the true value according to an unspecified calculation."@en ;
+                 rdfs:label "uncertaintyHigh"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyHigh1s
+:uncertaintyHigh1s rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "68% confidence interval upper bound" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1371" ;
+                   le:hasSynonym "P+SD" ,
+                               "Q0.84" ,
+                               "T+SD" ,
+                               "T.PlusSD" ,
+                               "Temperature 1 sigma range high" ,
+                               "age_y_bp+1s" ,
+                               "dDP_1s_upper" ,
+                               "deltaT + 1 sigma" ,
+                               "ice volume adjusted" ,
+                               "ice volume and vegetation adjusted" ,
+                               "p+SD" ,
+                               "precip_1s_upper" ,
+                               "precip_1s_uppper" ;
+                   rdfs:comment "the upper (maximum) bound of the confidence interval that captures the true value 68% of the time."@en ;
+                   rdfs:label "uncertaintyHigh1s"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyHigh50
+:uncertaintyHigh50 rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "50% confidence interval upper bound" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=5831" ;
+                   le:hasSynonym "0.25_quantile_dust_flux" ,
+                               "0.75_quantile_dust_flux" ,
+                               "Precip dD 75 CI" ;
+                   rdfs:comment "the upper (maximum) bound of the confidence interval that captures the true value 50% of the time."@en ;
+                   rdfs:label "uncertaintyHigh50"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyHigh90
+:uncertaintyHigh90 rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "90% confidence interval upper bound" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=496" ;
+                   le:hasSynonym "pcpanomCI95" ;
+                   rdfs:comment "the upper (maximum) bound of the confidence interval that captures the true value 90% of the time."@en ;
+                   rdfs:label "uncertaintyHigh90"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyHigh95
+:uncertaintyHigh95 rdf:type owl:NamedIndividual ,
+                            :PaleoVariable ;
+                   le:hasNoaaPastName "95% confidence interval upper bound" ;
+                   le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=494" ;
+                   le:hasSynonym "0.975_quantile_dust_flux" ,
+                               "95UpperAge" ,
+                               "Q0.975" ,
+                               "age95conMax" ,
+                               "age_97.5" ,
+                               "age_calBP95+" ,
+                               "d13C_97.5" ,
+                               "d18O_97.5" ,
+                               "ice volume adjusted" ,
+                               "ice volume and vegetation adjusted" ,
+                               "maxAge95" ,
+                               "max_age_95" ,
+                               "upper95" ;
+                   rdfs:comment "the upper (maximum) bound of the confidence interval that captures the true value 95% of the time."@en ;
+                   rdfs:label "uncertaintyHigh95"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyLow
+:uncertaintyLow rdf:type owl:NamedIndividual ,
+                         :PaleoVariable ;
+                le:hasNoaaPastName "unspecified error lower bound" ;
+                le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2198" ;
+                le:hasSynonym "Acc min" ,
+                            "Age_min" ,
+                            "Chironomid d18O min" ,
+                            "IMON1953_i" ,
+                            "JAS-" ,
+                            "MAP_min" ,
+                            "MAT_min" ,
+                            "MATmin" ,
+                            "MinElevM" ,
+                            "PannomMin" ,
+                            "PannomMinUncertainty" ,
+                            "PanomMin" ,
+                            "PanomMinUncertainty" ,
+                            "Pmin" ,
+                            "SAUG_i" ,
+                            "SETE_i" ,
+                            "SFEV_i" ,
+                            "SHIV_i" ,
+                            "SunFracMin" ,
+                            "TETE_i" ,
+                            "TFEV_i" ,
+                            "THIV_i" ,
+                            "TreeCover_min" ,
+                            "UncertaintyDust0x5B0x250x5D0x28Minus0x29" ,
+                            "WMT_min" ,
+                            "WMTmin" ,
+                            "age min" ,
+                            "ageBaconUncertaintyLow" ,
+                            "ageBchronUncertaintyLow" ,
+                            "ageMin" ,
+                            "ageOxCalUncertaintyLow" ,
+                            "ageStalAgeUncertaintyLow" ,
+                            "ageUncertaintyLow" ,
+                            "ageYoung" ,
+                            "age_min" ,
+                            "age_young" ,
+                            "agecopRaUncertaintyLow" ,
+                            "agelinInterpUncertaintyLow" ,
+                            "agelinRegUncertaintyLow" ,
+                            "cal_age_range_young" ,
+                            "d18OUncertaintyLow" ,
+                            "errorLow" ,
+                            "errorLow2" ,
+                            "error_younger_age" ,
+                            "lakeLevelLo" ,
+                            "lakeLevelMin" ,
+                            "lowerErr" ,
+                            "meltUncertaintyLow" ,
+                            "min Age" ,
+                            "min RH" ,
+                            "min age" ,
+                            "minAge" ,
+                            "precip-" ,
+                            "tempErrorLower" ,
+                            "temperatureCold" ,
+                            "undertainty_minus" ,
+                            "yearBottom" ,
+                            "yearTop" ,
+                            "∆RH_lower" ;
+                rdfs:comment "the lower (minimum) bound of the interval believed to capture the true value according to an unspecified calculation."@en ;
+                rdfs:label "uncertaintyLow"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyLow1s
+:uncertaintyLow1s rdf:type owl:NamedIndividual ,
+                           :PaleoVariable ;
+                  le:hasNoaaPastName "68% confidence interval lower bound" ;
+                  le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1370" ;
+                  le:hasSynonym "P-SD" ,
+                              "Q0.16" ,
+                              "T-SD" ,
+                              "T.MinusSD" ,
+                              "Temperature 1 sigma range low" ,
+                              "age_y_bp-1s" ,
+                              "dDP_1s_lower" ,
+                              "deltaT - 1 sigma" ,
+                              "ice volume adjusted" ,
+                              "ice volume and vegetation adjusted" ,
+                              "p-SD" ,
+                              "precip_1s_lower" ;
+                  rdfs:comment "the lower (minimum) bound of the confidence interval that captures the true value 68% of the time."@en ;
+                  rdfs:label "uncertaintyLow1s"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyLow90
+:uncertaintyLow90 rdf:type owl:NamedIndividual ,
+                           :PaleoVariable ;
+                  le:hasNoaaPastName "90% confidence interval lower bound" ;
+                  le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=497" ;
+                  le:hasSynonym "age97.5" ,
+                              "age_5thpercentile" ,
+                              "age_95thpercentile" ;
+                  rdfs:comment "the lower (minimum) bound of the confidence interval that captures the true value 90% of the time."@en ;
+                  rdfs:label "uncertaintyLow90"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uncertaintyLow95
+:uncertaintyLow95 rdf:type owl:NamedIndividual ,
+                           :PaleoVariable ;
+                  le:hasNoaaPastName "95% confidence interval lower bound" ;
+                  le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=495" ;
+                  le:hasSynonym "0.025_quantile_dust_flux" ,
+                              "95LowerAge" ,
+                              "Precip dD 25 CI" ,
+                              "Q0.025" ,
+                              "age2.5" ,
+                              "age95ConfMin" ,
+                              "age_2.5" ,
+                              "age_calBP95-" ,
+                              "d13C_2.5" ,
+                              "d18O_2.5" ,
+                              "ice volume adjusted" ,
+                              "ice volume and vegetation adjusted" ,
+                              "lower95" ,
+                              "lowerErr2" ,
+                              "minAge95" ,
+                              "pcpanomCI5" ;
+                  rdfs:comment "the lower (minimum) bound of the confidence interval that captures the true value 95% of the time."@en ;
+                  rdfs:label "uncertaintyLow95"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#upwelling
+:upwelling rdf:type owl:NamedIndividual ,
+                    :PaleoVariable ;
+           le:hasNoaaPastName "Upwelling Index" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4771" ;
+           rdfs:comment "a circulation index that is a measure of the volume of water upwelling in the ocean."@en ;
+           rdfs:label "upwelling"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#uranium
+:uranium rdf:type owl:NamedIndividual ,
+                  :PaleoVariable ;
+         le:hasNoaaPastName "uranium" ;
+         le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=928" ;
+         le:hasSynonym "U" ;
+         rdfs:comment "a chemical element with atomic number 92."@en ;
+         rdfs:label "uranium"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#varveThickness
+:varveThickness rdf:type owl:NamedIndividual ,
+                         :PaleoVariable ;
+                le:hasNoaaPastName "varve thickness" ;
+                le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1630" ;
+                le:hasSynonym "Varve thickness" ,
+                            "Varve_width" ;
+                rdfs:comment "the thickness of a sublayer of or an entire annually-resolved varve in a sediment sequence."@en ;
+                rdfs:label "varveThickness"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#volume
+:volume rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "volume" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=608" ;
+        le:hasSynonym "Samp vol" ;
+        rdfs:comment "a physical property that is a measure of the three-dimensional space filled by a sample."@en ;
+        rdfs:label "volume"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#waterContent
+:waterContent rdf:type owl:NamedIndividual ,
+                       :PaleoVariable ;
+              le:hasNoaaPastName "water content" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=3313" ;
+              rdfs:comment "a measure of the amount of water that is contained within a material, often expressed as a weight percent."@en ;
+              rdfs:label "waterContent"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#waterTableDepth
+:waterTableDepth rdf:type owl:NamedIndividual ,
+                          :PaleoVariable ;
+                 le:hasNoaaPastName "water table depth" ;
+                 le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1398" ;
+                 le:hasSynonym "Water Table" ,
+                             "Water Table Detrended" ,
+                             "Water_tableDepth" ,
+                             "water wm" ,
+                             "water_table_depth" ;
+                 rdfs:comment "a geographic variable that quantifies the depth from the land surface to the upper surface of the zone of saturation in the soil."@en ;
+                 rdfs:label "waterTableDepth"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#wetBulkDensity
+:wetBulkDensity rdf:type owl:NamedIndividual ,
+                         :PaleoVariable ;
+                le:hasSynonym "WetBD" ;
+                rdfs:comment ""@en ;
+                rdfs:label "wetBulkDensity"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#year
+:year rdf:type owl:NamedIndividual ,
+               :PaleoVariable ;
+      le:hasNoaaPastName "year" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=273" ;
+      le:hasSynonym "Recon0x2EDate" ,
+                  "Year" ,
+                  "Year b2k" ,
+                  "age_CE" ,
+                  "year start" ,
+                  "yearEnsemble" ,
+                  "yearRounded" ;
+      rdfs:comment "a duration unit that is equal to 12 months which in science is taken to be equal to 365.25 days (Credit: Units of measurement ontology)."@en ;
+      rdfs:label "year"@en .
+
+
+###  http://linked.earth/ontology/paleo_variables#zscore
+:zscore rdf:type owl:NamedIndividual ,
+                 :PaleoVariable ;
+        le:hasNoaaPastName "collection elevation" ;
+        le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=537" ;
+        le:hasSynonym "Z_score" ;
+        rdfs:comment "sampling metadata that identifies the elevation, either above or below sea level, at which a sample was collected or a reconstruction was generated."@en ;
+        rdfs:label "zscore"@en .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

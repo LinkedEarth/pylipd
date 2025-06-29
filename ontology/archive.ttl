@@ -1,0 +1,226 @@
+@prefix : <http://linked.earth/ontology/archive#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix le: <http://linked.earth/ontology#> .
+@base <http://linked.earth/ontology/archive#> .
+
+<http://linked.earth/ontology/archive#> rdf:type owl:Ontology ;
+                                 owl:versionIRI <http://linked.earth/ontology/archive/2.0.0> ;
+                                 dcterms:contributor <http://w3id.org/people/dgarijo> ,
+                                                     <http://www.isi.edu/~gil/> ;
+                                 dcterms:creator <http://earth.usc.edu/~khider/> ,
+                                                 <http://orcid.org/0000-0001-5920-4751> ,
+                                                 <http://www.cefns.nau.edu/~npm4/> ;
+                                 dcterms:license "http://creativecommons.org/licenses/by/2.0/" ;
+                                 dcterms:title "The Archive Type Ontology"@en ;
+                                 vann:preferredNamespacePrefix "archive" ;
+                                 vann:preferredNamespaceUri "http://linked.earth/ontology/archive#" ;
+                                 owl:versionInfo "2.0.0"@en .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/contributor
+dcterms:contributor rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/creator
+dcterms:creator rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/license
+dcterms:license rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/title
+dcterms:title rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespacePrefix
+vann:preferredNamespacePrefix rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespaceUri
+vann:preferredNamespaceUri rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://linked.earth/ontology/archive#ArchiveType
+:ArchiveType rdf:type owl:Class ;
+              rdfs:comment """The medium in which the response of a sensor to environmental forcing is recorded. Sensu Evans et al. (2013).
+
+Examples of archives include: marine sediments, corals, wood, lake sediments, speleothems, glacier ice, etc."""@en ;
+              rdfs:isDefinedBy <http://www.sciencedirect.com/science/article/pii/S0277379113002011> ;
+              rdfs:label "Proxy archive"@en .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://linked.earth/ontology/archive#Borehole
+:Borehole rdf:type owl:NamedIndividual ,
+                   :ArchiveType ;
+          le:hasNoaaPastName "borehole" ;
+          le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=114" ;
+          rdfs:comment "a data type that consists of direct measurements of subsurface temperature from boreholes drilled into materials such as rock and glacier ice." ;
+          rdfs:label "Borehole" .
+
+
+###  http://linked.earth/ontology/archive#Coral
+:Coral rdf:type owl:NamedIndividual ,
+                :ArchiveType ;
+       le:hasNoaaPastName "coral" ;
+       le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=245" ;
+       rdfs:comment "an identifiable organism that belongs to the kingdom Animalia, phylum Cnindaria." ;
+       rdfs:label "Coral"@en .
+
+
+###  http://linked.earth/ontology/archive#FluvialSediment
+:FluvialSediment rdf:type owl:NamedIndividual ,
+                          :ArchiveType ;
+                 le:hasSynonym "Creek" ,
+                             "Fluvial" ,
+                             "River" ,
+                             "Stream" ;
+                 rdfs:label "Fluvial sediment" .
+
+
+###  http://linked.earth/ontology/archive#GlacierIce
+:GlacierIce rdf:type owl:NamedIndividual ,
+                     :ArchiveType ;
+            le:hasNoaaPastName "ice cores" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=102" ;
+            rdfs:comment "a data type that includes measurements made on land-based ice." ;
+            rdfs:label "Glacier ice"@en .
+
+
+###  http://linked.earth/ontology/archive#GroundIce
+:GroundIce rdf:type owl:NamedIndividual ,
+                    :ArchiveType ;
+           le:hasNoaaPastName "bulk ice" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=789" ;
+           rdfs:comment "a hydrologic material that is a whole sample of recrystallized and compacted snow, without any separation of components." ;
+           rdfs:label "Ground ice" .
+
+
+###  http://linked.earth/ontology/archive#LakeSediment
+:LakeSediment rdf:type owl:NamedIndividual ,
+                       :ArchiveType ;
+              le:hasSynonym "Lagoon" ,
+                          "Lake" ,
+                          "Lake Sediment" ;
+              rdfs:comment "Sediment deposited in a lake" ;
+              rdfs:label "Lake sediment"@en .
+
+
+###  http://linked.earth/ontology/archive#MarineSediment
+:MarineSediment rdf:type owl:NamedIndividual ,
+                         :ArchiveType ;
+                le:hasSynonym "Delta" ,
+                            "Marine" ;
+                rdfs:label "Marine sediment"@en .
+
+
+###  http://linked.earth/ontology/archive#Midden
+:Midden rdf:type owl:NamedIndividual ,
+                 :ArchiveType ;
+        rdfs:label "Midden" .
+
+
+###  http://linked.earth/ontology/archive#MolluskShell
+:MolluskShell rdf:type owl:NamedIndividual ,
+                       :ArchiveType ;
+              le:hasNoaaPastName "bivalve" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1772" ;
+              le:hasSynonym "MolluskShells" ;
+              rdfs:comment "an identifiable organism including clams and mussels that belongs to the kingdom Animalia, phylum Mollusca, class Bivalvia." ;
+              rdfs:label "Mollusk shell"@en .
+
+
+###  http://linked.earth/ontology/archive#Peat
+:Peat rdf:type owl:NamedIndividual ,
+               :ArchiveType ;
+      le:hasNoaaPastName "peat" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=1623" ;
+      le:hasSynonym "Bog" ,
+                  "Fen" ,
+                  "Marsh" ,
+                  "Mire" ,
+                  "Swamp" ;
+      rdfs:comment "a bulk biological material that consists of an unconsolidated combustible deposit of partially carbonized plant remains, common in bogs, fens, and lakes in tundra or periglacial regions (Credit: Smol et al. 2001 Tracking Environmental Change Using Lake Sediments)." ;
+      rdfs:label "Peat"@en .
+
+
+###  http://linked.earth/ontology/archive#Sclerosponge
+:Sclerosponge rdf:type owl:NamedIndividual ,
+                       :ArchiveType ;
+              le:hasNoaaPastName "sclerosponge" ;
+              le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=4574" ;
+              rdfs:comment "an identifiable organism that belongs to kingdom Animalia, phylum Porifera, class Demospongiae." ;
+              rdfs:label "Sclerosponge"@en .
+
+
+###  http://linked.earth/ontology/archive#Shoreline
+:Shoreline rdf:type owl:NamedIndividual ,
+                    :ArchiveType ;
+           le:hasNoaaPastName "lake levels" ;
+           le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=2298" ;
+           le:hasSynonym "LakeDeposit" ,
+                       "LakeDeposits" ;
+           rdfs:comment "a data type that quantifies past changes in lake elevation or lake depth, either directly or using reconstruction methods, based on shoreline deposits or sediment cores." ;
+           rdfs:label "Shoreline" .
+
+
+###  http://linked.earth/ontology/archive#Speleothem
+:Speleothem rdf:type owl:NamedIndividual ,
+                     :ArchiveType ;
+            le:hasNoaaPastName "speleothems" ;
+            le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=106" ;
+            le:hasSynonym "Cave" ;
+            rdfs:comment "a data type that includes measurements made on cave deposits." ;
+            rdfs:label "Speleothem"@en .
+
+
+###  http://linked.earth/ontology/archive#TerrestrialSediment
+:TerrestrialSediment rdf:type owl:NamedIndividual ,
+                              :ArchiveType ;
+                     le:hasSynonym "Dune" ,
+                                 "Loess" ;
+                     rdfs:label "Terrestrial sediment" .
+
+
+###  http://linked.earth/ontology/archive#Wood
+:Wood rdf:type owl:NamedIndividual ,
+               :ArchiveType ;
+      le:hasNoaaPastName "tree ring" ;
+      le:hasSynonym "tree" ;
+      le:hasNoaaPastUrl "https://www.ncei.noaa.gov/access/paleo-search/cvterms?termId=116" ;
+      rdfs:comment "a data type that includes measurements made on the rings of trees." ;
+      rdfs:label "Wood"@en .
+
+
+###  http://linked.earth/ontology/archive#Documents
+:Documents rdf:type owl:NamedIndividual ,
+                :ArchiveType ;
+       le:hasNoaaPastName "documents" ;
+       rdfs:comment "added due to some LiPD files using this" ;
+       rdfs:label "Documents"@en .
+
+###  http://linked.earth/ontology/archive#Other
+:Other rdf:type owl:NamedIndividual ,
+                :ArchiveType ;
+       le:hasNoaaPastName "other" ;
+       rdfs:comment "added due to some LiPD files using this" ;
+       rdfs:label "Other"@en .
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

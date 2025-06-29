@@ -44,12 +44,59 @@ class GraphDBConverter:
             'errors': []
         }
 
+    def cleanup_macos_artifacts(self):
+        """Remove macOS artifacts like __MACOSX directories and .DS_Store files."""
+        print(f"Cleaning up macOS artifacts in: {self.input_dir}")
+        
+        cleanup_count = 0
+        
+        # Find and remove __MACOSX directories
+        macosx_dirs = list(self.input_dir.rglob("__MACOSX"))
+        for macosx_dir in macosx_dirs:
+            if macosx_dir.is_dir():
+                try:
+                    import shutil
+                    shutil.rmtree(macosx_dir)
+                    cleanup_count += 1
+                    print(f"  Removed: {macosx_dir}")
+                except Exception as e:
+                    print(f"  Warning: Could not remove {macosx_dir}: {e}")
+        
+        # Find and remove .DS_Store files
+        dsstore_files = list(self.input_dir.rglob(".DS_Store"))
+        for dsstore_file in dsstore_files:
+            try:
+                dsstore_file.unlink()
+                cleanup_count += 1
+                print(f"  Removed: {dsstore_file}")
+            except Exception as e:
+                print(f"  Warning: Could not remove {dsstore_file}: {e}")
+        
+        # Find and remove resource fork files (._filename)
+        resource_fork_files = list(self.input_dir.rglob("._*"))
+        for rf_file in resource_fork_files:
+            if rf_file.is_file():
+                try:
+                    rf_file.unlink()
+                    cleanup_count += 1
+                    print(f"  Removed: {rf_file}")
+                except Exception as e:
+                    print(f"  Warning: Could not remove {rf_file}: {e}")
+        
+        if cleanup_count > 0:
+            print(f"✓ Cleaned up {cleanup_count} macOS artifacts")
+        else:
+            print("✓ No macOS artifacts found to clean up")
+
     def find_lipd_files(self):
         """Find all LiPD files in the input directory and subdirectories."""
         print(f"Searching for LiPD files in: {self.input_dir}")
         
         if not self.input_dir.exists():
             raise ValueError(f"Input directory does not exist: {self.input_dir}")
+        
+        # Clean up macOS artifacts first
+        self.cleanup_macos_artifacts()
         
         # Find all .lpd files recursively
         lipd_files = list(self.input_dir.rglob("*.lpd"))

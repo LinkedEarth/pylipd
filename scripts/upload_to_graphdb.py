@@ -4,11 +4,12 @@ Upload data to GraphDB
 
 This script:
 1. Connects to a GraphDB instance
-2. Deletes all existing graphs (except the default graph)
-3. Imports a .nq.zip file with target graphs set to "from data"
+2. Clears the entire repository
+3. Imports all TTL files from ontology/*.ttl to the default graph
+4. Imports a .nq.zip file with target graphs set to "from data"
 
 Usage:
-    python upload_to_graphdb.py --endpoint ENDPOINT --nq-zip-file FILE [--username USER] [--password PASS]
+    python upload_to_graphdb.py --endpoint ENDPOINT --nq-zip-file FILE [--ontology-dir ONTOLOGY_DIR] [--username USER] [--password PASS]
 """
 
 import os
@@ -22,7 +23,7 @@ import json
 
 
 class GraphDBUploader:
-    def __init__(self, endpoint_url, username=None, password=None):
+    def __init__(self, endpoint_url, ontology_dir="ontology", username=None, password=None):
         """
         Initialize GraphDB uploader.
         
@@ -30,6 +31,8 @@ class GraphDBUploader:
         ----------
         endpoint_url : str
             GraphDB repository endpoint URL (e.g., http://localhost:7200/repositories/myrepo)
+        ontology_dir : str
+            Directory containing TTL ontology files
         username : str, optional
             Username for authentication
         password : str, optional
@@ -38,6 +41,7 @@ class GraphDBUploader:
         self.endpoint_url = endpoint_url.rstrip('/')
         self.base_url = '/'.join(endpoint_url.split('/')[:-2])  # Remove /repositories/reponame
         self.repo_name = endpoint_url.split('/')[-1]
+        self.ontology_dir = Path(ontology_dir)
         self.username = username
         self.password = password
         
@@ -48,15 +52,17 @@ class GraphDBUploader:
         
         # Upload statistics
         self.upload_stats = {
-            'graphs_deleted': 0,
-            'import_successful': False,
-            'import_time_seconds': 0,
+            'repository_cleared': False,
+            'ontology_files_imported': 0,
+            'data_import_successful': False,
+            'total_time_seconds': 0,
             'errors': []
         }
         
         print(f"GraphDB Uploader initialized:")
         print(f"  Base URL: {self.base_url}")
         print(f"  Repository: {self.repo_name}")
+        print(f"  Ontology directory: {self.ontology_dir}")
         print(f"  Authentication: {'Yes' if self.auth else 'No'}")
 
     def test_connection(self):
@@ -64,7 +70,7 @@ class GraphDBUploader:
         print("Testing connection to GraphDB...")
         
         try:
-            # Test basic connectivity
+            # Test basic connectivity with REST API
             test_url = f"{self.base_url}/rest/repositories"
             response = requests.get(test_url, auth=self.auth, timeout=10)
             response.raise_for_status()
@@ -76,6 +82,22 @@ class GraphDBUploader:
             if repo_exists:
                 print(f"✓ Connected to GraphDB successfully")
                 print(f"✓ Repository '{self.repo_name}' found")
+                
+                # Test SPARQL endpoint specifically
+                try:
+                    test_query = "SELECT (COUNT(*) as ?count) WHERE { ?s ?p ?o }"
+                    sparql_response = requests.post(
+                        f"{self.endpoint_url}",
+                        data={'query': test_query},
+                        headers={'Accept': 'application/sparql-results+json'},
+                        auth=self.auth,
+                        timeout=10
+                    )
+                    sparql_response.raise_for_status()
+                    print(f"✓ SPARQL endpoint working")
+                except Exception as e:
+                    print(f"⚠ SPARQL endpoint test failed: {e}")
+                
                 return True
             else:
                 available_repos = [repo['id'] for repo in repositories]
@@ -84,104 +106,97 @@ class GraphDBUploader:
         except requests.exceptions.RequestException as e:
             raise Exception(f"Failed to connect to GraphDB: {e}")
 
-    def get_existing_graphs(self):
-        """Get list of existing named graphs."""
-        print("Retrieving existing graphs...")
+    def clear_repository(self):
+        """Clear the entire repository using SPARQL."""
+        print("Clearing repository...")
         
         try:
-            # SPARQL query to get all named graphs
-            query = """
-            SELECT DISTINCT ?graph WHERE {
-                GRAPH ?graph { ?s ?p ?o }
-            }
-            ORDER BY ?graph
-            """
+            # Use SPARQL UPDATE to clear all data
+            clear_query = "CLEAR ALL"
             
-            query_url = f"{self.endpoint_url}"
             response = requests.post(
-                query_url,
-                data={'query': query},
-                headers={'Accept': 'application/sparql-results+json'},
-                auth=self.auth,
-                timeout=30
-            )
-            response.raise_for_status()
-            
-            results = response.json()
-            graphs = [binding['graph']['value'] for binding in results['results']['bindings']]
-            
-            # Filter out the default graph (usually represented as empty string or special URI)
-            named_graphs = [g for g in graphs if g and not g.endswith('#default')]
-            
-            print(f"Found {len(named_graphs)} named graphs:")
-            for graph in named_graphs[:10]:  # Show first 10
-                print(f"  - {graph}")
-            if len(named_graphs) > 10:
-                print(f"  ... and {len(named_graphs) - 10} more")
-            
-            return named_graphs
-            
-        except requests.exceptions.RequestException as e:
-            raise Exception(f"Failed to retrieve graphs: {e}")
-
-    def delete_graph(self, graph_uri):
-        """Delete a specific named graph."""
-        try:
-            # SPARQL UPDATE to delete the graph
-            update_query = f"DROP GRAPH <{graph_uri}>"
-            
-            update_url = f"{self.endpoint_url}/statements"
-            response = requests.post(
-                update_url,
-                data={'update': update_query},
+                f"{self.endpoint_url}/statements",
+                data={'update': clear_query},
                 headers={'Content-Type': 'application/x-www-form-urlencoded'},
                 auth=self.auth,
-                timeout=60
+                timeout=300  # 5 minute timeout
             )
             response.raise_for_status()
             
+            print("✓ Repository cleared successfully")
+            self.upload_stats['repository_cleared'] = True
             return True
             
         except requests.exceptions.RequestException as e:
-            error_msg = f"Failed to delete graph {graph_uri}: {e}"
+            error_msg = f"Failed to clear repository: {e}"
+            if hasattr(e, 'response') and e.response is not None:
+                error_msg += f" - Response: {e.response.text}"
+            print(f"✗ {error_msg}")
             self.upload_stats['errors'].append(error_msg)
-            print(f"  ✗ {error_msg}")
             return False
 
-    def delete_all_graphs(self, exclude_default=True):
-        """Delete all named graphs except the default graph."""
-        print("Deleting existing graphs...")
+    def import_ontology_files(self):
+        """Import all TTL files from the ontology directory to the default graph."""
+        print("Importing ontology files...")
         
-        graphs = self.get_existing_graphs()
+        if not self.ontology_dir.exists():
+            print(f"⚠ Ontology directory not found: {self.ontology_dir}")
+            return True  # Not an error, just skip
         
-        if not graphs:
-            print("No named graphs to delete")
-            return True
+        # Find all TTL files
+        ttl_files = list(self.ontology_dir.glob("*.ttl"))
         
-        print(f"Deleting {len(graphs)} graphs...")
+        if not ttl_files:
+            print(f"⚠ No TTL files found in: {self.ontology_dir}")
+            return True  # Not an error, just skip
         
-        deleted_count = 0
-        for graph_uri in graphs:
-            print(f"  Deleting: {graph_uri}")
-            if self.delete_graph(graph_uri):
-                deleted_count += 1
-                print(f"  ✓ Deleted: {graph_uri}")
-            
-            # Small delay to avoid overwhelming the server
-            time.sleep(0.1)
+        print(f"Found {len(ttl_files)} TTL files to import:")
+        for ttl_file in ttl_files:
+            print(f"  - {ttl_file.name}")
         
-        self.upload_stats['graphs_deleted'] = deleted_count
+        imported_count = 0
         
-        if deleted_count == len(graphs):
-            print(f"✓ Successfully deleted {deleted_count} graphs")
+        for ttl_file in ttl_files:
+            try:
+                print(f"  Importing {ttl_file.name}...")
+                
+                # Read TTL file content
+                with open(ttl_file, 'r', encoding='utf-8') as f:
+                    ttl_content = f.read()
+                
+                # Import using SPARQL UPDATE with INSERT DATA
+                response = requests.post(
+                    f"{self.endpoint_url}/statements",
+                    data=ttl_content,
+                    headers={'Content-Type': 'text/turtle'},
+                    auth=self.auth,
+                    timeout=300
+                )
+                response.raise_for_status()
+                
+                print(f"  ✓ Imported {ttl_file.name}")
+                imported_count += 1
+                
+            except Exception as e:
+                error_msg = f"Failed to import {ttl_file.name}: {e}"
+                if hasattr(e, 'response') and e.response is not None:
+                    error_msg += f" - Response: {e.response.text}"
+                print(f"  ✗ {error_msg}")
+                self.upload_stats['errors'].append(error_msg)
+        
+        self.upload_stats['ontology_files_imported'] = imported_count
+        
+        if imported_count > 0:
+            print(f"✓ Successfully imported {imported_count} ontology files")
             return True
         else:
-            print(f"⚠ Deleted {deleted_count} out of {len(graphs)} graphs")
-            return False
+            print("⚠ No ontology files were imported")
+            return len(ttl_files) == 0  # Success if there were no files to import
 
     def import_nq_zip(self, nq_zip_file):
         """
-        Import a .nq.zip file into GraphDB with target graphs set to "from data".
+        Import a .nq.zip file into GraphDB directly (without extracting).
+        GraphDB will handle the extraction and import automatically.
         
         Parameters
         ----------
@@ -197,61 +212,33 @@ class GraphDBUploader:
         print(f"File size: {nq_zip_path.stat().st_size:,} bytes ({nq_zip_path.stat().st_size / (1024*1024):.1f} MB)")
         
         try:
-            # GraphDB import endpoint
-            import_url = f"{self.base_url}/rest/data/import/upload/{self.repo_name}/text"
+            # Import the .nq.zip file directly (GraphDB handles the extraction)
+            start_time = time.time()
             
-            # Prepare the file for upload
             with open(nq_zip_path, 'rb') as f:
-                files = {
-                    'file': (nq_zip_path.name, f, 'application/zip')
-                }
-                
-                # Import settings - target graphs from data
-                data = {
-                    'type': 'text',
-                    'format': 'application/x-gzip',  # GraphDB expects this for .nq.zip
-                    'context': '',  # Empty means use graphs from data
-                    'forceSerial': 'false',
-                    'stopOnError': 'true',
-                    'parserSettings': json.dumps({
-                        'preserveBNodeIds': False,
-                        'failOnUnknownDataTypes': False,
-                        'verifyDataTypeValues': False,
-                        'normalizeDataTypeValues': False,
-                        'failOnUnknownLanguageTags': False,
-                        'verifyLanguageTags': True,
-                        'normalizeLanguageTags': False
-                    })
-                }
-                
-                print("Uploading file to GraphDB...")
-                start_time = time.time()
-                
                 response = requests.post(
-                    import_url,
-                    files=files,
-                    data=data,
+                    f"{self.endpoint_url}/statements",
+                    data=f.read(),
+                    headers={'Content-Type': 'application/zip'},
                     auth=self.auth,
                     timeout=1800  # 30 minute timeout for large files
                 )
                 response.raise_for_status()
+            
+            end_time = time.time()
+            import_time = end_time - start_time
+            
+            print(f"✓ Data import completed in {import_time:.1f} seconds")
+            self.upload_stats['data_import_successful'] = True
+            return True
                 
-                end_time = time.time()
-                self.upload_stats['import_time_seconds'] = end_time - start_time
-                
-                # Check response
-                if response.status_code == 202:
-                    print("✓ File uploaded successfully")
-                    print(f"✓ Import completed in {self.upload_stats['import_time_seconds']:.1f} seconds")
-                    self.upload_stats['import_successful'] = True
-                    return True
-                else:
-                    raise Exception(f"Import failed with status code: {response.status_code}")
-                    
         except requests.exceptions.RequestException as e:
-            error_msg = f"Import failed: {e}"
+            error_msg = f"Data import failed: {e}"
+            if hasattr(e, 'response') and e.response is not None:
+                error_msg += f" - Response: {e.response.text}"
+            print(f"✗ {error_msg}")
             self.upload_stats['errors'].append(error_msg)
-            raise Exception(error_msg)
+            return False
 
     def verify_import(self):
         """Verify that data was imported successfully."""
@@ -267,7 +254,7 @@ class GraphDBUploader:
                 data={'query': count_query},
                 headers={'Accept': 'application/sparql-results+json'},
                 auth=self.auth,
-                timeout=30
+                timeout=60  # Increased timeout for verification
             )
             response.raise_for_status()
             
@@ -275,11 +262,6 @@ class GraphDBUploader:
             triple_count = int(results['results']['bindings'][0]['count']['value'])
             
             print(f"✓ Import verified: {triple_count:,} triples in repository")
-            
-            # Get graph count
-            graphs = self.get_existing_graphs()
-            print(f"✓ {len(graphs)} named graphs created")
-            
             return True
             
         except Exception as e:
@@ -288,7 +270,7 @@ class GraphDBUploader:
 
     def upload_to_graphdb(self, nq_zip_file):
         """
-        Complete upload process: test connection, delete graphs, import data.
+        Complete upload process: clear repository, import ontology, import data.
         
         Parameters
         ----------
@@ -298,23 +280,33 @@ class GraphDBUploader:
         print("Starting GraphDB Upload Process")
         print("=" * 35)
         
+        start_time = time.time()
+        
         try:
             # Step 1: Test connection
             self.test_connection()
             
-            # Step 2: Delete existing graphs
-            self.delete_all_graphs()
+            # Step 2: Clear repository
+            self.clear_repository()
             
-            # Step 3: Import new data
+            # Step 3: Import ontology files
+            self.import_ontology_files()
+            
+            # Step 4: Import data
             self.import_nq_zip(nq_zip_file)
             
-            # Step 4: Verify import
+            # Step 5: Verify import
             self.verify_import()
+            
+            end_time = time.time()
+            self.upload_stats['total_time_seconds'] = end_time - start_time
             
             print("\n" + "=" * 35)
             print("✅ GraphDB Upload Complete!")
-            print(f"Graphs deleted: {self.upload_stats['graphs_deleted']}")
-            print(f"Import time: {self.upload_stats['import_time_seconds']:.1f} seconds")
+            print(f"Repository cleared: {self.upload_stats['repository_cleared']}")
+            print(f"Ontology files imported: {self.upload_stats['ontology_files_imported']}")
+            print(f"Data import successful: {self.upload_stats['data_import_successful']}")
+            print(f"Total time: {self.upload_stats['total_time_seconds']:.1f} seconds")
             print(f"Repository: {self.endpoint_url}")
             
         except Exception as e:
@@ -324,38 +316,32 @@ class GraphDBUploader:
 
     def generate_report(self):
         """Generate an upload report."""
-        report_data = {
-            'endpoint': self.endpoint_url,
-            'repository': self.repo_name,
-            'graphs_deleted': self.upload_stats['graphs_deleted'],
-            'import_successful': self.upload_stats['import_successful'],
-            'import_time_seconds': self.upload_stats['import_time_seconds'],
-            'errors': self.upload_stats['errors']
-        }
-        
         print(f"Upload Report:")
-        print(f"  Endpoint: {report_data['endpoint']}")
-        print(f"  Graphs deleted: {report_data['graphs_deleted']}")
-        print(f"  Import successful: {report_data['import_successful']}")
-        print(f"  Import time: {report_data['import_time_seconds']:.1f} seconds")
-        if report_data['errors']:
-            print(f"  Errors: {len(report_data['errors'])}")
+        print(f"  Endpoint: {self.endpoint_url}")
+        print(f"  Repository cleared: {self.upload_stats['repository_cleared']}")
+        print(f"  Ontology files imported: {self.upload_stats['ontology_files_imported']}")
+        print(f"  Data import successful: {self.upload_stats['data_import_successful']}")
+        print(f"  Total time: {self.upload_stats['total_time_seconds']:.1f} seconds")
+        if self.upload_stats['errors']:
+            print(f"  Errors: {len(self.upload_stats['errors'])}")
+            for error in self.upload_stats['errors']:
+                print(f"    - {error}")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Upload .nq.zip file to GraphDB",
+        description="Upload data to GraphDB (clear repository, import ontology, import data)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   # Upload to local GraphDB instance
   python upload_to_graphdb.py --endpoint http://localhost:7200/repositories/myrepo --nq-zip-file graphdb_output/all-lipd.nq.zip
 
+  # Upload with custom ontology directory
+  python upload_to_graphdb.py --endpoint http://localhost:7200/repositories/myrepo --nq-zip-file data.nq.zip --ontology-dir my_ontology
+
   # Upload with authentication
   python upload_to_graphdb.py --endpoint https://graphdb.example.com/repositories/lipd --nq-zip-file data.nq.zip --username admin --password secret
-
-  # Upload to remote GraphDB instance
-  python upload_to_graphdb.py --endpoint https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic --nq-zip-file all-lipd.nq.zip
         """
     )
     
@@ -374,6 +360,13 @@ Examples:
     )
     
     parser.add_argument(
+        '--ontology-dir',
+        type=str,
+        default='ontology',
+        help='Directory containing TTL ontology files (default: ontology)'
+    )
+    
+    parser.add_argument(
         '--username',
         type=str,
         help='Username for GraphDB authentication'
@@ -385,30 +378,19 @@ Examples:
         help='Password for GraphDB authentication'
     )
     
-    parser.add_argument(
-        '--dry-run',
-        action='store_true',
-        help='Test connection and show what would be deleted without actually doing it'
-    )
-    
     args = parser.parse_args()
     
     # Create and run the uploader
     uploader = GraphDBUploader(
         endpoint_url=args.endpoint,
+        ontology_dir=args.ontology_dir,
         username=args.username,
         password=args.password
     )
     
     try:
-        if args.dry_run:
-            print("DRY RUN MODE - No changes will be made")
-            uploader.test_connection()
-            graphs = uploader.get_existing_graphs()
-            print(f"Would delete {len(graphs)} graphs and import {args.nq_zip_file}")
-        else:
-            uploader.upload_to_graphdb(args.nq_zip_file)
-            uploader.generate_report()
+        uploader.upload_to_graphdb(args.nq_zip_file)
+        uploader.generate_report()
             
     except KeyboardInterrupt:
         print("\nUpload process interrupted by user")
