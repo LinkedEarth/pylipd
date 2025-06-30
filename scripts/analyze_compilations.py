@@ -4,25 +4,20 @@ Compilation Analysis Script for LiPDVerse
 
 This script:
 1. Queries GraphDB repository to get compilation names and dataset counts
-2. Downloads LiPD files for each compilation from LiPDverse
+2. Analyzes LiPD files from a local input directory  
 3. Loads LiPD files using PyLiPD and analyzes compilation assignments
 4. Generates reports on compilation consistency and coverage
 
 Usage:
-    python analyze_compilations.py [--output-dir OUTPUT_DIR] [--sparql-endpoint ENDPOINT]
+    python analyze_compilations.py --input-dir INPUT_DIR [--output-dir OUTPUT_DIR] [--sparql-endpoint ENDPOINT]
 """
 
 import os
 import sys
 import argparse
 import requests
-import zipfile
-import tempfile
 import json
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
-import re
-from bs4 import BeautifulSoup
 import pandas as pd
 from collections import defaultdict, Counter
 import csv
@@ -31,14 +26,21 @@ from pylipd.lipd import LiPD
 
 
 class CompilationAnalyzer:
-    def __init__(self, sparql_endpoint, output_dir):
+    def __init__(self, sparql_endpoint, input_dir, output_dir):
         self.sparql_endpoint = sparql_endpoint
+        self.input_dir = Path(input_dir)
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
+        # Validate input directory
+        if not self.input_dir.exists():
+            raise ValueError(f"Input directory does not exist: {input_dir}")
+        if not self.input_dir.is_dir():
+            raise ValueError(f"Input path is not a directory: {input_dir}")
+        
         # Results storage
         self.graphdb_compilations = {}
-        self.downloaded_compilations = {}
+        self.local_compilations = {}
         self.lipd_analysis = {}
         
         # Mapping of dataset -> collections info
@@ -155,155 +157,46 @@ class CompilationAnalyzer:
             print(f"Error fetching dataset-compilation mapping: {e}")
             # Leave mapping empty if fails
 
-    def find_download_link(self, compilation_name):
+    def scan_input_directory(self):
         """
-        Find the download link for a specific compilation from LiPDverse.
-        Uses a multi-step search process:
-        1. First check the main page: https://lipdverse.org/[compilation]/current_version/
-        2. If not found, check the sidebar: https://lipdverse.org/[compilation]/current_version/projectSidebar.html
+        Scan the input directory for LiPD files and organize them by compilation.
         
-        Parameters
-        ----------
-        compilation_name : str
-            Name of the compilation
-            
         Returns
         -------
-        str or None
-            Download URL if found, None otherwise
+        dict
+            Dictionary mapping compilation names to directories containing LiPD files
         """
-        base_url = f"https://lipdverse.org/{compilation_name}/current_version/"
-        main_url = base_url
-        sidebar_url = f"{base_url}projectSidebar.html"
+        print(f"Scanning input directory: {self.input_dir}")
         
-        def search_for_download_links(url, soup):
-            """Helper function to search for download links in a BeautifulSoup object"""
-            # Look for "Download all LiPD files" link
-            for link in soup.find_all('a', href=True):
-                link_text = link.get_text(strip=True).lower()
-                if 'download all lipd files' in link_text or 'download all' in link_text:
-                    href = link['href']
-                    if href.startswith('http'):
-                        return href
-                    else:
-                        return urljoin(base_url, href)
-            
-            # Fallback: look for .zip files
-            for link in soup.find_all('a', href=True):
-                href = link['href']
-                if href.endswith('.zip') and ('lipd' in href.lower() or 'all' in href.lower()):
-                    if href.startswith('http'):
-                        return href
-                    else:
-                        return urljoin(base_url, href)
-            
-            return None
+        compilations = {}
         
-        # Step 1: Try main page
-        print(f"Looking for download link on main page: {main_url}")
-        try:
-            response = requests.get(main_url, timeout=30)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            download_url = search_for_download_links(main_url, soup)
-            
-            if download_url:
-                print(f"  Found download link on main page: {download_url}")
-                return download_url
-            else:
-                print(f"  No download link found on main page")
-                
-        except Exception as e:
-            print(f"  Error accessing main page for {compilation_name}: {e}")
+        # Look for LiPD files in the input directory structure
+        # Support both flat structure and compilation subdirectories
         
-        # Step 2: Try sidebar page
-        print(f"Looking for download link on sidebar: {sidebar_url}")
-        try:
-            response = requests.get(sidebar_url, timeout=30)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            download_url = search_for_download_links(sidebar_url, soup)
-            
-            if download_url:
-                print(f"  Found download link on sidebar: {download_url}")
-                return download_url
-            else:
-                print(f"  No download link found on sidebar")
-                
-        except Exception as e:
-            print(f"  Error accessing sidebar for {compilation_name}: {e}")
-        
-        print(f"  No download link found for {compilation_name}")
-        return None
-
-    def download_compilation(self, compilation_name, download_url):
-        """
-        Download and extract LiPD files for a compilation.
-        
-        Parameters
-        ----------
-        compilation_name : str
-            Name of the compilation
-        download_url : str
-            URL to download the ZIP file from
-            
-        Returns
-        -------
-        str or None
-            Path to extracted LiPD files directory
-        """
-        compilation_dir = self.output_dir / "compilations" / compilation_name
-        compilation_dir.mkdir(parents=True, exist_ok=True)
-        
-        zip_path = compilation_dir / f"{compilation_name}.zip"
-        extract_dir = compilation_dir / "lipd_files"
-        
-        if zip_path.exists():
-            print(f"Zip file already exists for {compilation_name}: {zip_path}. Skipping download.")
+        # Check if input directory contains LiPD files directly
+        lipd_files = list(self.input_dir.glob("*.lpd"))
+        if lipd_files:
+            # Flat structure - treat as single compilation
+            comp_name = self.input_dir.name
+            compilations[comp_name] = str(self.input_dir)
+            print(f"  Found {len(lipd_files)} LiPD files in flat structure: {comp_name}")
         else:
-            print(f"Downloading {compilation_name} from: {download_url}")
-            try:
-                # Download ZIP file
-                with requests.get(download_url, stream=True) as r:
-                    r.raise_for_status()
-                    total_size = int(r.headers.get('content-length', 0))
-                    
-                    with open(zip_path, 'wb') as f:
-                        downloaded = 0
-                        for chunk in r.iter_content(chunk_size=8192):
-                            if chunk:
-                                f.write(chunk)
-                                downloaded += len(chunk)
-                                if total_size > 0:
-                                    percent = (downloaded / total_size) * 100
-                                    print(f"\r  Progress: {percent:.1f}%", end='')
-                print(f"\n  Download completed: {zip_path}")
-            except Exception as e:
-                print(f"  Error downloading {compilation_name}: {e}")
-                return None
+            # Look for subdirectories containing LiPD files
+            for subdir in self.input_dir.iterdir():
+                if subdir.is_dir():
+                    lipd_files = list(subdir.glob("*.lpd"))
+                    if lipd_files:
+                        comp_name = subdir.name
+                        compilations[comp_name] = str(subdir)
+                        print(f"  Found {len(lipd_files)} LiPD files in compilation: {comp_name}")
         
-        # Extract ZIP file (whether just downloaded or existing)
-        try:
-            extract_dir.mkdir(parents=True, exist_ok=True)
-            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                zip_ref.extractall(extract_dir)
-            
-            # Find the actual LiPD files directory
-            lipd_files = list(extract_dir.rglob("*.lpd"))
-            if lipd_files:
-                # Find the common directory containing most LiPD files
-                directories = [f.parent for f in lipd_files]
-                most_common_dir = max(set(directories), key=directories.count)
-                print(f"  Extracted {len(lipd_files)} LiPD files to: {most_common_dir}")
-                return str(most_common_dir)
-            else:
-                print(f"  Warning: No LiPD files found in {extract_dir}")
-                return None
-        except Exception as e:
-            print(f"  Error extracting {compilation_name}: {e}")
-            return None
+        if not compilations:
+            print("  No LiPD files found in input directory")
+            return {}
+        
+        self.local_compilations = compilations
+        print(f"Found {len(compilations)} compilation(s) with LiPD files")
+        return compilations
 
     def analyze_lipd_compilation(self, compilation_name, lipd_dir):
         """
@@ -442,18 +335,18 @@ class CompilationAnalyzer:
                 f.write(f"  {comp_name}: {dataset_count} datasets\n")
             f.write("\n")
             
-            # Download Results
-            f.write("2. Download Results\n")
-            f.write("-" * 20 + "\n")
-            f.write(f"Successfully downloaded: {len(self.downloaded_compilations)} compilations\n\n")
+            # Local Results
+            f.write("2. Local Compilation Analysis\n")
+            f.write("-" * 35 + "\n")
+            f.write(f"Total compilations found: {len(self.local_compilations)}\n\n")
             
-            for comp_name in sorted(self.downloaded_compilations.keys()):
+            for comp_name in sorted(self.local_compilations.keys()):
                 f.write(f"  ✓ {comp_name}\n")
             
-            failed_downloads = set(self.graphdb_compilations.keys()) - set(self.downloaded_compilations.keys())
-            if failed_downloads:
-                f.write(f"\nFailed downloads: {len(failed_downloads)} compilations\n")
-                for comp_name in sorted(failed_downloads):
+            missing_compilations = set(self.graphdb_compilations.keys()) - set(self.local_compilations.keys())
+            if missing_compilations:
+                f.write(f"\nCompilations in GraphDB but not found locally: {len(missing_compilations)}\n")
+                for comp_name in sorted(missing_compilations):
                     f.write(f"  ✗ {comp_name}\n")
             f.write("\n")
             
@@ -522,7 +415,7 @@ class CompilationAnalyzer:
             row = {
                 'compilation_name': comp_name,
                 'graphdb_datasets': self.graphdb_compilations[comp_name],
-                'download_success': comp_name in self.downloaded_compilations,
+                'local_found': comp_name in self.local_compilations,
                 'lipd_total_datasets': 0,
                 'lipd_with_compilation': 0,
                 'lipd_without_compilation': 0,
@@ -583,49 +476,42 @@ class CompilationAnalyzer:
 
     def run_analysis(self, max_compilations=None):
         """
-        Run the complete compilation analysis workflow.
+        Run the complete compilation analysis workflow using local LiPD files.
         
         Parameters
         ----------
         max_compilations : int, optional
             Limit analysis to first N compilations (for testing)
         """
-        print("Starting LiPDVerse Compilation Analysis...")
+        print("Starting LiPDVerse Compilation Analysis (Local Files)...")
         print("=" * 50)
         
         try:
-            # Step 1: Query GraphDB for compilations
-            compilations = self.execute_sparql_query()
+            # Step 1: Query GraphDB for compilations (for comparison)
+            print("Querying GraphDB for compilation information...")
+            self.execute_sparql_query()
             
-            if not compilations:
-                print("No compilations found in GraphDB. Exiting.")
+            # Step 2: Scan input directory for LiPD files
+            local_compilations = self.scan_input_directory()
+            
+            if not local_compilations:
+                print("No LiPD files found in input directory. Exiting.")
                 return
             
             # Limit compilations if requested
             if max_compilations:
-                original_count = len(compilations)
-                compilation_items = list(compilations.items())[:max_compilations]
-                compilations = dict(compilation_items)
-                print(f"Limited to first {len(compilations)} of {original_count} compilations")
+                original_count = len(local_compilations)
+                compilation_items = list(local_compilations.items())[:max_compilations]
+                local_compilations = dict(compilation_items)
+                print(f"Limited to first {len(local_compilations)} of {original_count} compilations")
             
-            # Step 2: Download LiPD files for each compilation
-            print(f"\nDownloading LiPD files for {len(compilations)} compilations...")
-            for compilation_name in compilations.keys():
-                download_url = self.find_download_link(compilation_name)
-                
-                if download_url:
-                    lipd_dir = self.download_compilation(compilation_name, download_url)
-                    if lipd_dir:
-                        self.downloaded_compilations[compilation_name] = lipd_dir
-                else:
-                    print(f"Could not find download link for: {compilation_name}")
-            
-            # Step 3: Analyze LiPD files for each downloaded compilation
-            print(f"\nAnalyzing LiPD files for {len(self.downloaded_compilations)} compilations...")
-            for compilation_name, lipd_dir in self.downloaded_compilations.items():
+            # Step 3: Analyze LiPD files for each compilation
+            print(f"\nAnalyzing LiPD files for {len(local_compilations)} compilation(s)...")
+            for compilation_name, lipd_dir in local_compilations.items():
                 self.analyze_lipd_compilation(compilation_name, lipd_dir)
             
             # Step 4: Fetch dataset-compilation mapping from GraphDB
+            print("\nFetching dataset-compilation mapping from GraphDB...")
             self.fetch_graphdb_dataset_compilations()
             
             # Step 5: Generate reports
@@ -643,9 +529,15 @@ class CompilationAnalyzer:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Analyze LiPDVerse compilations",
+        description="Analyze LiPD files for compilation assignments",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
+    )
+    
+    parser.add_argument(
+        '--input-dir',
+        required=True,
+        help='Directory containing LiPD files to analyze (can contain subdirectories for different compilations)'
     )
     
     parser.add_argument(
@@ -657,7 +549,7 @@ def main():
     parser.add_argument(
         '--sparql-endpoint',
         default='https://linkedearth.graphdb.mint.isi.edu/repositories/LiPDVerse-dynamic',
-        help='SPARQL endpoint URL (default: LinkedEarth GraphDB)'
+        help='SPARQL endpoint URL for comparison (default: LinkedEarth GraphDB)'
     )
     
     parser.add_argument(
@@ -669,7 +561,7 @@ def main():
     args = parser.parse_args()
     
     # Create analyzer and run
-    analyzer = CompilationAnalyzer(args.sparql_endpoint, args.output_dir)
+    analyzer = CompilationAnalyzer(args.sparql_endpoint, args.input_dir, args.output_dir)
     
     analyzer.run_analysis(max_compilations=args.max_compilations)
 
