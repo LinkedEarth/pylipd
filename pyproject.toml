@@ -3,7 +3,7 @@ name = "pylipd"
 version = "1.4.5"
 description = "Python utilities for handling LiPD data"
 readme = "README.md"
-license = "Apache-2.0"
+license = { text = "Apache-2.0" }
 authors = [
   { name = "Varun Ratnakar", email = "varunratnakar@gmail.com" },
   { name = "Deborah Khider" }
