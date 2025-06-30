@@ -37,3 +37,6 @@ Issues = "https://github.com/linkedearth/pylipd/issues"
 [build-system]
 requires = ["setuptools>=69.0.2", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+license-files = []
