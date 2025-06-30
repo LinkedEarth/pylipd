@@ -24,8 +24,8 @@ jobs:
         python -m pip install --upgrade pip
         # Install latest packaging tooling so that PEP639 (license-expression / license-file)
         # metadata fields are recognised by wheel and Twine.
-        pip install --upgrade build wheel
-        pip install --upgrade "twine>=5.0.0" "pkginfo>=1.9.7"
+        pip install --no-cache-dir --upgrade build wheel
+        pip install --no-cache-dir --upgrade "twine>=5.0.0" "pkginfo>=1.9.7"
     - name: Build and publish
       env:
         TWINE_USERNAME: __token__
