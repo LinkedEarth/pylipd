@@ -35,84 +35,158 @@ class LiPDCompilationDownloader:
         }
 
     def get_available_compilations(self):
-        """Get list of known compilations"""
-        return {
-            "CoralHydro2k",
-            "HoloCoral", 
-            "HoloceneAbruptChange",
-            "HoloceneHydroclimate",
-            "Hydro21k",
-            "LakeStatus21k",
-            "Pages2kTemperature",
-            "RapidArcticWarming",
-            "SISAL-LiPD",
-            "Temp12k",
-            "Temp24k",
-            "iso2k",
-            "wNAm"
-        }
+        """Get list of available compilations by parsing the LiPDverse project page"""
+        project_page_url = "https://lipdverse.org/project/"
+        
+        print("Fetching available compilations from LiPDverse...")
+        
+        try:
+            response = requests.get(project_page_url, timeout=30)
+            response.raise_for_status()
+            
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Find compilation links following the pattern:
+            # <h2><a href="https://lipdverse.org/project/rapidarcticwarming/">RapidArcticWarming</a></h2>
+            compilations = {}
+            
+            for h2_tag in soup.find_all('h2'):
+                link_tag = h2_tag.find('a', href=True)
+                if link_tag and link_tag['href'].startswith('https://lipdverse.org/project/'):
+                    compilation_name = link_tag.get_text(strip=True)
+                    project_url = link_tag['href']
+                    
+                    # Skip generic links that aren't compilations
+                    if compilation_name and compilation_name not in ['Projects', 'Home', 'Articles']:
+                        compilations[compilation_name] = project_url
+            
+            print(f"Found {len(compilations)} available compilations:")
+            for name in sorted(compilations.keys()):
+                print(f"  - {name}")
+            
+            return compilations
+            
+        except Exception as e:
+            print(f"Error fetching compilations from project page: {e}")
+            print("Falling back to known compilations...")
+            
+            # Fallback to known compilations if the web request fails
+            known_compilations = {
+                "CoralHydro2k": "https://lipdverse.org/project/coralhydro2k/",
+                "HoloCoral": "https://lipdverse.org/project/holocoral/", 
+                "HoloceneAbruptChange": "https://lipdverse.org/project/holoceneabruptchange/",
+                "HoloceneHydroclimate": "https://lipdverse.org/project/holocenehydroclimate/",
+                "Hydro21k": "https://lipdverse.org/project/hydro21k/",
+                "LakeStatus21k": "https://lipdverse.org/project/lakestatus21k/",
+                "Pages2kTemperature": "https://lipdverse.org/project/pages2ktemperature/",
+                "RapidArcticWarming": "https://lipdverse.org/project/rapidarcticwarming/",
+                "SISAL-LiPD": "https://lipdverse.org/project/sisal/",
+                "Temp12k": "https://lipdverse.org/project/temperature12k/",
+                "Temp24k": "https://lipdverse.org/project/temp24k/",
+                "iso2k": "https://lipdverse.org/project/iso2k/",
+                "wNAm": "https://lipdverse.org/project/wnam/"
+            }
+            return known_compilations
 
-    def find_download_link(self, compilation_name):
+    def find_download_link(self, compilation_name, project_url):
         """
-        Find the download link for a specific compilation from LiPDverse.
+        Find the download link for a specific compilation using its project page URL.
         """
-        base_url = f"https://lipdverse.org/{compilation_name}/current_version/"
-        main_url = base_url
-        sidebar_url = f"{base_url}projectSidebar.html"
-        
-        def search_for_download_links(url, soup):
-            """Helper function to search for download links in a BeautifulSoup object"""
-            # Look for "Download all LiPD files" link
-            for link in soup.find_all('a', href=True):
-                link_text = link.get_text(strip=True).lower()
-                if 'download all lipd files' in link_text or 'download all' in link_text:
-                    href = link['href']
-                    if href.startswith('http'):
-                        return href
-                    else:
-                        return urljoin(base_url, href)
-            
-            # Fallback: look for .zip files
-            for link in soup.find_all('a', href=True):
-                href = link['href']
-                if href.endswith('.zip') and ('lipd' in href.lower() or 'all' in href.lower()):
-                    if href.startswith('http'):
-                        return href
-                    else:
-                        return urljoin(base_url, href)
-            
-            return None
-        
-        # Try main page first
         print(f"Looking for download link: {compilation_name}")
-        try:
-            response = requests.get(main_url, timeout=30)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            download_url = search_for_download_links(main_url, soup)
-            
-            if download_url:
-                print(f"  Found download link: {download_url}")
-                return download_url
-                
-        except Exception as e:
-            print(f"  Error accessing main page for {compilation_name}: {e}")
+        print(f"  Project page: {project_url}")
         
-        # Try sidebar page
         try:
-            response = requests.get(sidebar_url, timeout=30)
+            # First, get the project page to find the data link
+            response = requests.get(project_url, timeout=30)
             response.raise_for_status()
             
             soup = BeautifulSoup(response.content, 'html.parser')
-            download_url = search_for_download_links(sidebar_url, soup)
             
-            if download_url:
-                print(f"  Found download link on sidebar: {download_url}")
-                return download_url
+            # Look for the data link following the pattern:
+            # <h2><a href="http://lipdverse.org/RapidArcticWarming/current_version/">Data</a></h2>
+            data_url = None
+            
+            for h2_tag in soup.find_all('h2'):
+                link_tag = h2_tag.find('a', href=True)
+                if link_tag and link_tag.get_text(strip=True).lower() == 'data':
+                    data_url = link_tag['href']
+                    break
+            
+            # Alternative search - look for links containing "current_version"
+            if not data_url:
+                for link in soup.find_all('a', href=True):
+                    href = link['href']
+                    link_text = link.get_text(strip=True).lower()
+                    if 'current_version' in href and ('data' in link_text or 'access' in link_text):
+                        data_url = href
+                        break
+            
+            if not data_url:
+                print(f"  No data link found on project page for {compilation_name}")
+                return None
+            
+            print(f"  Found data page: {data_url}")
+            
+            # Now search for download links on the data page
+            base_url = data_url
+            main_url = base_url
+            sidebar_url = f"{base_url}projectSidebar.html"
+            
+            def search_for_download_links(url, soup):
+                """Helper function to search for download links in a BeautifulSoup object"""
+                # Look for "Download all LiPD files" link
+                for link in soup.find_all('a', href=True):
+                    link_text = link.get_text(strip=True).lower()
+                    if 'download all lipd files' in link_text or 'download all' in link_text:
+                        href = link['href']
+                        if href.startswith('http'):
+                            return href
+                        else:
+                            return urljoin(base_url, href)
                 
+                # Fallback: look for .zip files
+                for link in soup.find_all('a', href=True):
+                    href = link['href']
+                    if href.endswith('.zip') and ('lipd' in href.lower() or 'all' in href.lower()):
+                        if href.startswith('http'):
+                            return href
+                        else:
+                            return urljoin(base_url, href)
+                
+                return None
+            
+            # Try main data page first
+            try:
+                response = requests.get(main_url, timeout=30)
+                response.raise_for_status()
+                
+                soup = BeautifulSoup(response.content, 'html.parser')
+                download_url = search_for_download_links(main_url, soup)
+                
+                if download_url:
+                    print(f"  Found download link: {download_url}")
+                    return download_url
+                    
+            except Exception as e:
+                print(f"  Error accessing data page for {compilation_name}: {e}")
+            
+            # Try sidebar page
+            try:
+                response = requests.get(sidebar_url, timeout=30)
+                response.raise_for_status()
+                
+                soup = BeautifulSoup(response.content, 'html.parser')
+                download_url = search_for_download_links(sidebar_url, soup)
+                
+                if download_url:
+                    print(f"  Found download link on sidebar: {download_url}")
+                    return download_url
+                    
+            except Exception as e:
+                print(f"  Error accessing sidebar for {compilation_name}: {e}")
+            
         except Exception as e:
-            print(f"  Error accessing sidebar for {compilation_name}: {e}")
+            print(f"  Error accessing project page for {compilation_name}: {e}")
         
         print(f"  No download link found for {compilation_name}")
         return None
@@ -162,7 +236,7 @@ class LiPDCompilationDownloader:
         """
         Download and extract LiPD files for a compilation.
         """
-        compilation_dir = self.output_dir / f"{compilation_name}_lipd_files"
+        compilation_dir = self.output_dir / f"{compilation_name}"
         compilation_dir.mkdir(parents=True, exist_ok=True)
         
         print(f"Downloading {compilation_name} from {download_url}")
@@ -183,7 +257,7 @@ class LiPDCompilationDownloader:
                 parsed_url = urlparse(download_url)
                 filename = os.path.basename(parsed_url.path)
                 if not filename or not filename.endswith('.zip'):
-                    filename = f"{compilation_name}_lipd_files.zip"
+                    filename = f"{compilation_name}.zip"
             
             # Save to temporary file
             with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_file:
@@ -241,26 +315,30 @@ class LiPDCompilationDownloader:
         available_compilations = self.get_available_compilations()
         
         if specific_compilations:
-            # Validate requested compilations
-            invalid_compilations = set(specific_compilations) - available_compilations
+            # Validate requested compilations - filter the dict by requested compilation names
+            invalid_compilations = set(specific_compilations) - set(available_compilations.keys())
             if invalid_compilations:
                 print(f"Warning: Unknown compilations requested: {invalid_compilations}")
             
-            compilations_to_download = set(specific_compilations) & available_compilations
+            # Create a filtered dict of compilations to download
+            compilations_to_download = {
+                name: url for name, url in available_compilations.items() 
+                if name in specific_compilations
+            }
         else:
             compilations_to_download = available_compilations
         
         print(f"Will attempt to download {len(compilations_to_download)} compilations:")
-        for comp in sorted(compilations_to_download):
+        for comp in sorted(compilations_to_download.keys()):
             print(f"  - {comp}")
         print()
         
         self.download_stats['total_compilations_attempted'] = len(compilations_to_download)
         
         # Download each compilation
-        for compilation_name in tqdm(sorted(compilations_to_download), desc="Downloading compilations"):
+        for compilation_name, project_url in tqdm(sorted(compilations_to_download.items()), desc="Downloading compilations"):
             try:
-                download_url = self.find_download_link(compilation_name)
+                download_url = self.find_download_link(compilation_name, project_url)
                 
                 if download_url:
                     result = self.download_compilation(compilation_name, download_url)
