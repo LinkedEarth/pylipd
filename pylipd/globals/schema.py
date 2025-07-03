@@ -120,7 +120,8 @@ SCHEMA = {
             'name': 'hasName'
         },
         'compilationVersion': {
-            'name': 'hasVersion'
+            'name': 'hasVersion',
+            'multiple': True
         }
     },
     'ChangeLog': {

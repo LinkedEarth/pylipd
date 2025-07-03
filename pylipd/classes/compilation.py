@@ -12,7 +12,7 @@ class Compilation:
         """Initialize a new Compilation instance."""
         
         self.name: str = None
-        self.version: str = None
+        self.versions: list[str] = []
         self.misc = {}
         self.ontns = "http://linked.earth/ontology#"
         self.ns = "http://linked.earth/lipd"
@@ -54,8 +54,8 @@ class Compilation:
             elif key == "hasVersion":
                 for val in value:
                     if "@value" in val:
-                        obj = val["@value"]                        
-                    self.version = obj
+                        obj = val["@value"]
+                    self.versions.append(obj)
             else:
                 for val in value:
                     obj = None
@@ -88,6 +88,16 @@ class Compilation:
             }
         ]
 
+        if len(self.versions):
+            data[self.id]["hasVersion"] = []
+        for value_obj in self.versions:
+            obj = {
+                "@value": value_obj,
+                "@type": "literal",
+                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
+            }
+            data[self.id]["hasVersion"].append(obj)
+
         if self.name:
             value_obj = self.name
             obj = {
@@ -96,16 +106,6 @@ class Compilation:
                 "@datatype": "http://www.w3.org/2001/XMLSchema#string"
             }
             data[self.id]["hasName"] = [obj]
-                
-
-        if self.version:
-            value_obj = self.version
-            obj = {
-                "@value": value_obj,
-                "@type": "literal",
-                "@datatype": "http://www.w3.org/2001/XMLSchema#string"
-            }
-            data[self.id]["hasVersion"] = [obj]
                 
         for key in self.misc:
             value = self.misc[key]
@@ -146,15 +146,16 @@ class Compilation:
             "@id": self.id
         }
 
+        if len(self.versions):
+            data["compilationVersion"] = []
+        for value_obj in self.versions:
+            obj = value_obj
+            data["compilationVersion"].append(obj)
+
         if self.name:
             value_obj = self.name
             obj = value_obj
             data["compilationName"] = obj
-
-        if self.version:
-            value_obj = self.version
-            obj = value_obj
-            data["compilationVersion"] = obj
 
         for key in self.misc:
             value = self.misc[key]
@@ -186,9 +187,9 @@ class Compilation:
                     obj = value
                     self.name = obj
             elif key == "compilationVersion":
-                    value = pvalue
+                for value in pvalue:
                     obj = value
-                    self.version = obj
+                    self.versions.append(obj)
             else:
                 self.set_non_standard_property(key, pvalue)
                    
@@ -270,24 +271,36 @@ class Compilation:
         assert isinstance(name, str), f"Error: '{name}' is not of type str"
         self.name = name
     
-    def getVersion(self) -> str:
-        """Get version.
+    def getVersions(self) -> list[str]:
+        """Get versions list.
 
         Returns
         -------
-        str
-            The current value of version.
+        list[str]
+            A list of str objects.
         """
-        return self.version
+        return self.versions
 
-    def setVersion(self, version:str):
-        """Set version.
+    def setVersions(self, versions:list[str]):
+        """Set the versions list.
 
         Parameters
         ----------
-        version : str
-            The value to assign.
+        versions : list[str]
+            The list to assign.
         """
-        assert isinstance(version, str), f"Error: '{version}' is not of type str"
-        self.version = version
-    
+        assert isinstance(versions, list), "Error: versions is not a list"
+        assert all(isinstance(x, str) for x in versions), f"Error: '{versions}' is not of type str"
+        self.versions = versions
+
+    def addVersion(self, versions:str):
+        """Add a value to the versions list.
+
+        Parameters
+        ----------
+        versions : str
+            The value to append.
+        """
+        assert isinstance(versions, str), f"Error: '{versions}' is not of type str"
+        self.versions.append(versions)
+        

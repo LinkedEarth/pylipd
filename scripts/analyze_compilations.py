@@ -123,9 +123,11 @@ class CompilationAnalyzer:
 
         SELECT ?datasetName ?compilationName
         WHERE {
-          ?compilation a le:Compilation .
-          ?compilation le:hasName ?compilationName .
-          ?variable le:partOfCompilation ?compilation .
+          OPTIONAL {
+            ?compilation a le:Compilation .
+            ?compilation le:hasName ?compilationName .
+            ?variable le:partOfCompilation ?compilation .
+          }
           ?dataTable le:hasVariable ?variable .
           ?paleoData le:hasMeasurementTable ?dataTable .
           ?dataset le:hasPaleoData ?paleoData .
@@ -460,9 +462,11 @@ class CompilationAnalyzer:
             for ds in sorted(dataset_names):
                 in_graphdb = ds in self.graphdb_dataset_compilations
                 in_local = ds in self.local_dataset_info
-                dir_comps = sorted(self.local_dataset_info[ds]['dir_comps']) if in_local else []
-                lipd_comps = sorted(self.local_dataset_info[ds]['lipd_comps']) if in_local else []
-                graphdb_comps = sorted(self.graphdb_dataset_compilations[ds]) if in_graphdb else []
+                
+                # Filter out None values before sorting to avoid TypeError
+                dir_comps = sorted([comp for comp in self.local_dataset_info[ds]['dir_comps'] if comp is not None]) if in_local else []
+                lipd_comps = sorted([comp for comp in self.local_dataset_info[ds]['lipd_comps'] if comp is not None]) if in_local else []
+                graphdb_comps = sorted([comp for comp in self.graphdb_dataset_compilations[ds] if comp is not None]) if in_graphdb else []
 
                 writer.writerow({
                     'datasetName': ds,

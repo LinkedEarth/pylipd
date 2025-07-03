@@ -1,8 +1,6 @@
 import copy
 import re
-import time
-import math
-import random
+import uuid
 
 from pandas import DataFrame
 from rdflib.plugins.sparql.processor import SPARQLResult
@@ -45,17 +43,32 @@ def sanitizeId(id):
     return re.sub(r"[^a-zA-Z0-9\-_\.]", "_", id)
 
 def uniqid(prefix='', more_entropy=False):
-    m = time.time()
-    sec = math.floor(m)
-    usec = math.floor(1000000 * (m - sec))
+    """
+    Generate a truly unique identifier using UUID4.
+    
+    Parameters:
+    -----------
+    prefix : str
+        Optional prefix to prepend to the UUID
+    more_entropy : bool
+        If True, generates a longer UUID with additional entropy
+        
+    Returns:
+    --------
+    str
+        A unique identifier string
+    """
     if more_entropy:
-        lcg = random.random()
-        the_uniqid = "%08x%05x%.8F" % (sec, usec, lcg * 10)
+        # Generate two UUIDs for extra entropy and combine them
+        uuid1 = str(uuid.uuid4()).replace('-', '')
+        uuid2 = str(uuid.uuid4()).replace('-', '')[:8]  # Take first 8 chars of second UUID
+        the_uniqid = uuid1 + uuid2
     else:
-        the_uniqid = '%8x%05x' % (sec, usec)
-
-    the_uniqid = (prefix if prefix else '') + the_uniqid
-    return the_uniqid
+        # Standard UUID4 without hyphens
+        the_uniqid = str(uuid.uuid4()).replace('-', '')
+    
+    # Add prefix if provided
+    return (prefix if prefix else '') + the_uniqid
 
 def zip_string(string):
     return base64.b64encode(
