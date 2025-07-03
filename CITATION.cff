@@ -1,14 +1,14 @@
-cff-version: 1.5.0.1
+cff-version: 1.5.1.1
 message: "If you use this software, please cite it as below."
 authors:
   - family-names: "Ratnakar"
     given-names: "Varun"
-    orcid: "0000-0001-9381-705X"  
+    orcid: "https://orcid.org/0000-0001-9381-705X"  
   - family-names: "Khider"
     given-names: "Deborah"
     orcid: "https://orcid.org/0000-0001-7501-8430"
 title: "PyLiPD: a Python package for the manipulation of LiPD datasets"
-version: v1.5.0
+version: v1.5.1
 doi: 10.5281/zenodo.7951201
-date-released: 2025-06-30
+date-released: 2025-07-03
 url: "https://github.com/LinkedEarth/pylipd"
