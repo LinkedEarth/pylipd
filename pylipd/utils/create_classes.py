@@ -95,7 +95,7 @@ def get_fromjson_item(ptype, range, is_enum):
     return fromjsonitem
 
 def get_python_snippet_for_multi_value_property(clsid, pid, propid, pname, ptype, ont_range, python_range, getter, setter, adder, is_enum):
-    # Create the python snippet for initialzing property variables
+    # Create the python snippet for initializing property variables
     initvar = f"self.{pname}: list[{python_range}] = []"
 
     # Create the python function snippet for this property to convert the class to a dictionary (todata)
@@ -175,7 +175,7 @@ def get_python_snippet_for_multi_value_property(clsid, pid, propid, pname, ptype
 
 
 def get_python_snippet_for_property(clsid, pid, propid, pname, ptype, ont_range, python_range, getter, setter, is_enum):
-    # Create the python snippet for initialzing property variables
+    # Create the python snippet for initializing property variables
     initvar = f"self.{pname}: {python_range} = None"
 
     # Create the python function snippet for this property to convert the class to a dictionary (todata)

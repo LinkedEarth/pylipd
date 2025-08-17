@@ -7,7 +7,7 @@
 Installing PyLiPD
 ====================
 
-Install PyLiPD through Pypi, which contains the most stable version of PyLiPD:
+Install PyLiPD through PyPI, which contains the most stable version of PyLiPD:
 
 .. code-block:: bash
 

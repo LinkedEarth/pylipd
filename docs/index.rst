@@ -18,12 +18,13 @@ PyLiPD loads the Linked Paleo Data (`LiPD <http://lipd.net>`_), either locally o
 
 PyLiPD can use the internal/remote graph representation to either answer `SparQL <https://www.ontotext.com/knowledgehub/fundamentals/what-is-sparql/>`_  queries about the datasets, or simply convert it back to LiPD, or get the TimeSeries objects across multiple datasets for further analysis by packages such as `Pyleoclim <https://pyleoclim-util.readthedocs.io/en/latest/>`_ or `CFR <https://fzhu2e.github.io/cfr/>`_.
 
-The package makes working with the Graph representation easier. You do no need to learn SparQL to start working with PyLiPD. However, SparQL is a fast, efficient language that makes querying much easier so we won't stop you from learning it. 
+The package makes working with the Graph representation easier. You do not need to learn SparQL to start working with PyLiPD. However, SparQL is a fast, efficient language that makes querying much easier so we won't stop you from learning it.
 
 In summary, PyLiPD allows you to:
-* Open LiPD-formatted datasets stored locally on your computer, available through a URL or our Graph Database, the `LiPDGraph <https://linkedearth.graphdb.mint.isi.edu>`_. 
-* Manipulate these datasets to query information either through Pandas, SPARQL-supported APIs or SPARQL queries
-* Create LiPD files
+
+  * Open LiPD-formatted datasets stored locally on your computer, available through a URL or our Graph Database, the `LiPDGraph <https://linkedearth.graphdb.mint.isi.edu>`_.
+  * Manipulate these datasets to query information either through Pandas, SPARQL-supported APIs or SPARQL queries
+  * Create LiPD files
 
 Getting Started
 ===============

@@ -9,7 +9,7 @@ import json
 class LiPDSeries(RDFGraph):
     '''The LiPD Series class describes a collection of `LiPD (Linked Paleo Data) <https://cp.copernicus.org/articles/12/1093/2016/cp-12-1093-2016.html>`_ 
     variables. It contains an `RDF <https://www.w3.org/RDF/>`_ Graph which is serialization of  LiPD variables into an RDF graph containing terms from 
-    the `LiPD Ontology <http://linked.earth/Ontology/release/core/1.2.0/index-en.html>`. Each LiPD Variable is also associated with the LiPD itself
+    the `LiPD Ontology <http://linked.earth/Ontology/release/core/1.2.0/index-en.html>`_. Each LiPD Variable is also associated with the LiPD itself
     so it can be deserialized into the original LiPD format.
     How to browse and query the LiPD variables is described in a short example below.
 

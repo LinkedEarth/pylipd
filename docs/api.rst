@@ -3,7 +3,7 @@
 PyLiPD User API
 ===============
 
-The following describes the main classes that makes up PyLiPD. Most users will only interface with the functionalies contained in these classes. 
+The following describes the main classes that make up PyLiPD. Most users will only interface with the functionalities contained in these classes.
 
 LiPD (pylipd.lipd.LiPD)
 """"""""""""""""""

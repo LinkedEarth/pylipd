@@ -629,7 +629,7 @@ SCHEMA = {
             'skip_auto_convert_to_json': True
         },
         'notes': { 'name': 'hasNotes' },
-        'rank': { 'name': 'hasRank' }, # TODO: Auto-create if it doesnt exist
+        'rank': { 'name': 'hasRank' }, # TODO: Auto-create if it doesn't exist
         'basis': { 'name': 'hasBasis' },
         'scope': { 'name': 'hasScope' },
         'mathematicalRelation': { 'name': 'hasMathematicalRelation' },

@@ -39,7 +39,7 @@ from pybtex.database import BibliographyData, Entry
 from .globals.urls import NSURL, DEFAULT_GRAPH_URI
 
 class LiPD(RDFGraph):
-    '''The LiPD class describes a `LiPD (Linked Paleo Data) <https://cp.copernicus.org/articles/12/1093/2016/cp-12-1093-2016.html>`_ object. It contains an `RDF <https://www.w3.org/RDF/>`_ Graph which is serialization of the LiPD data into an RDF graph containing terms from the `LiPD Ontology <http://linked.earth/Ontology/release/core/1.2.0/index-en.html>`
+    '''The LiPD class describes a `LiPD (Linked Paleo Data) <https://cp.copernicus.org/articles/12/1093/2016/cp-12-1093-2016.html>`_ object. It contains an `RDF <https://www.w3.org/RDF/>`_ Graph which is serialization of the LiPD data into an RDF graph containing terms from the `LiPD Ontology <http://linked.earth/Ontology/release/core/1.2.0/index-en.html>`_.
     How to browse and query LiPD objects is described in a short example below.
 
     Examples
@@ -395,7 +395,7 @@ class LiPD(RDFGraph):
     def get_timeseries(self, dsnames, to_dataframe=False, mode="paleo", time="age"):
         '''Get Legacy LiPD like Time Series Object (tso)
         
-        This function is meant to provide legacy support to the older version of the LiPD utilities, which retruns a dictionary ot timeseries objects. The function also supports returning to a pandas.DataFrame, essentially flattening all the information. This is useful to explore all possible properties but can be slow for large number of datasets or if you only require some standard information. In this case, use `get_timeseries_essentials`. 
+        This function is meant to provide legacy support to the older version of the LiPD utilities, which returns a dictionary of timeseries objects. The function also supports returning to a pandas.DataFrame, essentially flattening all the information. This is useful to explore all possible properties but can be slow for large number of datasets or if you only require some standard information. In this case, use `get_timeseries_essentials`. 
 
         Parameters
         ----------
@@ -419,7 +419,7 @@ class LiPD(RDFGraph):
             A dictionary containing Time Series Object
             
         df : Pandas.DataFrame
-            If to_dataframe is set to True, returns a queriable Pandas DataFrame
+            If to_dataframe is set to True, returns a queryable Pandas DataFrame
 
         Examples
         --------
@@ -500,7 +500,7 @@ class LiPD(RDFGraph):
         dsnames : list
             array of dataset id or name strings        
         mode : paleo, chron
-            Whether to retrun the information stored in the PaleoMeasurementTable or the ChronMeasurementTable. The default is 'paleo'.
+            Whether to return the information stored in the PaleoMeasurementTable or the ChronMeasurementTable. The default is 'paleo'.
 
         Raises
         ------
@@ -991,7 +991,7 @@ class LiPD(RDFGraph):
 
     def get_all_variable_names(self):
         """
-        Get a list of all possible distinct variableNames. Useful for filtering and qeurying. 
+        Get a list of all possible distinct variableNames. Useful for filtering and querying. 
 
         Returns
         -------
@@ -1023,7 +1023,7 @@ class LiPD(RDFGraph):
         Returns
         -------
         clean_list : list
-            A list of avialable properties that can queried
+            A list of available properties that can queried
 
         Examples
         --------
