@@ -57,7 +57,7 @@ class LipdToRDF:
         self.graph = ConjunctiveGraph()
         
         lpdname = os.path.basename(lipdpath).replace(".lpd", "")
-        lpdname = re.sub("\?.+$", "", lpdname)
+        lpdname = re.sub(r"\?.+$", "", lpdname)
 
         self.graphurl = NSURL + "/" + lpdname
 
@@ -132,13 +132,13 @@ class LipdToRDF:
     def _parse_persons_string(self, author_string, parent = None) :
         # Check for semi-colon delimiter and split accordingly
         if ";" in author_string:
-            author_split = re.split("\s*;\s*", author_string)
+            author_split = re.split(r"\s*;\s*", author_string)
             # Further split the authors with commas if necessary
             author_list = []
             for author in author_split:
                 author = author
                 if "," in author:
-                    last_first = re.split("\s*,\s*", author)
+                    last_first = re.split(r"\s*,\s*", author)
                     author_list.append(f"{last_first[1]} {last_first[0]}")
                 else:
                     author_list.append(author)
@@ -146,7 +146,7 @@ class LipdToRDF:
         else:
             # Split the author string with commas
             author_list = []
-            author_split = re.split("\s*,\s*", author_string)
+            author_split = re.split(r"\s*,\s*", author_string)
             if len(author_split) % 2 == 0:
                 # Even number : last name first name
                 for i in range(0, len(author_split), 2):
@@ -971,7 +971,7 @@ class LipdToRDF:
                     self._set_property_value(objid, propDI, value)
 
     def _find_files_with_extension(self, directory, extension):
-        myregexobj = re.compile('\.'+extension+'$')
+        myregexobj = re.compile(r'\.'+extension+'$')
         try: 
             for entry in os.scandir(directory):
                 if entry.is_file() and myregexobj.search(entry.path): 
