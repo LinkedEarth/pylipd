@@ -2,6 +2,8 @@
 [![PyPI](https://img.shields.io/badge/python-3.11-yellow.svg)]()
 [![license](https://img.shields.io/github/license/linkedearth/pylipd.svg)]()
 [![DOI](https://zenodo.org/badge/428434519.svg)](https://doi.org/10.5281/zenodo.7951200)
+[![Documentation Status](https://app.readthedocs.org/projects/pylipd/badge/?version=latest)](https://pylipd.readthedocs.io/en/latest/)
+ 
 
 [![PyPI Downloads](https://static.pepy.tech/badge/pylipd)](https://pepy.tech/projects/pylipd)
 [![PyPI Downloads](https://static.pepy.tech/badge/pylipd/month)](https://pepy.tech/projects/pylipd)
