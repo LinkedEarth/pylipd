@@ -50,11 +50,11 @@ Getting Involved
 
 PyLiPD has been made freely available under the terms of the `Apache License 2.0 <https://github.com/LinkedEarth/pylipd/blob/main/LICENSE>`_ and follows an open development model. There are many ways to get :ref:`involved in the development of PyLiPD <contributing_to_pylipd>`:
 
-  * If you write a paper making use of Pyleoclim, please cite it :ref:`thus <citing_pylipd>`.
-  * Report bugs and problems with the code or documentation to our `GitHub repository <https://github.com/LinkedEarth/PyLiPD/issues>`_. Please make sure that there is not outstanding issues that cover the problem you're experiencing.
-  * Contribute bug fixes
-  * Contribute enhancements and new features
-  * Contribute to the code documentation, and share your PyLiPD-supported scientific workflow as a (`PaleoBook <http://linked.earth/PaleoBooks/>`_).
+* If you write a paper making use of Pyleoclim, please cite it :ref:`thus <citing_pylipd>`.
+* Report bugs and problems with the code or documentation to our `GitHub repository <https://github.com/LinkedEarth/PyLiPD/issues>`_. Please make sure that there is not outstanding issues that cover the problem you're experiencing.
+* Contribute bug fixes
+* Contribute enhancements and new features
+* Contribute to the code documentation, and share your PyLiPD-supported scientific workflow as a (`PaleoBook <http://linked.earth/PaleoBooks/>`_).
 
 
 Indices and tables
