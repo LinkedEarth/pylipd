@@ -25,7 +25,8 @@ Online documentation is available through [readthedocs](https://pylipd.readthedo
 ## Installation 
 The latest stable release is available through Pypi. We recommend using Anaconda or Miniconda with a dedicated environment.   
 
-`pip install pylipd`
+    pip install pylipd
+
 
 ## Usage
 
