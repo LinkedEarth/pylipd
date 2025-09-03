@@ -73,9 +73,18 @@ At the command line, this would like something like::
 
 This creates the directory `pylipd-yourname` and connects your repository to the upstream (main project) PyLiPD repository.  However, most Git first-timers may find it easier to do so through the Github web interface or desktop app (where there is a proverbial “button for that”).
 
+.. _creating-a-development-environment:
+
 Creating a development environment
 """"""""""""""""""""""""""""""""""
-We recommend developing in the same conda environment in which you installed PyLiPD.
+
+Next create a development environment with the development dependencies, and an editable version of PyLiPD installed::
+
+    conda create --name pylipd-dev python=3.13
+    conda activate pylipd-dev
+    pip install --group dev --editable .
+
+This ensures that you will be able to run the tests and build the documentation with the code you edit in the branch you will create next.
 
 Creating a branch
 """""""""""""""""
@@ -232,7 +241,7 @@ This request then goes to the repository maintainers, and they will review the c
 Updating your pull request
 """"""""""""""""""""""""""
 
-Based on the review you get on your pull request, you will probably need to make some changes to the code. In that case, you can make them in your branch, add a new commit to that branch, push it to GitHub, and the pull request will be automatically updated. Pushing them to GitHub again is done by:
+Based on the review you get on your pull request, you will probably need to make some changes to the code. In that case, you can make them in your branch, add a new commit to that branch, push it to GitHub, and the pull request will be automatically updated. Pushing them to GitHub again is done by::
 
     git push origin shiny-new-feature
 
@@ -294,7 +303,7 @@ You may use existing docstrings as examples. A good docstring explains:
   * what it does, with what properties/inputs/outputs
   * how to use it, via a minimal working example.
 
-For the latter, make sure the example is prefaced by:
+For the latter, make sure the example is prefaced by::
 
       .. jupyter-execute::
 
@@ -303,7 +312,7 @@ and properly indented (look at other docstrings for inspiration).
 How to build the PyLiPD documentation
 """"""""""""""""""""""""""""""""""""""""
 
-Navigate to the docs folder and type `make html`. This may require installing other packages (sphinx, chardet, numpydoc, nbsphinx, sphinx_search, jupyter-sphinx, sphinx_copybutton, sphinx_rtd_theme).
+Navigate to the docs folder and type `make html`. If you have set up your development environment as in :ref:`creating-a-development-environment` you should not need to install any additional dependencies.
 
 
 You are done! Thanks for playing.
