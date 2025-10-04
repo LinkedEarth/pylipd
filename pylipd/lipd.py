@@ -512,7 +512,7 @@ class LiPD(RDFGraph):
         qres_df : pandas.DataFrame
             A pandas dataframe returning the properties in columns for each series stored in a row of the dataframe
 
-        Example
+        Examples
         --------
         
         .. jupyter-execute::
