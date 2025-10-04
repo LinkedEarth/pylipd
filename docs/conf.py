@@ -39,7 +39,8 @@ extensions = [
     'IPython.sphinxext.ipython_directive',
     'sphinx_search.extension',
     'jupyter_sphinx',
-    'sphinx_copybutton'
+    'sphinx_copybutton',
+    'sphinx_design'
 ]
 
 #mathjax_config = {
