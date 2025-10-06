@@ -70,7 +70,7 @@ This will install the latest official release, which you can view `here <https:/
 
 This version may contain bugs not caught by our continuous integration test suite; if so, please report them via `github issues <https://github.com/LinkedEarth/pylipd/issues>`_. 
 
-If you wish to contribute to PyLiPD, see our `contributing guide <contributing_to_pylipd>` for complete instructions on building from the git source tree. 
+If you wish to contribute to PyLiPD, :ref:`see our contributing guide <contributing_to_pylipd>` for complete instructions on building from the git source tree. 
 
 Running the test suite
 """"""""""""""""""""""
