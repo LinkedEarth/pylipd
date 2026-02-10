@@ -284,12 +284,13 @@ class LiPD(RDFGraph):
         '''
 
         def establish_type(pub_type):
-            
-            if pub_type:
-                pub_type = re.sub('-', '', pub_type).lower()
-            else:
+            # Handle None and NaN values
+            if pd.isna(pub_type) or pub_type is None or pub_type == '':
                 pub_type = 'misc'
-            
+            else:
+                pub_type = str(pub_type)  # Ensure it's a string
+                pub_type = re.sub('-', '', pub_type).lower()
+
             if re.match(r".*article.*", pub_type) or re.match(r".*shortcommunication.*", pub_type):
                 pub_type = 'article'
             elif re.match(r".*chapter.*", pub_type) or re.match(r".*book.*", pub_type):
@@ -298,8 +299,26 @@ class LiPD(RDFGraph):
                 pub_type = 'report'
             else:
                 pub_type = 'misc'
-            
+
             return pub_type
+
+        # def establish_type(pub_type):
+            
+        #     if pub_type:
+        #         pub_type = re.sub('-', '', pub_type).lower()
+        #     else:
+        #         pub_type = 'misc'
+            
+        #     if re.match(r".*article.*", pub_type) or re.match(r".*shortcommunication.*", pub_type):
+        #         pub_type = 'article'
+        #     elif re.match(r".*chapter.*", pub_type) or re.match(r".*book.*", pub_type):
+        #         pub_type = 'chapter'
+        #     elif re.match(r".*report.*", pub_type):
+        #         pub_type = 'report'
+        #     else:
+        #         pub_type = 'misc'
+            
+        #     return pub_type
 
         def make_bib(row):
             pub_type = establish_type(row['type'])
@@ -552,13 +571,18 @@ class LiPD(RDFGraph):
             qres, qtmp_df = self.query(query)
             
             try:
-                qtmp_df['paleoData_values']=qtmp_df['paleoData_values'].apply(lambda row : np.array(json.loads(row)))
+                #qtmp_df['paleoData_values']=qtmp_df['paleoData_values'].apply(lambda row : np.array(json.loads(row)))
+                qtmp_df['paleoData_values']=qtmp_df['paleoData_values'].apply(lambda x : np.array(json.loads(x)) if (x is not None and isinstance(x, str)) else None)
             except:
-                qtmp_df['chronData_values']=qtmp_df['chronData_values'].apply(lambda row : np.array(json.loads(row)))
+                #qtmp_df['chronData_values']=qtmp_df['chronData_values'].apply(lambda row : np.array(json.loads(row)))
+                qtmp_df['chronData_values']=qtmp_df['chronData_values'].apply(lambda x : np.array(json.loads(x)) if (x is not None and isinstance(x, str)) else None)
             
+            #qtmp_df['time_values']=qtmp_df['time_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
+            #qtmp_df['depth_values']=qtmp_df['depth_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
+
+            qtmp_df['depth_values']=qtmp_df['depth_values'].apply(lambda x : np.array(json.loads(x)) if (x is not None and isinstance(x, str)) else None)
+            qtmp_df['time_values']=qtmp_df['time_values'].apply(lambda x : np.array(json.loads(x)) if (x is not None and isinstance(x, str)) else None)
             
-            qtmp_df['time_values']=qtmp_df['time_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
-            qtmp_df['depth_values']=qtmp_df['depth_values'].apply(lambda x : np.array(json.loads(x)) if x is not None else None)
             if qres_df is None:
                 qres_df = qtmp_df
             else:
